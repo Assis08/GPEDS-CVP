@@ -9,7 +9,10 @@ import br.edu.GPEDSCVP.classe.Pessoa;
 import br.edu.GPEDSCVP.dao.daoPessoa;
 import br.edu.GPEDSCVP.validacao.FormatarData;
 import br.edu.GPEDSCVP.validacao.PreencherJtableGenerico;
+import br.edu.GPEDSCVP.validacao.Rotinas;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
+import br.edu.GPEDSCVP.validacao.ValidaBotoes;
+import br.edu.GPEDSCVP.validacao.ValidaCampos;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -23,10 +26,13 @@ import javax.swing.JOptionPane;
 public class InterfacePessoa extends javax.swing.JFrame {
     
     PreencherJtableGenerico preencher;
+    ValidaCampos validaCampos;
     FormatarData data;
     daoPessoa dao_pessoa;
     Pessoa pessoa;
-
+    Rotinas rotinas; 
+    ValidaBotoes validabotoes;
+    int situacao = Rotinas.PADRAO;
 
     /**
      * Creates new form InterfacePessoa
@@ -35,15 +41,27 @@ public class InterfacePessoa extends javax.swing.JFrame {
         
         initComponents();
         
+        //Instancia de todas as classes
         preencher = new PreencherJtableGenerico();
         data = new FormatarData();
         dao_pessoa = new daoPessoa();
         pessoa = new Pessoa();
+        validaCampos = new ValidaCampos();
+        validabotoes = new ValidaBotoes();
         
         //Define o tamanho das colunas da tabela de contatos
         preencher.FormatarJtable(jTBContato, new int[] {
             50, 300, 30, 10
         });
+        
+        //Desabilita todos os campos
+        validaCampos.desabilitaCampos(jPPessoa);
+        
+        //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
+        situacao = Rotinas.INICIAL;
+        
+        //habilita os botoes utilizados na inicialização da tela
+        validabotoes.ValidaEstado(jPBotoes, situacao);
     }
 
     /**
@@ -57,8 +75,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jTabbedPane1 = new javax.swing.JTabbedPane();
         jPCadastroPessoa = new javax.swing.JPanel();
-        jRBPessoaFisica = new javax.swing.JRadioButton();
-        jRBPessoaJuridica = new javax.swing.JRadioButton();
         jPPessoa = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jTFIDPessoa = new javax.swing.JTextField();
@@ -76,8 +92,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jRBMasc = new javax.swing.JRadioButton();
         jRBFem = new javax.swing.JRadioButton();
-        jLabel4 = new javax.swing.JLabel();
+        jRBPessoaJuridica = new javax.swing.JRadioButton();
+        jRBPessoaFisica = new javax.swing.JRadioButton();
         jTFData = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         jPBotoes = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -102,10 +120,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jRBPessoaFisica.setText("Pessoa Física");
-
-        jRBPessoaJuridica.setText("Pessoa Jurídica");
-
         jLabel1.setText("ID Pessoa:");
 
         jTFIDPessoa.setEditable(false);
@@ -128,49 +142,74 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jRBFem.setText("Feminino");
 
+        jRBPessoaJuridica.setText("Pessoa Jurídica");
+
+        jRBPessoaFisica.setText("Pessoa Física");
+
+        jTFData.setEditable(false);
+
+        jLabel4.setText("Data:");
+
         javax.swing.GroupLayout jPPessoaLayout = new javax.swing.GroupLayout(jPPessoa);
         jPPessoa.setLayout(jPPessoaLayout);
         jPPessoaLayout.setHorizontalGroup(
             jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPPessoaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(jPPessoaLayout.createSequentialGroup()
                         .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTFIDPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addComponent(jTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(24, 24, 24)
-                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jTFRazaoSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPPessoaLayout.createSequentialGroup()
+                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTFIDPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(24, 24, 24)
+                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jTFRazaoSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPPessoaLayout.createSequentialGroup()
+                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTFCPFCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPPessoaLayout.createSequentialGroup()
+                                        .addComponent(jRBCPF)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jRBCNPJ))
+                                    .addComponent(jLabel6)
+                                    .addComponent(jTFDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPPessoaLayout.createSequentialGroup()
+                                        .addComponent(jRBMasc)
+                                        .addGap(10, 10, 10)
+                                        .addComponent(jRBFem))
+                                    .addComponent(jLabel5)
+                                    .addComponent(jTFRG, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel7))))
+                        .addGap(181, 181, 181))
                     .addGroup(jPPessoaLayout.createSequentialGroup()
-                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTFCPFCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPPessoaLayout.createSequentialGroup()
-                                .addComponent(jRBCPF)
-                                .addGap(10, 10, 10)
-                                .addComponent(jRBCNPJ))
-                            .addComponent(jLabel6)
-                            .addComponent(jTFDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPPessoaLayout.createSequentialGroup()
-                                .addComponent(jRBMasc)
-                                .addGap(10, 10, 10)
-                                .addComponent(jRBFem))
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel5)
-                            .addComponent(jTFRG, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jRBPessoaJuridica)
+                        .addGap(10, 10, 10)
+                        .addComponent(jRBPessoaFisica)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(20, 20, 20))))
         );
         jPPessoaLayout.setVerticalGroup(
             jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPPessoaLayout.createSequentialGroup()
                 .addContainerGap()
+                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jRBPessoaJuridica)
+                    .addComponent(jRBPessoaFisica)
+                    .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20)
                 .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
@@ -180,30 +219,29 @@ public class InterfacePessoa extends javax.swing.JFrame {
                     .addComponent(jTFIDPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFRazaoSocial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRBCPF)
-                    .addComponent(jRBCNPJ)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFCPFCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFRG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7))
-                .addGap(3, 3, 3)
-                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRBMasc)
-                    .addComponent(jRBFem))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPPessoaLayout.createSequentialGroup()
+                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jRBCPF)
+                            .addComponent(jRBCNPJ)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTFCPFCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTFRG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPPessoaLayout.createSequentialGroup()
+                        .addComponent(jLabel7)
+                        .addGap(3, 3, 3)
+                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jRBMasc)
+                            .addComponent(jRBFem))))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
-
-        jLabel4.setText("Data:");
-
-        jTFData.setEditable(false);
 
         jButton1.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
         jButton1.setText("Novo");
@@ -221,6 +259,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jButton4.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5750_Knob_Cancel.png")); // NOI18N
         jButton4.setText("Cancelar");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
         jButton5.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Hardware-Floppy-icon (Custom).png")); // NOI18N
         jButton5.setText("Gravar");
@@ -370,33 +413,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
             jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPCadastroPessoaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPCadastroPessoaLayout.createSequentialGroup()
-                        .addComponent(jRBPessoaFisica)
-                        .addGap(18, 18, 18)
-                        .addComponent(jRBPessoaJuridica)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCadastroPessoaLayout.createSequentialGroup()
-                        .addGroup(jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPBotoes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jPPessoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addContainerGap())))
+                .addGroup(jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPBotoes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPPessoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPCadastroPessoaLayout.setVerticalGroup(
             jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPCadastroPessoaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jRBPessoaFisica)
-                    .addComponent(jRBPessoaJuridica)
-                    .addComponent(jLabel4)
-                    .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTabbedPane2)
@@ -429,17 +454,17 @@ public class InterfacePessoa extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 665, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 11, Short.MAX_VALUE))
         );
 
-        pack();
+        setSize(new java.awt.Dimension(900, 714));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
  
-        
-        //Pega atributos da tela de cadastro.
+        //Pega atributos da tela de cadastro de pessoa.
         getcomp();
         try
         {
@@ -454,6 +479,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         UltimaSequencia ultima;
+        
+        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+        situacao = Rotinas.INCLUIR;
+        
+        //habilita os botoes utilizados na inclusão e desabilita os restantes
+        validabotoes.ValidaEstado(jPBotoes, situacao);
  
         //Seta a data atual no campo data
         jTFData.setText(data.DataAtual());
@@ -464,10 +495,21 @@ public class InterfacePessoa extends javax.swing.JFrame {
             int sequencia = (Integer) (ultima.ultimasequencia("PESSOA","ID_PESSOA"));
             //Seta no campo id de pessoa o utltimo id gerado.
             jTFIDPessoa.setText(Integer.toString(sequencia));
+            
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }  
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        
+        //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+        situacao = Rotinas.PADRAO;
+        
+        //habilita os botoes utilizados quando cancela um processo
+        validabotoes.ValidaEstado(jPBotoes, situacao);
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -500,6 +542,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new InterfacePessoa().setVisible(true);
+
             }
         });
     }
@@ -553,8 +596,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
 
 
-public Pessoa getcomp()
-    {
+    public Pessoa getcomp() {
         Date data_atual = new Date(System.currentTimeMillis());
         pessoa.setNome(jTFNome.getText());
         pessoa.setCpf_cnpj(jTFCPFCNPJ.getText());
