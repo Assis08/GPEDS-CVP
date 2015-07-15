@@ -7,6 +7,7 @@ package br.edu.GPEDSCVP.dao;
 
 import br.edu.GPEDSCVP.classe.Pessoa;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
+import br.edu.GPEDSCVP.validacao.FormatarData;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -33,13 +34,19 @@ public class daoPessoa {
         }
     }
 
-    public void incluir(Pessoa pessoa)
-        throws SQLException
-    {/*
+    public void incluir(Pessoa pessoa)throws SQLException
+    {
+       
         ultima = new UltimaSequencia();
-        int sequencia = Integer.valueOf(ultima.ultimasequencia("Pessoa", "id_pessoa")).intValue();
-        String sql = ("INSERT INTO PESSOA VALUES (").append(sequencia).append(",'").append(pessoa.getNome()).append("','").append(pessoa.getCpf_cnpj()).append("','").append(FormatarData.dateParaSQLDate(pessoa.getData_cadastro())).append("','").append(FormatarData.dateParaSQLDate(pessoa.getData_alter())).append("')").toString();
-        conecta_banco.incluirSQL(sql);
-            */
+        int sequencia = (Integer) (ultima.ultimasequencia("PESSOA","ID_PESSOA"));
+        String sql = "INSERT INTO PESSOA VALUES ("
+                + sequencia + ",'"
+                + pessoa.getNome()+ "','"
+                + pessoa.getCpf_cnpj()+ "','"
+                + FormatarData.dateParaSQLDate(pessoa.getData_cadastro())+ "','"
+                + FormatarData.dateParaSQLDate(pessoa.getData_alter())+ "')";
+        
+                conecta_banco.incluirSQL(sql);
+  
     }
 }
