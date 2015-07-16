@@ -139,12 +139,37 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jLabel7.setText("Sexo:");
 
         jRBMasc.setText("Masculino");
+        jRBMasc.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRBMascMouseClicked(evt);
+            }
+        });
 
         jRBFem.setText("Feminino");
+        jRBFem.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRBFemMouseClicked(evt);
+            }
+        });
 
         jRBPessoaJuridica.setText("Pessoa Jurídica");
+        jRBPessoaJuridica.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRBPessoaJuridicaMouseClicked(evt);
+            }
+        });
+        jRBPessoaJuridica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRBPessoaJuridicaActionPerformed(evt);
+            }
+        });
 
         jRBPessoaFisica.setText("Pessoa Física");
+        jRBPessoaFisica.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRBPessoaFisicaMouseClicked(evt);
+            }
+        });
 
         jTFData.setEditable(false);
 
@@ -424,7 +449,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             .addGroup(jPCadastroPessoaLayout.createSequentialGroup()
                 .addComponent(jPPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTabbedPane2)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 314, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
@@ -499,17 +524,85 @@ public class InterfacePessoa extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }  
+        
+        //Habilita campos necessários
+        jRBPessoaFisica.setEnabled(true);
+        jRBPessoaJuridica.setEnabled(true);
+       
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         
         //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
-        situacao = Rotinas.PADRAO;
+        situacao = Rotinas.INICIAL;
         
         //habilita os botoes utilizados quando cancela um processo
         validabotoes.ValidaEstado(jPBotoes, situacao);
+        
+        //Desabilita todos os campos
+        validaCampos.desabilitaCampos(jPPessoa);
+        
+        
+        validaCampos.LimparCampos(jPPessoa);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jRBPessoaJuridicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRBPessoaJuridicaActionPerformed
+
+    private void jRBPessoaJuridicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaMouseClicked
+        // TODO add your handling code here:
+        
+        //Habilita campos de pessoa jurídica
+        jRBPessoaFisica.setSelected(false);
+        jRBPessoaJuridica.setSelected(true);
+        jRBCNPJ.setSelected(true);
+        jTFCPFCNPJ.setEnabled(true);
+        jTFRazaoSocial.setEnabled(true);
+        jTFNome.setEnabled(true);
+        
+        //Desabilita campos de pessoa física
+        jTFDataNasc.setEnabled(false);
+        jTFRG.setEnabled(false);
+        jRBCPF.setSelected(false);
+        jRBMasc.setEnabled(false);
+        jRBFem.setEnabled(false);
+        jRBMasc.setSelected(false);
+        jRBFem.setSelected(false);
+    }//GEN-LAST:event_jRBPessoaJuridicaMouseClicked
+
+    private void jRBPessoaFisicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBPessoaFisicaMouseClicked
+        // TODO add your handling code here:
+        
+        //Habilita campos de pessoa fisíca
+        jRBPessoaJuridica.setSelected(false);
+        jRBPessoaFisica.setSelected(true);
+        jTFNome.setEnabled(true);
+        jTFDataNasc.setEnabled(true);
+        jRBCPF.setSelected(true);
+        jTFRG.setEnabled(true);
+        jTFCPFCNPJ.setEnabled(true);
+        jRBMasc.setEnabled(true);
+        jRBFem.setEnabled(true);
+        jTFNome.setEnabled(true);
+        
+        //Desabilita campos de pessoa jurídica
+        jTFRazaoSocial.setEnabled(false);
+        jRBCNPJ.setSelected(false);
+    }//GEN-LAST:event_jRBPessoaFisicaMouseClicked
+
+    private void jRBMascMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBMascMouseClicked
+        // TODO add your handling code here: 
+        jRBMasc.setSelected(true);
+        jRBFem.setSelected(false);
+    }//GEN-LAST:event_jRBMascMouseClicked
+
+    private void jRBFemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBFemMouseClicked
+        // TODO add your handling code here:
+        jRBMasc.setSelected(false);
+        jRBFem.setSelected(true);
+    }//GEN-LAST:event_jRBFemMouseClicked
 
     /**
      * @param args the command line arguments

@@ -7,6 +7,7 @@ package br.edu.GPEDSCVP.validacao;
 
 import java.awt.Component;
 import java.awt.Container;
+import javax.swing.JComboBox;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
@@ -41,4 +42,23 @@ public class ValidaCampos {
                }
            }
      }
+    
+    //Método para limpar os campos de um container
+
+        public void LimparCampos(Container container) {
+        Component components[] = container.getComponents();
+        for (Component component : components) {
+             if (component instanceof JTextField) {
+                JTextField field = (JTextField) component;
+                field.setText("");
+             }
+             else if ((component instanceof JComboBox)) {
+                JComboBox field = (JComboBox) component;
+                field.removeAllItems();
+            } else if ((component instanceof JRadioButton)){
+                JRadioButton field = (JRadioButton) component;
+                field.setSelected(false);
+            }
+        }
+    }
 }
