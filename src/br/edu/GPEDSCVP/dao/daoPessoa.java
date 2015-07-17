@@ -6,6 +6,8 @@
 package br.edu.GPEDSCVP.dao;
 
 import br.edu.GPEDSCVP.classe.Pessoa;
+import br.edu.GPEDSCVP.classe.PessoaFisica;
+import br.edu.GPEDSCVP.classe.PessoaJuridica;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.validacao.FormatarData;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
@@ -34,9 +36,10 @@ public class daoPessoa {
         }
     }
 
-    public void incluir(Pessoa pessoa)throws SQLException
+    public void incluir(PessoaFisica pessoa)throws SQLException
     {
        
+        //Insert de pessoa
         ultima = new UltimaSequencia();
         int sequencia = (Integer) (ultima.ultimasequencia("PESSOA","ID_PESSOA"));
         String sql = "INSERT INTO PESSOA VALUES ("
@@ -47,6 +50,37 @@ public class daoPessoa {
                 + FormatarData.dateParaSQLDate(pessoa.getData_alter())+ "')";
         
                 conecta_banco.incluirSQL(sql);
-  
+               
+               //Insert de pessoa fisica 
+               sql = "INSERT INTO PESSOA_FISICA VALUES ("
+                + sequencia + ",'"
+                + FormatarData.stringParaSQLDate(pessoa.getDt_nasc())+ "','"
+                + pessoa.getRg()+ "','"
+                + pessoa.getSexo()+ "')"; 
+                
+               conecta_banco.incluirSQL(sql);
+
+    }
+    
+    public void incluir(PessoaJuridica pessoa)throws SQLException
+    {
+        //Insert de pessoa
+        ultima = new UltimaSequencia();
+        int sequencia = (Integer) (ultima.ultimasequencia("PESSOA","ID_PESSOA"));
+        String sql = "INSERT INTO PESSOA VALUES ("
+                + sequencia + ",'"
+                + pessoa.getNome()+ "','"
+                + pessoa.getCpf_cnpj()+ "','"
+                + FormatarData.dateParaSQLDate(pessoa.getData_cadastro())+ "','"
+                + FormatarData.dateParaSQLDate(pessoa.getData_alter())+ "')";
+        
+                conecta_banco.incluirSQL(sql);
+               
+               //Insert de pessoa juridica 
+               sql = "INSERT INTO PESSOA_JURIDICA VALUES ("
+                + sequencia + ",'"
+                + pessoa.getRazao_social()+ "')"; 
+                
+               conecta_banco.incluirSQL(sql);   
     }
 }

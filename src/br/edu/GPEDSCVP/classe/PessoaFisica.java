@@ -5,6 +5,8 @@
  */
 package br.edu.GPEDSCVP.classe;
 
+import java.sql.Date;
+
 /**
  *
  * @author Willys

@@ -6,6 +6,8 @@
 package br.edu.GPEDSCVP.interfaces;
 
 import br.edu.GPEDSCVP.classe.Pessoa;
+import br.edu.GPEDSCVP.classe.PessoaFisica;
+import br.edu.GPEDSCVP.classe.PessoaJuridica;
 import br.edu.GPEDSCVP.dao.daoPessoa;
 import br.edu.GPEDSCVP.validacao.FormatarData;
 import br.edu.GPEDSCVP.validacao.PreencherJtableGenerico;
@@ -29,7 +31,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
     ValidaCampos validaCampos;
     FormatarData data;
     daoPessoa dao_pessoa;
-    Pessoa pessoa;
+    PessoaFisica pessoa_fisica;
+    PessoaJuridica pessoa_juridica;
     Rotinas rotinas; 
     ValidaBotoes validabotoes;
     int situacao = Rotinas.PADRAO;
@@ -45,7 +48,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
         preencher = new PreencherJtableGenerico();
         data = new FormatarData();
         dao_pessoa = new daoPessoa();
-        pessoa = new Pessoa();
+        pessoa_fisica = new PessoaFisica();
+        pessoa_juridica = new PessoaJuridica();
         validaCampos = new ValidaCampos();
         validabotoes = new ValidaBotoes();
         
@@ -489,11 +493,33 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
  
-        //Pega atributos da tela de cadastro de pessoa.
-        getcomp();
         try
         {
-            dao_pessoa.incluir(pessoa);
+            if(jRBPessoaFisica.isSelected()){
+                //Pega atributos da tela de cadastro de pessoa fisica.
+                getcompPessoaFisica();
+                //Inclui pessoa fisica
+                dao_pessoa.incluir(pessoa_fisica);
+            }else if(jRBPessoaJuridica.isSelected()){
+                //Pega atributos da tela de cadastro de pessoa juridica.
+                getcompPessoaJuridica();
+                //Inclui pessoa juridica
+                dao_pessoa.incluir(pessoa_juridica);
+            }
+                
+            //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+            situacao = Rotinas.INICIAL;
+        
+            //habilita os botoes utilizados quando cancela um processo
+            validabotoes.ValidaEstado(jPBotoes, situacao);
+        
+            //Limpa os campos do container pessoa
+            validaCampos.LimparCampos(jPPessoa);
+        
+            //Desabilita todos os campos do container pessoa
+            validaCampos.desabilitaCampos(jPPessoa);
+            
+            JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
         }
         catch(SQLException ex)
         {
@@ -504,7 +530,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         UltimaSequencia ultima;
-        
+           
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
         situacao = Rotinas.INCLUIR;
         
@@ -540,11 +566,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //habilita os botoes utilizados quando cancela um processo
         validabotoes.ValidaEstado(jPBotoes, situacao);
         
-        //Desabilita todos os campos
-        validaCampos.desabilitaCampos(jPPessoa);
-        
-        
+        //Limpa os campos do container pessoa
         validaCampos.LimparCampos(jPPessoa);
+        
+        //Desabilita todos os campos do container pessoa
+        validaCampos.desabilitaCampos(jPPessoa);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jRBPessoaJuridicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaActionPerformed
@@ -688,13 +714,37 @@ public class InterfacePessoa extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
 
-
-    public Pessoa getcomp() {
+    //Pega dados de pessoa fisíca da tela 
+    public Pessoa getcompPessoaFisica() {
         Date data_atual = new Date(System.currentTimeMillis());
-        pessoa.setNome(jTFNome.getText());
-        pessoa.setCpf_cnpj(jTFCPFCNPJ.getText());
-        pessoa.setData_cadastro(data_atual);
-        pessoa.setData_alter(data_atual);
-        return pessoa;
+        //Pessoa
+        pessoa_fisica.setNome(jTFNome.getText());
+        pessoa_fisica.setCpf_cnpj(jTFCPFCNPJ.getText());
+        pessoa_fisica.setData_cadastro(data_atual);
+        pessoa_fisica.setData_alter(data_atual);
+        
+        //Pessoa Fisíca
+        pessoa_fisica.setDt_nasc(jTFDataNasc.getText());
+        pessoa_fisica.setRg(jTFRG.getText());
+        if (jRBMasc.isSelected()){
+            pessoa_fisica.setSexo("M");
+        }else if (jRBFem.isSelected()){
+            pessoa_fisica.setSexo("F");
+        }
+        return pessoa_fisica;
+    }
+    
+    //Pega dados de pessoa jurídica da tela
+    public Pessoa getcompPessoaJuridica() {
+        Date data_atual = new Date(System.currentTimeMillis());
+        //Pessoa
+        pessoa_juridica.setNome(jTFNome.getText());
+        pessoa_juridica.setCpf_cnpj(jTFCPFCNPJ.getText());
+        pessoa_juridica.setData_cadastro(data_atual);
+        pessoa_juridica.setData_alter(data_atual);
+        
+        //Pessoa Juridica
+        pessoa_juridica.setRazao_social(jTFRazaoSocial.getText());
+        return pessoa_juridica;
     }
 }
