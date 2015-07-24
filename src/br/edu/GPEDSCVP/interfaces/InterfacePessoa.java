@@ -35,6 +35,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     daoPessoa dao_pessoa;
     PessoaFisica pessoa_fisica;
     PessoaJuridica pessoa_juridica;
+    Pessoa pessoa;
     Rotinas rotinas; 
     ValidaBotoes validabotoes;
     int situacao = Rotinas.PADRAO;
@@ -52,6 +53,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         dao_pessoa = new daoPessoa();
         pessoa_fisica = new PessoaFisica();
         pessoa_juridica = new PessoaJuridica();
+        pessoa = new Pessoa();
         try {
             validaCampos = new ValidaCampos();
         } catch (SQLException ex) {
@@ -528,6 +530,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
 
+        pessoa_fisica = new PessoaFisica();
+        pessoa_juridica = new PessoaJuridica();
+        pessoa = new Pessoa();
+        
         try
         {
             if(jRBPessoaFisica.isSelected()){
@@ -588,6 +594,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+
         UltimaSequencia ultima;
                    
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
@@ -657,9 +664,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jRBFem.setSelected(false);
         
         //Seta mascara no campo de CNPJ
-        
-        /* erro: esta setando no campo cnpj/cpp o ultimo valor salvo */
         jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
+        jFTCPFCNPJ.setValue("");
+        
  
     }//GEN-LAST:event_jRBPessoaJuridicaMouseClicked
 
@@ -683,9 +690,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jRBCNPJ.setSelected(false);
         
         //Seta mascara no campo de CPF
-        
-         /* erro: esta setando no campo cnpj/cpp o ultimo valor salvo */
         jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("###.###.###-##")));
+        jFTCPFCNPJ.setValue("");
     }//GEN-LAST:event_jRBPessoaFisicaMouseClicked
 
     private void jRBMascMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBMascMouseClicked

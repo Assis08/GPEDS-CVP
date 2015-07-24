@@ -129,6 +129,7 @@ public class ValidaCampos {
     
     //Método para criar e retornar uma mascara(JTextField) por parâmetro 
     public static MaskFormatter formata(String mascara) {
+   
        try {
             MaskFormatter mascara_cpf = new MaskFormatter(mascara);   
             mascara_cpf.setValidCharacters("0123456789");
@@ -139,7 +140,5 @@ public class ValidaCampos {
           JOptionPane.showMessageDialog(null,"Erro: "+error_mask);
       }
        return null;
-    }
-
-    
+    }           
 }
