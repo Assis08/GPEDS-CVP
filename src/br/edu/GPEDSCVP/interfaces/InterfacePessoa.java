@@ -65,7 +65,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         preencher.FormatarJtable(jTBContato, new int[] {
             50, 300, 30, 10
         });
-        
+          
         //Desabilita todos os campos
         validaCampos.desabilitaCampos(jPPessoa);
         
@@ -107,13 +107,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jTFData = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jFTDataNasc = new javax.swing.JFormattedTextField();
-
-        try{
-            javax.swing.text.MaskFormatter telefone = new javax.swing.text.MaskFormatter("##/##/####");
-
-            jFTDataNasc = new javax.swing.JFormattedTextField(telefone);
-        }catch(Exception e){
-        }
         jFTCPFCNPJ = new javax.swing.JFormattedTextField();
         jPBotoes = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
@@ -529,10 +522,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-
-        pessoa_fisica = new PessoaFisica();
-        pessoa_juridica = new PessoaJuridica();
-        pessoa = new Pessoa();
         
         try
         {
@@ -595,6 +584,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
+        setaMascaras ();
+        
         UltimaSequencia ultima;
                    
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
@@ -646,26 +637,30 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jRBPessoaJuridicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaMouseClicked
         // TODO add your handling code here:
         
-        //Habilita campos de pessoa jurídica
-        jRBPessoaFisica.setSelected(false);
-        jRBPessoaJuridica.setSelected(true);
-        jRBCNPJ.setSelected(true);
-        jFTCPFCNPJ.setEnabled(true);
-        jTFRazaoSocial.setEnabled(true);
-        jTFNome.setEnabled(true);
+         if(jRBPessoaJuridica.isEnabled()){
         
-        //Desabilita campos de pessoa física
-        jFTDataNasc.setEnabled(false);
-        jTFRG.setEnabled(false);
-        jRBCPF.setSelected(false);
-        jRBMasc.setEnabled(false);
-        jRBFem.setEnabled(false);
-        jRBMasc.setSelected(false);
-        jRBFem.setSelected(false);
-        
-        //Seta mascara no campo de CNPJ
-        jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
-        jFTCPFCNPJ.setValue("");
+            //Habilita campos de pessoa jurídica
+            jRBPessoaFisica.setSelected(false);
+            jRBPessoaJuridica.setSelected(true);
+            jRBCNPJ.setSelected(true);
+            jFTCPFCNPJ.setEnabled(true);
+            jTFRazaoSocial.setEnabled(true);
+            jTFNome.setEnabled(true);
+
+            //Desabilita campos de pessoa física
+            jFTDataNasc.setEnabled(false);
+            jTFRG.setEnabled(false);
+            jRBCPF.setSelected(false);
+            jRBMasc.setEnabled(false);
+            jRBFem.setEnabled(false);
+            jRBMasc.setSelected(false);
+            jRBFem.setSelected(false);
+
+            //Seta mascara no campo de CNPJ
+            jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
+            //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+            jFTCPFCNPJ.setValue("");
+         }
         
  
     }//GEN-LAST:event_jRBPessoaJuridicaMouseClicked
@@ -673,37 +668,45 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jRBPessoaFisicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBPessoaFisicaMouseClicked
         // TODO add your handling code here:
         
-        //Habilita campos de pessoa fisíca
-        jRBPessoaJuridica.setSelected(false);
-        jRBPessoaFisica.setSelected(true);
-        jTFNome.setEnabled(true);
-        jFTDataNasc.setEnabled(true);
-        jRBCPF.setSelected(true);
-        jTFRG.setEnabled(true);
-        jFTCPFCNPJ.setEnabled(true);
-        jRBMasc.setEnabled(true);
-        jRBFem.setEnabled(true);
-        jTFNome.setEnabled(true);
-        
-        //Desabilita campos de pessoa jurídica
-        jTFRazaoSocial.setEnabled(false);
-        jRBCNPJ.setSelected(false);
-        
-        //Seta mascara no campo de CPF
-        jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("###.###.###-##")));
-        jFTCPFCNPJ.setValue("");
+         if(jRBPessoaFisica.isEnabled()){
+             
+            //Habilita campos de pessoa fisíca
+            jRBPessoaJuridica.setSelected(false);
+            jRBPessoaFisica.setSelected(true);
+            jTFNome.setEnabled(true);
+            jFTDataNasc.setEnabled(true);
+            jRBCPF.setSelected(true);
+            jTFRG.setEnabled(true);
+            jFTCPFCNPJ.setEnabled(true);
+            jRBMasc.setEnabled(true);
+            jRBFem.setEnabled(true);
+            jTFNome.setEnabled(true);
+
+            //Desabilita campos de pessoa jurídica
+            jTFRazaoSocial.setEnabled(false);
+            jRBCNPJ.setSelected(false);
+
+            //Seta mascara no campo de CPF
+            jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("###.###.###-##")));
+            //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+            jFTCPFCNPJ.setValue("");
+         }
     }//GEN-LAST:event_jRBPessoaFisicaMouseClicked
 
     private void jRBMascMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBMascMouseClicked
         // TODO add your handling code here: 
-        jRBMasc.setSelected(true);
-        jRBFem.setSelected(false);
+        if(jRBMasc.isEnabled()){
+            jRBMasc.setSelected(true);
+            jRBFem.setSelected(false);
+        }
     }//GEN-LAST:event_jRBMascMouseClicked
 
     private void jRBFemMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBFemMouseClicked
         // TODO add your handling code here:
-        jRBMasc.setSelected(false);
-        jRBFem.setSelected(true);
+        if(jRBFem.isEnabled()){
+            jRBMasc.setSelected(false);
+            jRBFem.setSelected(true);
+        }
     }//GEN-LAST:event_jRBFemMouseClicked
 
     private void jRBCPFMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBCPFMouseClicked
@@ -826,5 +829,14 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Pessoa Juridica
         pessoa_juridica.setRazao_social(jTFRazaoSocial.getText());
         return pessoa_juridica;
+    }
+    
+    public void setaMascaras (){
+
+        //Seta mascara no campo  data de nascimento
+        jFTDataNasc.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##/##/####")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+        jFTDataNasc.setValue("");
+        
     }
 }

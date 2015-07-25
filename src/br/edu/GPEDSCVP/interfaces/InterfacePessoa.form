@@ -316,9 +316,6 @@
                     <Property name="toolTipText" type="java.lang.String" value="Data Nascimento"/>
                     <Property name="name" type="java.lang.String" value="dt_nasc" noResource="true"/>
                   </Properties>
-                  <AuxValues>
-                    <AuxValue name="JavaCodeGenerator_CreateCodePost" type="java.lang.String" value="&#xd;&#xa;try{&#xd;&#xa; javax.swing.text.MaskFormatter telefone = new javax.swing.text.MaskFormatter(&quot;##/##/####&quot;);&#xd;&#xa;&#xd;&#xa; jFTDataNasc = new javax.swing.JFormattedTextField(telefone);&#xd;&#xa; }catch(Exception e){&#xd;&#xa;}&#xd;&#xa;"/>
-                  </AuxValues>
                 </Component>
                 <Component class="javax.swing.JFormattedTextField" name="jFTCPFCNPJ">
                   <Properties>
