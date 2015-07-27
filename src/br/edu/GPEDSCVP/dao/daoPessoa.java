@@ -5,6 +5,8 @@
  */
 package br.edu.GPEDSCVP.dao;
 
+import br.edu.GPEDSCVP.classe.Certificadora;
+import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.Pessoa;
 import br.edu.GPEDSCVP.classe.PessoaFisica;
 import br.edu.GPEDSCVP.classe.PessoaJuridica;
@@ -62,7 +64,7 @@ public class daoPessoa {
 
     }
     
-    public void incluir(PessoaJuridica pessoa)throws SQLException
+    public void incluir(Certificadora pessoa)throws SQLException
     {
         //Insert de pessoa
         ultima = new UltimaSequencia();
@@ -81,6 +83,43 @@ public class daoPessoa {
                 + sequencia + ",'"
                 + pessoa.getRazao_social()+ "')"; 
                 
-               conecta_banco.incluirSQL(sql);   
+               conecta_banco.incluirSQL(sql);
+               
+               //Insert de certificadora 
+               sql = "INSERT INTO certificadora VALUES ("
+                + sequencia + ",'"
+                + pessoa.getIn_calibracoes()+ "')"; 
+                
+               conecta_banco.incluirSQL(sql); 
+    }
+    
+     public void incluir(Fornecedor pessoa)throws SQLException
+    {
+        //Insert de pessoa
+        ultima = new UltimaSequencia();
+        int sequencia = (Integer) (ultima.ultimasequencia("PESSOA","ID_PESSOA"));
+        String sql = "INSERT INTO PESSOA VALUES ("
+                + sequencia + ",'"
+                + pessoa.getNome()+ "','"
+                + pessoa.getCpf_cnpj()+ "','"
+                + FormatarData.dateParaSQLDate(pessoa.getData_cadastro())+ "','"
+                + FormatarData.dateParaSQLDate(pessoa.getData_alter())+ "')";
+        
+                conecta_banco.incluirSQL(sql);
+               
+               //Insert de pessoa juridica 
+               sql = "INSERT INTO PESSOA_JURIDICA VALUES ("
+                + sequencia + ",'"
+                + pessoa.getRazao_social()+ "')"; 
+                
+               conecta_banco.incluirSQL(sql);
+               
+               //Insert de fornecedor 
+               sql = "INSERT INTO fornecedor VALUES ("
+                + sequencia + ",'"
+                + pessoa.getSite()+"','"
+                + pessoa.getRamo()+ "')"; 
+                
+               conecta_banco.incluirSQL(sql);
     }
 }

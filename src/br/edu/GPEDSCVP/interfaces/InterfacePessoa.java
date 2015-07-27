@@ -72,6 +72,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
           
         //Desabilita todos os campos
         validaCampos.desabilitaCampos(jPPessoa);
+        validaCampos.desabilitaCampos(jPTipoPessoa);
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -101,28 +102,18 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jRBCPF = new javax.swing.JRadioButton();
         jRBCNPJ = new javax.swing.JRadioButton();
         jLabel5 = new javax.swing.JLabel();
-        jTFRG = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jRBMasc = new javax.swing.JRadioButton();
         jRBFem = new javax.swing.JRadioButton();
-        jRBPessoaJuridica = new javax.swing.JRadioButton();
-        jRBPessoaFisica = new javax.swing.JRadioButton();
-        jTFData = new javax.swing.JTextField();
-        jLabel4 = new javax.swing.JLabel();
         jFTDataNasc = new javax.swing.JFormattedTextField();
         jFTCPFCNPJ = new javax.swing.JFormattedTextField();
         jCBCalibracoes = new javax.swing.JCheckBox();
-        jRBFornecedor = new javax.swing.JRadioButton();
-        jRBCertificadora = new javax.swing.JRadioButton();
-        jRBUsuario = new javax.swing.JRadioButton();
         jLabel11 = new javax.swing.JLabel();
         JTFSite = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jTFRamo = new javax.swing.JTextField();
-        jLabel16 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jLabel18 = new javax.swing.JLabel();
+        jFTRG = new javax.swing.JFormattedTextField();
         jPBotoes = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
@@ -156,6 +147,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jCheckBox3 = new javax.swing.JCheckBox();
         jCheckBox4 = new javax.swing.JCheckBox();
         jCheckBox5 = new javax.swing.JCheckBox();
+        jPTipoPessoa = new javax.swing.JPanel();
+        jLabel16 = new javax.swing.JLabel();
+        jRBPessoaJuridica = new javax.swing.JRadioButton();
+        jRBPessoaFisica = new javax.swing.JRadioButton();
+        jLabel17 = new javax.swing.JLabel();
+        jRBCertificadora = new javax.swing.JRadioButton();
+        jRBFornecedor = new javax.swing.JRadioButton();
+        jTFData = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -187,9 +187,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jLabel5.setText("RG:");
 
-        jTFRG.setToolTipText("RG");
-        jTFRG.setName("rg"); // NOI18N
-
         jLabel6.setText("Data Nascimento:");
 
         jLabel7.setText("Sexo:");
@@ -208,30 +205,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
             }
         });
 
-        jRBPessoaJuridica.setText("Pessoa Jurídica");
-        jRBPessoaJuridica.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jRBPessoaJuridicaMouseClicked(evt);
-            }
-        });
-        jRBPessoaJuridica.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRBPessoaJuridicaActionPerformed(evt);
-            }
-        });
-
-        jRBPessoaFisica.setText("Pessoa Física");
-        jRBPessoaFisica.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jRBPessoaFisicaMouseClicked(evt);
-            }
-        });
-
-        jTFData.setEditable(false);
-        jTFData.setName("data_cadastro"); // NOI18N
-
-        jLabel4.setText("Data:");
-
         jFTDataNasc.setToolTipText("Data Nascimento");
         jFTDataNasc.setName("dt_nasc"); // NOI18N
 
@@ -239,32 +212,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jFTCPFCNPJ.setName("cpf_cnpj"); // NOI18N
 
         jCBCalibracoes.setText("Calibrações");
-
-        jRBFornecedor.setText("Fornecedor");
-        jRBFornecedor.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jRBFornecedorMouseClicked(evt);
-            }
-        });
-
-        jRBCertificadora.setText("Certificadora");
-        jRBCertificadora.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jRBCertificadoraMouseClicked(evt);
-            }
-        });
-        jRBCertificadora.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRBCertificadoraActionPerformed(evt);
-            }
-        });
-
-        jRBUsuario.setText("Usuário");
-        jRBUsuario.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jRBUsuarioMouseClicked(evt);
-            }
-        });
 
         jLabel11.setText("Site:");
 
@@ -276,11 +223,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jTFRamo.setToolTipText("Ramo");
         jTFRamo.setName("ramo"); // NOI18N
 
-        jLabel16.setText("Pessoa:");
-
-        jLabel17.setText("Jurídica:");
-
-        jLabel18.setText("Física:");
+        jFTRG.setToolTipText("RG");
+        jFTRG.setName("rg"); // NOI18N
 
         javax.swing.GroupLayout jPPessoaLayout = new javax.swing.GroupLayout(jPPessoa);
         jPPessoa.setLayout(jPPessoaLayout);
@@ -290,90 +234,63 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPPessoaLayout.createSequentialGroup()
-                        .addComponent(jLabel16)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRBPessoaJuridica)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRBPessoaFisica)
-                        .addGap(39, 39, 39)
-                        .addComponent(jLabel17)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRBCertificadora)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jRBFornecedor)
-                        .addGap(27, 27, 27)
-                        .addComponent(jLabel18)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jRBUsuario)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))
+                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel6)
+                            .addComponent(jFTDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(43, 43, 43)
+                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addGroup(jPPessoaLayout.createSequentialGroup()
+                                .addComponent(jRBMasc)
+                                .addGap(10, 10, 10)
+                                .addComponent(jRBFem)))
+                        .addGap(54, 54, 54)
+                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPPessoaLayout.createSequentialGroup()
+                                .addComponent(jLabel12)
+                                .addGap(244, 405, Short.MAX_VALUE))
+                            .addGroup(jPPessoaLayout.createSequentialGroup()
+                                .addComponent(jTFRamo, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(37, 37, 37)
+                                .addComponent(jCBCalibracoes)
+                                .addGap(0, 0, Short.MAX_VALUE))))
+                    .addGroup(jPPessoaLayout.createSequentialGroup()
+                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTFIDPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(24, 24, 24)
+                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addComponent(jTFRazaoSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPPessoaLayout.createSequentialGroup()
                         .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPPessoaLayout.createSequentialGroup()
-                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTFIDPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPPessoaLayout.createSequentialGroup()
-                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPPessoaLayout.createSequentialGroup()
-                                        .addComponent(jRBCPF)
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jRBCNPJ))
-                                    .addComponent(jLabel6)
-                                    .addComponent(jFTDataNasc, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jFTCPFCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel5)
-                                    .addComponent(jTFRG, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7)
-                                    .addGroup(jPPessoaLayout.createSequentialGroup()
-                                        .addComponent(jRBMasc)
-                                        .addGap(10, 10, 10)
-                                        .addComponent(jRBFem)))))
-                        .addGap(24, 24, 24)
+                                .addComponent(jRBCPF)
+                                .addGap(10, 10, 10)
+                                .addComponent(jRBCNPJ))
+                            .addComponent(jFTCPFCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPPessoaLayout.createSequentialGroup()
-                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPPessoaLayout.createSequentialGroup()
-                                        .addComponent(jTFRamo, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(37, 37, 37)
-                                        .addComponent(jCBCalibracoes)
-                                        .addGap(0, 0, Short.MAX_VALUE))
-                                    .addComponent(JTFSite))
-                                .addGap(20, 20, 20))
+                                .addComponent(jLabel5)
+                                .addGap(184, 184, 184))
                             .addGroup(jPPessoaLayout.createSequentialGroup()
-                                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jTFRazaoSocial, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel11)
-                                    .addComponent(jLabel12))
-                                .addGap(181, 181, 181)))
-                        .addGap(0, 0, Short.MAX_VALUE))))
+                                .addComponent(jFTRG)
+                                .addGap(24, 24, 24)))
+                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(JTFSite)
+                            .addGroup(jPPessoaLayout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addGap(244, 244, 244)))))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPPessoaLayout.setVerticalGroup(
             jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPPessoaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jRBPessoaJuridica)
-                    .addComponent(jRBPessoaFisica)
-                    .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jRBCertificadora)
-                    .addComponent(jRBFornecedor)
-                    .addComponent(jRBUsuario)
-                    .addComponent(jLabel16)
-                    .addComponent(jLabel17)
-                    .addComponent(jLabel18))
-                .addGap(20, 20, 20)
                 .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
@@ -383,20 +300,20 @@ public class InterfacePessoa extends javax.swing.JFrame {
                     .addComponent(jTFIDPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFRazaoSocial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRBCPF)
+                    .addComponent(jRBCNPJ)
+                    .addComponent(jLabel5)
+                    .addComponent(jLabel11))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jFTCPFCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(JTFSite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jFTRG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPPessoaLayout.createSequentialGroup()
-                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRBCPF)
-                            .addComponent(jRBCNPJ)
-                            .addComponent(jLabel5)
-                            .addComponent(jLabel11))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTFRG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jFTCPFCNPJ, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(JTFSite, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel6)
                             .addComponent(jLabel7)
@@ -408,7 +325,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                         .addComponent(jRBFem)
                         .addComponent(jCBCalibracoes)
                         .addComponent(jTFRamo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(21, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jButton1.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
@@ -537,7 +454,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                     .addComponent(jCBTipoContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFDescContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFNumeroContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -557,7 +474,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 287, Short.MAX_VALUE)
+            .addGap(0, 286, Short.MAX_VALUE)
         );
 
         jTabbedPane2.addTab("Endereço", jPanel3);
@@ -645,28 +562,146 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addComponent(jCheckBox4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCheckBox5)
-                .addContainerGap(8, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Permissões de Acesso", jPanel4);
+
+        jLabel16.setText("Pessoa:");
+
+        jRBPessoaJuridica.setText("Pessoa Jurídica");
+        jRBPessoaJuridica.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRBPessoaJuridicaMouseClicked(evt);
+            }
+        });
+        jRBPessoaJuridica.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRBPessoaJuridicaStateChanged(evt);
+            }
+        });
+        jRBPessoaJuridica.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRBPessoaJuridicaActionPerformed(evt);
+            }
+        });
+
+        jRBPessoaFisica.setText("Pessoa Física");
+        jRBPessoaFisica.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRBPessoaFisicaMouseClicked(evt);
+            }
+        });
+        jRBPessoaFisica.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRBPessoaFisicaStateChanged(evt);
+            }
+        });
+
+        jLabel17.setText("Jurídica:");
+
+        jRBCertificadora.setText("Certificadora");
+        jRBCertificadora.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRBCertificadoraMouseClicked(evt);
+            }
+        });
+        jRBCertificadora.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRBCertificadoraStateChanged(evt);
+            }
+        });
+        jRBCertificadora.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRBCertificadoraActionPerformed(evt);
+            }
+        });
+
+        jRBFornecedor.setText("Fornecedor");
+        jRBFornecedor.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRBFornecedorMouseClicked(evt);
+            }
+        });
+        jRBFornecedor.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jRBFornecedorStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPTipoPessoaLayout = new javax.swing.GroupLayout(jPTipoPessoa);
+        jPTipoPessoa.setLayout(jPTipoPessoaLayout);
+        jPTipoPessoaLayout.setHorizontalGroup(
+            jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPTipoPessoaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel16)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRBPessoaJuridica)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRBPessoaFisica)
+                .addGap(32, 32, 32)
+                .addComponent(jLabel17)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jRBCertificadora)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRBFornecedor)
+                .addContainerGap(197, Short.MAX_VALUE))
+        );
+        jPTipoPessoaLayout.setVerticalGroup(
+            jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPTipoPessoaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel16)
+                    .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jRBPessoaJuridica)
+                        .addComponent(jRBPessoaFisica)
+                        .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jRBCertificadora)
+                            .addComponent(jRBFornecedor)
+                            .addComponent(jLabel17))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jTFData.setEditable(false);
+        jTFData.setName("data_cadastro"); // NOI18N
+
+        jLabel4.setText("Data:");
 
         javax.swing.GroupLayout jPCadastroPessoaLayout = new javax.swing.GroupLayout(jPCadastroPessoa);
         jPCadastroPessoa.setLayout(jPCadastroPessoaLayout);
         jPCadastroPessoaLayout.setHorizontalGroup(
             jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPCadastroPessoaLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPBotoes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPPessoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPCadastroPessoaLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTabbedPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addComponent(jPBotoes, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jPPessoa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                    .addGroup(jPCadastroPessoaLayout.createSequentialGroup()
+                        .addComponent(jPTipoPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPCadastroPessoaLayout.setVerticalGroup(
             jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPCadastroPessoaLayout.createSequentialGroup()
-                .addComponent(jPPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPTipoPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPCadastroPessoaLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPCadastroPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
                 .addComponent(jTabbedPane2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -726,9 +761,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                        //Limpa os campos do container pessoa
                        validaCampos.LimparCampos(jPPessoa);
+                       validaCampos.LimparCampos(jPTipoPessoa);
 
                        //Desabilita todos os campos do container pessoa
                        validaCampos.desabilitaCampos(jPPessoa);
+                       validaCampos.desabilitaCampos(jPTipoPessoa);
                     }
                 }
             }else if(jRBPessoaJuridica.isSelected()){
@@ -752,9 +789,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                                 //Limpa os campos do container pessoa
                                 validaCampos.LimparCampos(jPPessoa);
+                                validaCampos.LimparCampos(jPTipoPessoa);
 
                                 //Desabilita todos os campos do container pessoa
                                 validaCampos.desabilitaCampos(jPPessoa);
+                                validaCampos.desabilitaCampos(jPTipoPessoa);
                              }
                          }
                     }
@@ -779,9 +818,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                                 //Limpa os campos do container pessoa
                                 validaCampos.LimparCampos(jPPessoa);
+                                validaCampos.LimparCampos(jPTipoPessoa);
 
                                 //Desabilita todos os campos do container pessoa
                                 validaCampos.desabilitaCampos(jPPessoa);
+                                validaCampos.desabilitaCampos(jPTipoPessoa);
                              }
                          }
                     }
@@ -843,9 +884,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
         
         //Limpa os campos do container pessoa
         validaCampos.LimparCampos(jPPessoa);
+        validaCampos.LimparCampos(jPTipoPessoa);
         
         //Desabilita todos os campos do container pessoa
         validaCampos.desabilitaCampos(jPPessoa);
+        validaCampos.desabilitaCampos(jPTipoPessoa);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jRBPessoaJuridicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaActionPerformed
@@ -853,40 +896,16 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jRBPessoaJuridicaActionPerformed
 
     private void jRBPessoaJuridicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaMouseClicked
-        // TODO add your handling code here:
-        
-         if(jRBPessoaJuridica.isEnabled()){
-        
-            //Habilita campos de pessoa jurídica
-            jRBPessoaFisica.setSelected(false);
+        if(jRBPessoaJuridica.isEnabled()){
             jRBPessoaJuridica.setSelected(true);
-            jRBCertificadora.setSelected(false);
-            jRBFornecedor.setSelected(false);
-            jRBCertificadora.setEnabled(true);
-            jRBFornecedor.setEnabled(true);
-            jRBUsuario.setEnabled(false);
+        }
         
-         }
-            
-        
-        
- 
     }//GEN-LAST:event_jRBPessoaJuridicaMouseClicked
 
     private void jRBPessoaFisicaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBPessoaFisicaMouseClicked
-        // TODO add your handling code here:
-        
-         if(jRBPessoaFisica.isEnabled()){
-             
-            //Habilita campos de pessoa fisíca
-            jRBPessoaJuridica.setSelected(false);
+        if(jRBPessoaFisica.isEnabled()){
             jRBPessoaFisica.setSelected(true);
-            jRBCertificadora.setSelected(false);
-            jRBFornecedor.setSelected(false);
-            jRBCertificadora.setEnabled(false);
-            jRBFornecedor.setEnabled(false);
-            jRBUsuario.setEnabled(true);
-         }
+        }
     }//GEN-LAST:event_jRBPessoaFisicaMouseClicked
 
     private void jRBMascMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBMascMouseClicked
@@ -910,105 +929,149 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jRBCPFMouseClicked
 
     private void jRBFornecedorMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBFornecedorMouseClicked
-        
         if(jRBFornecedor.isEnabled()){
-            
-            //Habilita campos de pessoa jurídica
-            jRBFornecedor.setEnabled(true);
             jRBFornecedor.setSelected(true);
-            jRBCertificadora.setEnabled(true);
-            jRBCertificadora.setSelected(false);
-            jRBCNPJ.setSelected(true);
-            jFTCPFCNPJ.setEnabled(true);
-            jTFRazaoSocial.setEnabled(true);
-            jTFNome.setEnabled(true);
-            JTFSite.setEnabled(true);
-            jTFRamo.setEnabled(true);
-
-            //Desabilita campos de pessoa física
-            jFTDataNasc.setEnabled(false);
-            jTFRG.setEnabled(false);
-            jRBCPF.setSelected(false);
-            jRBMasc.setEnabled(false);
-            jRBFem.setEnabled(false);
-            jRBMasc.setSelected(false);
-            jRBFem.setSelected(false);
-            jCBCalibracoes.setEnabled(false);
-            jRBUsuario.setEnabled(false);
-            
-
-            //Seta mascara no campo de CNPJ
-            jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
-            //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
-            jFTCPFCNPJ.setValue("");
-         }
+        }
+        
     }//GEN-LAST:event_jRBFornecedorMouseClicked
 
     private void jRBCertificadoraMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBCertificadoraMouseClicked
-       if(jRBCertificadora.isEnabled()){
-        
-            //Habilita campos de pessoa jurídica
-            jRBCertificadora.setEnabled(true);
+         if(jRBCertificadora.isEnabled()){
             jRBCertificadora.setSelected(true);
-            jRBFornecedor.setEnabled(true);
-            jRBFornecedor.setSelected(false);
-            jRBCNPJ.setSelected(true);
-            jFTCPFCNPJ.setEnabled(true);
-            jTFRazaoSocial.setEnabled(true);
-            jTFNome.setEnabled(true);
-            jCBCalibracoes.setEnabled(true);
-
-            //Desabilita campos de pessoa física
-            JTFSite.setEnabled(false);
-            jTFRamo.setEnabled(false);
-            jFTDataNasc.setEnabled(false);
-            jTFRG.setEnabled(false);
-            jRBCPF.setSelected(false);
-            jRBMasc.setEnabled(false);
-            jRBFem.setEnabled(false);
-            jRBMasc.setSelected(false);
-            jRBFem.setSelected(false);
-            jRBUsuario.setEnabled(false); 
-
-            //Seta mascara no campo de CNPJ
-            jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
-            //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
-            jFTCPFCNPJ.setValue("");
-          
-         }
+        }
     }//GEN-LAST:event_jRBCertificadoraMouseClicked
 
     private void jRBCertificadoraActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBCertificadoraActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jRBCertificadoraActionPerformed
 
-    private void jRBUsuarioMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRBUsuarioMouseClicked
-         if(jRBUsuario.isEnabled()){
-             
-            //Habilita campos de pessoa fisíca
-            jTFNome.setEnabled(true);
-            jFTDataNasc.setEnabled(true);
-            jRBCPF.setSelected(true);
-            jTFRG.setEnabled(true);
-            jFTCPFCNPJ.setEnabled(true);
-            jRBMasc.setEnabled(true);
-            jRBFem.setEnabled(true);
-            jTFNome.setEnabled(true);
-
-            //Desabilita campos de pessoa jurídica
-            jTFRazaoSocial.setEnabled(false);
-            jRBCNPJ.setSelected(false);
-
-            //Seta mascara no campo de CPF
-            jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("###.###.###-##")));
-            //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
-            jFTCPFCNPJ.setValue("");
-         }
-    }//GEN-LAST:event_jRBUsuarioMouseClicked
-
     private void jCBMostSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBMostSenhaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jCBMostSenhaActionPerformed
+
+    private void jRBPessoaJuridicaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaStateChanged
+         //garante que sempre quando estiver selecionado pessoa juridica, pessoa fisica não estará selecionado
+         if(jRBPessoaJuridica.isEnabled()){
+            if(jRBPessoaJuridica.isSelected()){
+                validaCampos.desabilitaCampos(jPPessoa);
+                jRBPessoaFisica.setSelected(false);
+        
+                //Habilita campos de pessoa jurídica
+                jRBPessoaFisica.setSelected(false);
+                jRBPessoaJuridica.setSelected(true);
+                jRBCertificadora.setSelected(false);
+                jRBFornecedor.setSelected(false);
+                jRBCertificadora.setEnabled(true);
+                jRBFornecedor.setEnabled(true);
+            }
+         }
+    }//GEN-LAST:event_jRBPessoaJuridicaStateChanged
+
+    private void jRBPessoaFisicaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRBPessoaFisicaStateChanged
+        //garante que sempre quando estiver selecionado pessoa fisica, pessoa juridica não estará selecionado
+        if(jRBPessoaFisica.isEnabled()){
+            if(jRBPessoaFisica.isSelected()){
+                
+                //Habilita campos de pessoa fisíca
+                jRBPessoaJuridica.setSelected(false);
+                jRBPessoaFisica.setSelected(true);
+                jRBCertificadora.setSelected(false);
+                jRBFornecedor.setSelected(false);
+                jRBCertificadora.setEnabled(false);
+                jRBFornecedor.setEnabled(false);
+            
+                //Habilita campos de pessoa fisíca
+                jTFNome.setEnabled(true);
+                jFTDataNasc.setEnabled(true);
+                jRBCPF.setSelected(true);
+                jFTRG.setEnabled(true);
+                jFTCPFCNPJ.setEnabled(true);
+                jRBMasc.setEnabled(true);
+                jRBFem.setEnabled(true);
+                jTFNome.setEnabled(true);
+
+                //Desabilita campos de pessoa jurídica
+                jTFRazaoSocial.setEnabled(false);
+                jRBCNPJ.setSelected(false);
+
+                //Seta mascara no campo de CPF
+                jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("###.###.###-##")));
+                //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+                jFTCPFCNPJ.setValue("");
+            }
+        }
+    }//GEN-LAST:event_jRBPessoaFisicaStateChanged
+
+    private void jRBCertificadoraStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRBCertificadoraStateChanged
+ 
+        if(jRBCertificadora.isEnabled()){
+            if(jRBCertificadora.isSelected()){
+
+               //Habilita campos de pessoa jurídica
+               jRBCertificadora.setEnabled(true);
+               jRBCertificadora.setSelected(true);
+               jRBFornecedor.setEnabled(true);
+               jRBFornecedor.setSelected(false);
+               jRBCNPJ.setSelected(true);
+               jFTCPFCNPJ.setEnabled(true);
+               jTFRazaoSocial.setEnabled(true);
+               jTFNome.setEnabled(true);
+               jCBCalibracoes.setEnabled(true);
+
+               //Desabilita campos de pessoa física
+               JTFSite.setEnabled(false);
+               jTFRamo.setEnabled(false);
+               jFTDataNasc.setEnabled(false);
+               jFTRG.setEnabled(false);
+               jRBCPF.setSelected(false);
+               jRBMasc.setEnabled(false);
+               jRBFem.setEnabled(false);
+               jRBMasc.setSelected(false);
+               jRBFem.setSelected(false);
+
+               //Seta mascara no campo de CNPJ
+               jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
+               //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+               jFTCPFCNPJ.setValue("");
+
+            }
+        }
+    }//GEN-LAST:event_jRBCertificadoraStateChanged
+
+    private void jRBFornecedorStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRBFornecedorStateChanged
+        
+         if(jRBFornecedor.isEnabled()){
+            if(jRBFornecedor.isSelected()){
+                
+                //Habilita campos de pessoa jurídica
+                jRBFornecedor.setEnabled(true);
+                jRBFornecedor.setSelected(true);
+                jRBCertificadora.setEnabled(true);
+                jRBCertificadora.setSelected(false);
+                jRBCNPJ.setSelected(true);
+                jFTCPFCNPJ.setEnabled(true);
+                jTFRazaoSocial.setEnabled(true);
+                jTFNome.setEnabled(true);
+                JTFSite.setEnabled(true);
+                jTFRamo.setEnabled(true);
+
+                //Desabilita campos de pessoa física
+                jFTDataNasc.setEnabled(false);
+                jFTRG.setEnabled(false);
+                jRBCPF.setSelected(false);
+                jRBMasc.setEnabled(false);
+                jRBFem.setEnabled(false);
+                jRBMasc.setSelected(false);
+                jRBFem.setSelected(false);
+                jCBCalibracoes.setEnabled(false);
+
+                //Seta mascara no campo de CNPJ
+                jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
+                //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
+                jFTCPFCNPJ.setValue("");
+            }
+         }
+    }//GEN-LAST:event_jRBFornecedorStateChanged
 
     /**
      * @param args the command line arguments
@@ -1066,6 +1129,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JFormattedTextField jFTCPFCNPJ;
     private javax.swing.JFormattedTextField jFTDataNasc;
+    private javax.swing.JFormattedTextField jFTRG;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1075,7 +1139,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1088,6 +1151,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JPanel jPCadastroPessoa;
     private javax.swing.JPasswordField jPFSenha;
     private javax.swing.JPanel jPPessoa;
+    private javax.swing.JPanel jPTipoPessoa;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -1100,7 +1164,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRBMasc;
     private javax.swing.JRadioButton jRBPessoaFisica;
     private javax.swing.JRadioButton jRBPessoaJuridica;
-    private javax.swing.JRadioButton jRBUsuario;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTBContato;
@@ -1110,7 +1173,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JTextField jTFLogin;
     private javax.swing.JTextField jTFNome;
     private javax.swing.JTextField jTFNumeroContato;
-    private javax.swing.JTextField jTFRG;
     private javax.swing.JTextField jTFRamo;
     private javax.swing.JTextField jTFRazaoSocial;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -1129,7 +1191,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         
         //Pessoa Fisíca
         pessoa_fisica.setDt_nasc(jFTDataNasc.getText());
-        pessoa_fisica.setRg(jTFRG.getText());
+        pessoa_fisica.setRg(jFTRG.getText());
         if (jRBMasc.isSelected()){
             pessoa_fisica.setSexo("M");
         }else if (jRBFem.isSelected()){
@@ -1184,6 +1246,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jFTDataNasc.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##/##/####")));
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
         jFTDataNasc.setValue("");
-        
+        //Seta mascara no campo de RG
+        jFTRG.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###-#")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+        jFTRG.setValue(""); 
     }
 }

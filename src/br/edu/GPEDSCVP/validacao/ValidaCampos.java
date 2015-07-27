@@ -11,6 +11,7 @@ import java.awt.Container;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.ParseException;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
@@ -62,6 +63,14 @@ public class ValidaCampos {
                         JRBT.setEnabled(false);
                    }
                }
+               
+               //Desabilita todos JCheckBox do container
+               if (component instanceof JCheckBox){
+                    JCheckBox JCB = (JCheckBox) component; 
+                    if(JCB.isEnabled()){
+                        JCB.setEnabled(false);
+                   }
+               }
            }
      }
     
@@ -78,6 +87,9 @@ public class ValidaCampos {
                 field.removeAllItems();
             } else if ((component instanceof JRadioButton)){
                 JRadioButton field = (JRadioButton) component;
+                field.setSelected(false);
+            } else if ((component instanceof JCheckBox )){
+                JCheckBox field = (JCheckBox) component;
                 field.setSelected(false);
             }
             if (component instanceof JFormattedTextField) {
@@ -97,7 +109,6 @@ public class ValidaCampos {
         try{           
             metaData = conecta_banco.resultset.getMetaData();
             int conta = metaData.getColumnCount();
-          
                for ( int i = 1; i <= conta; i++){
                    String atributo = metaData.getColumnName(i);
                    int situacao = metaData.isNullable(i);
@@ -110,7 +121,7 @@ public class ValidaCampos {
                                 if (field.isEnabled()){
                                     if (field.getName().equals(atributo)){
                                         if (field.getText().equals("") || (field.getText().equals("  /  /    ")) || (field.getText().equals("  .   .   /    -  ")) ||
-                                        (field.getText().equals("   .   .   -  ")))  {
+                                        (field.getText().equals("   .   .   -  ")) ||(field.getText().equals("  .   .   - ")))  {
                                         JOptionPane.showMessageDialog(null, "campo: "+ field.getToolTipText()+ " é obrigatorio");
                                         field.grabFocus(); 
                                         retorno = 1;
