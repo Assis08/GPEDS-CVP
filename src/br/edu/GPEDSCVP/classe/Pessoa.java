@@ -7,6 +7,7 @@ package br.edu.GPEDSCVP.classe;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 
 /**
  *

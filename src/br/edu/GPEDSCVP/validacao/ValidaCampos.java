@@ -71,6 +71,13 @@ public class ValidaCampos {
                         JCB.setEnabled(false);
                    }
                }
+               
+               if (component instanceof JComboBox){
+                    JComboBox JCB = (JComboBox) component; 
+                    if(JCB.isEnabled()){
+                        JCB.setEnabled(false);
+                   }
+               }
            }
      }
     
@@ -91,11 +98,10 @@ public class ValidaCampos {
             } else if ((component instanceof JCheckBox )){
                 JCheckBox field = (JCheckBox) component;
                 field.setSelected(false);
-            }
-            if (component instanceof JFormattedTextField) {
+            }else if (component instanceof JFormattedTextField) {
                 JFormattedTextField field = (JFormattedTextField) component;
                 field.setText("");
-             }
+            }
         }
     }
        

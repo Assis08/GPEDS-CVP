@@ -7,7 +7,7 @@ import java.util.Date;
 /**
  * Classe útil para conversão de tipos
  *
- * @author Douglas
+ * @author Willys
  */
 public class FormatarData {
 

@@ -453,7 +453,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
               <SubComponents>
-                <Container class="javax.swing.JPanel" name="jPanel1">
+                <Container class="javax.swing.JPanel" name="jPContato">
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                       <JTabbedPaneConstraints tabName="Contato">
@@ -584,13 +584,15 @@
                     <Component class="javax.swing.JComboBox" name="jCBTipoContato">
                       <Properties>
                         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-                          <StringArray count="3">
-                            <StringItem index="0" value="Selecione tipo"/>
-                            <StringItem index="1" value="Email"/>
-                            <StringItem index="2" value="Telefone"/>
-                          </StringArray>
+                          <StringArray count="0"/>
                         </Property>
+                        <Property name="toolTipText" type="java.lang.String" value="Tipo"/>
+                        <Property name="name" type="java.lang.String" value="tipo" noResource="true"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jCBTipoContatoMouseClicked"/>
+                        <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCBTipoContatoItemStateChanged"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel9">
                       <Properties>
@@ -598,6 +600,10 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTFDescContato">
+                      <Properties>
+                        <Property name="toolTipText" type="java.lang.String" value="Descri&#xe7;&#xe3;o"/>
+                        <Property name="name" type="java.lang.String" value="descricao" noResource="true"/>
+                      </Properties>
                     </Component>
                     <Component class="javax.swing.JLabel" name="jLabel10">
                       <Properties>
@@ -605,6 +611,10 @@
                       </Properties>
                     </Component>
                     <Component class="javax.swing.JTextField" name="jTFNumeroContato">
+                      <Properties>
+                        <Property name="toolTipText" type="java.lang.String" value="Numero"/>
+                        <Property name="name" type="java.lang.String" value="numero" noResource="true"/>
+                      </Properties>
                     </Component>
                     <Component class="javax.swing.JButton" name="jBTAddContato">
                       <Properties>
@@ -612,6 +622,9 @@
                           <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\Botoes_Site_5752_Knob_Add.png"/>
                         </Property>
                       </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBTAddContatoActionPerformed"/>
+                      </Events>
                     </Component>
                     <Component class="javax.swing.JButton" name="jBTRemoveContato">
                       <Properties>
@@ -814,17 +827,17 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jLabel16" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Group type="103" alignment="3" groupAlignment="3" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Group type="103" alignment="0" groupAlignment="3" attributes="0">
+                                  <Component id="jRBCertificadora" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jRBFornecedor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jRBPessoaJuridica" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jRBPessoaFisica" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Group type="103" alignment="3" groupAlignment="3" attributes="0">
-                                      <Component id="jRBCertificadora" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jRBFornecedor" alignment="3" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jLabel17" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  </Group>
                               </Group>
+                              <Component id="jLabel16" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="32767" attributes="0"/>
                       </Group>

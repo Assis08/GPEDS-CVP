@@ -6,12 +6,15 @@
 package br.edu.GPEDSCVP.interfaces;
 
 import br.edu.GPEDSCVP.classe.Certificadora;
+import br.edu.GPEDSCVP.classe.Contato;
 import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.Pessoa;
 import br.edu.GPEDSCVP.classe.PessoaFisica;
 import br.edu.GPEDSCVP.classe.PessoaJuridica;
+import br.edu.GPEDSCVP.dao.daoContato;
 import br.edu.GPEDSCVP.dao.daoPessoa;
 import br.edu.GPEDSCVP.validacao.FormatarData;
+import br.edu.GPEDSCVP.validacao.Mensagens;
 import br.edu.GPEDSCVP.validacao.PreencherJtableGenerico;
 import br.edu.GPEDSCVP.validacao.Rotinas;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
@@ -19,6 +22,8 @@ import br.edu.GPEDSCVP.validacao.ValidaBotoes;
 import br.edu.GPEDSCVP.validacao.ValidaCampos;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
@@ -33,12 +38,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
     
     PreencherJtableGenerico preencher;
     ValidaCampos validaCampos;
+    Mensagens mensagem;
     FormatarData data;
     daoPessoa dao_pessoa;
+    daoContato dao_contato;
     PessoaFisica pessoa_fisica;
     Certificadora certificadora;
     Fornecedor fornecedor;
     Pessoa pessoa;
+    Contato contato;
     Rotinas rotinas; 
     ValidaBotoes validabotoes;
     int situacao = Rotinas.PADRAO;
@@ -53,7 +61,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Instancia de todas as classes
         preencher = new PreencherJtableGenerico();
         data = new FormatarData();
+        mensagem = new Mensagens();
         dao_pessoa = new daoPessoa();
+        dao_contato = new daoContato();
+        contato = new Contato();
         pessoa_fisica = new PessoaFisica();
         certificadora = new Certificadora();
         fornecedor = new Fornecedor();
@@ -73,6 +84,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Desabilita todos os campos
         validaCampos.desabilitaCampos(jPPessoa);
         validaCampos.desabilitaCampos(jPTipoPessoa);
+        validaCampos.desabilitaCampos(jPContato);
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -121,7 +133,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jTabbedPane2 = new javax.swing.JTabbedPane();
-        jPanel1 = new javax.swing.JPanel();
+        jPContato = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTBContato = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
@@ -403,68 +415,90 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jLabel8.setText("Tipo:");
 
-        jCBTipoContato.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione tipo", "Email", "Telefone" }));
+        jCBTipoContato.setToolTipText("Tipo");
+        jCBTipoContato.setName("tipo"); // NOI18N
+        jCBTipoContato.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCBTipoContatoMouseClicked(evt);
+            }
+        });
+        jCBTipoContato.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCBTipoContatoItemStateChanged(evt);
+            }
+        });
 
         jLabel9.setText("Descrição:");
 
+        jTFDescContato.setToolTipText("Descrição");
+        jTFDescContato.setName("descricao"); // NOI18N
+
         jLabel10.setText("Numero:");
 
+        jTFNumeroContato.setToolTipText("Numero");
+        jTFNumeroContato.setName("numero"); // NOI18N
+
         jBTAddContato.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
+        jBTAddContato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTAddContatoActionPerformed(evt);
+            }
+        });
 
         jBTRemoveContato.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPContatoLayout = new javax.swing.GroupLayout(jPContato);
+        jPContato.setLayout(jPContatoLayout);
+        jPContatoLayout.setHorizontalGroup(
+            jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPContatoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPContatoLayout.createSequentialGroup()
+                        .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jCBTipoContato, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8))
                         .addGap(34, 34, 34)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
                             .addComponent(jTFDescContato, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPContatoLayout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addGap(184, 184, 184))
                             .addComponent(jTFNumeroContato))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBTAddContato, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBTRemoveContato, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(57, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+        jPContatoLayout.setVerticalGroup(
+            jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPContatoLayout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel9)
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCBTipoContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFDescContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFNumeroContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPContatoLayout.createSequentialGroup()
                         .addComponent(jBTAddContato, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBTRemoveContato, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
-        jTabbedPane2.addTab("Contato", jPanel1);
+        jTabbedPane2.addTab("Contato", jPContato);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -652,15 +686,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
             jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPTipoPessoaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel16)
+                .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jRBCertificadora)
+                        .addComponent(jRBFornecedor)
+                        .addComponent(jLabel17))
                     .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jRBPessoaJuridica)
-                        .addComponent(jRBPessoaFisica)
-                        .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRBCertificadora)
-                            .addComponent(jRBFornecedor)
-                            .addComponent(jLabel17))))
+                        .addComponent(jRBPessoaFisica))
+                    .addComponent(jLabel16))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -740,32 +774,78 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        
+        int retorno_mensagem;
         try
         {
             if(jRBPessoaFisica.isSelected()){
                 if (validaCampos.validacamposobrigatorios(jPPessoa, "PESSOA") == 0){ 
                     if (validaCampos.validacamposobrigatorios(jPPessoa, "PESSOA_FISICA") == 0){
 
-                       //Pega atributos da tela de cadastro de pessoa fisica.
-                       getcompPessoaFisica();
-                       //Inclui pessoa fisica
-                       dao_pessoa.incluir(pessoa_fisica);   
-                       JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                        //Pega atributos da tela de cadastro de pessoa fisica.
+                        getcompPessoaFisica();
+                        //se não estiver preenchido os dados de contato
+                        if((jCBTipoContato.getSelectedIndex() == 0)){
+                            //Retorno da mensagem: 0-sim 1-não;
+                            retorno_mensagem = mensagem.ValidaMensagem("Deseja salvar registro sem o contato?");
+                            
+                            if(retorno_mensagem == 1){
+                                
+                                JOptionPane.showMessageDialog(null, "Preencha os campos de contato");
+                                
+                            //Salvar apenas pessoa    
+                            }else if(retorno_mensagem == 0){
+                                
+                                    //Inclui pessoa fisica
+                                    dao_pessoa.incluir(pessoa_fisica);   
+                                    JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
-                       //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
-                       situacao = Rotinas.INICIAL;
+                                    //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                    situacao = Rotinas.INICIAL;
 
-                       //habilita os botoes utilizados quando cancela um processo
-                       validabotoes.ValidaEstado(jPBotoes, situacao);
+                                    //habilita os botoes utilizados quando cancela um processo
+                                    validabotoes.ValidaEstado(jPBotoes, situacao);
 
-                       //Limpa os campos do container pessoa
-                       validaCampos.LimparCampos(jPPessoa);
-                       validaCampos.LimparCampos(jPTipoPessoa);
+                                    //Limpa os campos do container pessoa
+                                    validaCampos.LimparCampos(jPPessoa);
+                                    validaCampos.LimparCampos(jPTipoPessoa);
 
-                       //Desabilita todos os campos do container pessoa
-                       validaCampos.desabilitaCampos(jPPessoa);
-                       validaCampos.desabilitaCampos(jPTipoPessoa);
+                                    //Desabilita todos os campos do container pessoa
+                                    validaCampos.desabilitaCampos(jPPessoa);
+                                    validaCampos.desabilitaCampos(jPTipoPessoa);
+                                
+                            } 
+                        //Salvar pessoa e contato
+                        } else{
+                            //valida campos obrigatórios de contato
+                            if (validaCampos.validacamposobrigatorios(jPContato, "CONTATO") == 0){
+                                 //Pega dados de contato da tela
+                                getContato();
+                                
+                                //Inclui pessoa fisica
+                                dao_pessoa.incluir(pessoa_fisica);   
+                                                                       
+                                //Inclui contato
+                                dao_contato.incluir(contato);
+                                
+                                JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+
+                                //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                situacao = Rotinas.INICIAL;
+
+                                //habilita os botoes utilizados quando cancela um processo
+                                validabotoes.ValidaEstado(jPBotoes, situacao);
+
+                                //Limpa os campos do container pessoa
+                                validaCampos.LimparCampos(jPPessoa);
+                                validaCampos.LimparCampos(jPTipoPessoa);
+                                validaCampos.LimparCampos(jPContato);
+
+                                //Desabilita todos os campos do container pessoa
+                                validaCampos.desabilitaCampos(jPPessoa);
+                                validaCampos.desabilitaCampos(jPTipoPessoa);
+                                validaCampos.desabilitaCampos(jPContato);
+                            }
+                        }
                     }
                 }
             }else if(jRBPessoaJuridica.isSelected()){
@@ -831,7 +911,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 }
             }else {
                 JOptionPane.showMessageDialog(null, "Selecione o tipo da pessoa para prosseguir");
-            }
+            }    
         }
         catch(SQLException ex)
         {
@@ -846,7 +926,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
         
         //Seta mascaras nos campos necessários
         setaMascaras ();
-                   
+        
+        //Carrega conteudo das combobox
+        jCBTipoContato.addItem("Selecione tipo");
+        jCBTipoContato.addItem("Email");
+        jCBTipoContato.addItem("Telefone");
+  
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
         situacao = Rotinas.INCLUIR;
         
@@ -885,10 +970,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Limpa os campos do container pessoa
         validaCampos.LimparCampos(jPPessoa);
         validaCampos.LimparCampos(jPTipoPessoa);
+        validaCampos.LimparCampos(jPContato);
         
         //Desabilita todos os campos do container pessoa
         validaCampos.desabilitaCampos(jPPessoa);
         validaCampos.desabilitaCampos(jPTipoPessoa);
+        validaCampos.desabilitaCampos(jPContato);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jRBPessoaJuridicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaActionPerformed
@@ -952,9 +1039,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jRBPessoaJuridicaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaStateChanged
          //garante que sempre quando estiver selecionado pessoa juridica, pessoa fisica não estará selecionado
          if(jRBPessoaJuridica.isEnabled()){
-            if(jRBPessoaJuridica.isSelected()){
+            if((jRBPessoaJuridica.isSelected()) && ((!jRBCertificadora.isSelected()) && (!jRBFornecedor.isSelected()))){
                 validaCampos.desabilitaCampos(jPPessoa);
                 jRBPessoaFisica.setSelected(false);
+                jCBTipoContato.setEnabled(false);
         
                 //Habilita campos de pessoa jurídica
                 jRBPessoaFisica.setSelected(false);
@@ -979,6 +1067,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 jRBFornecedor.setSelected(false);
                 jRBCertificadora.setEnabled(false);
                 jRBFornecedor.setEnabled(false);
+                jCBTipoContato.setEnabled(true);
             
                 //Habilita campos de pessoa fisíca
                 jTFNome.setEnabled(true);
@@ -1017,6 +1106,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                jTFRazaoSocial.setEnabled(true);
                jTFNome.setEnabled(true);
                jCBCalibracoes.setEnabled(true);
+               jCBTipoContato.setEnabled(true);
 
                //Desabilita campos de pessoa física
                JTFSite.setEnabled(false);
@@ -1054,6 +1144,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 jTFNome.setEnabled(true);
                 JTFSite.setEnabled(true);
                 jTFRamo.setEnabled(true);
+                jCBTipoContato.setEnabled(true);
 
                 //Desabilita campos de pessoa física
                 jFTDataNasc.setEnabled(false);
@@ -1072,6 +1163,37 @@ public class InterfacePessoa extends javax.swing.JFrame {
             }
          }
     }//GEN-LAST:event_jRBFornecedorStateChanged
+
+    private void jBTAddContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddContatoActionPerformed
+        if(jCBTipoContato.getSelectedIndex() == 0){ 
+            JOptionPane.showMessageDialog(null, "Selecione o tipo do contato para continuar");
+        }else{
+            if (validaCampos.validacamposobrigatorios(jPContato, "CONTATO") == 0) { 
+             
+         }
+        }
+        
+    }//GEN-LAST:event_jBTAddContatoActionPerformed
+
+    private void jCBTipoContatoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCBTipoContatoMouseClicked
+
+    }//GEN-LAST:event_jCBTipoContatoMouseClicked
+
+    private void jCBTipoContatoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBTipoContatoItemStateChanged
+        //Se for email 
+        if(jCBTipoContato.getSelectedIndex() == 1){
+            jTFDescContato.setEnabled(true);
+            jTFNumeroContato.setEnabled(false); 
+        //Se for telefone    
+        }else if (jCBTipoContato.getSelectedIndex() == 2){
+            jTFNumeroContato.setEnabled(true); 
+            jTFDescContato.setEnabled(false);
+        //Se nenhum selecionado 
+        }else{
+            jTFNumeroContato.setEnabled(false); 
+            jTFDescContato.setEnabled(false);    
+        }
+    }//GEN-LAST:event_jCBTipoContatoItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -1149,10 +1271,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPBotoes;
     private javax.swing.JPanel jPCadastroPessoa;
+    private javax.swing.JPanel jPContato;
     private javax.swing.JPasswordField jPFSenha;
     private javax.swing.JPanel jPPessoa;
     private javax.swing.JPanel jPTipoPessoa;
-    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1182,6 +1304,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     //Pega dados de pessoa fisíca da tela 
     public Pessoa getcompPessoaFisica() {
+        //  Variaveis e conversões
         Date data_atual = new Date(System.currentTimeMillis());
         //Pessoa
         pessoa_fisica.setNome(jTFNome.getText());
@@ -1202,6 +1325,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     
     //Pega dados de pessoa jurídica da tela
     public Pessoa getcompCertificadora() {
+        //  Variaveis e conversões
         Date data_atual = new Date(System.currentTimeMillis());
         //Pessoa
         certificadora.setNome(jTFNome.getText());
@@ -1223,7 +1347,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }
     
     public Pessoa getcompFornecedor() {
+        //  Variaveis e conversões
         Date data_atual = new Date(System.currentTimeMillis());
+        
         //Pessoa
         fornecedor.setNome(jTFNome.getText());
         fornecedor.setCpf_cnpj(jFTCPFCNPJ.getText());
@@ -1241,7 +1367,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }
     
     public void setaMascaras (){
-
         //Seta mascara no campo  data de nascimento
         jFTDataNasc.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##/##/####")));
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
@@ -1250,5 +1375,30 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jFTRG.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###-#")));
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
         jFTRG.setValue(""); 
+    }
+    
+    //Pega dados da tela de contatos 
+    public Contato getContato() {
+        //  Variaveis e conversões
+        Date data_atual = new Date(System.currentTimeMillis());
+        int fone;
+        int id_pessoa = Integer.parseInt(jTFIDPessoa.getText());
+        contato.setData_alter(data_atual);
+        contato.setId_pessoa(id_pessoa);
+
+        //Se for Email
+        if(jCBTipoContato.getSelectedIndex() == 1){
+            contato.setDescricao(jTFDescContato.getText()); 
+            contato.setTipo("E");
+            
+        //Se for telefone    
+        }else if(jCBTipoContato.getSelectedIndex() == 2){
+            fone = Integer.parseInt(jTFNumeroContato.getText());
+            contato.setFone(fone);
+            contato.setTipo("F");
+            
+        }
+       
+        return contato;
     }
 }

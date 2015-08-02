@@ -49,7 +49,7 @@ public class daoPessoa {
                 + pessoa.getNome()+ "','"
                 + pessoa.getCpf_cnpj()+ "','"
                 + FormatarData.dateParaSQLDate(pessoa.getData_cadastro())+ "','"
-                + FormatarData.dateParaSQLDate(pessoa.getData_alter())+ "')";
+                + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+ "')";
         
                 conecta_banco.incluirSQL(sql);
                
@@ -74,7 +74,7 @@ public class daoPessoa {
                 + pessoa.getNome()+ "','"
                 + pessoa.getCpf_cnpj()+ "','"
                 + FormatarData.dateParaSQLDate(pessoa.getData_cadastro())+ "','"
-                + FormatarData.dateParaSQLDate(pessoa.getData_alter())+ "')";
+                + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+ "')";
         
                 conecta_banco.incluirSQL(sql);
                
@@ -103,7 +103,7 @@ public class daoPessoa {
                 + pessoa.getNome()+ "','"
                 + pessoa.getCpf_cnpj()+ "','"
                 + FormatarData.dateParaSQLDate(pessoa.getData_cadastro())+ "','"
-                + FormatarData.dateParaSQLDate(pessoa.getData_alter())+ "')";
+                + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+ "')";
         
                 conecta_banco.incluirSQL(sql);
                
