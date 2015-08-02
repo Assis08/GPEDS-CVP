@@ -16,7 +16,9 @@ import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 
 /**
@@ -127,7 +129,7 @@ public class ValidaCampos {
                                 if (field.isEnabled()){
                                     if (field.getName().equals(atributo)){
                                         if (field.getText().equals("") || (field.getText().equals("  /  /    ")) || (field.getText().equals("  .   .   /    -  ")) ||
-                                        (field.getText().equals("   .   .   -  ")) ||(field.getText().equals("  .   .   - ")))  {
+                                        (field.getText().equals("   .   .   -  ")) ||(field.getText().equals("  .   .   - ")) ||(field.getText().equals("(  )    -    ")))  {
                                         JOptionPane.showMessageDialog(null, "campo: "+ field.getToolTipText()+ " é obrigatorio");
                                         field.grabFocus(); 
                                         retorno = 1;
@@ -157,5 +159,21 @@ public class ValidaCampos {
           JOptionPane.showMessageDialog(null,"Erro: "+error_mask);
       }
        return null;
-    }           
+    }
+    
+    //Método para limpar dados de uma Jtable
+    public void LimparJtable(JTable tabela){
+/*
+        int totlinha = tabela.getRowCount();
+        int totcolun = tabela.getColumnCount();
+        
+        for (int l = 0; l< totlinha; l++){
+            for(int c = 0; c< totcolun; c++){
+                tabela.setValueAt("", l, c);
+            }   
+        }
+        */
+        DefaultTableModel tableModel =(DefaultTableModel) tabela.getModel();  
+        tableModel.setNumRows(0);
+    }
 }

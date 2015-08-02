@@ -75,10 +75,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
         validabotoes = new ValidaBotoes();
-        
+
         //Define o tamanho das colunas da tabela de contatos
         preencher.FormatarJtable(jTBContato, new int[] {
-            50, 300, 30, 10
+            1, 1, 60, 10, 10
         });
           
         //Desabilita todos os campos
@@ -141,9 +141,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jTFDescContato = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jTFNumeroContato = new javax.swing.JTextField();
         jBTAddContato = new javax.swing.JButton();
         jBTRemoveContato = new javax.swing.JButton();
+        jLabel18 = new javax.swing.JLabel();
+        jTFEmail = new javax.swing.JTextField();
+        jFTNumeroContato = new javax.swing.JFormattedTextField();
         jPanel3 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
@@ -402,16 +404,20 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jTBContato.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "ID Contato", "Tipo", "Descrição", "Numero"
+                "ID Contato", "Tipo", "Descrição", "Numero", "Email"
             }
         ));
         jScrollPane1.setViewportView(jTBContato);
+        if (jTBContato.getColumnModel().getColumnCount() > 0) {
+            jTBContato.getColumnModel().getColumn(0).setMinWidth(1);
+            jTBContato.getColumnModel().getColumn(1).setMinWidth(1);
+        }
 
         jLabel8.setText("Tipo:");
 
@@ -435,9 +441,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jLabel10.setText("Numero:");
 
-        jTFNumeroContato.setToolTipText("Numero");
-        jTFNumeroContato.setName("numero"); // NOI18N
-
         jBTAddContato.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
         jBTAddContato.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -447,32 +450,39 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jBTRemoveContato.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
 
+        jLabel18.setText("Email:");
+
+        jTFEmail.setToolTipText("Email");
+        jTFEmail.setName("email"); // NOI18N
+
+        jFTNumeroContato.setToolTipText("Numero");
+        jFTNumeroContato.setName("numero"); // NOI18N
+
         javax.swing.GroupLayout jPContatoLayout = new javax.swing.GroupLayout(jPContato);
         jPContato.setLayout(jPContatoLayout);
         jPContatoLayout.setHorizontalGroup(
             jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPContatoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPContatoLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCBTipoContato, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel8))
+                            .addComponent(jBTAddContato, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBTRemoveContato, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPContatoLayout.createSequentialGroup()
+                        .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jCBTipoContato, 0, 135, Short.MAX_VALUE)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jFTNumeroContato))
                         .addGap(34, 34, 34)
                         .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel9)
-                            .addComponent(jTFDescContato, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPContatoLayout.createSequentialGroup()
-                                .addComponent(jLabel10)
-                                .addGap(184, 184, 184))
-                            .addComponent(jTFNumeroContato))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBTAddContato, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBTRemoveContato, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTFDescContato, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel18)
+                            .addComponent(jTFEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 281, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel10))
                 .addContainerGap(57, Short.MAX_VALUE))
         );
         jPContatoLayout.setVerticalGroup(
@@ -481,16 +491,22 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10))
+                    .addComponent(jLabel9))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCBTipoContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFDescContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFNumeroContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                    .addComponent(jTFDescContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jLabel18))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTFEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jFTNumeroContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPContatoLayout.createSequentialGroup()
                         .addComponent(jBTAddContato, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -508,7 +524,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 286, Short.MAX_VALUE)
+            .addGap(0, 289, Short.MAX_VALUE)
         );
 
         jTabbedPane2.addTab("Endereço", jPanel3);
@@ -808,25 +824,29 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                     //Limpa os campos do container pessoa
                                     validaCampos.LimparCampos(jPPessoa);
                                     validaCampos.LimparCampos(jPTipoPessoa);
+                                    //Limpa os campos do container contato
+                                    validaCampos.LimparCampos(jPContato);
 
                                     //Desabilita todos os campos do container pessoa
                                     validaCampos.desabilitaCampos(jPPessoa);
                                     validaCampos.desabilitaCampos(jPTipoPessoa);
+                                    //Desabilita todos os campos do container contato
+                                    validaCampos.desabilitaCampos(jPContato);
                                 
                             } 
                         //Salvar pessoa e contato
                         } else{
-                            //valida campos obrigatórios de contato
-                            if (validaCampos.validacamposobrigatorios(jPContato, "CONTATO") == 0){
-                                 //Pega dados de contato da tela
+                     
+                                //Pega dados de contato da tela
                                 getContato();
-                                
+
                                 //Inclui pessoa fisica
                                 dao_pessoa.incluir(pessoa_fisica);   
-                                                                       
+
                                 //Inclui contato
-                                dao_contato.incluir(contato);
-                                
+                                //dao_contato.incluir(contato);
+                                dao_contato.gravarContatos(contato);
+
                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
                                 //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
@@ -838,13 +858,16 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                 //Limpa os campos do container pessoa
                                 validaCampos.LimparCampos(jPPessoa);
                                 validaCampos.LimparCampos(jPTipoPessoa);
+                                //Limpa os campos do container contato
                                 validaCampos.LimparCampos(jPContato);
+                                validaCampos.LimparJtable(jTBContato);
 
                                 //Desabilita todos os campos do container pessoa
                                 validaCampos.desabilitaCampos(jPPessoa);
                                 validaCampos.desabilitaCampos(jPTipoPessoa);
+                                //Desabilita todos os campos do container contato
                                 validaCampos.desabilitaCampos(jPContato);
-                            }
+                           
                         }
                     }
                 }
@@ -1165,14 +1188,28 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jRBFornecedorStateChanged
 
     private void jBTAddContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddContatoActionPerformed
+        contato = new Contato();
+        //Se não estiver selecionado o tipo do contato
         if(jCBTipoContato.getSelectedIndex() == 0){ 
             JOptionPane.showMessageDialog(null, "Selecione o tipo do contato para continuar");
         }else{
-            if (validaCampos.validacamposobrigatorios(jPContato, "CONTATO") == 0) { 
-             
-         }
+            //Se estiver selecionado o tipo do contato
+            if (validaCampos.validacamposobrigatorios(jPContato, "CONTATO") == 0) {
+                //Pega dados da tela de contato
+                getContato();
+                try {
+                    //adiciona dados do contato na Jtable de contatos
+                    dao_contato.addContato(contato);
+                    //limpa campos de contato
+                    jTFDescContato.setText("");
+                    jFTNumeroContato.setText("");
+                    jTFEmail.setText("");
+                    
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Falha ao adicionar contato");
+                }
+            }
         }
-        
     }//GEN-LAST:event_jBTAddContatoActionPerformed
 
     private void jCBTipoContatoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCBTipoContatoMouseClicked
@@ -1183,15 +1220,23 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Se for email 
         if(jCBTipoContato.getSelectedIndex() == 1){
             jTFDescContato.setEnabled(true);
-            jTFNumeroContato.setEnabled(false); 
+            jTFEmail.setEnabled(true);
+            jFTNumeroContato.setEnabled(false); 
+            jFTNumeroContato.setText("");
         //Se for telefone    
         }else if (jCBTipoContato.getSelectedIndex() == 2){
-            jTFNumeroContato.setEnabled(true); 
-            jTFDescContato.setEnabled(false);
+            jFTNumeroContato.setEnabled(true); 
+            jTFDescContato.setEnabled(true);
+            jTFEmail.setEnabled(false);
+            jTFEmail.setText("");
         //Se nenhum selecionado 
         }else{
-            jTFNumeroContato.setEnabled(false); 
-            jTFDescContato.setEnabled(false);    
+            jFTNumeroContato.setEnabled(false); 
+            jTFDescContato.setEnabled(false);  
+            jTFEmail.setEnabled(false);
+            jFTNumeroContato.setText(""); 
+            jTFDescContato.setText("");  
+            jTFEmail.setText("");
         }
     }//GEN-LAST:event_jCBTipoContatoItemStateChanged
 
@@ -1251,6 +1296,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JFormattedTextField jFTCPFCNPJ;
     private javax.swing.JFormattedTextField jFTDataNasc;
+    private javax.swing.JFormattedTextField jFTNumeroContato;
     private javax.swing.JFormattedTextField jFTRG;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1261,6 +1307,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
+    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1291,10 +1338,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JTable jTBContato;
     private javax.swing.JTextField jTFData;
     private javax.swing.JTextField jTFDescContato;
+    private javax.swing.JTextField jTFEmail;
     private javax.swing.JTextField jTFIDPessoa;
     private javax.swing.JTextField jTFLogin;
     private javax.swing.JTextField jTFNome;
-    private javax.swing.JTextField jTFNumeroContato;
     private javax.swing.JTextField jTFRamo;
     private javax.swing.JTextField jTFRazaoSocial;
     private javax.swing.JTabbedPane jTabbedPane1;
@@ -1375,25 +1422,31 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jFTRG.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###-#")));
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
         jFTRG.setValue(""); 
+        //Seta mascara no campo de Telefone
+        jFTNumeroContato.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("(##)####-####")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+        jFTNumeroContato.setValue(""); 
     }
     
     //Pega dados da tela de contatos 
     public Contato getContato() {
         //  Variaveis e conversões
         Date data_atual = new Date(System.currentTimeMillis());
-        int fone;
+        String fone;
         int id_pessoa = Integer.parseInt(jTFIDPessoa.getText());
         contato.setData_alter(data_atual);
         contato.setId_pessoa(id_pessoa);
+        contato.setTabela(jTBContato);
+        contato.setDescricao(jTFDescContato.getText()); 
 
         //Se for Email
         if(jCBTipoContato.getSelectedIndex() == 1){
-            contato.setDescricao(jTFDescContato.getText()); 
+            contato.setEmail(jTFEmail.getText());
             contato.setTipo("E");
             
         //Se for telefone    
         }else if(jCBTipoContato.getSelectedIndex() == 2){
-            fone = Integer.parseInt(jTFNumeroContato.getText());
+            fone = jFTNumeroContato.getText();
             contato.setFone(fone);
             contato.setTipo("F");
             

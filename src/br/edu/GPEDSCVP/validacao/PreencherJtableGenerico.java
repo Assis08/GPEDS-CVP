@@ -5,11 +5,13 @@
  */
 package br.edu.GPEDSCVP.validacao;
 
+import java.awt.FontMetrics;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 
 /**
  *
@@ -58,6 +60,18 @@ public class PreencherJtableGenerico {
             JOptionPane.showMessageDialog(null, (new StringBuilder()).append("Erro ao listar no JTable ").append(erro).toString());
         }
     }
+    
+    //Método para dimensionar a largura das colunas da Jtable de acordo com o tamanho do texto
+    public void ajustaColunas(JTable tabela) {  
+        tabela.setAutoResizeMode(0);  
+        FontMetrics fm = tabela.getGraphics().getFontMetrics();  
+  
+        for(int i = 0; i < tabela.getColumnCount(); i++) {  
+            String columnName = tabela.getColumnName(i);  
+            TableColumn col = tabela.getColumnModel().getColumn(i);  
+            col.setMinWidth(fm.stringWidth(columnName) + 10);  
+        }                         
+    }  
 
     
 }

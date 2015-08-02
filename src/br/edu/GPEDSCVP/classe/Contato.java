@@ -7,6 +7,7 @@ package br.edu.GPEDSCVP.classe;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import javax.swing.JTable;
 
 /**
  *
@@ -16,18 +17,21 @@ public class Contato {
     
     private int id_contato;
     private int id_pessoa;
-    private int fone;
+    private String fone;
     private String descricao;
     private String tipo;
+    private String email;
     private Date data_alter;
+    private JTable tabela;
     private ResultSet retorno;
 
     public Contato() {
         id_contato = 0;
         id_pessoa = 0;
-        fone = 0;
+        fone = "";
         descricao = "";
         tipo = "";
+        email = "";
         data_alter = null;
     }
     
@@ -47,11 +51,11 @@ public class Contato {
         this.id_pessoa = id_pessoa;
     }
 
-    public int getFone() {
+    public String getFone() {
         return fone;
     }
 
-    public void setFone(int fone) {
+    public void setFone(String fone) {
         this.fone = fone;
     }
 
@@ -86,7 +90,20 @@ public class Contato {
     public void setRetorno(ResultSet retorno) {
         this.retorno = retorno;
     }
-    
-    
-    
+
+    public JTable getTabela() {
+        return tabela;
+    }
+
+    public void setTabela(JTable tabela) {
+        this.tabela = tabela;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
