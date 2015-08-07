@@ -811,42 +811,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                             //Salvar apenas pessoa    
                             }else if(retorno_mensagem == 0){
                                 
-                                    //Inclui pessoa fisica
-                                    dao_pessoa.incluir(pessoa_fisica);   
-                                    JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
-
-                                    //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
-                                    situacao = Rotinas.INICIAL;
-
-                                    //habilita os botoes utilizados quando cancela um processo
-                                    validabotoes.ValidaEstado(jPBotoes, situacao);
-
-                                    //Limpa os campos do container pessoa
-                                    validaCampos.LimparCampos(jPPessoa);
-                                    validaCampos.LimparCampos(jPTipoPessoa);
-                                    //Limpa os campos do container contato
-                                    validaCampos.LimparCampos(jPContato);
-
-                                    //Desabilita todos os campos do container pessoa
-                                    validaCampos.desabilitaCampos(jPPessoa);
-                                    validaCampos.desabilitaCampos(jPTipoPessoa);
-                                    //Desabilita todos os campos do container contato
-                                    validaCampos.desabilitaCampos(jPContato);
-                                
-                            } 
-                        //Salvar pessoa e contato
-                        } else{
-                     
-                                //Pega dados de contato da tela
-                                getContato();
-
                                 //Inclui pessoa fisica
                                 dao_pessoa.incluir(pessoa_fisica);   
-
-                                //Inclui contato
-                                //dao_contato.incluir(contato);
-                                dao_contato.gravarContatos(contato);
-
                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
                                 //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
@@ -860,16 +826,53 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                 validaCampos.LimparCampos(jPTipoPessoa);
                                 //Limpa os campos do container contato
                                 validaCampos.LimparCampos(jPContato);
-                                validaCampos.LimparJtable(jTBContato);
 
                                 //Desabilita todos os campos do container pessoa
                                 validaCampos.desabilitaCampos(jPPessoa);
                                 validaCampos.desabilitaCampos(jPTipoPessoa);
                                 //Desabilita todos os campos do container contato
                                 validaCampos.desabilitaCampos(jPContato);
-                           
+                            } 
+                        //Salvar pessoa e contato
+                        } else{
+                                if(validaCampos.VerificaJtable(jTBContato) == 0){
+                                    JOptionPane.showMessageDialog(null, "Favor, adicionar dados do contato");
+                                }else
+                                {
+                                    //Pega dados de contato da tela
+                                    getContato();
+
+                                    //Inclui pessoa fisica
+                                    dao_pessoa.incluir(pessoa_fisica);   
+
+                                    //Inclui contato
+                                    //dao_contato.incluir(contato);
+                                    dao_contato.gravarContatos(contato);
+
+                                    JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+
+                                    //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                    situacao = Rotinas.INICIAL;
+
+                                    //habilita os botoes utilizados quando cancela um processo
+                                    validabotoes.ValidaEstado(jPBotoes, situacao);
+
+                                    //Limpa os campos do container pessoa
+                                    validaCampos.LimparCampos(jPPessoa);
+                                    validaCampos.LimparCampos(jPTipoPessoa);
+                                    //Limpa os campos do container contato
+                                    validaCampos.LimparCampos(jPContato);
+                                    validaCampos.LimparJtable(jTBContato);
+
+                                    //Desabilita todos os campos do container pessoa
+                                    validaCampos.desabilitaCampos(jPPessoa);
+                                    validaCampos.desabilitaCampos(jPTipoPessoa);
+                                    //Desabilita todos os campos do container contato
+                                    validaCampos.desabilitaCampos(jPContato);
+                                }
+                                
+                            }
                         }
-                    }
                 }
             }else if(jRBPessoaJuridica.isSelected()){
                 if(jRBCertificadora.isSelected()){

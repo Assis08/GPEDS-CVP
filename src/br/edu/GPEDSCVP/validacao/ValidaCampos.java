@@ -163,17 +163,16 @@ public class ValidaCampos {
     
     //Método para limpar dados de uma Jtable
     public void LimparJtable(JTable tabela){
-/*
-        int totlinha = tabela.getRowCount();
-        int totcolun = tabela.getColumnCount();
-        
-        for (int l = 0; l< totlinha; l++){
-            for(int c = 0; c< totcolun; c++){
-                tabela.setValueAt("", l, c);
-            }   
-        }
-        */
+
         DefaultTableModel tableModel =(DefaultTableModel) tabela.getModel();  
         tableModel.setNumRows(0);
+    }
+    
+    //Método para verificar se a Jtable possui registros
+    public int VerificaJtable(JTable tabela){
+         if (tabela.getRowCount()>0){
+             return 1;        
+         }else
+             return 0;
     }
 }
