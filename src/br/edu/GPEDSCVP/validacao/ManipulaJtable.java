@@ -17,9 +17,9 @@ import javax.swing.table.TableColumn;
  *
  * @author Willys
  */
-public class PreencherJtableGenerico {
+public class ManipulaJtable {
     
-    public PreencherJtableGenerico()
+    public ManipulaJtable()
     {
     }
 
@@ -71,6 +71,34 @@ public class PreencherJtableGenerico {
             TableColumn col = tabela.getColumnModel().getColumn(i);  
             col.setMinWidth(fm.stringWidth(columnName) + 10);  
         }                         
+    } 
+    
+     //Método para remover um registro da Jtable
+     public void removeContato(JTable  jtable){
+        DefaultTableModel tabela = (DefaultTableModel)jtable.getModel();
+        int totlinha = tabela.getRowCount();
+        Boolean sel = false;
+        
+        int opcao = JOptionPane.showConfirmDialog(null, "Deseja remover as linhas selecionadas? ",
+                "remover", 
+                    JOptionPane.YES_NO_OPTION);
+        if(opcao == JOptionPane.YES_OPTION){
+            for(int i = totlinha - 1; i>=0 ; i--){
+                if(tabela.getValueAt(i,0) == null){
+                    sel = false;
+                }else{
+                     Boolean selecionado = (Boolean) tabela.getValueAt(i,0);
+                    if(selecionado == true){
+                        sel = true;
+                        tabela.removeRow(i);
+                    }
+                }
+            }
+            if (sel == false){
+                JOptionPane.showMessageDialog(null, "Não ha nenhum registro selecionado !"); 
+            }
+        }
+        
     }  
 
     

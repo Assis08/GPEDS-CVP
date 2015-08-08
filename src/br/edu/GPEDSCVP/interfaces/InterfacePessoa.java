@@ -15,7 +15,7 @@ import br.edu.GPEDSCVP.dao.daoContato;
 import br.edu.GPEDSCVP.dao.daoPessoa;
 import br.edu.GPEDSCVP.validacao.FormatarData;
 import br.edu.GPEDSCVP.validacao.Mensagens;
-import br.edu.GPEDSCVP.validacao.PreencherJtableGenerico;
+import br.edu.GPEDSCVP.validacao.ManipulaJtable;
 import br.edu.GPEDSCVP.validacao.Rotinas;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
 import br.edu.GPEDSCVP.validacao.ValidaBotoes;
@@ -36,7 +36,7 @@ import javax.swing.text.DefaultFormatterFactory;
  */
 public class InterfacePessoa extends javax.swing.JFrame {
     
-    PreencherJtableGenerico preencher;
+    ManipulaJtable Jtable;
     ValidaCampos validaCampos;
     Mensagens mensagem;
     FormatarData data;
@@ -59,7 +59,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         initComponents();
         
         //Instancia de todas as classes
-        preencher = new PreencherJtableGenerico();
+        Jtable = new ManipulaJtable();
         data = new FormatarData();
         mensagem = new Mensagens();
         dao_pessoa = new daoPessoa();
@@ -77,8 +77,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
         validabotoes = new ValidaBotoes();
 
         //Define o tamanho das colunas da tabela de contatos
-        preencher.FormatarJtable(jTBContato, new int[] {
-            1, 1, 60, 10, 10
+        Jtable.FormatarJtable(jTBContato, new int[] {
+            1, 1, 60, 10, 10, 10
         });
           
         //Desabilita todos os campos
@@ -404,19 +404,27 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jTBContato.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null},
-                {null, null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "ID Contato", "Tipo", "Descrição", "Numero", "Email"
+                "Sel", "ID Contato", "Tipo", "Descrição", "Numero", "Email"
             }
-        ));
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
         jScrollPane1.setViewportView(jTBContato);
         if (jTBContato.getColumnModel().getColumnCount() > 0) {
-            jTBContato.getColumnModel().getColumn(0).setMinWidth(1);
             jTBContato.getColumnModel().getColumn(1).setMinWidth(1);
+            jTBContato.getColumnModel().getColumn(2).setMinWidth(1);
         }
 
         jLabel8.setText("Tipo:");
@@ -449,6 +457,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
         });
 
         jBTRemoveContato.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
+        jBTRemoveContato.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTRemoveContatoActionPerformed(evt);
+            }
+        });
 
         jLabel18.setText("Email:");
 
@@ -882,26 +895,79 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                 //Pega atributos da tela de cadastro de pessoa juridica.
                                 getcompCertificadora();
                                 
-                                //Inclui pessoa juridica
-                                dao_pessoa.incluir(certificadora);
+                                //se não estiver preenchido os dados de contato
+                                if((jCBTipoContato.getSelectedIndex() == 0)){
+                                    //Retorno da mensagem: 0-sim 1-não;
+                                    retorno_mensagem = mensagem.ValidaMensagem("Deseja salvar registro sem o contato?");
+                            
+                                    if(retorno_mensagem == 1){
+                                
+                                        JOptionPane.showMessageDialog(null, "Preencha os campos de contato");
+                                
+                                        //Salvar apenas pessoa    
+                                        }else if(retorno_mensagem == 0){
+                                
+                                            //Inclui pessoa fisica
+                                            dao_pessoa.incluir(pessoa_fisica);   
+                                            JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
-                                JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                                            //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                            situacao = Rotinas.INICIAL;
 
-                                //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
-                                situacao = Rotinas.INICIAL;
+                                            //habilita os botoes utilizados quando cancela um processo
+                                            validabotoes.ValidaEstado(jPBotoes, situacao);
 
-                                //habilita os botoes utilizados quando cancela um processo
-                                validabotoes.ValidaEstado(jPBotoes, situacao);
+                                            //Limpa os campos do container pessoa
+                                            validaCampos.LimparCampos(jPPessoa);
+                                            validaCampos.LimparCampos(jPTipoPessoa);
+                                            //Limpa os campos do container contato
+                                            validaCampos.LimparCampos(jPContato);
 
-                                //Limpa os campos do container pessoa
-                                validaCampos.LimparCampos(jPPessoa);
-                                validaCampos.LimparCampos(jPTipoPessoa);
+                                            //Desabilita todos os campos do container pessoa
+                                            validaCampos.desabilitaCampos(jPPessoa);
+                                            validaCampos.desabilitaCampos(jPTipoPessoa);
+                                            //Desabilita todos os campos do container contato
+                                            validaCampos.desabilitaCampos(jPContato);
+                                        }    
+                                    //Salvar pessoa e contato
+                                } else{
+                                    if(validaCampos.VerificaJtable(jTBContato) == 0){
+                                        JOptionPane.showMessageDialog(null, "Favor, adicionar dados do contato");
+                                    }else{
 
-                                //Desabilita todos os campos do container pessoa
-                                validaCampos.desabilitaCampos(jPPessoa);
-                                validaCampos.desabilitaCampos(jPTipoPessoa);
-                             }
-                         }
+                                        //Pega dados de contato da tela
+                                        getContato();
+
+                                        //Inclui pessoa juridica
+                                        dao_pessoa.incluir(certificadora); 
+
+                                        //Inclui contato
+                                        dao_contato.gravarContatos(contato);
+
+                                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+
+                                        //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                        situacao = Rotinas.INICIAL;
+
+                                        //habilita os botoes utilizados quando cancela um processo
+                                        validabotoes.ValidaEstado(jPBotoes, situacao);
+
+                                        //Limpa os campos do container pessoa
+                                        validaCampos.LimparCampos(jPPessoa);
+                                        validaCampos.LimparCampos(jPTipoPessoa);
+                                        //Limpa os campos do container contato
+                                        validaCampos.LimparCampos(jPContato);
+                                        validaCampos.LimparJtable(jTBContato);
+
+                                        //Desabilita todos os campos do container pessoa
+                                        validaCampos.desabilitaCampos(jPPessoa);
+                                        validaCampos.desabilitaCampos(jPTipoPessoa);
+                                        //Desabilita todos os campos do container contato
+                                        validaCampos.desabilitaCampos(jPContato);
+                                    } 
+                                }
+                            }
+                        }
                     }
                 }else if(jRBFornecedor.isSelected()){
                     
@@ -910,25 +976,78 @@ public class InterfacePessoa extends javax.swing.JFrame {
                              if (validaCampos.validacamposobrigatorios(jPPessoa, "FORNECEDOR") == 0) {
                                 //Pega atributos da tela de cadastro de pessoa juridica.
                                 getcompFornecedor();
+                           
+                                //se não estiver preenchido os dados de contato
+                                if((jCBTipoContato.getSelectedIndex() == 0)){
+                                    //Retorno da mensagem: 0-sim 1-não;
+                                    retorno_mensagem = mensagem.ValidaMensagem("Deseja salvar registro sem o contato?");
+                            
+                                    if(retorno_mensagem == 1){
+                                
+                                        JOptionPane.showMessageDialog(null, "Preencha os campos de contato");
+                                
+                                        //Salvar apenas pessoa    
+                                        }else if(retorno_mensagem == 0){
+                                
+                                            //Inclui pessoa juridica
+                                            dao_pessoa.incluir(fornecedor);   
+                                            JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
-                                //Inclui pessoa juridica
-                                dao_pessoa.incluir(fornecedor);
+                                            //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                            situacao = Rotinas.INICIAL;
 
-                                JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                                            //habilita os botoes utilizados quando cancela um processo
+                                            validabotoes.ValidaEstado(jPBotoes, situacao);
 
-                                //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
-                                situacao = Rotinas.INICIAL;
+                                            //Limpa os campos do container pessoa
+                                            validaCampos.LimparCampos(jPPessoa);
+                                            validaCampos.LimparCampos(jPTipoPessoa);
+                                            //Limpa os campos do container contato
+                                            validaCampos.LimparCampos(jPContato);
 
-                                //habilita os botoes utilizados quando cancela um processo
-                                validabotoes.ValidaEstado(jPBotoes, situacao);
+                                            //Desabilita todos os campos do container pessoa
+                                            validaCampos.desabilitaCampos(jPPessoa);
+                                            validaCampos.desabilitaCampos(jPTipoPessoa);
+                                            //Desabilita todos os campos do container contato
+                                            validaCampos.desabilitaCampos(jPContato);
+                                        }    
+                                    //Salvar pessoa e contato
+                                } else{
+                                    if(validaCampos.VerificaJtable(jTBContato) == 0){
+                                        JOptionPane.showMessageDialog(null, "Favor, adicionar dados do contato");
+                                    }else{
 
-                                //Limpa os campos do container pessoa
-                                validaCampos.LimparCampos(jPPessoa);
-                                validaCampos.LimparCampos(jPTipoPessoa);
+                                        //Pega dados de contato da tela
+                                        getContato();
 
-                                //Desabilita todos os campos do container pessoa
-                                validaCampos.desabilitaCampos(jPPessoa);
-                                validaCampos.desabilitaCampos(jPTipoPessoa);
+                                        //Inclui pessoa juridica
+                                        dao_pessoa.incluir(fornecedor); 
+
+                                        //Inclui contato
+                                        dao_contato.gravarContatos(contato);
+
+                                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+
+                                        //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                        situacao = Rotinas.INICIAL;
+
+                                        //habilita os botoes utilizados quando cancela um processo
+                                        validabotoes.ValidaEstado(jPBotoes, situacao);
+
+                                        //Limpa os campos do container pessoa
+                                        validaCampos.LimparCampos(jPPessoa);
+                                        validaCampos.LimparCampos(jPTipoPessoa);
+                                        //Limpa os campos do container contato
+                                        validaCampos.LimparCampos(jPContato);
+                                        validaCampos.LimparJtable(jTBContato);
+
+                                        //Desabilita todos os campos do container pessoa
+                                        validaCampos.desabilitaCampos(jPPessoa);
+                                        validaCampos.desabilitaCampos(jPTipoPessoa);
+                                        //Desabilita todos os campos do container contato
+                                        validaCampos.desabilitaCampos(jPContato);
+                                    } 
+                                }
                              }
                          }
                     }
@@ -997,6 +1116,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         validaCampos.LimparCampos(jPPessoa);
         validaCampos.LimparCampos(jPTipoPessoa);
         validaCampos.LimparCampos(jPContato);
+        validaCampos.LimparJtable(jTBContato);
         
         //Desabilita todos os campos do container pessoa
         validaCampos.desabilitaCampos(jPPessoa);
@@ -1242,6 +1362,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
             jTFEmail.setText("");
         }
     }//GEN-LAST:event_jCBTipoContatoItemStateChanged
+
+    private void jBTRemoveContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveContatoActionPerformed
+        // TODO add your handling code here:
+        Jtable.removeContato(jTBContato);
+    }//GEN-LAST:event_jBTRemoveContatoActionPerformed
 
     /**
      * @param args the command line arguments
