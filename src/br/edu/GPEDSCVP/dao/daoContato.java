@@ -79,8 +79,6 @@ public class daoContato {
         TabelaContato.setValueAt(contato.getDescricao(),totlinha,3);
         TabelaContato.setValueAt(contato.getFone(),totlinha,4);
         TabelaContato.setValueAt(contato.getEmail(),totlinha,5);
-        
-          
     }
  
    
@@ -119,7 +117,4 @@ public class daoContato {
             conecta_banco.incluirSQL(sql);
         }
      }
-    
-    
-    
 }

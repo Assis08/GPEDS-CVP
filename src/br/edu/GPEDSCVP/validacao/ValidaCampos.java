@@ -83,6 +83,49 @@ public class ValidaCampos {
            }
      }
     
+    public void habilitaCampos(Container container){
+        
+        Component components[] = container.getComponents();
+           for (Component component : components){   
+               //Desabilita todas JTextField do container
+               if (component instanceof JTextField){
+                   JTextField field = (JTextField) component;
+                   if (!field.isEnabled()){
+                        field.setEnabled(true); 
+                   }
+               } 
+               //Desabilita todas JFormattedTextField do container
+               if (component instanceof JFormattedTextField){
+                   JFormattedTextField field = (JFormattedTextField) component;
+                   if (!field.isEnabled()){
+                        field.setEnabled(true); 
+                   }    
+               }
+               //Desabilita todos JRadioButton do container
+               if (component instanceof JRadioButton){
+                    JRadioButton JRBT = (JRadioButton) component; 
+                    if(!JRBT.isEnabled()){
+                        JRBT.setEnabled(true);
+                   }
+               }
+               
+               //Desabilita todos JCheckBox do container
+               if (component instanceof JCheckBox){
+                    JCheckBox JCB = (JCheckBox) component; 
+                    if(!JCB.isEnabled()){
+                        JCB.setEnabled(true);
+                   }
+               }
+               
+               if (component instanceof JComboBox){
+                    JComboBox JCB = (JComboBox) component; 
+                    if(!JCB.isEnabled()){
+                        JCB.setEnabled(true);
+                   }
+               }
+           }
+     }
+    
     //Método para limpar os campos de um container
         public void LimparCampos(Container container) {
         Component components[] = container.getComponents();
@@ -111,7 +154,6 @@ public class ValidaCampos {
     public int validacamposobrigatorios(Container container, String tabela){
          
         Integer retorno =0;
-        String valor_campo;
         
         conecta_banco.executeSQL("select * from " + tabela + " LIMIT 1");
         try{           
@@ -120,7 +162,6 @@ public class ValidaCampos {
                for ( int i = 1; i <= conta; i++){
                    String atributo = metaData.getColumnName(i);
                    int situacao = metaData.isNullable(i);
-                   
                    if (situacao == 0){
                         Component components[] = container.getComponents();
                         for (Component component : components){

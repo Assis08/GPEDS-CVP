@@ -6,13 +6,18 @@
 package br.edu.GPEDSCVP.interfaces;
 
 import br.edu.GPEDSCVP.classe.Certificadora;
+import br.edu.GPEDSCVP.classe.Cidade;
 import br.edu.GPEDSCVP.classe.Contato;
+import br.edu.GPEDSCVP.classe.Endereco;
 import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.Pessoa;
 import br.edu.GPEDSCVP.classe.PessoaFisica;
 import br.edu.GPEDSCVP.classe.PessoaJuridica;
+import br.edu.GPEDSCVP.dao.daoCidade;
 import br.edu.GPEDSCVP.dao.daoContato;
+import br.edu.GPEDSCVP.dao.daoEndereco;
 import br.edu.GPEDSCVP.dao.daoPessoa;
+import br.edu.GPEDSCVP.validacao.ComboBox;
 import br.edu.GPEDSCVP.validacao.FormatarData;
 import br.edu.GPEDSCVP.validacao.Mensagens;
 import br.edu.GPEDSCVP.validacao.ManipulaJtable;
@@ -37,19 +42,25 @@ import javax.swing.text.DefaultFormatterFactory;
 public class InterfacePessoa extends javax.swing.JFrame {
     
     ManipulaJtable Jtable;
+    ComboBox combo;
     ValidaCampos validaCampos;
     Mensagens mensagem;
     FormatarData data;
     daoPessoa dao_pessoa;
     daoContato dao_contato;
+    daoCidade dao_cidade;
+    daoEndereco dao_endereco;
     PessoaFisica pessoa_fisica;
     Certificadora certificadora;
     Fornecedor fornecedor;
     Pessoa pessoa;
+    Endereco endereco;
+    Cidade cidade;
     Contato contato;
     Rotinas rotinas; 
     ValidaBotoes validabotoes;
     int situacao = Rotinas.PADRAO;
+    int[] array_cidade;
 
     /**
      * Creates new form InterfacePessoa
@@ -61,10 +72,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Instancia de todas as classes
         Jtable = new ManipulaJtable();
         data = new FormatarData();
+        combo = new ComboBox();
         mensagem = new Mensagens();
         dao_pessoa = new daoPessoa();
         dao_contato = new daoContato();
+        dao_cidade = new daoCidade();
+        dao_endereco = new daoEndereco();
         contato = new Contato();
+        endereco = new Endereco();
+        cidade = new Cidade();
         pessoa_fisica = new PessoaFisica();
         certificadora = new Certificadora();
         fornecedor = new Fornecedor();
@@ -80,11 +96,23 @@ public class InterfacePessoa extends javax.swing.JFrame {
         Jtable.FormatarJtable(jTBContato, new int[] {
             1, 1, 60, 10, 10, 10
         });
-          
+        
+        //Define o tamanho das colunas da tabela de Endereços
+        Jtable.FormatarJtable(jTBEndereco, new int[] {
+            1, 1, 60, 10, 10, 10, 10, 10, 10
+        });
+       
         //Desabilita todos os campos
         validaCampos.desabilitaCampos(jPPessoa);
         validaCampos.desabilitaCampos(jPTipoPessoa);
         validaCampos.desabilitaCampos(jPContato);
+        validaCampos.desabilitaCampos(jPEndereco);
+        
+        //Desabilita botões especificos da tela
+        jBTAddContato.setEnabled(false);
+        jBTRemoveContato.setEnabled(false);
+        jBTAddEndereco.setEnabled(false);
+        jBTRemoveEndereco.setEnabled(false);
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -147,6 +175,25 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jTFEmail = new javax.swing.JTextField();
         jFTNumeroContato = new javax.swing.JFormattedTextField();
         jPanel3 = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTBEndereco = new javax.swing.JTable();
+        jBTRemoveEndereco = new javax.swing.JButton();
+        jBTAddEndereco = new javax.swing.JButton();
+        jPEndereco = new javax.swing.JPanel();
+        jTFNumeroEnd = new javax.swing.JTextField();
+        jLabel21 = new javax.swing.JLabel();
+        jTFUF = new javax.swing.JTextField();
+        jLabel25 = new javax.swing.JLabel();
+        jCBCidade = new javax.swing.JComboBox();
+        jLabel24 = new javax.swing.JLabel();
+        jTFRua = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jTFBairro = new javax.swing.JTextField();
+        jLabel22 = new javax.swing.JLabel();
+        jTFDescEnd = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        jFTCep = new javax.swing.JFormattedTextField();
         jPanel4 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jTFLogin = new javax.swing.JTextField();
@@ -399,7 +446,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(27, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTBContato.setModel(new javax.swing.table.DefaultTableModel(
@@ -519,25 +566,208 @@ public class InterfacePessoa extends javax.swing.JFrame {
                     .addComponent(jFTNumeroContato, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPContatoLayout.createSequentialGroup()
                         .addComponent(jBTAddContato, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBTRemoveContato, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(jBTRemoveContato, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(33, 33, 33))
         );
 
         jTabbedPane2.addTab("Contato", jPContato);
+
+        jTBEndereco.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null},
+                {null, null, null, null, null, null, null, null, null}
+            },
+            new String [] {
+                "Sel", "ID Endereço", "Descrição", "Rua", "Nº", "Bairro", "CEP", "Cidade", "UF"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(jTBEndereco);
+        if (jTBEndereco.getColumnModel().getColumnCount() > 0) {
+            jTBEndereco.getColumnModel().getColumn(1).setMinWidth(1);
+            jTBEndereco.getColumnModel().getColumn(2).setMinWidth(1);
+            jTBEndereco.getColumnModel().getColumn(7).setResizable(false);
+            jTBEndereco.getColumnModel().getColumn(8).setResizable(false);
+        }
+
+        jBTRemoveEndereco.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
+        jBTRemoveEndereco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTRemoveEnderecoActionPerformed(evt);
+            }
+        });
+
+        jBTAddEndereco.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
+        jBTAddEndereco.setName("descricao"); // NOI18N
+        jBTAddEndereco.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTAddEnderecoActionPerformed(evt);
+            }
+        });
+
+        jTFNumeroEnd.setToolTipText("Nº");
+        jTFNumeroEnd.setName("numero"); // NOI18N
+        jTFNumeroEnd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFNumeroEndActionPerformed(evt);
+            }
+        });
+
+        jLabel21.setText("Nº:");
+
+        jTFUF.setName("uf"); // NOI18N
+        jTFUF.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFUFActionPerformed(evt);
+            }
+        });
+
+        jLabel25.setText("UF:");
+
+        jCBCidade.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione item" }));
+        jCBCidade.setName("cidade"); // NOI18N
+
+        jLabel24.setText("Cidade");
+
+        jTFRua.setToolTipText("Rua");
+        jTFRua.setName("rua"); // NOI18N
+
+        jLabel20.setText("Rua:");
+
+        jLabel23.setText("CEP:");
+
+        jTFBairro.setToolTipText("Bairro");
+        jTFBairro.setName("bairro"); // NOI18N
+
+        jLabel22.setText("Bairro:");
+
+        jTFDescEnd.setToolTipText("Descrição");
+        jTFDescEnd.setName("descricao"); // NOI18N
+
+        jLabel19.setText("Descrição:");
+
+        jFTCep.setToolTipText("CEP");
+        jFTCep.setName("cep"); // NOI18N
+
+        javax.swing.GroupLayout jPEnderecoLayout = new javax.swing.GroupLayout(jPEndereco);
+        jPEndereco.setLayout(jPEnderecoLayout);
+        jPEnderecoLayout.setHorizontalGroup(
+            jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPEnderecoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPEnderecoLayout.createSequentialGroup()
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel19)
+                            .addComponent(jTFDescEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPEnderecoLayout.createSequentialGroup()
+                                .addComponent(jTFRua, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9))
+                            .addGroup(jPEnderecoLayout.createSequentialGroup()
+                                .addComponent(jLabel20)
+                                .addGap(42, 42, 42)))
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTFNumeroEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel21)))
+                    .addGroup(jPEnderecoLayout.createSequentialGroup()
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPEnderecoLayout.createSequentialGroup()
+                                .addComponent(jTFBairro)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jFTCep, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(11, 11, 11))
+                            .addGroup(jPEnderecoLayout.createSequentialGroup()
+                                .addComponent(jLabel22)
+                                .addGap(242, 242, 242)
+                                .addComponent(jLabel23)
+                                .addGap(163, 163, 163)))
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel24)
+                            .addComponent(jCBCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPEnderecoLayout.createSequentialGroup()
+                                .addComponent(jLabel25)
+                                .addGap(71, 71, 71))
+                            .addComponent(jTFUF))))
+                .addContainerGap())
+        );
+        jPEnderecoLayout.setVerticalGroup(
+            jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPEnderecoLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel19)
+                    .addComponent(jLabel20)
+                    .addComponent(jLabel21))
+                .addGap(4, 4, 4)
+                .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTFDescEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTFRua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTFNumeroEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPEnderecoLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel23)
+                            .addComponent(jLabel22)
+                            .addComponent(jLabel24)
+                            .addComponent(jLabel25))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTFUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCBCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPEnderecoLayout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTFBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jFTCep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 854, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 744, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jBTAddEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBTRemoveEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 289, Short.MAX_VALUE)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addComponent(jPEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addComponent(jBTAddEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBTRemoveEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("Endereço", jPanel3);
@@ -766,8 +996,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addComponent(jPPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(28, 28, 28)
                 .addComponent(jTabbedPane2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(25, 25, 25))
         );
 
         jTabbedPane1.addTab("Cadastro", jPCadastroPessoa);
@@ -820,68 +1051,197 @@ public class InterfacePessoa extends javax.swing.JFrame {
                             if(retorno_mensagem == 1){
                                 
                                 JOptionPane.showMessageDialog(null, "Preencha os campos de contato");
-                                
-                            //Salvar apenas pessoa    
+
                             }else if(retorno_mensagem == 0){
                                 
-                                //Inclui pessoa fisica
-                                dao_pessoa.incluir(pessoa_fisica);   
-                                JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                                //se não estiver preenchido os dados de endereço
+                                if(validaCampos.VerificaJtable(jTBEndereco) == 0){
+                                    retorno_mensagem = mensagem.ValidaMensagem("Deseja salvar registro sem o endereço?");
+                            
+                                    if(retorno_mensagem == 1){
+                                        JOptionPane.showMessageDialog(null, "Preencha os campos de endereço");
+                                    }else{
+                                            //Inclui pessoa fisica
+                                            dao_pessoa.incluir(pessoa_fisica);   
+                                            JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
-                                //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
-                                situacao = Rotinas.INICIAL;
+                                            //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                            situacao = Rotinas.INICIAL;
 
-                                //habilita os botoes utilizados quando cancela um processo
-                                validabotoes.ValidaEstado(jPBotoes, situacao);
+                                            //habilita os botoes utilizados quando cancela um processo
+                                            validabotoes.ValidaEstado(jPBotoes, situacao);
 
-                                //Limpa os campos do container pessoa
-                                validaCampos.LimparCampos(jPPessoa);
-                                validaCampos.LimparCampos(jPTipoPessoa);
-                                //Limpa os campos do container contato
-                                validaCampos.LimparCampos(jPContato);
+                                            //Limpa os campos do container pessoa
+                                            validaCampos.LimparCampos(jPPessoa);
+                                            validaCampos.LimparCampos(jPTipoPessoa);
+                                            //Limpa os campos do container contato
+                                            validaCampos.LimparCampos(jPContato);
 
-                                //Desabilita todos os campos do container pessoa
-                                validaCampos.desabilitaCampos(jPPessoa);
-                                validaCampos.desabilitaCampos(jPTipoPessoa);
-                                //Desabilita todos os campos do container contato
-                                validaCampos.desabilitaCampos(jPContato);
+                                            //Desabilita todos os campos do container pessoa
+                                            validaCampos.desabilitaCampos(jPPessoa);
+                                            validaCampos.desabilitaCampos(jPTipoPessoa);
+                                            validaCampos.desabilitaCampos(jPEndereco);
+                                            //Desabilita todos os campos do container contato
+                                            validaCampos.desabilitaCampos(jPContato);
+                                            //Desabilita os botoes especificos da tela
+                                            jBTAddContato.setEnabled(false);
+                                            jBTRemoveContato.setEnabled(false);
+                                            jBTAddEndereco.setEnabled(false);
+                                            jBTRemoveEndereco.setEnabled(false);
+                                    }
+                                }else{
+                                    
+                                        //Salva Pessoa com endereço 
+                                        
+                                        //Pega dados de endereço da tela
+                                        getEndereco();
+
+                                        //Inclui pessoa fisica
+                                        dao_pessoa.incluir(pessoa_fisica);   
+                                        
+                                        //Inclui endereço
+                                        dao_endereco.gravarEndereco(endereco);
+
+                                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+
+                                        //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                        situacao = Rotinas.INICIAL;
+
+                                        //habilita os botoes utilizados quando cancela um processo
+                                        validabotoes.ValidaEstado(jPBotoes, situacao);
+
+                                        //Limpa os campos do container pessoa
+                                        validaCampos.LimparCampos(jPPessoa);
+                                        validaCampos.LimparCampos(jPTipoPessoa);
+                                        //Limpa os campos do container contato
+                                        validaCampos.LimparCampos(jPContato);
+                                        validaCampos.LimparJtable(jTBContato);
+                                        //Limpa os campos do container endereco
+                                        validaCampos.LimparCampos(jPEndereco);
+                                        validaCampos.LimparJtable(jTBEndereco);
+
+                                        //Desabilita todos os campos do container pessoa
+                                        validaCampos.desabilitaCampos(jPPessoa);
+                                        validaCampos.desabilitaCampos(jPTipoPessoa);
+                                        //Desabilita todos os campos do container contato
+                                        validaCampos.desabilitaCampos(jPContato);
+                                        //Desabilita todos os campos do container endereco
+                                        validaCampos.desabilitaCampos(jPEndereco);
+                                        
+                                        //Desabilita os botoes especificos da tela
+                                        jBTAddContato.setEnabled(false);
+                                        jBTRemoveContato.setEnabled(false);
+                                        jBTAddEndereco.setEnabled(false);
+                                        jBTRemoveEndereco.setEnabled(false);
+                                }
                             } 
                         //Salvar pessoa e contato
                         } else{
-                                if(validaCampos.VerificaJtable(jTBContato) == 0){
-                                    JOptionPane.showMessageDialog(null, "Favor, adicionar dados do contato");
-                                }else
-                                {
-                                    //Pega dados de contato da tela
-                                    getContato();
+                            if(validaCampos.VerificaJtable(jTBContato) == 0){
+                                JOptionPane.showMessageDialog(null, "Favor, adicionar dados do contato");
+                            }else{
+                                     //se não estiver preenchido os dados de endereço
+                                    if(validaCampos.VerificaJtable(jTBEndereco) == 0){
+                                    retorno_mensagem = mensagem.ValidaMensagem("Deseja salvar registro sem o endereço?");
+                            
+                                    if(retorno_mensagem == 1){
+                                        JOptionPane.showMessageDialog(null, "Preencha os campos de endereço");
+                                    }else{
+                                        //Salva Pessoa sem endereço 
+                                        
+                                        //Pega dados de contato da tela
+                                        getContato();
 
-                                    //Inclui pessoa fisica
-                                    dao_pessoa.incluir(pessoa_fisica);   
+                                        //Inclui pessoa fisica
+                                        dao_pessoa.incluir(pessoa_fisica);   
 
-                                    //Inclui contato
-                                    //dao_contato.incluir(contato);
-                                    dao_contato.gravarContatos(contato);
+                                        //Inclui contato
+                                        //dao_contato.incluir(contato);
+                                        dao_contato.gravarContatos(contato);
 
-                                    JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
-                                    //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
-                                    situacao = Rotinas.INICIAL;
+                                        //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                        situacao = Rotinas.INICIAL;
 
-                                    //habilita os botoes utilizados quando cancela um processo
-                                    validabotoes.ValidaEstado(jPBotoes, situacao);
+                                        //habilita os botoes utilizados quando cancela um processo
+                                        validabotoes.ValidaEstado(jPBotoes, situacao);
 
-                                    //Limpa os campos do container pessoa
-                                    validaCampos.LimparCampos(jPPessoa);
-                                    validaCampos.LimparCampos(jPTipoPessoa);
-                                    //Limpa os campos do container contato
-                                    validaCampos.LimparCampos(jPContato);
-                                    validaCampos.LimparJtable(jTBContato);
+                                        //Limpa os campos do container pessoa
+                                        validaCampos.LimparCampos(jPPessoa);
+                                        validaCampos.LimparCampos(jPTipoPessoa);
+                                        //Limpa os campos do container contato
+                                        validaCampos.LimparCampos(jPContato);
+                                        validaCampos.LimparJtable(jTBContato);
+                                        //Limpa os campos do container endereco
+                                        validaCampos.LimparCampos(jPEndereco);
+                                        validaCampos.LimparJtable(jTBEndereco);
 
-                                    //Desabilita todos os campos do container pessoa
-                                    validaCampos.desabilitaCampos(jPPessoa);
-                                    validaCampos.desabilitaCampos(jPTipoPessoa);
-                                    //Desabilita todos os campos do container contato
-                                    validaCampos.desabilitaCampos(jPContato);
+                                        //Desabilita todos os campos do container pessoa
+                                        validaCampos.desabilitaCampos(jPPessoa);
+                                        validaCampos.desabilitaCampos(jPTipoPessoa);
+                                        //Desabilita todos os campos do container contato
+                                        validaCampos.desabilitaCampos(jPContato);
+                                        //Desabilita todos os campos do container endereco
+                                        validaCampos.desabilitaCampos(jPEndereco);
+                                        //Desabilita os botoes especificos da tela
+                                        jBTAddContato.setEnabled(false);
+                                        jBTRemoveContato.setEnabled(false);
+                                        jBTAddEndereco.setEnabled(false);
+                                        jBTRemoveEndereco.setEnabled(false);
+                                        
+                                    }
+                                    }else{
+                                        
+                                        //Salva Pessoa com contato e endereço 
+                                        
+                                        //Pega dados de contato da tela
+                                        getContato();
+                                        getEndereco();
+
+                                        //Inclui pessoa fisica
+                                        dao_pessoa.incluir(pessoa_fisica);   
+
+                                        //Inclui contato
+                                        dao_contato.gravarContatos(contato);
+                                        
+                                        //Inclui endereço
+                                        dao_endereco.gravarEndereco(endereco);
+
+                                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+
+                                        //Define a situação como cancelar para habilitar os botoes utilizados apenas quando cancela um processo
+                                        situacao = Rotinas.INICIAL;
+
+                                        //habilita os botoes utilizados quando cancela um processo
+                                        validabotoes.ValidaEstado(jPBotoes, situacao);
+
+                                        //Limpa os campos do container pessoa
+                                        validaCampos.LimparCampos(jPPessoa);
+                                        validaCampos.LimparCampos(jPTipoPessoa);
+                                        //Limpa os campos do container contato
+                                        validaCampos.LimparCampos(jPContato);
+                                        validaCampos.LimparJtable(jTBContato);
+                                        //Limpa os campos do container endereco
+                                        validaCampos.LimparCampos(jPEndereco);
+                                        validaCampos.LimparJtable(jTBEndereco);
+
+                                        //Desabilita todos os campos do container pessoa
+                                        validaCampos.desabilitaCampos(jPPessoa);
+                                        validaCampos.desabilitaCampos(jPTipoPessoa);
+                                        //Desabilita todos os campos do container contato
+                                        validaCampos.desabilitaCampos(jPContato);
+                                        //Desabilita todos os campos do container endereco
+                                        validaCampos.desabilitaCampos(jPEndereco);
+                                        
+                                        //Desabilita os botoes especificos da tela
+                                        jBTAddContato.setEnabled(false);
+                                        jBTRemoveContato.setEnabled(false);
+                                        jBTAddEndereco.setEnabled(false);
+                                        jBTRemoveEndereco.setEnabled(false);
+                                        
+                                    }
+                                   
                                 }
                                 
                             }
@@ -928,6 +1288,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                             validaCampos.desabilitaCampos(jPTipoPessoa);
                                             //Desabilita todos os campos do container contato
                                             validaCampos.desabilitaCampos(jPContato);
+                                            //Desabilita os botoes especificos da tela
+                                            jBTAddContato.setEnabled(false);
+                                            jBTRemoveContato.setEnabled(false);
+                                            jBTAddEndereco.setEnabled(false);
+                                            jBTRemoveEndereco.setEnabled(false);
                                         }    
                                     //Salvar pessoa e contato
                                 } else{
@@ -964,6 +1329,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                         validaCampos.desabilitaCampos(jPTipoPessoa);
                                         //Desabilita todos os campos do container contato
                                         validaCampos.desabilitaCampos(jPContato);
+                                        //Desabilita os botoes especificos da tela
+                                        jBTAddContato.setEnabled(false);
+                                        jBTRemoveContato.setEnabled(false);
+                                        jBTAddEndereco.setEnabled(false);
+                                        jBTRemoveEndereco.setEnabled(false);
                                     } 
                                 }
                             }
@@ -1010,6 +1380,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                             validaCampos.desabilitaCampos(jPTipoPessoa);
                                             //Desabilita todos os campos do container contato
                                             validaCampos.desabilitaCampos(jPContato);
+                                            //Desabilita os botoes especificos da tela
+                                            jBTAddContato.setEnabled(false);
+                                            jBTRemoveContato.setEnabled(false);
+                                            jBTAddEndereco.setEnabled(false);
+                                            jBTRemoveEndereco.setEnabled(false);
                                         }    
                                     //Salvar pessoa e contato
                                 } else{
@@ -1046,6 +1421,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                         validaCampos.desabilitaCampos(jPTipoPessoa);
                                         //Desabilita todos os campos do container contato
                                         validaCampos.desabilitaCampos(jPContato);
+                                        //Desabilita os botoes especificos da tela
+                                        jBTAddContato.setEnabled(false);
+                                        jBTRemoveContato.setEnabled(false);
+                                        jBTAddEndereco.setEnabled(false);
+                                        jBTRemoveEndereco.setEnabled(false);
                                     } 
                                 }
                              }
@@ -1076,12 +1456,24 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jCBTipoContato.addItem("Selecione tipo");
         jCBTipoContato.addItem("Email");
         jCBTipoContato.addItem("Telefone");
+        
+        dao_cidade.consultageral(cidade);
+        //Preenche dados nas ComboBox de cidade
+        array_cidade = combo.PreencherCombo(jCBCidade, "descricao",cidade.getRetorno(), "id_cidade" );
+        //seta no array da classe de cidade a lista de cidades listadas na combo
+        cidade.setArray_cidade(array_cidade);
   
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
         situacao = Rotinas.INCLUIR;
         
         //habilita os botoes utilizados na inclusão e desabilita os restantes
         validabotoes.ValidaEstado(jPBotoes, situacao);
+        
+        //Habilita os botoes especificos da tela
+        jBTAddContato.setEnabled(true);
+        jBTRemoveContato.setEnabled(true);
+        jBTAddEndereco.setEnabled(true);
+        jBTRemoveEndereco.setEnabled(true);
  
         //Seta a data atual no campo data
         jTFData.setText(data.DataAtual());
@@ -1100,6 +1492,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Habilita campos necessários
         jRBPessoaFisica.setEnabled(true);
         jRBPessoaJuridica.setEnabled(true);
+        validaCampos.habilitaCampos(jPEndereco);
        
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -1116,12 +1509,21 @@ public class InterfacePessoa extends javax.swing.JFrame {
         validaCampos.LimparCampos(jPPessoa);
         validaCampos.LimparCampos(jPTipoPessoa);
         validaCampos.LimparCampos(jPContato);
+        validaCampos.LimparCampos(jPEndereco);
         validaCampos.LimparJtable(jTBContato);
+        validaCampos.LimparJtable(jTBEndereco);
         
         //Desabilita todos os campos do container pessoa
         validaCampos.desabilitaCampos(jPPessoa);
         validaCampos.desabilitaCampos(jPTipoPessoa);
         validaCampos.desabilitaCampos(jPContato);
+        validaCampos.desabilitaCampos(jPEndereco);
+        
+        //Desabilita os botoes especificos da tela
+        jBTAddContato.setEnabled(false);
+        jBTRemoveContato.setEnabled(false);
+        jBTAddEndereco.setEnabled(false);
+        jBTRemoveEndereco.setEnabled(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jRBPessoaJuridicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaActionPerformed
@@ -1364,9 +1766,43 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBTipoContatoItemStateChanged
 
     private void jBTRemoveContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveContatoActionPerformed
-        // TODO add your handling code here:
-        Jtable.removeContato(jTBContato);
+         if(validaCampos.VerificaJtable(jTBContato) == 1){
+            Jtable.removeContato(jTBContato);
+         }else{
+             JOptionPane.showMessageDialog(null, "Não possui contatos para remover");
+         }
     }//GEN-LAST:event_jBTRemoveContatoActionPerformed
+
+    private void jTFNumeroEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFNumeroEndActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFNumeroEndActionPerformed
+
+    private void jTFUFActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFUFActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFUFActionPerformed
+
+    private void jBTRemoveEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveEnderecoActionPerformed
+         if(validaCampos.VerificaJtable(jTBEndereco) == 1){
+            Jtable.removeContato(jTBEndereco);
+         }else{
+             JOptionPane.showMessageDialog(null, "Não possui endereços para remover");
+         }
+    }//GEN-LAST:event_jBTRemoveEnderecoActionPerformed
+
+    private void jBTAddEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddEnderecoActionPerformed
+       endereco = new Endereco();
+         if (validaCampos.validacamposobrigatorios(jPEndereco, "ENDERECO") == 0) {
+                //Pega dados da tela de endereco
+                getEndereco();
+                try {
+                    //adiciona dados do endereço na Jtable de endereços
+                    dao_endereco.addEndereco(endereco);
+
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Falha ao adicionar endereco");
+                }
+            }
+    }//GEN-LAST:event_jBTAddEnderecoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1407,7 +1843,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField JTFSite;
     private javax.swing.JButton jBTAddContato;
+    private javax.swing.JButton jBTAddEndereco;
     private javax.swing.JButton jBTRemoveContato;
+    private javax.swing.JButton jBTRemoveEndereco;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -1415,6 +1853,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JCheckBox jCBAcesso;
     private javax.swing.JCheckBox jCBCalibracoes;
+    private javax.swing.JComboBox jCBCidade;
     private javax.swing.JCheckBox jCBGerente;
     private javax.swing.JCheckBox jCBMostSenha;
     private javax.swing.JComboBox jCBTipoContato;
@@ -1423,6 +1862,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JCheckBox jCheckBox5;
     private javax.swing.JFormattedTextField jFTCPFCNPJ;
+    private javax.swing.JFormattedTextField jFTCep;
     private javax.swing.JFormattedTextField jFTDataNasc;
     private javax.swing.JFormattedTextField jFTNumeroContato;
     private javax.swing.JFormattedTextField jFTRG;
@@ -1436,7 +1876,14 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1447,6 +1894,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JPanel jPBotoes;
     private javax.swing.JPanel jPCadastroPessoa;
     private javax.swing.JPanel jPContato;
+    private javax.swing.JPanel jPEndereco;
     private javax.swing.JPasswordField jPFSenha;
     private javax.swing.JPanel jPPessoa;
     private javax.swing.JPanel jPTipoPessoa;
@@ -1462,16 +1910,23 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRBPessoaFisica;
     private javax.swing.JRadioButton jRBPessoaJuridica;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTBContato;
+    private javax.swing.JTable jTBEndereco;
+    private javax.swing.JTextField jTFBairro;
     private javax.swing.JTextField jTFData;
     private javax.swing.JTextField jTFDescContato;
+    private javax.swing.JTextField jTFDescEnd;
     private javax.swing.JTextField jTFEmail;
     private javax.swing.JTextField jTFIDPessoa;
     private javax.swing.JTextField jTFLogin;
     private javax.swing.JTextField jTFNome;
+    private javax.swing.JTextField jTFNumeroEnd;
     private javax.swing.JTextField jTFRamo;
     private javax.swing.JTextField jTFRazaoSocial;
+    private javax.swing.JTextField jTFRua;
+    private javax.swing.JTextField jTFUF;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;
     // End of variables declaration//GEN-END:variables
@@ -1541,21 +1996,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
         return fornecedor;
     }
     
-    public void setaMascaras (){
-        //Seta mascara no campo  data de nascimento
-        jFTDataNasc.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##/##/####")));
-        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
-        jFTDataNasc.setValue("");
-        //Seta mascara no campo de RG
-        jFTRG.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###-#")));
-        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
-        jFTRG.setValue(""); 
-        //Seta mascara no campo de Telefone
-        jFTNumeroContato.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("(##)####-####")));
-        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
-        jFTNumeroContato.setValue(""); 
-    }
-    
     //Pega dados da tela de contatos 
     public Contato getContato() {
         //  Variaveis e conversões
@@ -1581,5 +2021,41 @@ public class InterfacePessoa extends javax.swing.JFrame {
         }
        
         return contato;
+    }
+    
+    public Endereco getEndereco(){
+        //  Variaveis e conversões
+        Date data_atual = new Date(System.currentTimeMillis());
+        int id_pessoa = Integer.parseInt(jTFIDPessoa.getText());
+        Object cidade_end;
+        int id_cidade;
+        
+        endereco.setId_pessoa(id_pessoa);
+        endereco.setId_cidade(cidade.getArray_cidade(jCBCidade.getSelectedIndex()));
+        endereco.setDescricao(jTFDescEnd.getText());
+        endereco.setCep(jFTCep.getText());
+        endereco.setRua(jTFRua.getText());
+        endereco.setNumero(jTFNumeroEnd.getText());
+        endereco.setBairro(jTFBairro.getText());
+        endereco.setData_alter(data_atual);
+        endereco.setTabela(jTBEndereco);
+        
+        return endereco;
+        
+    }
+    
+     public void setaMascaras (){
+        //Seta mascara no campo  data de nascimento
+        jFTDataNasc.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##/##/####")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+        jFTDataNasc.setValue("");
+        //Seta mascara no campo de RG
+        jFTRG.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###-#")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+        jFTRG.setValue(""); 
+        //Seta mascara no campo de Telefone
+        jFTNumeroContato.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("(##)####-####")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+        jFTNumeroContato.setValue(""); 
     }
 }
