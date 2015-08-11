@@ -637,7 +637,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jLabel25.setText("UF:");
 
-        jCBCidade.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione item" }));
         jCBCidade.setName("cidade"); // NOI18N
 
         jLabel24.setText("Cidade");
@@ -675,12 +674,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
                             .addComponent(jTFDescEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 268, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPEnderecoLayout.createSequentialGroup()
-                                .addComponent(jTFRua, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(9, 9, 9))
-                            .addGroup(jPEnderecoLayout.createSequentialGroup()
-                                .addComponent(jLabel20)
-                                .addGap(42, 42, 42)))
+                            .addComponent(jTFRua, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel20))
+                        .addGap(9, 9, 9)
                         .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTFNumeroEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel21)))
@@ -1090,12 +1086,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                             jBTRemoveEndereco.setEnabled(false);
                                     }
                                 }else{
-                                    
+      
                                         //Salva Pessoa com endereço 
-                                        
-                                        //Pega dados de endereço da tela
-                                        getEndereco();
-
+                                       
                                         //Inclui pessoa fisica
                                         dao_pessoa.incluir(pessoa_fisica);   
                                         
@@ -1148,9 +1141,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                         JOptionPane.showMessageDialog(null, "Preencha os campos de endereço");
                                     }else{
                                         //Salva Pessoa sem endereço 
-                                        
-                                        //Pega dados de contato da tela
-                                        getContato();
 
                                         //Inclui pessoa fisica
                                         dao_pessoa.incluir(pessoa_fisica);   
@@ -1192,12 +1182,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                         
                                     }
                                     }else{
-                                        
+                                                                        
                                         //Salva Pessoa com contato e endereço 
-                                        
-                                        //Pega dados de contato da tela
-                                        getContato();
-                                        getEndereco();
 
                                         //Inclui pessoa fisica
                                         dao_pessoa.incluir(pessoa_fisica);   
@@ -1797,6 +1783,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 try {
                     //adiciona dados do endereço na Jtable de endereços
                     dao_endereco.addEndereco(endereco);
+                    
+                    //limpa campos de endereço
+                    validaCampos.LimparCampos(jPEndereco);
 
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Falha ao adicionar endereco");
@@ -2031,6 +2020,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         int id_cidade;
         
         endereco.setId_pessoa(id_pessoa);
+//        JOptionPane.showMessageDialog(null, cidade.getArray_cidade(jCBCidade.getSelectedIndex()));
         endereco.setId_cidade(cidade.getArray_cidade(jCBCidade.getSelectedIndex()));
         endereco.setDescricao(jTFDescEnd.getText());
         endereco.setCep(jFTCep.getText());
