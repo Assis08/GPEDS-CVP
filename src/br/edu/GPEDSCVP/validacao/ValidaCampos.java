@@ -11,6 +11,8 @@ import java.awt.Container;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.InputMismatchException;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -222,31 +224,54 @@ public class ValidaCampos {
              return 0;
     }
     
-   //Método para calcular digito verificador 
-   private static int calcularDigito(String str, int[] peso) {
-      int soma = 0;
-      for (int indice=str.length()-1, digito; indice >= 0; indice-- ) {
-         digito = Integer.parseInt(str.substring(indice,indice+1));
-         soma += digito*peso[peso.length-str.length()+indice];
-      }
-      soma = 11 - soma % 11;
-      return soma > 9 ? 0 : soma;
-   }
-   //Método para validar Cpf
-   public static boolean ValidaCpf(String cpf) {
-      if ((cpf==null) || (cpf.length()!=11)) return false;
+    //Método para calcular digito verificador 
+    private static int calcularDigito(String str, int[] peso) {
+        int soma = 0;
+        for (int indice=str.length()-1, digito; indice >= 0; indice-- ) {
+            digito = Integer.parseInt(str.substring(indice,indice+1));
+            soma += digito*peso[peso.length-str.length()+indice];
+        }
+        soma = 11 - soma % 11;
+        return soma > 9 ? 0 : soma;
+    }
+    //Método para validar Cpf
+    public static boolean ValidaCpf(String cpf) {
+        if ((cpf==null) || (cpf.length()!=11)) return false;
 
-      Integer digito1 = calcularDigito(cpf.substring(0,9), pesoCPF);
-      Integer digito2 = calcularDigito(cpf.substring(0,9) + digito1, pesoCPF);
-      return cpf.equals(cpf.substring(0,9) + digito1.toString() + digito2.toString());
-   }
+        Integer digito1 = calcularDigito(cpf.substring(0,9), pesoCPF);
+        Integer digito2 = calcularDigito(cpf.substring(0,9) + digito1, pesoCPF);
+        return cpf.equals(cpf.substring(0,9) + digito1.toString() + digito2.toString());
+    }
    //Método para validar Cnpj
-   public static boolean ValidaCnpj(String cnpj) {
-      if ((cnpj==null)||(cnpj.length()!=14)) return false;
+    public static boolean ValidaCnpj(String cnpj) {
+        if ((cnpj==null)||(cnpj.length()!=14)) return false;
 
-      Integer digito1 = calcularDigito(cnpj.substring(0,12), pesoCNPJ);
-      Integer digito2 = calcularDigito(cnpj.substring(0,12) + digito1, pesoCNPJ);
-      return cnpj.equals(cnpj.substring(0,12) + digito1.toString() + digito2.toString());
+        Integer digito1 = calcularDigito(cnpj.substring(0,12), pesoCNPJ);
+        Integer digito2 = calcularDigito(cnpj.substring(0,12) + digito1, pesoCNPJ);
+        return cnpj.equals(cnpj.substring(0,12) + digito1.toString() + digito2.toString());
+    }
+    //Verifica se data é válida
+    public static boolean ValidaData(String data) {
+        FormatarData formata_data = new FormatarData(); 
+        Date data_atual = new Date();  
+       
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);
+        try {
+            Date data_formatada = sdf.parse(data);
+            int idade = formata_data.calculaIdade(data, "dd/MM/yyyy");
+            if((idade>13) && (idade < 80)){
+                //Data válida
+                return true;
+            }else{
+                JOptionPane.showMessageDialog(null, "Data fora do limite, favor verificar a data");
+                return false;
+            }
+        } catch(ParseException e){
+            // data inválida
+            JOptionPane.showMessageDialog(null, "Data inválida, favor verificar a data");
+            return false;
+          }
    }
 }
 

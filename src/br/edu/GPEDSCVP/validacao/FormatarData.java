@@ -1,8 +1,11 @@
 package br.edu.GPEDSCVP.validacao;
 
 import java.sql.Timestamp;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Classe útil para conversão de tipos
@@ -142,4 +145,35 @@ public class FormatarData {
         String data_atual = fmt.format(data);
         return data_atual;
     }
+    
+    //Calcula a Idade baseado em uma String data;
+    public static int calculaIdade(String dataNasc, String pattern){
+
+        DateFormat sdf = new SimpleDateFormat(pattern);
+        Date dataNascInput = null;
+
+        try {
+            dataNascInput= sdf.parse(dataNasc);
+        } catch (Exception e) {}
+
+        Calendar dateOfBirth = new GregorianCalendar();
+
+        dateOfBirth.setTime(dataNascInput);
+
+        // Cria um objeto calendar com a data atual
+
+        Calendar today = Calendar.getInstance();
+
+        // Obtém a idade baseado no ano
+
+        int age = today.get(Calendar.YEAR) - dateOfBirth.get(Calendar.YEAR);
+        dateOfBirth.add(Calendar.YEAR, age);
+
+        if (today.before(dateOfBirth)) {
+            age--;
+        }
+
+        return age;
+    }
 }
+

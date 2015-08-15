@@ -59,7 +59,7 @@
                           <Group type="102" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jTabbedPane2" alignment="0" pref="0" max="32767" attributes="0"/>
+                                  <Component id="jTBPAdicionais" alignment="0" pref="0" max="32767" attributes="0"/>
                                   <Component id="jPBotoes" alignment="0" max="32767" attributes="0"/>
                                   <Component id="jPPessoa" max="32767" attributes="0"/>
                               </Group>
@@ -92,7 +92,7 @@
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPPessoa" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                      <Component id="jTabbedPane2" max="32767" attributes="0"/>
+                      <Component id="jTBPAdicionais" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPBotoes" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="25" max="-2" attributes="0"/>
@@ -305,6 +305,7 @@
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jRBMascMouseClicked"/>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jRBMascStateChanged"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="jRBFem">
@@ -313,6 +314,7 @@
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jRBFemMouseClicked"/>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jRBFemStateChanged"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JFormattedTextField" name="jFTDataNasc">
@@ -320,6 +322,9 @@
                     <Property name="toolTipText" type="java.lang.String" value="Data Nascimento"/>
                     <Property name="name" type="java.lang.String" value="dt_nasc" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jFTDataNascFocusLost"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JFormattedTextField" name="jFTCPFCNPJ">
                   <Properties>
@@ -363,6 +368,9 @@
                     <Property name="toolTipText" type="java.lang.String" value="RG"/>
                     <Property name="name" type="java.lang.String" value="rg" noResource="true"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jFTRGFocusLost"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -455,7 +463,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JTabbedPane" name="jTabbedPane2">
+            <Container class="javax.swing.JTabbedPane" name="jTBPAdicionais">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
               <SubComponents>
@@ -670,6 +678,9 @@
                         <Property name="toolTipText" type="java.lang.String" value="Numero"/>
                         <Property name="name" type="java.lang.String" value="numero" noResource="true"/>
                       </Properties>
+                      <Events>
+                        <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jFTNumeroContatoFocusLost"/>
+                      </Events>
                     </Component>
                   </SubComponents>
                 </Container>
@@ -1012,6 +1023,9 @@
                             <Property name="toolTipText" type="java.lang.String" value="CEP"/>
                             <Property name="name" type="java.lang.String" value="cep" noResource="true"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jFTCepFocusLost"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>
