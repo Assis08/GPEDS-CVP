@@ -24,11 +24,13 @@ public class ComboBox {
         try{
             retorno.last();
             int[] array = new int[retorno.getRow()];
-            
             retorno.first();
              do {
-                combo.addItem(retorno.getString(campo));
-                array[cont] = Integer.parseInt(retorno.getString (atributo_array));
+                    if(cont==0)
+                    combo.addItem("selecione item");
+                    combo.addItem(retorno.getString(campo));
+                    array[cont] = Integer.parseInt(retorno.getString (atributo_array));
+                    
                 cont++;
             }while (retorno.next());
             //cidade.setArray_cidade(array);

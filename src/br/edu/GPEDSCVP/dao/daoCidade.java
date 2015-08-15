@@ -9,6 +9,7 @@ import br.edu.GPEDSCVP.classe.Cidade;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -35,6 +36,23 @@ public class daoCidade {
         String sql = "select * from cidade";
         conecta_banco.executeSQL(sql);
         cidade.setRetorno(conecta_banco.resultset);
+    }
+    
+     public void retornardados(Cidade cidade){
+        String sql = "select * from cidade where id_cidade = "+ cidade.getId_cidade();
+           
+        conecta_banco.executeSQL(sql);
+        try {        
+            conecta_banco.resultset.first();
+            cidade.setId_cidade(conecta_banco.resultset.getInt("id_cidade"));
+            cidade.setUf(conecta_banco.resultset.getString("uf"));
+            cidade.setDescricao(conecta_banco.resultset.getString("descricao"));
+            cidade.setData_alter(conecta_banco.resultset.getDate("data_alter"));
+           
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao retornar dados de cidade");
+        }
+       
     }
     
 }
