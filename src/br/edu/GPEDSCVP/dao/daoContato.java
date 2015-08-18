@@ -30,7 +30,7 @@ public class daoContato {
         }
         catch(SQLException ex)
         {
-            
+            JOptionPane.showMessageDialog(null, "Falha na fonte de dados");
         }
     }
     //Método de incluir contato no banco
@@ -62,7 +62,7 @@ public class daoContato {
         TabelaContato.setNumRows(totlinha + 1);
         //se for a primeira linha, gera o id do contato referente ao ultimo cadastrado no banco
         if(totlinha ==0){
-            TabelaContato.setValueAt(ultima.ultimasequencia("CONTATO","ID_CONTATO"), totlinha, 1);
+        TabelaContato.setValueAt(ultima.ultimasequencia("CONTATO","ID_CONTATO"), totlinha, 1);
         //se não for a primeira linha, gera o id do contato referente ao id da ulima linha da Jtable   
         }else{
             //armazena o ultimo id da Jtable
@@ -90,7 +90,6 @@ public class daoContato {
         int totlinha = tabela.getRowCount();
         for (int i = 0; i < totlinha; i++){
             
-            
             Integer id = (Integer) tabela.getValueAt(i, 1);
             if(tabela.getValueAt(i, 2).equals("Email")){
                 tipo = "E";
@@ -100,9 +99,13 @@ public class daoContato {
             String descricao = (String) tabela.getValueAt(i, 3);
             if((tabela.getValueAt(i, 4)) != ""){
                 numero = (String) tabela.getValueAt(i, 4);
+            }else{
+                numero = "";
             }
             if((tabela.getValueAt(i, 5)) != ""){
                 email = (String) tabela.getValueAt(i, 5);
+            }else{
+                email = "";
             }
 
             String sql = "INSERT INTO CONTATO VALUES ("

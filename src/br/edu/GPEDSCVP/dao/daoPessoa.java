@@ -10,12 +10,14 @@ import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.Pessoa;
 import br.edu.GPEDSCVP.classe.PessoaFisica;
 import br.edu.GPEDSCVP.classe.PessoaJuridica;
+import br.edu.GPEDSCVP.classe.Usuario;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.validacao.FormatarData;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -34,11 +36,11 @@ public class daoPessoa {
         }
         catch(SQLException ex)
         {
-            
+            JOptionPane.showMessageDialog(null, "Falha na fonte de dados");
         }
     }
 
-    public void incluir(PessoaFisica pessoa)throws SQLException
+    public void incluir(Usuario pessoa)throws SQLException
     {
        
         //Insert de pessoa
@@ -61,7 +63,15 @@ public class daoPessoa {
                 + pessoa.getSexo()+ "')"; 
                 
                conecta_banco.incluirSQL(sql);
-
+               
+               //Insert de usuario
+               sql = "INSERT INTO USUARIO VALUES ("
+                + sequencia + ",'"
+                + pessoa.getLogin()+ "','"
+                + pessoa.getSenha()+ "',"
+                + pessoa.getIn_gerente()+ ")";
+               
+               conecta_banco.incluirSQL(sql);
     }
     
     public void incluir(Certificadora pessoa)throws SQLException

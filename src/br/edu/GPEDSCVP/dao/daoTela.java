@@ -5,7 +5,7 @@
  */
 package br.edu.GPEDSCVP.dao;
 
-import br.edu.GPEDSCVP.classe.Cidade;
+import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
 import java.sql.SQLException;
@@ -15,12 +15,12 @@ import javax.swing.JOptionPane;
  *
  * @author Willys
  */
-public class daoCidade {
+public class daoTela {
     
     ConexaoBanco conecta_banco;
     UltimaSequencia ultima;
     
-    public daoCidade()
+    public daoTela()
     {
         try
         {
@@ -32,25 +32,23 @@ public class daoCidade {
         }
     }
     
-    public void consultageral(Cidade cidade){
-        String sql = "select * from cidade";
+    public void consultageral(Tela tela){
+        String sql = "select * from tela";
         conecta_banco.executeSQL(sql);
-        cidade.setRetorno(conecta_banco.resultset);
+        tela.setRetorno(conecta_banco.resultset);
     }
     
-     public void retornardados(Cidade cidade){
-        String sql = "select * from cidade where id_cidade = "+ cidade.getId_cidade();
+     public void retornardados(Tela tela){
+        String sql = "select * from tela where id_tela = "+ tela.getId_tela();
            
         conecta_banco.executeSQL(sql);
         try {        
             conecta_banco.resultset.first();
-            cidade.setId_cidade(conecta_banco.resultset.getInt("id_cidade"));
-            cidade.setUf(conecta_banco.resultset.getString("uf"));
-            cidade.setDescricao(conecta_banco.resultset.getString("descricao"));
-            cidade.setData_alter(conecta_banco.resultset.getDate("data_alter"));
+            tela.setId_tela(conecta_banco.resultset.getInt("id_tela"));
+            tela.setDescricao(conecta_banco.resultset.getString("descricao"));
            
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao retornar dados de cidade");
+            JOptionPane.showMessageDialog(null, "Falha ao retornar dados de telas");
         }
        
     }

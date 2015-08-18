@@ -24,6 +24,7 @@ public class Endereco {
     private Date data_alter;
     private String numero;
     private String bairro;
+    private String uf;
     
     private JTable tabela;
     private ResultSet retorno;
@@ -38,6 +39,7 @@ public class Endereco {
         data_alter = null;
         numero = "";
         bairro = "";
+        uf = "";
     }
 
     public int getId_endereco() {
@@ -127,4 +129,13 @@ public class Endereco {
     public void setRetorno(ResultSet retorno) {
         this.retorno = retorno;
     }
+
+    public String getUf() {
+        return uf;
+    }
+
+    public void setUf(String uf) {
+        this.uf = uf;
+    }
+    
 }

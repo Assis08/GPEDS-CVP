@@ -5,11 +5,13 @@
  */
 package br.edu.GPEDSCVP.classe;
 
+import sun.security.util.Password;
+
 /**
  *
  * @author Willys
  */
-public class Usuario extends PessoaJuridica
+public class Usuario extends PessoaFisica
 {
     private String login;
     private String senha;
@@ -18,7 +20,7 @@ public class Usuario extends PessoaJuridica
     public Usuario()
     {
         login = "";
-        senha = "";
+        senha = null;
         in_gerente = 0;
     }
 

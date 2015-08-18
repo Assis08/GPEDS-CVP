@@ -16,12 +16,12 @@ public class Tela {
     private int id_tela;
     private String descricao;
     private ResultSet retorno;
+    private int[] array_tela;
     
     public Tela()
     {
-        this.id_tela = id_tela;
-        this.descricao = descricao;
-        this.retorno = retorno;
+        id_tela = 0;
+        descricao = "";
     }
 
     public int getId_tela()
@@ -52,5 +52,13 @@ public class Tela {
     public void setRetorno(ResultSet retorno)
     {
         this.retorno = retorno;
+    }
+    
+    public int getArray_tela(int posicao) {
+        return array_tela[posicao];
+    }
+
+    public void setArray_tela(int[] array_tela) {
+        this.array_tela = array_tela;
     }
 }

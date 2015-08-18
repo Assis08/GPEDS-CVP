@@ -10,6 +10,7 @@ import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.validacao.FormatarData;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -29,7 +30,7 @@ public class daoEndereco {
         }
         catch(SQLException ex)
         {
-            
+            JOptionPane.showMessageDialog(null, "Falha na fonte de dados");
         }
     }
     
@@ -80,7 +81,8 @@ public class daoEndereco {
         TabelaEndereco.setValueAt(endereco.getNumero(),totlinha,4);
         TabelaEndereco.setValueAt(endereco.getBairro(),totlinha,5);
         TabelaEndereco.setValueAt(endereco.getCep(),totlinha,6);
-        TabelaEndereco.setValueAt(endereco.getId_cidade(),totlinha,7);          
+        TabelaEndereco.setValueAt(endereco.getId_cidade(),totlinha,7); 
+        TabelaEndereco.setValueAt(endereco.getUf(), totlinha,8);
     }
     
     public void gravarEndereco (Endereco endereco){

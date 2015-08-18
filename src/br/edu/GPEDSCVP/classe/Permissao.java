@@ -5,7 +5,9 @@
  */
 package br.edu.GPEDSCVP.classe;
 
+import java.sql.Date;
 import java.sql.ResultSet;
+import javax.swing.JTable;
 
 /**
  *
@@ -15,25 +17,30 @@ public class Permissao
 {
     private int id_permissao;
     private int id_usuario;
+    private int id_tela;
+    private String nome_tela;
     private int acesso;
     private int inserir;
     private int alterar;
     private int excluir;
     private int consultar;
-    private String data_alter;
+    private Date data_alter;
     private ResultSet retorno;
+    private JTable tabela;
 
     public Permissao()
     {
-        this.id_permissao = id_permissao;
-        this.id_usuario = id_usuario;
-        this.acesso = acesso;
-        this.inserir = inserir;
-        this.alterar = alterar;
-        this.excluir = excluir;
-        this.consultar = consultar;
-        this.data_alter = data_alter;
-        this.retorno = retorno;
+        id_permissao = 0;
+        id_usuario = 0;
+        id_tela = 0;
+        nome_tela = "";
+        acesso = 0;
+        inserir = 0;
+        alterar = 0;
+        excluir = 0;
+        consultar = 0;
+        data_alter = null;
+
     }
 
     public int getId_permissao()
@@ -106,12 +113,12 @@ public class Permissao
         this.consultar = consultar;
     }
 
-    public String getData_alter()
+    public Date getData_alter()
     {
         return data_alter;
     }
 
-    public void setData_alter(String data_alter)
+    public void setData_alter(Date data_alter)
     {
         this.data_alter = data_alter;
     }
@@ -126,6 +133,30 @@ public class Permissao
         this.retorno = retorno;
     }
 
+    public int getId_tela() {
+        return id_tela;
+    }
+
+    public void setId_tela(int id_tela) {
+        this.id_tela = id_tela;
+    }
+
+    public JTable getTabela() {
+        return tabela;
+    }
+
+    public void setTabela(JTable tabela) {
+        this.tabela = tabela;
+    }
+
+    public String getNome_tela() {
+        return nome_tela;
+    }
+
+    public void setNome_tela(String nome_tela) {
+        this.nome_tela = nome_tela;
+    }
+    
     
 }
 
