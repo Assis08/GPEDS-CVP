@@ -74,7 +74,7 @@ public class ManipulaJtable {
     } 
     
      //Método para remover um registro da Jtable
-     public void removeContato(JTable  jtable){
+     public void removeItens(JTable  jtable){
         DefaultTableModel tabela = (DefaultTableModel)jtable.getModel();
         int totlinha = tabela.getRowCount();
         Boolean sel = false;

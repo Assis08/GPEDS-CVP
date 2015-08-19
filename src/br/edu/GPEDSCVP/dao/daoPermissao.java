@@ -77,7 +77,7 @@ public class daoPermissao {
         
         //Seta os demais valores dos campos em suas respectivas colunas
         TabelaPermissao.setValueAt(permissao.getId_tela(),totlinha,2);
-        //TabelaPermissao.setValueAt(endereco.getRua(),totlinha,3);
+        TabelaPermissao.setValueAt(permissao.getNome_tela(),totlinha,3);
         if(permissao.getAcesso() == 1){
             TabelaPermissao.setValueAt("Sim",totlinha,4);
         }else{

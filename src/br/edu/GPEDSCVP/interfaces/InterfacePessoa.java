@@ -129,6 +129,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jBTRemoveContato.setEnabled(false);
         jBTAddEndereco.setEnabled(false);
         jBTRemoveEndereco.setEnabled(false);
+        jBTAddPermissao.setEnabled(false);
+        jBTRemovePermissao.setEnabled(false);
+        
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -216,7 +219,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jCBTela = new javax.swing.JComboBox();
         jLabel26 = new javax.swing.JLabel();
         jCBGerente = new javax.swing.JCheckBox();
-        jCBAcesso = new javax.swing.JCheckBox();
         jCBInserir = new javax.swing.JCheckBox();
         jCBAlterar = new javax.swing.JCheckBox();
         jCBExcluir = new javax.swing.JCheckBox();
@@ -886,8 +888,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
             }
         });
 
-        jCBAcesso.setText("Acesso");
-
         jCBInserir.setText("Inserir");
 
         jCBAlterar.setText("Alterar");
@@ -906,28 +906,28 @@ public class InterfacePessoa extends javax.swing.JFrame {
                     .addGroup(jPPermissoesLayout.createSequentialGroup()
                         .addComponent(jLabel15)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPPermissoesLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPPermissoesLayout.createSequentialGroup()
                         .addGroup(jPPermissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jSeparator1)
                             .addGroup(jPPermissoesLayout.createSequentialGroup()
-                                .addComponent(jCBGerente)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
-                                .addComponent(jLabel26)
-                                .addGap(18, 18, 18)
-                                .addGroup(jPPermissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(jPPermissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPPermissoesLayout.createSequentialGroup()
-                                        .addGroup(jPPermissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jCBInserir)
-                                            .addComponent(jCBAcesso))
+                                        .addComponent(jCBGerente)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 45, Short.MAX_VALUE)
+                                        .addComponent(jLabel26)
                                         .addGap(18, 18, 18)
-                                        .addGroup(jPPermissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jCBExcluir)
-                                            .addGroup(jPPermissoesLayout.createSequentialGroup()
-                                                .addComponent(jCBAlterar)
-                                                .addGap(18, 18, 18)
-                                                .addComponent(jCBConsultar))))
-                                    .addComponent(jCBTela, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                        .addGap(53, 53, 53))))
+                                        .addComponent(jCBTela, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(jPPermissoesLayout.createSequentialGroup()
+                                        .addGap(0, 0, Short.MAX_VALUE)
+                                        .addComponent(jCBInserir)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jCBAlterar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jCBExcluir)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jCBConsultar)))
+                                .addGap(14, 14, 14)))
+                        .addGap(18, 18, 18))))
         );
         jPPermissoesLayout.setVerticalGroup(
             jPPermissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -942,18 +942,13 @@ public class InterfacePessoa extends javax.swing.JFrame {
                         .addComponent(jCBTela, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLabel26))
                     .addComponent(jCBGerente))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPPermissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPPermissoesLayout.createSequentialGroup()
-                        .addGroup(jPPermissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCBAcesso)
-                            .addComponent(jCBAlterar))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPPermissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCBInserir)
-                            .addComponent(jCBExcluir)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPPermissoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCBAlterar)
+                    .addComponent(jCBInserir)
+                    .addComponent(jCBExcluir)
                     .addComponent(jCBConsultar))
-                .addGap(35, 35, 35))
+                .addGap(60, 60, 60))
         );
 
         jTBPermissoes.setModel(new javax.swing.table.DefaultTableModel(
@@ -1018,19 +1013,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
             .addGroup(jPUsuarioLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel27)
+                    .addComponent(jLabel28)
                     .addGroup(jPUsuarioLayout.createSequentialGroup()
-                        .addComponent(jLabel27)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPUsuarioLayout.createSequentialGroup()
-                        .addGroup(jPUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel28)
-                            .addGroup(jPUsuarioLayout.createSequentialGroup()
-                                .addGroup(jPUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jPFSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
-                                    .addComponent(jTFLogin))
-                                .addGap(18, 18, 18)
-                                .addComponent(jCBMostSenha)))
-                        .addContainerGap(36, Short.MAX_VALUE))))
+                        .addGroup(jPUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jPFSenha, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+                            .addComponent(jTFLogin))
+                        .addGap(18, 18, 18)
+                        .addComponent(jCBMostSenha)))
+                .addContainerGap(36, Short.MAX_VALUE))
         );
         jPUsuarioLayout.setVerticalGroup(
             jPUsuarioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1234,7 +1225,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                             .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(28, 28, 28)
+                .addGap(25, 25, 25)
                 .addComponent(jTBPAdicionais, javax.swing.GroupLayout.PREFERRED_SIZE, 317, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1343,6 +1334,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 jBTRemoveContato.setEnabled(false);
                                                 jBTAddEndereco.setEnabled(false);
                                                 jBTRemoveEndereco.setEnabled(false);
+                                                jBTAddPermissao.setEnabled(false);
+                                                jBTRemovePermissao.setEnabled(false);
                                             }else{
                                                 //Seta foco na aba de endereço
                                                  jTBPAdicionais.setSelectedIndex(1);
@@ -1355,6 +1348,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                                                 //Inclui endereço
                                                 dao_endereco.gravarEndereco(endereco);
+                                                
+                                                //Inclui permissões
+                                                dao_permissao.gravarPermissao(permissao);
 
                                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
@@ -1373,6 +1369,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 //Limpa os campos do container endereco
                                                 validaCampos.LimparCampos(jPEndereco);
                                                 validaCampos.LimparJtable(jTBEndereco);
+                                                //Limpa os campos do container permissoes
+                                                validaCampos.LimparCampos(jPPermissoes);
+                                                validaCampos.LimparJtable(jTBPermissoes);
+                                                //Limpa os campos do container usuario
+                                                validaCampos.LimparCampos(jPUsuario);
 
                                                 //Desabilita todos os campos do container pessoa
                                                 validaCampos.desabilitaCampos(jPPessoa);
@@ -1381,12 +1382,18 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 validaCampos.desabilitaCampos(jPContato);
                                                 //Desabilita todos os campos do container endereco
                                                 validaCampos.desabilitaCampos(jPEndereco);
+                                                //Desabilita todos os campos do container usuario
+                                                validaCampos.desabilitaCampos(jPUsuario);
+                                                //Desabilita todos os campos do container permissoes
+                                                validaCampos.desabilitaCampos(jPPermissoes);
 
                                                 //Desabilita os botoes especificos da tela
                                                 jBTAddContato.setEnabled(false);
                                                 jBTRemoveContato.setEnabled(false);
                                                 jBTAddEndereco.setEnabled(false);
                                                 jBTRemoveEndereco.setEnabled(false);
+                                                jBTAddPermissao.setEnabled(false);
+                                                jBTRemovePermissao.setEnabled(false);
                                         }
                                     }else{
                                      //Seta o foco na aba de contato
@@ -1410,8 +1417,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 dao_pessoa.incluir(usuario);   
 
                                                 //Inclui contato
-                                                //dao_contato.incluir(contato);
                                                 dao_contato.gravarContatos(contato);
+                                                //Inclui permissões de acesso
+                                                dao_permissao.gravarPermissao(permissao);
 
                                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
@@ -1430,6 +1438,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 //Limpa os campos do container endereco
                                                 validaCampos.LimparCampos(jPEndereco);
                                                 validaCampos.LimparJtable(jTBEndereco);
+                                                //Limpa os campos do container permissões
+                                                validaCampos.LimparCampos(jPPermissoes);
+                                                validaCampos.LimparJtable(jTBPermissoes);
+                                                //Limpa os campos do container usuario
+                                                validaCampos.LimparCampos(jPUsuario);
 
                                                 //Desabilita todos os campos do container pessoa
                                                 validaCampos.desabilitaCampos(jPPessoa);
@@ -1438,11 +1451,18 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 validaCampos.desabilitaCampos(jPContato);
                                                 //Desabilita todos os campos do container endereco
                                                 validaCampos.desabilitaCampos(jPEndereco);
+                                                //Desabilita todos os campos do container usuario
+                                                validaCampos.desabilitaCampos(jPUsuario);
+                                                //Desabilita todos os campos do container permissoes
+                                                validaCampos.desabilitaCampos(jPPermissoes);
+   
                                                 //Desabilita os botoes especificos da tela
                                                 jBTAddContato.setEnabled(false);
                                                 jBTRemoveContato.setEnabled(false);
                                                 jBTAddEndereco.setEnabled(false);
                                                 jBTRemoveEndereco.setEnabled(false);
+                                                jBTAddPermissao.setEnabled(false);
+                                                jBTRemovePermissao.setEnabled(false);
 
                                             }else{
                                                  //Seta foco na aba de endereço
@@ -1460,6 +1480,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                                                 //Inclui endereço
                                                 dao_endereco.gravarEndereco(endereco);
+                                                
+                                                //Inclui permissoes
+                                                dao_permissao.gravarPermissao(permissao);
 
                                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
@@ -1478,6 +1501,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 //Limpa os campos do container endereco
                                                 validaCampos.LimparCampos(jPEndereco);
                                                 validaCampos.LimparJtable(jTBEndereco);
+                                                //Limpa os campos do container permissões
+                                                validaCampos.LimparCampos(jPPermissoes);
+                                                validaCampos.LimparJtable(jTBPermissoes);
+                                                //Limpa os campos do container usuario
+                                                validaCampos.LimparCampos(jPUsuario);
 
                                                 //Desabilita todos os campos do container pessoa
                                                 validaCampos.desabilitaCampos(jPPessoa);
@@ -1486,12 +1514,18 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 validaCampos.desabilitaCampos(jPContato);
                                                 //Desabilita todos os campos do container endereco
                                                 validaCampos.desabilitaCampos(jPEndereco);
+                                                //Desabilita todos os campos do container usuario
+                                                validaCampos.desabilitaCampos(jPUsuario);
+                                                //Desabilita todos os campos do container permissoes
+                                                validaCampos.desabilitaCampos(jPPermissoes);
 
                                                 //Desabilita os botoes especificos da tela
                                                 jBTAddContato.setEnabled(false);
                                                 jBTRemoveContato.setEnabled(false);
                                                 jBTAddEndereco.setEnabled(false);
                                                 jBTRemoveEndereco.setEnabled(false);
+                                                jBTAddPermissao.setEnabled(false);
+                                                jBTRemovePermissao.setEnabled(false);
 
                                             }
 
@@ -1988,10 +2022,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jRBPessoaFisica.setEnabled(true);
         jRBPessoaJuridica.setEnabled(true);
         validaCampos.habilitaCampos(jPEndereco);
-
-        
-        
-       
+        jBTAddPermissao.setEnabled(true);
+        jBTRemovePermissao.setEnabled(true);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -2026,6 +2058,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jBTRemoveContato.setEnabled(false);
         jBTAddEndereco.setEnabled(false);
         jBTRemoveEndereco.setEnabled(false);
+        jBTAddPermissao.setEnabled(false);
+        jBTRemovePermissao.setEnabled(false);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jRBPessoaJuridicaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaActionPerformed
@@ -2083,6 +2117,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 validaCampos.desabilitaCampos(jPUsuario);
                 jRBPessoaFisica.setSelected(false);
                 jCBTipoContato.setEnabled(false);
+                jBTAddPermissao.setEnabled(false);
+                jBTRemovePermissao.setEnabled(false);
         
                 //Habilita campos de pessoa jurídica
                 jRBPessoaFisica.setSelected(false);
@@ -2120,6 +2156,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 jTFNome.setEnabled(true);
                 validaCampos.habilitaCampos(jPPermissoes);
                 validaCampos.habilitaCampos(jPUsuario);
+                jBTAddPermissao.setEnabled(true);
+                jBTRemovePermissao.setEnabled(true);
 
                 //Desabilita campos de pessoa jurídica
                 jTFRazaoSocial.setEnabled(false);
@@ -2277,7 +2315,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jBTRemoveContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveContatoActionPerformed
          if(validaCampos.VerificaJtable(jTBContato) == 1){
-            Jtable.removeContato(jTBContato);
+            Jtable.removeItens(jTBContato);
          }else{
              JOptionPane.showMessageDialog(null, "Não possui contatos para remover");
          }
@@ -2293,7 +2331,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jBTRemoveEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveEnderecoActionPerformed
          if(validaCampos.VerificaJtable(jTBEndereco) == 1){
-            Jtable.removeContato(jTBEndereco);
+            Jtable.removeItens(jTBEndereco);
          }else{
              JOptionPane.showMessageDialog(null, "Não possui endereços para remover");
          }
@@ -2540,22 +2578,25 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTAddPermissaoActionPerformed
 
     private void jBTRemovePermissaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemovePermissaoActionPerformed
-        // TODO add your handling code here:
+         if(validaCampos.VerificaJtable(jTBPermissoes) == 1){
+            Jtable.removeItens(jTBPermissoes);
+         }else{
+             JOptionPane.showMessageDialog(null, "Não possui itens para remover");
+         }
     }//GEN-LAST:event_jBTRemovePermissaoActionPerformed
 
     private void jCBGerenteStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jCBGerenteStateChanged
         if(jCBGerente.isSelected()){
             jCBTela.setSelectedIndex(1);
             jCBTela.setEnabled(false);
-            jCBAcesso.setEnabled(false);
             jCBInserir.setEnabled(false);
             jCBAlterar.setEnabled(false);
             jCBConsultar.setEnabled(false);
             jCBExcluir.setEnabled(false);
+            validaCampos.LimparJtable(jTBPermissoes);
         }else{
   
             jCBTela.setEnabled(true);
-            jCBAcesso.setEnabled(true);
             jCBInserir.setEnabled(true);
             jCBAlterar.setEnabled(true);
             jCBConsultar.setEnabled(true);
@@ -2573,10 +2614,17 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 
                 //retorna os dados da tela pelo id
                 dao_tela.retornardados(tela);
+                
+                
             }
         }
         if(jCBTela.getSelectedIndex() == 1){
             jCBGerente.setSelected(true);
+            jCBGerente.setEnabled(false);
+            jCBTela.setEnabled(true);
+        }else{
+            jCBGerente.setSelected(false);
+            validaCampos.habilitaCampos(jPPermissoes);
         }
     }//GEN-LAST:event_jCBTelaPopupMenuWillBecomeInvisible
 
@@ -2633,7 +2681,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
-    private javax.swing.JCheckBox jCBAcesso;
     private javax.swing.JCheckBox jCBAlterar;
     private javax.swing.JCheckBox jCBCalibracoes;
     private javax.swing.JComboBox jCBCidade;
@@ -2855,29 +2902,30 @@ public class InterfacePessoa extends javax.swing.JFrame {
         permissao.setData_alter(data_atual);
         permissao.setTabela(jTBPermissoes);
         permissao.setNome_tela(tela.getDescricao());
+        permissao.setAcesso(0);
         
-        if(jCBAcesso.isSelected()){
-            permissao.setAcesso(1);
-        }else{
-             permissao.setAcesso(0);
-        }
+
         if(jCBAlterar.isSelected()){
             permissao.setAlterar(1);
+            permissao.setAcesso(1);
         }else{
              permissao.setAlterar(0);
         }
         if(jCBConsultar.isSelected()){
             permissao.setConsultar(1);
+            permissao.setAcesso(1);
         }else{
              permissao.setConsultar(0);
         }
         if(jCBExcluir.isSelected()){
             permissao.setExcluir(1);
+            permissao.setAcesso(1);
         }else{
              permissao.setExcluir(0);
         }
         if(jCBInserir.isSelected()){
             permissao.setInserir(1);
+            permissao.setAcesso(1);
         }else{
              permissao.setInserir(0);
         }
