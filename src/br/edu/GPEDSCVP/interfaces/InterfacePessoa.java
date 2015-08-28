@@ -2955,25 +2955,49 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jBTBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTBuscarActionPerformed
         // TODO add your handling code here:
         int id_busca;
-            
-            id_busca = Integer.parseInt(jTFFiltro.getText());
-            
-             switch (jCBBuscarPessoa.getSelectedIndex()) {
-             
-            case 1:
-                if(jCBBuscarPor.getSelectedIndex() == 1){
+     
+
+        switch (jCBBuscarPessoa.getSelectedIndex()) {
+        //Selecione pessoa (Geral) 
+        case 0:
+            //Geral
+            if(jCBBuscarPor.getSelectedIndex() == 0){
+                if(dao_pessoa.consultageral(usuario) == false){
+                    JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                }    
+            //código
+            }else if(jCBBuscarPor.getSelectedIndex() == 1){
+                if(!jTFFiltro.getText().equals("")){
+                    id_busca = Integer.parseInt(jTFFiltro.getText());
                     usuario.setId_pessoa(id_busca);
                     if(dao_pessoa.consultacodigo(usuario) == false){
-                    JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
                     }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                    jTFFiltro.grabFocus();
                 }
-                break;
-            case 2:
-                //classe_pessoa.setDspessoa(jTFPesquisa.getText());
-                //dao_pessoa.consultadescricao(classe_pessoa);
-                //break;
+            //descrição    
+            }else if(jCBBuscarPor.getSelectedIndex() == 2){
+
+            }
+            break;
+        //Usuario 
+        case 1:
+            if(jCBBuscarPor.getSelectedIndex() == 1){
+                //usuario.setId_pessoa(id_busca);
+                if(dao_pessoa.consultacodigo(usuario) == false){
+                JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                }
+            }
+            break;
+        case 2:
+            //classe_pessoa.setDspessoa(jTFPesquisa.getText());
+            //dao_pessoa.consultadescricao(classe_pessoa);
+            //break;
         }
         Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, usuario.getRetorno());
+        Jtable.ajustarColunasDaTabela(jTBDadosPessoas);
     }//GEN-LAST:event_jBTBuscarActionPerformed
 
     private void jFTNumeroContatoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFTNumeroContatoMouseClicked
