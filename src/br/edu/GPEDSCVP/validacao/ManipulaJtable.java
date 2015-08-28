@@ -5,13 +5,18 @@
  */
 package br.edu.GPEDSCVP.validacao;
 
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FontMetrics;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -40,25 +45,22 @@ public class ManipulaJtable {
 
     public void PreencherJtableGenerico(JTable tabela, String campos[], ResultSet resultSet)
     {
-        DefaultTableModel modelo = (DefaultTableModel)tabela.getModel();
+      
+        DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
         modelo.setNumRows(0);
-        try
-        {
-            Object row[];
-            for(; resultSet.next(); modelo.addRow(row))
-            {
+        try {
+            while (resultSet.next()) {
                 int len = campos.length;
-                row = new Object[len];
-                for(int i = 0; i < len; i++)
+                Object[] row = new Object[len];
+                for (int i = 0; i < len; i++) {
                     row[i] = resultSet.getString(campos[i]);
-
+                }
+                modelo.addRow(row);
             }
-
-        }
-        catch(SQLException erro)
-        {
-            JOptionPane.showMessageDialog(null, (new StringBuilder()).append("Erro ao listar no JTable ").append(erro).toString());
-        }
+                } catch (SQLException erro) {
+                    JOptionPane.showMessageDialog(null, "Erro ao listar no JTable " + erro);
+            }
+        
     }
     
     //Método para dimensionar a largura das colunas da Jtable de acordo com o tamanho do texto
@@ -99,7 +101,55 @@ public class ManipulaJtable {
             }
         }
         
-    }  
+    }
+    //Método para ajustar colunas da JTABLE de acordo com o tamanho do dado
+    public static void ajustarColunasDaTabela(JTable ttabela) {
+        for (int c = 0; c < ttabela.getColumnCount(); c++) {
 
-    
+            DefaultTableColumnModel colModel = (DefaultTableColumnModel) ttabela.getColumnModel();
+            TableColumn col = colModel.getColumn(c);
+            int width = 0;
+
+            // Get width of column header  
+            TableCellRenderer renderer = col.getHeaderRenderer();
+            if (renderer == null) {
+                renderer = ttabela.getTableHeader().getDefaultRenderer();
+            }
+            Component comp = renderer.getTableCellRendererComponent(ttabela, col.getHeaderValue(), false, false, -1, 0);
+            width = comp.getPreferredSize().width;
+
+            // Get maximum width of column data  
+            for (int r = 0; r < ttabela.getRowCount(); r++) {
+                renderer = ttabela.getCellRenderer(r, c);
+                comp = renderer.getTableCellRendererComponent(ttabela, ttabela.getValueAt(r, c), false, false, r, c);
+                width = Math.max(width, comp.getPreferredSize().width);
+            }
+
+            // Add margin  
+            width += 2 * 2;
+
+            // Set the width  
+            col.setPreferredWidth(width);
+        }
+        for (int r = 0; r < ttabela.getRowCount(); r++) {
+            // Get the preferred height  
+            //  int h = getPreferredRowHeight(ttabela, r, 0);
+            int height = ttabela.getRowHeight();
+
+            // Determine highest cell in the row  
+            for (int c = 0; c < ttabela.getColumnCount(); c++) {
+                TableCellRenderer renderer = ttabela.getCellRenderer(r, c);
+                Component comp = ttabela.prepareRenderer(renderer, r, c);
+                int h = comp.getPreferredSize().height + 2 * 0;
+                height = Math.max(height, h);
+            }
+
+            // Now set the row height using the preferred height  
+            if (ttabela.getRowHeight(r) != height) {
+                ttabela.setRowHeight(r, height);
+            }
+        }
+        ttabela.setRowHeight(20);
+        ttabela.setIntercellSpacing(new Dimension(2, 2));
+    }
 }

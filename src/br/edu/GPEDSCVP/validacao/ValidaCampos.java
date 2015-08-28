@@ -152,6 +152,7 @@ public class ValidaCampos {
             }else if (component instanceof JFormattedTextField) {
                 JFormattedTextField field = (JFormattedTextField) component;
                 field.setText("");
+                field.setValue("");
             }
         }
     }
@@ -174,11 +175,15 @@ public class ValidaCampos {
                             if (component instanceof JTextField){
                                 JTextField field = (JTextField) component;
                                 if (field.isEnabled()){
+                                    //Remove aspas simples do texto da String para evitar codigos SQL
+                                    field.setText(field.getText().replace("'", ""));
+
                                     if (field.getName().equals(atributo)){
                                         if (field.getText().equals("") || (field.getText().equals("  /  /    ")) || (field.getText().equals("  .   .   /    -  ")) ||
                                         (field.getText().equals("   .   .   -  ")) ||(field.getText().equals("  .   .   - ")) ||(field.getText().equals("(  )    -    ")) || 
                                                 (field.getText().equals("     -   ")))  {
                                         JOptionPane.showMessageDialog(null, "campo: "+ field.getToolTipText()+ " é obrigatorio");
+                                        
                                         field.grabFocus(); 
                                         retorno = 1;
                                         break;
@@ -236,6 +241,24 @@ public class ValidaCampos {
     }
     //Método para validar Cpf
     public static boolean ValidaCpf(String cpf) {
+        
+        cpf = cpf.replace(".", "");
+        cpf = cpf.replace("-", "");
+        cpf = cpf.replace("/", "");
+        cpf = cpf.replace(" ", "");
+        
+        if((cpf.equals("11111111111")) ||
+        (cpf.equals("22222222222")) ||
+        (cpf.equals("33333333333")) ||
+        (cpf.equals("44444444444")) ||
+        (cpf.equals("55555555555")) ||
+        (cpf.equals("66666666666")) ||
+        (cpf.equals("77777777777")) ||
+        (cpf.equals("88888888888")) ||
+        (cpf.equals("99999999999"))){
+            return false;
+        }
+        
         if ((cpf==null) || (cpf.length()!=11)) return false;
 
         Integer digito1 = calcularDigito(cpf.substring(0,9), pesoCPF);
@@ -244,6 +267,23 @@ public class ValidaCampos {
     }
    //Método para validar Cnpj
     public static boolean ValidaCnpj(String cnpj) {
+        
+        cnpj = cnpj.replace(".", "");
+        cnpj = cnpj.replace("-", "");
+        cnpj = cnpj.replace("/", "");
+        cnpj = cnpj.replace(" ", "");
+
+        if((cnpj.equals("11111111111111")) ||
+        (cnpj.equals("22222222222222")) ||
+        (cnpj.equals("33333333333333")) ||
+        (cnpj.equals("44444444444444")) ||
+        (cnpj.equals("55555555555555")) ||
+        (cnpj.equals("66666666666666")) ||
+        (cnpj.equals("77777777777777")) ||
+        (cnpj.equals("88888888888888")) ||
+        (cnpj.equals("99999999999999"))){
+            return false;
+        }
         if ((cnpj==null)||(cnpj.length()!=14)) return false;
 
         Integer digito1 = calcularDigito(cnpj.substring(0,12), pesoCNPJ);
@@ -273,6 +313,31 @@ public class ValidaCampos {
             return false;
           }
    }
+    
+    public static String xss(String texto) {
+        if (texto == null) {
+            return null;
+        }
+        StringBuilder textoXSS = new StringBuilder();
+        int tamanhoTexto = texto.length();
+        for (int i = 0; i < tamanhoTexto; i++) {
+            char caracter = texto.charAt(i);
+            if (caracter == '<') {
+                textoXSS.append("&lt;");
+            } else if (caracter == '>') {
+                textoXSS.append("&gt;");
+            } else if (caracter == '&') {
+                textoXSS.append("&amp;");
+            } else if (caracter == '"') {
+                textoXSS.append("&quot;");
+            } else if (caracter == ' ') {
+                textoXSS.append("&nbsp;");
+            } else {
+                textoXSS.append(caracter);
+            }
+        }
+        return textoXSS.toString();
+    }
 }
 
 

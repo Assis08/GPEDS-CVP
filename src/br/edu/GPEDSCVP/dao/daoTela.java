@@ -32,6 +32,19 @@ public class daoTela {
         }
     }
     
+     //Método de incluir tela no banco
+    public void incluir(Tela tela)throws SQLException
+    {
+        //Insert de Tela
+        ultima = new UltimaSequencia();
+        int sequencia = (Integer) (ultima.ultimasequencia("TELA","ID_TELA"));
+        String sql = "INSERT INTO TELA VALUES ("
+                + tela.getId_tela() + ",'"
+                + tela.getDescricao()+"') ON DUPLICATE KEY UPDATE DESCRICAO = ('"+tela.getDescricao()+"')";
+
+                conecta_banco.incluirSQL(sql);
+    }
+    
     public void consultageral(Tela tela){
         String sql = "select * from tela";
         conecta_banco.executeSQL(sql);

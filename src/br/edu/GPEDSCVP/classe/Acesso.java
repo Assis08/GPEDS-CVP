@@ -20,10 +20,9 @@ public class Acesso {
     
     public Acesso()
     {
-        this.id_acesso = id_acesso;
-        this.id_usuario = id_usuario;
-        this.data_acesso = data_acesso;
-        this.retorno = retorno;
+       id_acesso = 0;
+       id_usuario = 0;
+       data_acesso = null;
     }
 
     public int getId_acesso()
