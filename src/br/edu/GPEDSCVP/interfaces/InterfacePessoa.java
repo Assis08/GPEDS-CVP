@@ -39,6 +39,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.text.DefaultFormatterFactory;
 
 /**
@@ -108,22 +109,13 @@ public class InterfacePessoa extends javax.swing.JFrame {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
         validabotoes = new ValidaBotoes();
-
-        //Define o tamanho das colunas da tabela de contatos
-        Jtable.FormatarJtable(jTBContato, new int[] {
-            1, 1, 60, 10, 10, 10
-        });
         
-        //Define o tamanho das colunas da tabela de Endereços
-        Jtable.FormatarJtable(jTBEndereco, new int[] {
-            1, 1, 60, 10, 10, 10, 10, 10, 10
-        });
-        
-         //Define o tamanho das colunas da tabela de Permissões
-        Jtable.FormatarJtable(jTBPermissoes, new int[] {
-            1, 1, 1, 10, 10, 10, 10, 10, 10
-        });
-       
+        //Adiciona barra de rolagem na vertical das JTABLE
+        jTBDadosPessoas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
+        jTBContato.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
+        jTBEndereco.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
+        jTBPermissoes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); 
+                
         //Desabilita todos os campos
         validaCampos.desabilitaCampos(jPPessoa);
         validaCampos.desabilitaCampos(jPTipoPessoa);
@@ -139,7 +131,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jBTRemoveEndereco.setEnabled(false);
         jBTAddPermissao.setEnabled(false);
         jBTRemovePermissao.setEnabled(false);
-        
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -263,15 +254,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jScrollPane4 = new javax.swing.JScrollPane();
         jTBDadosPessoas = new javax.swing.JTable();
         jLabel30 = new javax.swing.JLabel();
-        jLabel31 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTBDadosEndereco = new javax.swing.JTable();
-        jLabel32 = new javax.swing.JLabel();
-        jScrollPane6 = new javax.swing.JScrollPane();
-        jTBDadosPermissoes = new javax.swing.JTable();
-        jLabel33 = new javax.swing.JLabel();
-        jScrollPane7 = new javax.swing.JScrollPane();
-        jTBDadosContato = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -1308,7 +1290,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jLabel14.setText("Buscar por:");
 
-        jCBBuscarPor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Geral", "Código", "Descrição", " " }));
+        jCBBuscarPor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Geral", "Código", "Descrição" }));
 
         jLabel29.setText("Filtro de busca:");
 
@@ -1331,51 +1313,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jLabel30.setText("Pessoa:");
 
-        jLabel31.setText("Permissões de acesso:");
-
-        jTBDadosEndereco.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID Endereço", "Rua", "Nº", "Bairro", "CEP", "Cidade", "UF", "País", "Ultima alteração"
-            }
-        ));
-        jScrollPane5.setViewportView(jTBDadosEndereco);
-        if (jTBDadosEndereco.getColumnModel().getColumnCount() > 0) {
-            jTBDadosEndereco.getColumnModel().getColumn(6).setHeaderValue("UF");
-            jTBDadosEndereco.getColumnModel().getColumn(7).setHeaderValue("País");
-            jTBDadosEndereco.getColumnModel().getColumn(8).setHeaderValue("Ultima alteração");
-        }
-
-        jLabel32.setText("Endereço:");
-
-        jTBDadosPermissoes.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID Permissão", "Tela", "Acesso", "Inserir", "Alterar", "Excluir", "Consultar", "Ultima alteração"
-            }
-        ));
-        jScrollPane6.setViewportView(jTBDadosPermissoes);
-        if (jTBDadosPermissoes.getColumnModel().getColumnCount() > 0) {
-            jTBDadosPermissoes.getColumnModel().getColumn(2).setHeaderValue("UF");
-            jTBDadosPermissoes.getColumnModel().getColumn(7).setHeaderValue("Ultima alteração");
-        }
-
-        jLabel33.setText("Contato:");
-
-        jTBDadosContato.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "ID Contato", "Tipo", "Descrição", "Numero", "Email", "Ultima alteração"
-            }
-        ));
-        jScrollPane7.setViewportView(jTBDadosContato);
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -1384,8 +1321,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4)
-                    .addComponent(jScrollPane5)
-                    .addComponent(jScrollPane6)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
@@ -1403,12 +1338,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                         .addComponent(jTFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
                                         .addComponent(jBTBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jLabel30)
-                            .addComponent(jLabel31)
-                            .addComponent(jLabel32)
-                            .addComponent(jLabel33))
-                        .addGap(0, 130, Short.MAX_VALUE))
-                    .addComponent(jScrollPane7))
+                            .addComponent(jLabel30))
+                        .addGap(0, 130, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -1428,20 +1359,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel30)
                 .addGap(7, 7, 7)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel31)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel32)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel33)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("Consulta", jPanel2);
@@ -2955,11 +2874,55 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jBTBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTBuscarActionPerformed
         // TODO add your handling code here:
         int id_busca;
-     
+        String ds_busca;
+        
+        //Tira aspas simples da string para evitar código sql
+        validaCampos.IgnoraSQL(jTFFiltro);
 
         switch (jCBBuscarPessoa.getSelectedIndex()) {
-        //Selecione pessoa (Geral) 
+        //Selecione pessoa (Consulta Geral) 
         case 0:
+            //Geral
+            if(jCBBuscarPor.getSelectedIndex() == 0){
+                if(dao_pessoa.consultageral(pessoa) == false){
+                    JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                }    
+            //Código
+            }else if(jCBBuscarPor.getSelectedIndex() == 1){
+                if(!jTFFiltro.getText().equals("")){
+                    try {
+                        id_busca = Integer.parseInt(jTFFiltro.getText());
+                        pessoa.setId_pessoa(id_busca);
+                        if(dao_pessoa.consultacodigo(pessoa) == false){
+                            JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                        jTFFiltro.grabFocus();
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                    jTFFiltro.grabFocus();
+                }
+            //Descrição
+            }else if (jCBBuscarPor.getSelectedIndex() == 2){
+                ds_busca = jTFFiltro.getText();
+                if(!ds_busca.equals("")){
+                    pessoa.setNome(ds_busca);
+                    if(dao_pessoa.consultadesc(pessoa) == false){
+                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                    }
+                }else{
+                     JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                     jTFFiltro.grabFocus();
+                }
+            }
+            //Preenche na JTABLE os dados das pessoas cadastradas
+            Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, pessoa.getRetorno());
+            break;
+                    
+        //Usuario 
+        case 1:
             //Geral
             if(jCBBuscarPor.getSelectedIndex() == 0){
                 if(dao_pessoa.consultageral(usuario) == false){
@@ -2968,35 +2931,118 @@ public class InterfacePessoa extends javax.swing.JFrame {
             //código
             }else if(jCBBuscarPor.getSelectedIndex() == 1){
                 if(!jTFFiltro.getText().equals("")){
-                    id_busca = Integer.parseInt(jTFFiltro.getText());
-                    usuario.setId_pessoa(id_busca);
-                    if(dao_pessoa.consultacodigo(usuario) == false){
-                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                    try {
+                        id_busca = Integer.parseInt(jTFFiltro.getText());
+                        usuario.setId_pessoa(id_busca);
+                        if(dao_pessoa.consultacodigo(usuario) == false){
+                            JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                        jTFFiltro.grabFocus();
                     }
                 }else{
                     JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
                     jTFFiltro.grabFocus();
                 }
-            //descrição    
+            //Descrição
             }else if(jCBBuscarPor.getSelectedIndex() == 2){
-
+                ds_busca = jTFFiltro.getText();
+                usuario.setNome(ds_busca);
+                if(!ds_busca.equals("")){
+                    if(dao_pessoa.consultadesc(usuario) == false){
+                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                    jTFFiltro.grabFocus();
+                } 
             }
+            //Preenche na JTABLE os dados dos usuários cadastrados
+            Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, usuario.getRetorno());
             break;
-        //Usuario 
-        case 1:
-            if(jCBBuscarPor.getSelectedIndex() == 1){
-                //usuario.setId_pessoa(id_busca);
-                if(dao_pessoa.consultacodigo(usuario) == false){
-                JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
-                }
-            }
-            break;
+        //Certificadora
         case 2:
-            //classe_pessoa.setDspessoa(jTFPesquisa.getText());
-            //dao_pessoa.consultadescricao(classe_pessoa);
-            //break;
+            //Geral
+            if(jCBBuscarPor.getSelectedIndex() == 0){
+                if(dao_pessoa.consultageral(certificadora) == false){
+                    JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                }    
+            //código
+            }else if(jCBBuscarPor.getSelectedIndex() == 1){
+                if(!jTFFiltro.getText().equals("")){
+                    try {
+                        id_busca = Integer.parseInt(jTFFiltro.getText());
+                        certificadora.setId_pessoa(id_busca);
+                        if(dao_pessoa.consultacodigo(certificadora) == false){
+                            JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                        jTFFiltro.grabFocus();
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                    jTFFiltro.grabFocus();
+                }
+            //Descrição
+            }else if(jCBBuscarPor.getSelectedIndex() == 2){
+                ds_busca = jTFFiltro.getText();
+                if(!ds_busca.equals("")){
+                    certificadora.setNome(ds_busca);
+                    if(dao_pessoa.consultadesc(certificadora) == false){
+                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                    jTFFiltro.grabFocus();
+                } 
+            }
+            //Preenche na JTABLE os dados dos usuários cadastrados
+            Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, certificadora.getRetorno());
+            break;
+            
+            //Certificadora
+        case 3:
+            //Geral
+            if(jCBBuscarPor.getSelectedIndex() == 0){
+                if(dao_pessoa.consultageral(fornecedor) == false){
+                    JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                }    
+            //código
+            }else if(jCBBuscarPor.getSelectedIndex() == 1){
+                if(!jTFFiltro.getText().equals("")){
+                    try {
+                        id_busca = Integer.parseInt(jTFFiltro.getText());
+                        fornecedor.setId_pessoa(id_busca);
+                        if(dao_pessoa.consultacodigo(fornecedor) == false){
+                            JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                        }
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                        jTFFiltro.grabFocus();
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                    jTFFiltro.grabFocus();
+                }
+            //Descrição
+            }else if(jCBBuscarPor.getSelectedIndex() == 2){
+                ds_busca = jTFFiltro.getText();
+                if(!ds_busca.equals("")){
+                    fornecedor.setNome(ds_busca);
+                    if(dao_pessoa.consultadesc(fornecedor) == false){
+                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                    }
+                }else{
+                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                    jTFFiltro.grabFocus();
+                } 
+            }
+            //Preenche na JTABLE os dados dos usuários cadastrados
+            Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, fornecedor.getRetorno());
+            break;
         }
-        Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, usuario.getRetorno());
         Jtable.ajustarColunasDaTabela(jTBDadosPessoas);
     }//GEN-LAST:event_jBTBuscarActionPerformed
 
@@ -3113,9 +3159,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
-    private javax.swing.JLabel jLabel31;
-    private javax.swing.JLabel jLabel32;
-    private javax.swing.JLabel jLabel33;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -3146,14 +3189,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JScrollPane jScrollPane6;
-    private javax.swing.JScrollPane jScrollPane7;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTable jTBContato;
-    private javax.swing.JTable jTBDadosContato;
-    private javax.swing.JTable jTBDadosEndereco;
-    private javax.swing.JTable jTBDadosPermissoes;
     private javax.swing.JTable jTBDadosPessoas;
     private javax.swing.JTable jTBEndereco;
     private javax.swing.JTabbedPane jTBPAdicionais;
@@ -3277,7 +3314,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             contato.setFone(fone);
             contato.setTipo("F");
         }
-       
+
         return contato;
     }
     
@@ -3297,8 +3334,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         endereco.setTabela(jTBEndereco);
         endereco.setUf(jTFUF.getText());
         
-        return endereco;
-        
+        return endereco; 
     }
     
     public Permissao getPermissoes(){

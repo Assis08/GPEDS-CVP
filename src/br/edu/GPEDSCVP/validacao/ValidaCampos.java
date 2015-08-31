@@ -338,6 +338,10 @@ public class ValidaCampos {
         }
         return textoXSS.toString();
     }
+    
+    public void IgnoraSQL (JTextField field){
+        field.setText(field.getText().replace("'", ""));
+    }
 }
 
 

@@ -14,6 +14,7 @@ import br.edu.GPEDSCVP.classe.Usuario;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.validacao.FormatarData;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -103,7 +104,7 @@ public class daoPessoa {
                conecta_banco.incluirSQL(sql); 
     }
     
-     public void incluir(Fornecedor pessoa)throws SQLException
+    public void incluir(Fornecedor pessoa)throws SQLException
     {
         //Insert de pessoa
         ultima = new UltimaSequencia();
@@ -132,8 +133,8 @@ public class daoPessoa {
                 
                conecta_banco.incluirSQL(sql);
     }
-     //Valida se o CPF ou CNPJ já esta cadastrado
-     public Boolean verificaCpfCnpj(Pessoa pessoa){
+    //Valida se o CPF ou CNPJ já esta cadastrado
+    public Boolean verificaCpfCnpj(Pessoa pessoa){
         String sql = "select * from pessoa where pessoa.cpf_cnpj = '"+ pessoa.getCpf_cnpj()+"'";
        
          try {
@@ -178,12 +179,50 @@ public class daoPessoa {
                     }
                 }
          } catch (Exception e) {
-             JOptionPane.showMessageDialog(null, "Falha ao retornar dados de Login");
+            JOptionPane.showMessageDialog(null, "Falha ao retornar dados de Login");
          }
          return false;
     }
+    //Consulta pelo código do usuário
+    public boolean consultacodigo(Usuario pessoa) {
+        
+        ResultSet rs = null;
+        
+        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+                + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+                + "inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+                + "inner join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
+                + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+                + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
+        
+                
+        
+        rs = conecta_banco.resultset;
+        pessoa.setRetorno(rs);
+
+        return true; 
+    }
     
-    public boolean consultacodigo(Usuario pessoa){
+    //Consulta pelo código certificadora
+    public boolean consultacodigo(Certificadora pessoa) {
+        ResultSet rs = null;
+        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+                + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+                + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+                + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
+                + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+                + "inner join certificadora on (certificadora.id_pessoa = pessoa.id_pessoa )"
+                + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
+        
+        rs = conecta_banco.resultset;
+        pessoa.setRetorno(rs);
+
+        return true; 
+    }
+    
+    //Consulta pelo código geral
+    public boolean consultacodigo(Pessoa pessoa) {
+        ResultSet rs = null;
         conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
@@ -191,6 +230,37 @@ public class daoPessoa {
                 + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
                 + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
         
+        rs = conecta_banco.resultset;
+        pessoa.setRetorno(rs);
+
+        return true; 
+    }
+    
+    //Consulta pelo código geral
+    public boolean consultacodigo(Fornecedor pessoa) {
+        ResultSet rs = null;
+         conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+            + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+            + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+            + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
+            + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+            + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )"
+            + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
+        
+        rs = conecta_banco.resultset;
+        pessoa.setRetorno(rs);
+
+        return true; 
+    }
+    
+    //Consulta de usuário
+    public boolean consultageral(Usuario pessoa){
+        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+                + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+                + "inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+                + "inner join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
+                + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )");
+
         if(conecta_banco.resultset.equals(null)){
             return false;
         }else{
@@ -199,7 +269,8 @@ public class daoPessoa {
         return true;
     }
     
-    public boolean consultageral(Usuario pessoa){
+    //Consulta geral de pessoas
+    public boolean consultageral(Pessoa pessoa){
         conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
@@ -214,17 +285,110 @@ public class daoPessoa {
         return true;
     }
     
-   
-    public void consultageral(Pessoa pessoa){
-        conecta_banco.executeSQL("SELECT * FROM PESSOA WHERE ID_PESSOA = "+ pessoa.getId_pessoa());
-        pessoa.setRetorno(conecta_banco.resultset);
+    //Consulta geral de certificadoras
+    public boolean consultageral(Certificadora pessoa){
+        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+                + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+                + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+                + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
+                + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+                + "inner join certificadora on (certificadora.id_pessoa = pessoa.id_pessoa )");
+
+        if(conecta_banco.resultset.equals(null)){
+            return false;
+        }else{
+             pessoa.setRetorno(conecta_banco.resultset);
+        }
+        return true;
     }
-    /*
-    public void consultadescricao(ClassePessoa pessoa){
-        conecta_oracle.executeSQL("SELECT * FROM CAD_PESSOA WHERE DS_PESSOA LIKE '%"+pessoa.getDspessoa()+"%'");
-        pessoa.setRetorno(conecta_oracle.resultset);
-    }
-    */
     
+    //Consulta geral de fornecedores
+    public boolean consultageral(Fornecedor pessoa){
+         conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+            + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+            + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+            + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
+            + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+            + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )");
+
+        if(conecta_banco.resultset.equals(null)){
+            return false;
+        }else{
+             pessoa.setRetorno(conecta_banco.resultset);
+        }
+        return true;
+    }
+    
+    //Consulta geral pela descrição
+    public boolean consultadesc(Pessoa pessoa){
+        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+                + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+                + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+                + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
+                + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+                + "where pessoa.nome = '"+pessoa.getNome()+"'");
+        
+        if(conecta_banco.resultset.equals(null)){
+            return false;
+        }else{
+             pessoa.setRetorno(conecta_banco.resultset);
+        }
+        return true;
+    }
+    //Consulta pela descrição do usuário
+    public boolean consultadesc(Usuario pessoa){
+        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+                + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+                + "inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+                + "inner join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
+                + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+                + "where pessoa.nome = '"+pessoa.getNome()+"'");
+        
+        if(conecta_banco.resultset.equals(null)){
+            return false;
+        }else{
+             pessoa.setRetorno(conecta_banco.resultset);
+        }
+        return true;
+    }
+    
+    //Consulta pela descrição de certificadoras
+    public boolean consultadesc(Certificadora pessoa){
+        
+            conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+            + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+            + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+            + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
+            + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+            + "inner join certificadora on (certificadora.id_pessoa = pessoa.id_pessoa )"
+            + "where pessoa.nome = '"+pessoa.getNome()+"'");
+        
+        if(conecta_banco.resultset.equals(null)){
+            return false;
+        }else{
+             pessoa.setRetorno(conecta_banco.resultset);
+        }
+        return true;
+    }
+    
+    //Consulta pela descrição de fornecedores
+    public boolean consultadesc(Fornecedor pessoa){
+        
+            conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+            + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+            + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+            + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
+            + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+            + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )"
+            + "where pessoa.nome = '"+pessoa.getNome()+"'");
+        
+        if(conecta_banco.resultset.equals(null)){
+            return false;
+        }else{
+             pessoa.setRetorno(conecta_banco.resultset);
+        }
+        return true;
+    }
+
      
 }
