@@ -140,29 +140,28 @@ public class daoPessoa {
          try {
                 conecta_banco.executeSQL(sql);
                 conecta_banco.resultset.first();
-                while(conecta_banco.resultset.next()){
-                    if(pessoa.getCpf_cnpj().equals(conecta_banco.resultset.getString("cpf_cnpj")) ){
-                        return true;
-                    }
-                }
+               
+                if(pessoa.getCpf_cnpj().equals(conecta_banco.resultset.getString("cpf_cnpj")) ){
+                    return true;
+                }           
          } catch (Exception e) {
-             JOptionPane.showMessageDialog(null, "Falha ao retornar dados do CPF ou CNPJ");
+             return false;
          }
          return false;
     }
-     //Valida se o CPF ou CNPJ já esta cadastrado
+     //Valida se o RG já esta cadastrado
      public Boolean verificaRG(Usuario pessoa){
         String sql = "select * from pessoa_fisica where rg = '"+ pessoa.getRg()+"'";
          try {
                 conecta_banco.executeSQL(sql);
                 conecta_banco.resultset.first();
-                while(conecta_banco.resultset.next()){
-                    if(pessoa.getRg().equals(conecta_banco.resultset.getString("rg")) ){
-                        return true;
-                    }
+                
+                if(pessoa.getRg().equals(conecta_banco.resultset.getString("rg")) ){
+                    return true;
                 }
+                
          } catch (Exception e) {
-             JOptionPane.showMessageDialog(null, "Falha ao retornar dados do RG");
+             return false;
          }
          return false;
     }
@@ -173,13 +172,13 @@ public class daoPessoa {
          try {
                 conecta_banco.executeSQL(sql);
                 conecta_banco.resultset.first();
-                while(conecta_banco.resultset.next()){
-                    if(pessoa.getLogin().equals(conecta_banco.resultset.getString("login")) ){
-                        return true;
-                    }
+              
+                if(pessoa.getLogin().equals(conecta_banco.resultset.getString("login")) ){
+                    return true;
                 }
+                
          } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Falha ao retornar dados de Login");
+            return false;
          }
          return false;
     }
@@ -196,11 +195,18 @@ public class daoPessoa {
                 + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
         
                 
-        
-        rs = conecta_banco.resultset;
-        pessoa.setRetorno(rs);
-
-        return true; 
+        pessoa.setRetorno(conecta_banco.resultset);
+        //Rotina para verificar se retornou algum registro
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+                if(conecta_banco.resultset.absolute(1)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (SQLException ex) {
+                return false;
+            } 
     }
     
     //Consulta pelo código certificadora
@@ -214,15 +220,23 @@ public class daoPessoa {
                 + "inner join certificadora on (certificadora.id_pessoa = pessoa.id_pessoa )"
                 + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
         
-        rs = conecta_banco.resultset;
-        pessoa.setRetorno(rs);
-
-        return true; 
+        pessoa.setRetorno(conecta_banco.resultset);
+        //Rotina para verificar se retornou algum registro
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+                if(conecta_banco.resultset.absolute(1)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (SQLException ex) {
+                return false;
+            }
     }
     
     //Consulta pelo código geral
     public boolean consultacodigo(Pessoa pessoa) {
-        ResultSet rs = null;
+
         conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
@@ -230,15 +244,23 @@ public class daoPessoa {
                 + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
                 + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
         
-        rs = conecta_banco.resultset;
-        pessoa.setRetorno(rs);
-
-        return true; 
+        pessoa.setRetorno(conecta_banco.resultset);
+        //Rotina para verificar se retornou algum registro
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+                if(conecta_banco.resultset.absolute(1)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (SQLException ex) {
+                return false;
+            }
     }
     
     //Consulta pelo código geral
     public boolean consultacodigo(Fornecedor pessoa) {
-        ResultSet rs = null;
+        
          conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
             + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
             + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
@@ -247,10 +269,18 @@ public class daoPessoa {
             + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )"
             + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
         
-        rs = conecta_banco.resultset;
-        pessoa.setRetorno(rs);
-
-        return true; 
+         pessoa.setRetorno(conecta_banco.resultset);
+        //Rotina para verificar se retornou algum registro
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+                if(conecta_banco.resultset.absolute(1)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (SQLException ex) {
+                return false;
+            }
     }
     
     //Consulta de usuário
@@ -261,12 +291,18 @@ public class daoPessoa {
                 + "inner join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
                 + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )");
 
-        if(conecta_banco.resultset.equals(null)){
-            return false;
-        }else{
-             pessoa.setRetorno(conecta_banco.resultset);
-        }
-        return true;
+        pessoa.setRetorno(conecta_banco.resultset);
+        
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+                if(conecta_banco.resultset.absolute(1)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (SQLException ex) {
+                return false;
+            }
     }
     
     //Consulta geral de pessoas
@@ -277,12 +313,18 @@ public class daoPessoa {
                 + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
                 + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )");
 
-        if(conecta_banco.resultset.equals(null)){
-            return false;
-        }else{
-             pessoa.setRetorno(conecta_banco.resultset);
-        }
-        return true;
+        pessoa.setRetorno(conecta_banco.resultset);
+        
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+                if(conecta_banco.resultset.absolute(1)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (SQLException ex) {
+                return false;
+            }
     }
     
     //Consulta geral de certificadoras
@@ -294,12 +336,18 @@ public class daoPessoa {
                 + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
                 + "inner join certificadora on (certificadora.id_pessoa = pessoa.id_pessoa )");
 
-        if(conecta_banco.resultset.equals(null)){
+        pessoa.setRetorno(conecta_banco.resultset);
+
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+            if(conecta_banco.resultset.absolute(1)){
+                return true;
+            }else{
+                return false;
+            }
+        } catch (SQLException ex) {
             return false;
-        }else{
-             pessoa.setRetorno(conecta_banco.resultset);
         }
-        return true;
     }
     
     //Consulta geral de fornecedores
@@ -311,16 +359,24 @@ public class daoPessoa {
             + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
             + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )");
 
-        if(conecta_banco.resultset.equals(null)){
-            return false;
-        }else{
-             pessoa.setRetorno(conecta_banco.resultset);
-        }
-        return true;
+    
+            pessoa.setRetorno(conecta_banco.resultset);
+             
+            try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+                if(conecta_banco.resultset.absolute(1)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (SQLException ex) {
+                return false;
+            }
     }
     
     //Consulta geral pela descrição
     public boolean consultadesc(Pessoa pessoa){
+
         conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
@@ -328,12 +384,18 @@ public class daoPessoa {
                 + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
                 + "where pessoa.nome = '"+pessoa.getNome()+"'");
         
-        if(conecta_banco.resultset.equals(null)){
+        pessoa.setRetorno(conecta_banco.resultset);
+
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+            if(conecta_banco.resultset.absolute(1)){
+                return true;
+            }else{
+                return false;
+            }
+        } catch (SQLException ex) {
             return false;
-        }else{
-             pessoa.setRetorno(conecta_banco.resultset);
         }
-        return true;
     }
     //Consulta pela descrição do usuário
     public boolean consultadesc(Usuario pessoa){
@@ -344,12 +406,18 @@ public class daoPessoa {
                 + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
                 + "where pessoa.nome = '"+pessoa.getNome()+"'");
         
-        if(conecta_banco.resultset.equals(null)){
-            return false;
-        }else{
-             pessoa.setRetorno(conecta_banco.resultset);
-        }
-        return true;
+        pessoa.setRetorno(conecta_banco.resultset);
+        //Rotina para verificar se retornou algum registro
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+                if(conecta_banco.resultset.absolute(1)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (SQLException ex) {
+                return false;
+            }
     }
     
     //Consulta pela descrição de certificadoras
@@ -363,12 +431,18 @@ public class daoPessoa {
             + "inner join certificadora on (certificadora.id_pessoa = pessoa.id_pessoa )"
             + "where pessoa.nome = '"+pessoa.getNome()+"'");
         
-        if(conecta_banco.resultset.equals(null)){
-            return false;
-        }else{
-             pessoa.setRetorno(conecta_banco.resultset);
-        }
-        return true;
+        pessoa.setRetorno(conecta_banco.resultset);
+        //Rotina para verificar se retornou algum registro
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+                if(conecta_banco.resultset.absolute(1)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (SQLException ex) {
+                return false;
+            }
     }
     
     //Consulta pela descrição de fornecedores
@@ -382,13 +456,34 @@ public class daoPessoa {
             + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )"
             + "where pessoa.nome = '"+pessoa.getNome()+"'");
         
-        if(conecta_banco.resultset.equals(null)){
-            return false;
-        }else{
-             pessoa.setRetorno(conecta_banco.resultset);
-        }
-        return true;
+        pessoa.setRetorno(conecta_banco.resultset);
+        //Rotina para verificar se retornou algum registro
+        try {
+            //Move o cursor para primeira linha do resultset, com isso verifica se há reigstro existente
+                if(conecta_banco.resultset.absolute(1)){
+                    return true;
+                }else{
+                    return false;
+                }
+            } catch (SQLException ex) {
+                return false;
+            }
     }
+    //Método para retornar dados gerais de pessoas
+    public void retornardadosGeral(Pessoa pessoa) {
 
-     
+       conecta_banco.executeSQL("select * from pessoa where pessoa.id_pessoa = "+pessoa.getId_pessoa());
+         
+        try {        
+            conecta_banco.resultset.first();
+            pessoa.setId_pessoa(conecta_banco.resultset.getInt("id_pessoa"));
+            pessoa.setNome(conecta_banco.resultset.getString("nome"));
+            pessoa.setCpf_cnpj(conecta_banco.resultset.getString("cpf_cnpj"));
+            pessoa.setData_cadastro(conecta_banco.resultset.getDate("data_cadastro"));
+            pessoa.setData_alter(conecta_banco.resultset.getDate("data_alter"));
+                 
+        } catch (SQLException ex) {
+           JOptionPane.showMessageDialog(null, "Falha ao retornar dados da pessoa");
+        }
+     } 
 }

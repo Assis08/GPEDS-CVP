@@ -8,8 +8,11 @@ package br.edu.GPEDSCVP.validacao;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableColumnModel;
@@ -23,86 +26,95 @@ import javax.swing.table.TableModel;
  * @author Willys
  */
 public class ManipulaJtable {
-    
-    public ManipulaJtable()
-    {
+
+    private SimpleDateFormat formatTimeStamp = new SimpleDateFormat("dd/MM/yy HH:mm");
+    private SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yy");
+
+    public ManipulaJtable() {
     }
 
-    public void FormatarJtable(JTable tabela, int valores[])
-    {
-        DefaultTableModel modelo = (DefaultTableModel)tabela.getModel();
+    public void FormatarJtable(JTable tabela, int valores[]) {
+        DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
         modelo.setNumRows(0);
-        if(modelo.getColumnCount() == valores.length)
-        {
-            for(int x = 0; x < valores.length; x++)
+        if (modelo.getColumnCount() == valores.length) {
+            for (int x = 0; x < valores.length; x++) {
                 tabela.getColumnModel().getColumn(x).setPreferredWidth(valores[x]);
+            }
 
-        } else
-        {
+        } else {
             JOptionPane.showMessageDialog(null, "Favor verificar os parametros passados !");
         }
     }
 
-    public void PreencherJtableGenerico(JTable tabela, String campos[], ResultSet resultSet)
-    {
-      
+    public void PreencherJtableGenerico(JTable tabela, String campos[], ResultSet resultSet) {
         DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
         modelo.setNumRows(0);
+
         try {
             while (resultSet.next()) {
                 int len = campos.length;
                 Object[] row = new Object[len];
                 for (int i = 0; i < len; i++) {
-                    row[i] = resultSet.getString(campos[i]);
+                    //Verifica o tipo do dado para formatar e preencher na Jtable
+                    if (resultSet.getObject(campos[i]) instanceof Timestamp) {
+                        row[i] = formatTimeStamp.format(resultSet.getTimestamp(campos[i]));
+                    } else if (resultSet.getObject(campos[i]) instanceof java.sql.Date) {
+                        row[i] = formatDate.format(resultSet.getDate(campos[i]));
+                    } else {
+                        row[i] = resultSet.getString(campos[i]);
+                    }
+
                 }
                 modelo.addRow(row);
             }
-                } catch (SQLException erro) {
-                    JOptionPane.showMessageDialog(null, "Erro ao listar no JTable " + erro);
-            }
-        
+        } catch (SQLException erro) {
+            JOptionPane.showMessageDialog(null, "Erro ao listar no JTable " + erro);
+        }
+
     }
-    
+
     //Método para dimensionar a largura das colunas da Jtable de acordo com o tamanho do texto
-    public void ajustaColunas(JTable tabela) {  
-        tabela.setAutoResizeMode(0);  
-        FontMetrics fm = tabela.getGraphics().getFontMetrics();  
-  
-        for(int i = 0; i < tabela.getColumnCount(); i++) {  
-            String columnName = tabela.getColumnName(i);  
-            TableColumn col = tabela.getColumnModel().getColumn(i);  
-            col.setMinWidth(fm.stringWidth(columnName) + 10);  
-        }                         
-    } 
-    
-     //Método para remover um registro da Jtable
-     public void removeItens(JTable  jtable){
-        DefaultTableModel tabela = (DefaultTableModel)jtable.getModel();
+    public void ajustaColunas(JTable tabela) {
+        tabela.setAutoResizeMode(0);
+        FontMetrics fm = tabela.getGraphics().getFontMetrics();
+
+        for (int i = 0; i < tabela.getColumnCount(); i++) {
+            String columnName = tabela.getColumnName(i);
+            TableColumn col = tabela.getColumnModel().getColumn(i);
+            col.setMinWidth(fm.stringWidth(columnName) + 10);
+        }
+    }
+
+    //Método para remover um registro da Jtable
+    public void removeItens(JTable jtable) {
+        DefaultTableModel tabela = (DefaultTableModel) jtable.getModel();
         int totlinha = tabela.getRowCount();
         Boolean sel = false;
-        
+
         int opcao = JOptionPane.showConfirmDialog(null, "Deseja remover as linhas selecionadas? ",
-                "remover", 
-                    JOptionPane.YES_NO_OPTION);
-        if(opcao == JOptionPane.YES_OPTION){
-            for(int i = totlinha - 1; i>=0 ; i--){
-                if(tabela.getValueAt(i,0) == null){
+                "remover",
+                JOptionPane.YES_NO_OPTION);
+        if (opcao == JOptionPane.YES_OPTION) {
+            for (int i = totlinha - 1; i >= 0; i--) {
+                if (tabela.getValueAt(i, 0) == null) {
                     sel = false;
-                }else{
-                     Boolean selecionado = (Boolean) tabela.getValueAt(i,0);
-                    if(selecionado == true){
+                } else {
+                    Boolean selecionado = (Boolean) tabela.getValueAt(i, 0);
+                    if (selecionado == true) {
                         sel = true;
                         tabela.removeRow(i);
                     }
                 }
             }
-            if (sel == false){
-                JOptionPane.showMessageDialog(null, "Não ha nenhum registro selecionado !"); 
+            if (sel == false) {
+                JOptionPane.showMessageDialog(null, "Não ha nenhum registro selecionado !");
             }
         }
-        
+
     }
+
     //Método para ajustar colunas da JTABLE de acordo com o tamanho do dado
+
     public static void ajustarColunasDaTabela(JTable ttabela) {
         for (int c = 0; c < ttabela.getColumnCount(); c++) {
 

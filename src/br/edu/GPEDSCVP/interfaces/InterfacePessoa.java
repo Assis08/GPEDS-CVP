@@ -148,7 +148,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jTabbedPane1 = new javax.swing.JTabbedPane();
+        jTBPessoas = new javax.swing.JTabbedPane();
         jPCadastroPessoa = new javax.swing.JPanel();
         jPPessoa = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -1282,7 +1282,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addGap(25, 25, 25))
         );
 
-        jTabbedPane1.addTab("Cadastro", jPCadastroPessoa);
+        jTBPessoas.addTab("Cadastro", jPCadastroPessoa);
 
         jLabel13.setText("Pessoa:");
 
@@ -1308,7 +1308,20 @@ public class InterfacePessoa extends javax.swing.JFrame {
             new String [] {
                 "ID Pessoa", "Login", "Descrição", "Razão Social", "CPF/CNPJ", "RG", "Sexo", "Data.Nasc", "Ultima alteração"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTBDadosPessoas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTBDadosPessoasMouseClicked(evt);
+            }
+        });
         jScrollPane4.setViewportView(jTBDadosPessoas);
 
         jLabel30.setText("Pessoa:");
@@ -1363,17 +1376,17 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTabbedPane1.addTab("Consulta", jPanel2);
+        jTBPessoas.addTab("Consulta", jPanel2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addComponent(jTBPessoas)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 676, Short.MAX_VALUE)
+            .addComponent(jTBPessoas, javax.swing.GroupLayout.PREFERRED_SIZE, 676, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(900, 714));
@@ -3067,6 +3080,27 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //jFTNumeroContato.setValue("");
     }//GEN-LAST:event_jFTNumeroContatoMouseClicked
 
+    private void jTBDadosPessoasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBDadosPessoasMouseClicked
+        //Verifica se houve 2 cliques do mouse 
+        if (evt.getClickCount() == 2) {
+
+            //recupera a linha clicada
+            int linha = jTBDadosPessoas.getSelectedRow();
+            //recupera o id da pessoa selecionada
+            String codigo = (String) jTBDadosPessoas.getValueAt(linha, 0);
+            //Seta o id da pessoa para retornar os dados
+            pessoa.setId_pessoa(Integer.parseInt(codigo));
+            //retorna dados da pessoa
+            dao_pessoa.retornardadosGeral(pessoa);
+            //Adiciona nos campos os dados da pessoa
+
+            setcompPessoa();
+
+            jTBPessoas.setSelectedIndex(0); 
+            jTBPAdicionais.setSelectedIndex(0);
+       }
+    }//GEN-LAST:event_jTBDadosPessoasMouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -3195,6 +3229,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JTable jTBEndereco;
     private javax.swing.JTabbedPane jTBPAdicionais;
     private javax.swing.JTable jTBPermissoes;
+    private javax.swing.JTabbedPane jTBPessoas;
     private javax.swing.JTextField jTFBairro;
     private javax.swing.JTextField jTFData;
     private javax.swing.JTextField jTFDescContato;
@@ -3209,7 +3244,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JTextField jTFRazaoSocial;
     private javax.swing.JTextField jTFRua;
     private javax.swing.JTextField jTFUF;
-    private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
 
 
@@ -3290,6 +3324,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
         fornecedor.setRamo(jTFRamo.getText());
         
         return fornecedor;
+    }
+    
+    private void setcompPessoa() {
+        //Implementar
     }
     
     //Pega dados da tela de contatos 
@@ -3392,7 +3430,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Seta mascara no campo cep
         jFTCep.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("#####-###")));
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
-        jFTCep.setValue("");
-        
+        jFTCep.setValue("");   
     }
+
 }
