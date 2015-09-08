@@ -12,10 +12,12 @@ package br.edu.GPEDSCVP.classe;
 public class PessoaJuridica extends Pessoa
 {
      private String razao_social;
+     private String internacional;
     
     public PessoaJuridica()
     {
         razao_social = "";
+        internacional = "";
     }
 
     public String getRazao_social()
@@ -28,6 +30,12 @@ public class PessoaJuridica extends Pessoa
         this.razao_social = razao_social;
     }
 
-   
+    public String getInternacional() {
+        return internacional;
+    }
+
+    public void setInternacional(String internacional) {
+        this.internacional = internacional;
+    }
 }
 

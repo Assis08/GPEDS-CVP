@@ -115,5 +115,15 @@ public class daoEndereco {
                 conecta_banco.incluirSQL(sql);
         }
      }
-    
+    //consulta endereço pelo codigo da pessoa 
+    public void consultacodigo(Endereco endereco){
+
+       conecta_banco.executeSQL("select null, endereco.id_endereco, endereco.descricao, rua, numero, bairro, cep, cidade.descricao,"
+            +" cidade.uf from endereco"
+            +" inner join cidade on (cidade.id_cidade = endereco.id_cidade)"
+            +" where endereco.id_pessoa = "+endereco.getId_pessoa());
+       
+            endereco.setRetorno(conecta_banco.resultset);
+    }
+
 }

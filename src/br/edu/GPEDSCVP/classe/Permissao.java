@@ -19,11 +19,11 @@ public class Permissao
     private int id_usuario;
     private int id_tela;
     private String nome_tela;
-    private int acesso;
-    private int inserir;
-    private int alterar;
-    private int excluir;
-    private int consultar;
+    private String acesso;
+    private String inserir;
+    private String alterar;
+    private String excluir;
+    private String consultar;
     private Date data_alter;
     private ResultSet retorno;
     private JTable tabela;
@@ -34,11 +34,11 @@ public class Permissao
         id_usuario = 0;
         id_tela = 0;
         nome_tela = "";
-        acesso = 0;
-        inserir = 0;
-        alterar = 0;
-        excluir = 0;
-        consultar = 0;
+        acesso = "";
+        inserir = "";
+        alterar = "";
+        excluir = "";
+        consultar = "";
         data_alter = null;
 
     }
@@ -63,52 +63,52 @@ public class Permissao
         this.id_usuario = id_usuario;
     }
 
-    public int getAcesso()
+    public String getAcesso()
     {
         return acesso;
     }
 
-    public void setAcesso(int acesso)
+    public void setAcesso(String acesso)
     {
         this.acesso = acesso;
     }
 
-    public int getInserir()
+    public String getInserir()
     {
         return inserir;
     }
 
-    public void setInserir(int inserir)
+    public void setInserir(String inserir)
     {
         this.inserir = inserir;
     }
 
-    public int getAlterar()
+    public String getAlterar()
     {
         return alterar;
     }
 
-    public void setAlterar(int alterar)
+    public void setAlterar(String alterar)
     {
         this.alterar = alterar;
     }
 
-    public int getExcluir()
+    public String getExcluir()
     {
         return excluir;
     }
 
-    public void setExcluir(int excluir)
+    public void setExcluir(String excluir)
     {
         this.excluir = excluir;
     }
 
-    public int getConsultar()
+    public String getConsultar()
     {
         return consultar;
     }
 
-    public void setConsultar(int consultar)
+    public void setConsultar(String consultar)
     {
         this.consultar = consultar;
     }

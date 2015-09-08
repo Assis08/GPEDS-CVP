@@ -13,7 +13,7 @@ import java.sql.Date;
  */
 public class PessoaFisica extends Pessoa
 {
-    private String dt_nasc;
+    private Date dt_nasc;
     private String rg;
     private String sexo;
     
@@ -24,12 +24,12 @@ public class PessoaFisica extends Pessoa
         sexo = "";
     }
 
-    public String getDt_nasc()
+    public Date getDt_nasc()
     {
         return dt_nasc;
     }
 
-    public void setDt_nasc(String dt_nasc)
+    public void setDt_nasc(Date dt_nasc)
     {
         this.dt_nasc = dt_nasc;
     }

@@ -78,27 +78,27 @@ public class daoPermissao {
         //Seta os demais valores dos campos em suas respectivas colunas
         TabelaPermissao.setValueAt(permissao.getId_tela(),totlinha,2);
         TabelaPermissao.setValueAt(permissao.getNome_tela(),totlinha,3);
-        if(permissao.getAcesso() == 1){
+        if(permissao.getAcesso().equals("S")){
             TabelaPermissao.setValueAt("Sim",totlinha,4);
         }else{
             TabelaPermissao.setValueAt("Não",totlinha,4);
         }
-        if(permissao.getInserir() == 1){
+        if(permissao.getInserir().equals("S")){
             TabelaPermissao.setValueAt("Sim",totlinha,5);
         }else{
             TabelaPermissao.setValueAt("Não",totlinha,5);
         }
-        if(permissao.getAlterar() == 1){
+        if(permissao.getAlterar().equals("S")){
             TabelaPermissao.setValueAt("Sim",totlinha,6);
         }else{
             TabelaPermissao.setValueAt("Não",totlinha,6);
         }
-        if(permissao.getExcluir() == 1){
+        if(permissao.getExcluir().equals("S")){
             TabelaPermissao.setValueAt("Sim",totlinha,7); 
         }else{
             TabelaPermissao.setValueAt("Não",totlinha,7); 
         }
-        if(permissao.getConsultar() == 1){
+        if(permissao.getConsultar().equals("S")){
             TabelaPermissao.setValueAt("Sim", totlinha,8);
         }else{
             TabelaPermissao.setValueAt("Não", totlinha,8);
@@ -108,11 +108,11 @@ public class daoPermissao {
      public void gravarPermissao (Permissao permissao){
         DefaultTableModel tabela = (DefaultTableModel) permissao.getTabela().getModel();
         int totlinha = tabela.getRowCount();
-        Integer acesso;
-        Integer inserir;
-        Integer alterar;
-        Integer excluir;
-        Integer consultar;
+        String acesso;
+        String inserir;
+        String alterar;
+        String excluir;
+        String consultar;
         
         for (int i = 0; i < totlinha; i++){
             
@@ -120,29 +120,29 @@ public class daoPermissao {
             Integer id_permissao = (Integer) tabela.getValueAt(i, 1);
             Integer id_tela = (Integer) tabela.getValueAt(i, 2);
             if(tabela.getValueAt(i, 4).equals("Sim")){
-                acesso = 1;
+                acesso = "S";
             }else{
-                acesso = 0;
+                acesso = "N";
             }
             if(tabela.getValueAt(i, 5).equals("Sim")){
-                inserir = 1;
+                inserir = "S";
             }else{
-                inserir = 0;
+                inserir = "N";
             }
             if(tabela.getValueAt(i, 6).equals("Sim")){
-                alterar = 1;
+                alterar = "S";
             }else{
-                alterar = 0;
+                alterar = "N";
             }
             if(tabela.getValueAt(i, 7).equals("Sim")){
-                excluir = 1;
+                excluir = "S";
             }else{
-                excluir = 0;
+                excluir = "N";
             }
             if(tabela.getValueAt(i, 8).equals("Sim")){
-                consultar = 1;
+                consultar = "S";
             }else{
-                consultar = 0;
+                consultar = "N";
             }
 
             String sql = "INSERT INTO PERMISSAO VALUES ("
@@ -159,5 +159,16 @@ public class daoPermissao {
                 conecta_banco.incluirSQL(sql);
         }
      }
+     
+    //consulta permissões pelo codigo da pessoa 
+    public void consultacodigo(Permissao permissao){
+
+       conecta_banco.executeSQL("select null,id_usuario, id_permissao, permissao.id_tela, tela.descricao, acesso, inserir, alterar, excluir,"
+               + " consultar from permissao" 
+               + " inner join tela on (tela.id_tela = permissao.id_tela)"
+               + " where permissao.id_usuario = "+permissao.getId_usuario());
+       
+               permissao.setRetorno(conecta_banco.resultset);
+    }
     
 }

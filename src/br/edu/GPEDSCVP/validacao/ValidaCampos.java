@@ -181,7 +181,7 @@ public class ValidaCampos {
                                     if (field.getName().equals(atributo)){
                                         if (field.getText().equals("") || (field.getText().equals("  /  /    ")) || (field.getText().equals("  .   .   /    -  ")) ||
                                         (field.getText().equals("   .   .   -  ")) ||(field.getText().equals("  .   .   - ")) ||(field.getText().equals("(  )    -    ")) || 
-                                                (field.getText().equals("     -   ")))  {
+                                                (field.getText().equals("     -   ")) || (field.getText().equals("(  )         ")))  {
                                         JOptionPane.showMessageDialog(null, "campo: "+ field.getToolTipText()+ " é obrigatorio");
                                         
                                         field.grabFocus(); 

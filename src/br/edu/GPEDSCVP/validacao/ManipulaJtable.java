@@ -27,9 +27,6 @@ import javax.swing.table.TableModel;
  */
 public class ManipulaJtable {
 
-    private SimpleDateFormat formatTimeStamp = new SimpleDateFormat("dd/MM/yy HH:mm");
-    private SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yy");
-
     public ManipulaJtable() {
     }
 
@@ -47,6 +44,7 @@ public class ManipulaJtable {
     }
 
     public void PreencherJtableGenerico(JTable tabela, String campos[], ResultSet resultSet) {
+        FormatarData data = new FormatarData();
         DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
         modelo.setNumRows(0);
 
@@ -57,13 +55,12 @@ public class ManipulaJtable {
                 for (int i = 0; i < len; i++) {
                     //Verifica o tipo do dado para formatar e preencher na Jtable
                     if (resultSet.getObject(campos[i]) instanceof Timestamp) {
-                        row[i] = formatTimeStamp.format(resultSet.getTimestamp(campos[i]));
+                        row[i] = data.organizaData(resultSet.getObject(campos[i]));
                     } else if (resultSet.getObject(campos[i]) instanceof java.sql.Date) {
-                        row[i] = formatDate.format(resultSet.getDate(campos[i]));
+                        row[i] = data.organizaData(resultSet.getObject(campos[i]));
                     } else {
                         row[i] = resultSet.getString(campos[i]);
                     }
-
                 }
                 modelo.addRow(row);
             }

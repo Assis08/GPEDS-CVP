@@ -5,6 +5,7 @@
  */
 package br.edu.GPEDSCVP.interfaces;
 
+import br.edu.GPEDSCVP.classe.Acesso;
 import br.edu.GPEDSCVP.classe.Certificadora;
 import br.edu.GPEDSCVP.classe.Cidade;
 import br.edu.GPEDSCVP.classe.Contato;
@@ -255,7 +256,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jTBDadosPessoas = new javax.swing.JTable();
         jLabel30 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Cadastro de Pessoas");
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowActivated(java.awt.event.WindowEvent evt) {
                 formWindowActivated(evt);
@@ -312,6 +314,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 jRBMascStateChanged(evt);
             }
         });
+        jRBMasc.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRBMascItemStateChanged(evt);
+            }
+        });
 
         jRBFem.setText("Feminino");
         jRBFem.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -322,6 +329,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jRBFem.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jRBFemStateChanged(evt);
+            }
+        });
+        jRBFem.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRBFemItemStateChanged(evt);
             }
         });
 
@@ -478,6 +490,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jButton2.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_5122_pencil_48.png")); // NOI18N
         jButton2.setText("Alterar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
 
         jButton3.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
         jButton3.setText("Excluir");
@@ -544,9 +561,16 @@ public class InterfacePessoa extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                true, false, false, true, true, true
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jScrollPane1.setViewportView(jTBContato);
@@ -678,9 +702,16 @@ public class InterfacePessoa extends javax.swing.JFrame {
             Class[] types = new Class [] {
                 java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                true, true, false, false, false, false, false, true, true
+            };
 
             public Class getColumnClass(int columnIndex) {
                 return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
         jScrollPane2.setViewportView(jTBEndereco);
@@ -2561,27 +2592,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jRBFemStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRBFemStateChanged
         
-        if(jRBFem.isEnabled()){
-            if(jRBFem.isSelected()){
-                jRBFem.setSelected(true);
-                jRBMasc.setSelected(false);
-            }
-        }else{
-                jRBMasc.setSelected(false);
-                jRBFem.setSelected(false);
-            }
     }//GEN-LAST:event_jRBFemStateChanged
 
     private void jRBMascStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jRBMascStateChanged
-        if(jRBMasc.isEnabled()){ 
-            if(jRBMasc.isSelected()){
-                jRBFem.setSelected(false);
-                jRBMasc.setSelected(true);
-            }
-        }else{
-                jRBMasc.setSelected(false);
-                jRBFem.setSelected(false);
-            }
+       
     }//GEN-LAST:event_jRBMascStateChanged
 
     private void jBTAddPermissaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddPermissaoActionPerformed
@@ -3088,18 +3102,117 @@ public class InterfacePessoa extends javax.swing.JFrame {
             int linha = jTBDadosPessoas.getSelectedRow();
             //recupera o id da pessoa selecionada
             String codigo = (String) jTBDadosPessoas.getValueAt(linha, 0);
-            //Seta o id da pessoa para retornar os dados
-            pessoa.setId_pessoa(Integer.parseInt(codigo));
-            //retorna dados da pessoa
-            dao_pessoa.retornardadosGeral(pessoa);
-            //Adiciona nos campos os dados da pessoa
-
-            setcompPessoa();
-
+            
+            //Limpa os campos da tela pessoa
+            validaCampos.LimparCampos(jPTipoPessoa);
+            validaCampos.LimparCampos(jPPessoa);
+            validaCampos.LimparJtable(jTBContato);
+            validaCampos.LimparJtable(jTBEndereco);
+            validaCampos.LimparJtable(jTBPermissoes);
+         
+            //retorna dados do usuário
+            if(jCBBuscarPessoa.getSelectedIndex() == 1){
+             
+                //retorna dados do usuario
+                usuario.setId_pessoa(Integer.parseInt(codigo));
+                dao_pessoa.retornardadosUsuario(usuario);
+                //retorna dados do endereço do usuário
+                endereco.setId_pessoa(Integer.parseInt(codigo));
+                dao_endereco.consultacodigo(endereco);
+                //retorna dados dos contatos do usuário
+                contato.setId_pessoa(Integer.parseInt(codigo));
+                dao_contato.consultacodigo(contato);
+                //retorna dados das permissões de acesso do usuario
+                permissao.setId_usuario(Integer.parseInt(codigo));
+                dao_permissao.consultacodigo(permissao);
+                
+                setcompUsuario();
+                
+                //Preenche na JTABLE de endereços todos endereços da pessoa
+                Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null","id_endereco","endereco.descricao","rua","numero","bairro","cep","cidade.descricao","uf"}, endereco.getRetorno());
+                
+                //Preenche na JTABLE de contatos todos contatos da pessoa
+                Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null","id_contato","tipo","descricao","numero","email"}, contato.getRetorno());
+                
+                //Preenche na JTABLE de contatos todos contatos da pessoa
+                Jtable.PreencherJtableGenerico(jTBPermissoes, new String[]{"null","id_permissao","id_tela","tela.descricao","acesso","inserir","alterar","excluir","consultar"}, permissao.getRetorno());
+                
+            //retorna dados da Certificadora
+            }else if(jCBBuscarPessoa.getSelectedIndex() == 2){
+              
+                //retorna dados da certificadora
+                certificadora.setId_pessoa(Integer.parseInt(codigo));            
+                dao_pessoa.retornardadosCertificadora(certificadora);
+                //retorna dados do endereço da certificadora
+                endereco.setId_pessoa(Integer.parseInt(codigo));
+                dao_endereco.consultacodigo(endereco);
+                //retorna dados dos contatos da certificadora
+                contato.setId_pessoa(Integer.parseInt(codigo));
+                dao_contato.consultacodigo(contato);
+                
+                setcompCertificadora();
+                
+                //Preenche na JTABLE de endereços todos endereços da pessoa
+                Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null","id_endereco","endereco.descricao","rua","numero","bairro","cep","cidade.descricao","uf"}, endereco.getRetorno());
+                
+                //Preenche na JTABLE de contatos todos contatos da pessoa
+                Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null","id_contato","tipo","descricao","numero","email"}, contato.getRetorno());
+                
+            //retorna dados do fornecedor
+            }else if (jCBBuscarPessoa.getSelectedIndex() == 3){
+  
+                fornecedor.setId_pessoa(Integer.parseInt(codigo)); 
+                dao_pessoa.retornardadosFornecedor(fornecedor);
+                //retorna dados do endereço do fornecedor
+                endereco.setId_pessoa(Integer.parseInt(codigo));
+                dao_endereco.consultacodigo(endereco);
+                //retorna dados dos contatos do fornecedor
+                contato.setId_pessoa(Integer.parseInt(codigo));
+                dao_contato.consultacodigo(contato);
+                
+                setcompFornecedor();
+                
+                //Preenche na JTABLE de endereços todos endereços da pessoa
+                Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null","id_endereco","endereco.descricao","rua","numero","bairro","cep","cidade.descricao","uf"}, endereco.getRetorno());
+                
+                //Preenche na JTABLE de contatos todos contatos da pessoa
+                Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null","id_contato","tipo","descricao","numero","email"}, contato.getRetorno());
+            }
+            
             jTBPessoas.setSelectedIndex(0); 
             jTBPAdicionais.setSelectedIndex(0);
+            //Define a situação como padrao para habilitar os botoes utilizados apenas na alteração ou exclusão
+            situacao = Rotinas.PADRAO;
+            //habilita os botoes utilizados na alteraçao e exclusão e desabilita os restantes
+            validabotoes.ValidaEstado(jPBotoes, situacao);
        }
+      //Ajusta largura das colunas da jtable de acordo com o tamanho do dado
+      Jtable.ajustarColunasDaTabela(jTBContato); 
+      Jtable.ajustarColunasDaTabela(jTBEndereco);
+      Jtable.ajustarColunasDaTabela(jTBPermissoes);
     }//GEN-LAST:event_jTBDadosPessoasMouseClicked
+
+    private void jRBMascItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRBMascItemStateChanged
+        if(jRBMasc.isSelected())  {
+            jRBFem.setSelected(false);
+        }     
+
+    }//GEN-LAST:event_jRBMascItemStateChanged
+
+    private void jRBFemItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRBFemItemStateChanged
+        if(jRBFem.isSelected())  {
+            jRBMasc.setSelected(false);
+        }    
+    }//GEN-LAST:event_jRBFemItemStateChanged
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        //Define a situação como alterar para habilitar os botoes utilizados apenas na inclusão
+        situacao = Rotinas.ALTERAR;
+        
+        //habilita os botoes utilizados no alterar e desabilita os restantes
+        validabotoes.ValidaEstado(jPBotoes, situacao);
+       
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -3258,7 +3371,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         usuario.setData_alter(data_atual);
         
         //Pessoa Fisíca
-        usuario.setDt_nasc(jFTDataNasc.getText());
+        usuario.setDt_nasc(data.stringParaSQLDate(jFTDataNasc.getText()));
         usuario.setRg(jFTRG.getText());
         if (jRBMasc.isSelected()){
             usuario.setSexo("M");
@@ -3269,7 +3382,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Usuario
         usuario.setLogin(jTFLogin.getText());
         //criptografa a senha
-        usuario.setSenha(criptografar.criptografarMD5(jPFSenha.getPassword().toString()));
+        usuario.setSenha(criptografar.criptografarMD5(jPFSenha.getText())); 
         if(jCBGerente.isSelected()){
             usuario.setIn_gerente(1);
         }else{
@@ -3290,12 +3403,17 @@ public class InterfacePessoa extends javax.swing.JFrame {
         
         //Pessoa Juridica
         certificadora.setRazao_social(jTFRazaoSocial.getText());
+        if(jCBInternacional.isSelected()){
+            certificadora.setInternacional("S");
+        }else{
+            certificadora.setInternacional("N");
+        }
         
         //Certificadora
         if(jCBCalibracoes.isSelected()){
-            certificadora.setIn_calibracoes('S');
+            certificadora.setIn_calibracoes("S");
         }else{
-            certificadora.setIn_calibracoes('N');
+            certificadora.setIn_calibracoes("N");
         }
         
         return certificadora;
@@ -3318,16 +3436,17 @@ public class InterfacePessoa extends javax.swing.JFrame {
         
         //Pessoa Juridica
         fornecedor.setRazao_social(jTFRazaoSocial.getText());
+        if(jCBInternacional.isSelected()){
+            fornecedor.setInternacional("S");
+        }else{
+            fornecedor.setInternacional("N");
+        }
         
         //Fornecedor
         fornecedor.setSite(JTFSite.getText());
         fornecedor.setRamo(jTFRamo.getText());
         
         return fornecedor;
-    }
-    
-    private void setcompPessoa() {
-        //Implementar
     }
     
     //Pega dados da tela de contatos 
@@ -3385,36 +3504,103 @@ public class InterfacePessoa extends javax.swing.JFrame {
         permissao.setData_alter(data_atual);
         permissao.setTabela(jTBPermissoes);
         permissao.setNome_tela(tela.getDescricao());
-        permissao.setAcesso(0);
+        permissao.setAcesso("N");
         
 
         if(jCBAlterar.isSelected()){
-            permissao.setAlterar(1);
-            permissao.setAcesso(1);
+            permissao.setAlterar("S");
+            permissao.setAcesso("S");
         }else{
-             permissao.setAlterar(0);
+             permissao.setAlterar("N");
         }
         if(jCBConsultar.isSelected()){
-            permissao.setConsultar(1);
-            permissao.setAcesso(1);
+            permissao.setConsultar("S");
+            permissao.setAcesso("S");
         }else{
-             permissao.setConsultar(0);
+             permissao.setConsultar("N");
         }
         if(jCBExcluir.isSelected()){
-            permissao.setExcluir(1);
-            permissao.setAcesso(1);
+            permissao.setExcluir("S");
+            permissao.setAcesso("S");
         }else{
-             permissao.setExcluir(0);
+             permissao.setExcluir("N");
         }
         if(jCBInserir.isSelected()){
-            permissao.setInserir(1);
-            permissao.setAcesso(1);
+            permissao.setInserir("S");
+            permissao.setAcesso("S");
         }else{
-             permissao.setInserir(0);
+             permissao.setInserir("N");
         }
         return permissao;
     }
-     public void setaMascaras (){
+    
+    //Seta dados do usuario na tela
+    private void setcompUsuario() {
+        //Dados de pessoa
+        jTFIDPessoa.setText(Integer.toString(usuario.getId_pessoa()));
+        jTFNome.setText(usuario.getNome());
+        jFTCPFCNPJ.setText(usuario.getCpf_cnpj());
+        jTFData.setText(data.organizaData(usuario.getData_cadastro()));
+        jFTDataNasc.setText(data.organizaData(usuario.getDt_nasc()));
+        jFTRG.setText(usuario.getRg());
+        jRBCPF.setSelected(true);
+        jRBPessoaFisica.setSelected(true);
+        jRBMasc.setSelected(true);
+        if(usuario.getSexo().equals("M")){
+            jRBMasc.setSelected(true);
+        }else if(usuario.getSexo().equals("F")){
+            jRBFem.setSelected(true);
+        }else{
+             jRBMasc.setSelected(false);
+             jRBFem.setSelected(false);
+        }
+    }
+    
+    //Seta dados da certificadora na tela
+    private void setcompCertificadora() {
+        //Dados de pessoa
+        jTFIDPessoa.setText(Integer.toString(certificadora.getId_pessoa()));
+        jTFNome.setText(certificadora.getNome());
+        jTFRazaoSocial.setText(certificadora.getRazao_social());
+        jFTCPFCNPJ.setText(certificadora.getCpf_cnpj());
+        jTFData.setText(data.organizaData(certificadora.getData_cadastro()));
+        if(certificadora.getIn_calibracoes().equals("S")){
+            jCBCalibracoes.setSelected(true);
+        }else{
+            jCBCalibracoes.setSelected(false);
+        }
+        if(certificadora.getInternacional().equals("S")){
+            jCBInternacional.setSelected(true);
+        }else{
+            jCBInternacional.setSelected(false);
+        }
+        jRBCNPJ.setSelected(true);
+        jRBPessoaJuridica.setSelected(true);
+        jRBCertificadora.setSelected(true);
+    }
+    
+    //Seta dados do fornecedor na tela
+    private void setcompFornecedor() {
+        //Dados de pessoa
+        jTFIDPessoa.setText(Integer.toString(fornecedor.getId_pessoa()));
+        jTFNome.setText(fornecedor.getNome());
+        jTFRazaoSocial.setText(fornecedor.getRazao_social());
+        jFTCPFCNPJ.setText(fornecedor.getCpf_cnpj());
+        jTFData.setText(data.organizaData(fornecedor.getData_cadastro()));
+        JTFSite.setText(fornecedor.getSite());
+        jTFRamo.setText(fornecedor.getRamo());
+        if(fornecedor.getInternacional().equals("S")){
+            jCBInternacional.setSelected(true);
+        }else{
+            jCBInternacional.setSelected(false);
+        }
+        jRBCNPJ.setSelected(true);
+        jRBPessoaJuridica.setSelected(true);
+        jRBFornecedor.setSelected(true);
+    }
+    
+    
+    public void setaMascaras (){
         //Seta mascara no campo  data de nascimento
         jFTDataNasc.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##/##/####")));
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
@@ -3432,5 +3618,4 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
         jFTCep.setValue("");   
     }
-
 }

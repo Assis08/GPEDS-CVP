@@ -120,4 +120,14 @@ public class daoContato {
             conecta_banco.incluirSQL(sql);
         }
      }
+     
+    //consulta contato pelo codigo da pessoa 
+    public void consultacodigo(Contato contato){
+
+       conecta_banco.executeSQL("select null,contato.id_pessoa,contato.id_contato,contato.tipo, contato.descricao,"
+            + " contato.numero, contato.email from contato"
+            + " where contato.id_pessoa = "+contato.getId_pessoa());
+       
+            contato.setRetorno(conecta_banco.resultset);
+    }
 }

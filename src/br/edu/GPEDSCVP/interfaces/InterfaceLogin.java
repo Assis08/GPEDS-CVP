@@ -5,18 +5,40 @@
  */
 package br.edu.GPEDSCVP.interfaces;
 
+import br.edu.GPEDSCVP.classe.Acesso;
+import br.edu.GPEDSCVP.classe.Usuario;
+import br.edu.GPEDSCVP.dao.daoAcesso;
+import br.edu.GPEDSCVP.dao.daoPessoa;
+import br.edu.GPEDSCVP.validacao.Criptografia;
+import br.edu.GPEDSCVP.validacao.ValidaCampos;
+import java.sql.Date;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Willys
  */
 public class InterfaceLogin extends javax.swing.JFrame {
+    
+    Usuario usuario;
+    Acesso acesso;
+    Criptografia criptografar;
+    daoPessoa dao_pessoa;
+    daoAcesso dao_acesso;
+    ValidaCampos valida_campos;
 
     /**
      * Creates new form InterfaceLogin
      */
     public InterfaceLogin() {
         initComponents();
+       
         jPImagem.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        
+        dao_pessoa = new daoPessoa();
+        usuario = new Usuario();
+        dao_acesso = new daoAcesso();
+        acesso = new Acesso();
     }
 
     /**
@@ -50,6 +72,7 @@ public class InterfaceLogin extends javax.swing.JFrame {
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login de acesso");
 
         jLabel1.setText("Login:");
 
@@ -57,6 +80,11 @@ public class InterfaceLogin extends javax.swing.JFrame {
 
         jBTLogar.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\32x32\\check-user-icon (Custom).png")); // NOI18N
         jBTLogar.setText("Logar");
+        jBTLogar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTLogarActionPerformed(evt);
+            }
+        });
 
         jBTCancelar.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\32x32\\cancel-icon (Custom).png")); // NOI18N
         jBTCancelar.setText("Cancelar");
@@ -127,12 +155,46 @@ public class InterfaceLogin extends javax.swing.JFrame {
                 .addGap(18, 31, Short.MAX_VALUE))
         );
 
-        pack();
+        setSize(new java.awt.Dimension(431, 285));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBTCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTCancelarActionPerformed
-        // TODO add your handling code here:
+        jTFLogin.setText("");
+        jPFSenha.setText("");
     }//GEN-LAST:event_jBTCancelarActionPerformed
+
+    private void jBTLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTLogarActionPerformed
+        //Verifica se os campos não estão vazios
+        if(!jTFLogin.getText().equals("")){
+            if(!jPFSenha.getText().equals("")){
+                 //Pega dados de login da tela
+                getcompUsuario();
+                //verifica se é um login e senha validos
+                if(dao_pessoa.validaLoginSenha(usuario) == true){
+                    //Pega dados de acesso
+                    getcompAcesso();
+                    //Grava acesso
+                    dao_acesso.gravarAcesso(acesso);
+                    //Retorna dados do usuario logado
+                    dao_acesso.retornaUsuarioLogado(acesso);
+                    //remove da tela a tela atual
+                    this.dispose();
+                    //Traz para tela a tela principal do sistema 
+                    new InterfacePrincipal().setVisible(true);
+
+                }else{
+                    JOptionPane.showMessageDialog(null, "Usuário ou senha incorretos");
+                }
+            }else{
+                JOptionPane.showMessageDialog(null, "Favor preencha o campo de senha");
+                jPFSenha.grabFocus();
+            }   
+        }else{
+            JOptionPane.showMessageDialog(null, "Favor preencha o campo de login");
+            jTFLogin.grabFocus();
+        }
+    }//GEN-LAST:event_jBTLogarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -180,4 +242,22 @@ public class InterfaceLogin extends javax.swing.JFrame {
     private javax.swing.JPanel jPLogin;
     private javax.swing.JTextField jTFLogin;
     // End of variables declaration//GEN-END:variables
+
+    private Usuario getcompUsuario() {
+        
+        usuario.setLogin(jTFLogin.getText());
+        usuario.setSenha(criptografar.criptografarMD5(jPFSenha.getText()));
+        
+        return usuario;        
+    }
+    
+    private Acesso getcompAcesso() {
+         //  Variaveis e conversões
+        Date data_atual = new Date(System.currentTimeMillis());
+        
+        acesso.setId_usuario(usuario.getId_pessoa());
+        acesso.setData_acesso(data_atual);
+        
+        return acesso;        
+    }
 }

@@ -2,10 +2,13 @@ package br.edu.GPEDSCVP.validacao;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Classe útil para conversão de tipos
@@ -174,6 +177,26 @@ public class FormatarData {
         }
 
         return age;
+    }
+    
+    
+    //Organiza uma data que não esta na sequencia adequada para ser vista pelo usuário (datas que retornam do banco)
+    public String organizaData(Object data){
+        
+        SimpleDateFormat formatTimeStamp = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
+        
+        if (data instanceof Timestamp) {
+            return formatTimeStamp.format(data);
+        }else if (data instanceof Date){
+            return formatDate.format(data);
+        }else if (data instanceof java.sql.Date){
+            return formatTimeStamp.format(data);
+        }else if (data instanceof String){ 
+           
+            return formatDate.format(data);
+        }
+        return null;
     }
 }
 

@@ -5,7 +5,9 @@
  */
 package br.edu.GPEDSCVP.classe;
 
+import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 
 /**
  *
@@ -14,14 +16,16 @@ import java.sql.ResultSet;
 public class Acesso {
     
     private int id_acesso;
-    private int id_usuario;
-    private String data_acesso;
+    private Date data_acesso;
     private ResultSet retorno;
+    
+    private static int id_usuario;
+    private static String nome_usuario;
+    private static String login_usuario;
     
     public Acesso()
     {
        id_acesso = 0;
-       id_usuario = 0;
        data_acesso = null;
     }
 
@@ -45,12 +49,12 @@ public class Acesso {
         this.id_usuario = id_usuario;
     }
 
-    public String getData_acesso()
+    public Date getData_acesso()
     {
         return data_acesso;
     }
 
-    public void setData_acesso(String data_acesso)
+    public void setData_acesso(Date data_acesso)
     {
         this.data_acesso = data_acesso;
     }
@@ -63,6 +67,22 @@ public class Acesso {
     public void setRetorno(ResultSet retorno)
     {
         this.retorno = retorno;
+    }
+
+    public static String getNome_usuario() {
+        return nome_usuario;
+    }
+
+    public static void setNome_usuario(String nome_usuario) {
+        Acesso.nome_usuario = nome_usuario;
+    }
+
+    public static String getLogin_usuario() {
+        return login_usuario;
+    }
+
+    public static void setLogin_usuario(String login_usuario) {
+        Acesso.login_usuario = login_usuario;
     }
 
     

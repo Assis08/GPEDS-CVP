@@ -11,19 +11,19 @@ package br.edu.GPEDSCVP.classe;
  */
 public class Certificadora extends PessoaJuridica
 {
-    private char in_calibracoes;
+    private String in_calibracoes;
     
     public Certificadora()
     {
-        in_calibracoes = '\0';
+        in_calibracoes = "";
     }
 
-    public char getIn_calibracoes()
+    public String getIn_calibracoes()
     {
         return in_calibracoes;
     }
 
-    public void setIn_calibracoes(char in_calibracoes)
+    public void setIn_calibracoes(String in_calibracoes)
     {
         this.in_calibracoes = in_calibracoes;
     }

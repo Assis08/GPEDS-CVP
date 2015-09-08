@@ -22,14 +22,14 @@ public class ValidaBotoes {
             if (component instanceof JButton) {
                 JButton field = (JButton) component;
                 String texto = field.getText();
-                if ((estado == Rotinas.INCLUIR) || (estado == Rotinas.ALTERAR)) {
+                if ((estado == Rotinas.INCLUIR) || (estado == Rotinas.ALTERAR)){
                     if (texto.equals("Novo") || (texto.equals("Alterar")) || (texto.equals("Excluir"))) {
                         field.setEnabled(false);
                     } else {
                         field.setEnabled(true);
                     }
                 } else if (estado == Rotinas.PADRAO) {
-                    if (texto.equals("Novo") || (texto.equals("Alterar")) || (texto.equals("Excluir"))) {
+                    if ((texto.equals("Alterar")) || (texto.equals("Excluir")) || (texto.equals("Cancelar"))) {
                         field.setEnabled(true);
                     } else {
                         field.setEnabled(false);
