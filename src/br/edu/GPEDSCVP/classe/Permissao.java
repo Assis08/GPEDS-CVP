@@ -19,7 +19,7 @@ public class Permissao
     private int id_usuario;
     private int id_tela;
     private String nome_tela;
-    private String acesso;
+    private static String acesso;
     private String inserir;
     private String alterar;
     private String excluir;

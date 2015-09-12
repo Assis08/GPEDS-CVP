@@ -5,7 +5,10 @@
  */
 package br.edu.GPEDSCVP.dao;
 
+import br.edu.GPEDSCVP.classe.Acesso;
 import br.edu.GPEDSCVP.classe.Permissao;
+import br.edu.GPEDSCVP.classe.Pessoa;
+import br.edu.GPEDSCVP.classe.Usuario;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.validacao.FormatarData;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
@@ -171,4 +174,26 @@ public class daoPermissao {
                permissao.setRetorno(conecta_banco.resultset);
     }
     
+    public void retornaDadosPermissao(Acesso acesso, Permissao permissao){
+        
+        conecta_banco.executeSQL("select * from permissao where id_usuario = "+ acesso.getId_usuario()+" and id_tela = "+ acesso.getId_tela());
+        
+        try {        
+ 
+            conecta_banco.resultset.first();
+            
+            permissao.setId_usuario(conecta_banco.resultset.getInt("id_usuario"));
+            permissao.setId_permissao(conecta_banco.resultset.getInt("id_permissao"));
+            permissao.setId_tela(conecta_banco.resultset.getInt("id_tela"));
+            permissao.setAcesso(conecta_banco.resultset.getString("acesso"));
+            permissao.setInserir(conecta_banco.resultset.getString("inserir"));
+            permissao.setAlterar(conecta_banco.resultset.getString("alterar"));
+            permissao.setExcluir(conecta_banco.resultset.getString("excluir"));
+            permissao.setConsultar(conecta_banco.resultset.getString("consultar"));
+            permissao.setData_alter(conecta_banco.resultset.getDate("data_alter"));
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao retornar dados das permissões de acesso");
+        }
+    }
 }

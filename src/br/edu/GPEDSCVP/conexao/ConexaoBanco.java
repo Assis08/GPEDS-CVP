@@ -84,7 +84,33 @@ public class ConexaoBanco {
         }
         catch(SQLException erro) { }
     }
-
+    
+    
+    public void atualizarSQL(String sql){
+    try{
+        statement = ConexaoBanco.createStatement(
+            ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
+        retorno = 0;
+        retorno = statement.executeUpdate(sql);
+        /*
+        if (retorno == 1){
+            JOptionPane.showMessageDialog(null, "Atualização realizada com sucesso");
+        }
+        */
+    }catch (SQLException sqlex){
+        if (sqlex.getErrorCode() == 2292){
+            JOptionPane.showConfirmDialog(null, "O registro não pode set"
+            + "atualizado porque ele está sendo utilizada em outro cadastro/movimento");
+        }else{
+            JOptionPane.showConfirmDialog(null, "Não foi possivel"
+            + "executar o comando sql de exclusão," + sqlex + ", o sql passado foi"
+            + sql);
+        }
+        retorno = 0;
+    }
+    
+    }
+    
     public void incluirSQL(String sql)
     {
         try

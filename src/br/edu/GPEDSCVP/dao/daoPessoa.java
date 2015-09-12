@@ -51,7 +51,7 @@ public class daoPessoa {
                 + pessoa.getNome()+ "','"
                 + pessoa.getCpf_cnpj()+ "','"
                 + FormatarData.dateParaSQLDate(pessoa.getData_cadastro())+ "','"
-                + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+ "')";
+                + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+ "','A','U')";
         
                 conecta_banco.incluirSQL(sql);
                
@@ -84,7 +84,7 @@ public class daoPessoa {
                 + pessoa.getNome()+ "','"
                 + pessoa.getCpf_cnpj()+ "','"
                 + FormatarData.dateParaSQLDate(pessoa.getData_cadastro())+ "','"
-                + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+ "')";
+                + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+ "','A','C')";
         
                 conecta_banco.incluirSQL(sql);
                
@@ -114,7 +114,7 @@ public class daoPessoa {
                 + pessoa.getNome()+ "','"
                 + pessoa.getCpf_cnpj()+ "','"
                 + FormatarData.dateParaSQLDate(pessoa.getData_cadastro())+ "','"
-                + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+ "')";
+                + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+"','A','F')";
         
                 conecta_banco.incluirSQL(sql);
                
@@ -136,7 +136,7 @@ public class daoPessoa {
     }
     //Valida se o CPF ou CNPJ já esta cadastrado
     public Boolean verificaCpfCnpj(Pessoa pessoa){
-        String sql = "select * from pessoa where pessoa.cpf_cnpj = '"+ pessoa.getCpf_cnpj()+"'";
+        String sql = "select * from pessoa where pessoa.cpf_cnpj = '"+ pessoa.getCpf_cnpj()+"' and pessoa.in_ativo = 'A'";
        
          try {
                 conecta_banco.executeSQL(sql);
@@ -152,7 +152,9 @@ public class daoPessoa {
     }
      //Valida se o RG já esta cadastrado
      public Boolean verificaRG(Usuario pessoa){
-        String sql = "select * from pessoa_fisica where rg = '"+ pessoa.getRg()+"'";
+        String sql = "select pessoa.in_ativo, pessoa_fisica.id_pessoa, pessoa_fisica.rg from pessoa" 
+                     +" inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+                     +"where pessoa_fisica.rg = '"+ pessoa.getRg()+"'and pessoa.in_ativo = 'A'";
          try {
                 conecta_banco.executeSQL(sql);
                 conecta_banco.resultset.first();
@@ -169,7 +171,10 @@ public class daoPessoa {
      
     //Valida se o Login já esta cadastrado
     public Boolean verificaLogin(Usuario pessoa){
-        String sql = "select * from usuario where login = '"+ pessoa.getLogin()+"'";
+        String sql = "select pessoa.in_ativo, usuario.login from pessoa"
+        + " inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+        + " inner join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario)  "
+        + " where login = '"+ pessoa.getLogin()+"' and pessoa.in_ativo = 'A'";
          try {
                 conecta_banco.executeSQL(sql);
                 conecta_banco.resultset.first();
@@ -186,7 +191,10 @@ public class daoPessoa {
     
     //Valida usuário e senha no momento do login
     public Boolean validaLoginSenha(Usuario pessoa){
-        String sql = "select * from usuario where login = '"+ pessoa.getLogin()+"' and senha = '"+pessoa.getSenha()+"'";
+        String sql = "select pessoa.in_ativo, usuario.login, usuario.senha, usuario.id_usuario from pessoa"
+        + " inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
+        + " inner join usuario on (usuario.id_usuario = pessoa_fisica.id_pessoa) "
+        + " where login = '"+ pessoa.getLogin()+"' and senha = '"+pessoa.getSenha()+"' and pessoa.in_ativo = 'A'";
          try {
                 conecta_banco.executeSQL(sql);
                 conecta_banco.resultset.first();
@@ -208,12 +216,14 @@ public class daoPessoa {
         
         ResultSet rs = null;
         
-        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+        conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,pessoa.in_ativo, usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
                 + "inner join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
                 + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
-                + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
+                + "where pessoa.id_pessoa = "+pessoa.getId_pessoa()+" and pessoa.in_ativo = 'A'");
+        
+                pessoa.setRetorno(conecta_banco.resultset);
         
         /*        
         pessoa.setRetorno(conecta_banco.resultset);
@@ -235,13 +245,13 @@ public class daoPessoa {
     //Consulta pelo código certificadora
     public boolean consultacodigo(Certificadora pessoa) {
         ResultSet rs = null;
-        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+        conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
                 + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
                 + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
                 + "inner join certificadora on (certificadora.id_pessoa = pessoa.id_pessoa )"
-                + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
+                + "where pessoa.id_pessoa = "+pessoa.getId_pessoa() +" and pessoa.in_ativo = 'A'");
         
         pessoa.setRetorno(conecta_banco.resultset);
         //Rotina para verificar se retornou algum registro
@@ -263,7 +273,7 @@ public class daoPessoa {
     //Consulta pelo código geral
     public boolean consultacodigo(Pessoa pessoa) {
 
-        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+        conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
                 + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
@@ -290,13 +300,13 @@ public class daoPessoa {
     //Consulta pelo código geral
     public boolean consultacodigo(Fornecedor pessoa) {
         
-         conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+         conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
             + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
             + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
             + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
             + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
             + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )"
-            + "where pessoa.id_pessoa = "+pessoa.getId_pessoa());
+            + "where pessoa.id_pessoa = "+pessoa.getId_pessoa() +" and pessoa.in_ativo = 'A'");
         
          pessoa.setRetorno(conecta_banco.resultset);
         //Rotina para verificar se retornou algum registro
@@ -317,11 +327,12 @@ public class daoPessoa {
     
     //Consulta de usuário
     public boolean consultageral(Usuario pessoa){
-        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+        conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
                 + "inner join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
-                + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )");
+                + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+                + "where pessoa.in_ativo = 'A'");
 
         pessoa.setRetorno(conecta_banco.resultset);
         /*
@@ -341,11 +352,12 @@ public class daoPessoa {
     
     //Consulta geral de pessoas
     public boolean consultageral(Pessoa pessoa){
-        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+        conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
                 + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
                 + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
+                + "where pessoa.in_ativo = 'A' "
                 + "order by pessoa.id_pessoa asc");
 
         pessoa.setRetorno(conecta_banco.resultset);
@@ -367,12 +379,13 @@ public class daoPessoa {
     //Consulta geral de certificadoras
     public boolean consultageral(Certificadora pessoa){
         
-        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+        conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
                 + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
                 + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
-                + "inner join certificadora on (certificadora.id_pessoa = pessoa.id_pessoa )");
+                + "inner join certificadora on (certificadora.id_pessoa = pessoa.id_pessoa )"
+                + "where pessoa.in_ativo = 'A'");
 
         pessoa.setRetorno(conecta_banco.resultset);
         /*
@@ -392,12 +405,13 @@ public class daoPessoa {
     
     //Consulta geral de fornecedores
     public boolean consultageral(Fornecedor pessoa){
-         conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+         conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
             + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
             + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
             + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
             + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
-            + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )");
+            + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )"
+            + "where pessoa.in_ativo = 'A'");
          
             pessoa.setRetorno(conecta_banco.resultset);
              /*
@@ -418,12 +432,12 @@ public class daoPessoa {
     //Consulta geral pela descrição
     public boolean consultadesc(Pessoa pessoa){
 
-        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+        conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
                 + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
                 + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
-                + "where pessoa.nome = '"+pessoa.getNome()+"'");
+                + "where pessoa.nome = '"+pessoa.getNome()+"' and pessoa.in_ativo = 'A'");
         
         pessoa.setRetorno(conecta_banco.resultset);
         /*
@@ -443,12 +457,12 @@ public class daoPessoa {
     }
     //Consulta pela descrição do usuário
     public boolean consultadesc(Usuario pessoa){
-        conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+        conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
                 + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
                 + "inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
                 + "inner join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
                 + "left join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
-                + "where pessoa.nome = '"+pessoa.getNome()+"'");
+                + "where pessoa.nome = '"+pessoa.getNome()+"' and pessoa.in_ativo = 'A'");
         
         pessoa.setRetorno(conecta_banco.resultset);
         //Rotina para verificar se retornou algum registro
@@ -470,13 +484,13 @@ public class daoPessoa {
     //Consulta pela descrição de certificadoras
     public boolean consultadesc(Certificadora pessoa){
         
-            conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+            conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
             + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
             + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
             + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
             + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
             + "inner join certificadora on (certificadora.id_pessoa = pessoa.id_pessoa )"
-            + "where pessoa.nome = '"+pessoa.getNome()+"'");
+            + "where pessoa.nome = '"+pessoa.getNome()+"' and pessoa.in_ativo = 'A'");
         
         pessoa.setRetorno(conecta_banco.resultset);
         //Rotina para verificar se retornou algum registro
@@ -499,13 +513,13 @@ public class daoPessoa {
     //Consulta pela descrição de fornecedores
     public boolean consultadesc(Fornecedor pessoa){
         
-            conecta_banco.executeSQL("select pessoa.id_pessoa,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+            conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
             + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
             + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
             + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
             + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
             + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )"
-            + "where pessoa.nome = '"+pessoa.getNome()+"'");
+            + "where pessoa.nome = '"+pessoa.getNome()+"' and pessoa.in_ativo = 'A'");
         
         pessoa.setRetorno(conecta_banco.resultset);
         //Rotina para verificar se retornou algum registro
@@ -530,7 +544,7 @@ public class daoPessoa {
         +" pessoa_fisica.rg,pessoa_fisica.sexo from pessoa" 
         +" inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
         +" inner join usuario on (usuario.id_usuario = pessoa_fisica.id_pessoa)"
-        +" where pessoa.id_pessoa = "+pessoa.getId_pessoa());
+        +" where pessoa.id_pessoa = "+pessoa.getId_pessoa() +" and pessoa.in_ativo = 'A'");
 
         try {        
             conecta_banco.resultset.first();
@@ -556,7 +570,7 @@ public class daoPessoa {
         +" pessoa_juridica.internacional,certificadora.in_calibracoes from pessoa"
         +" inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa)"
         +" left join certificadora on (certificadora.id_pessoa = pessoa_juridica.id_pessoa)"
-        +" where pessoa.id_pessoa = "+pessoa.getId_pessoa());
+        +" where pessoa.id_pessoa = "+pessoa.getId_pessoa() +" and pessoa.in_ativo = 'A'");
 
         try {        
  
@@ -581,7 +595,7 @@ public class daoPessoa {
         +" fornecedor.ramo from pessoa"
         +" inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa)"
         +" inner join fornecedor on (fornecedor.id_pessoa = pessoa_juridica.id_pessoa)"
-        +" where pessoa.id_pessoa = "+pessoa.getId_pessoa());
+        +" where pessoa.id_pessoa = "+pessoa.getId_pessoa() +" and pessoa.in_ativo = 'A'");
 
         try {        
  
@@ -600,4 +614,12 @@ public class daoPessoa {
             JOptionPane.showMessageDialog(null, "Falha ao retornar dados da pessoa");
         }
      }
+    
+    public void inativaPessoa(Pessoa pessoa){
+            
+        conecta_banco.atualizarSQL("UPDATE PESSOA SET IN_ATIVO = 'I'"
+                               + " WHERE ID_PESSOA = " + pessoa.getId_pessoa());
+    }  
+    
+    
 }

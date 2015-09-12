@@ -30,6 +30,7 @@ import br.edu.GPEDSCVP.validacao.Mensagens;
 import br.edu.GPEDSCVP.validacao.ManipulaJtable;
 import br.edu.GPEDSCVP.validacao.Rotinas;
 import br.edu.GPEDSCVP.validacao.UltimaSequencia;
+import br.edu.GPEDSCVP.validacao.ValidaAcesso;
 import br.edu.GPEDSCVP.validacao.ValidaBotoes;
 import br.edu.GPEDSCVP.validacao.ValidaCampos;
 import java.sql.Date;
@@ -68,10 +69,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
     Usuario usuario;
     Cidade cidade;
     Contato contato;
+    Acesso acesso;
     Tela tela;
     Rotinas rotinas; 
     Criptografia criptografar;
     ValidaBotoes validabotoes;
+    ValidaAcesso validaacesso;
     int situacao = Rotinas.PADRAO;
     int[] array_cidade;
     int[] array_tela;
@@ -98,12 +101,14 @@ public class InterfacePessoa extends javax.swing.JFrame {
         contato = new Contato();
         endereco = new Endereco();
         cidade = new Cidade();
+        acesso = new Acesso();
         tela = new Tela();
         permissao = new Permissao();
         usuario = new Usuario();
         certificadora = new Certificadora();
         fornecedor = new Fornecedor();
         pessoa = new Pessoa();
+        validaacesso = new ValidaAcesso();
         try {
             validaCampos = new ValidaCampos();
         } catch (SQLException ex) {
@@ -242,8 +247,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jRBCertificadora = new javax.swing.JRadioButton();
         jRBFornecedor = new javax.swing.JRadioButton();
         jCBInternacional = new javax.swing.JCheckBox();
-        jTFData = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
+        jFTData = new javax.swing.JFormattedTextField();
         jPanel2 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jCBBuscarPessoa = new javax.swing.JComboBox();
@@ -294,8 +299,18 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 jRBCPFMouseClicked(evt);
             }
         });
+        jRBCPF.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRBCPFItemStateChanged(evt);
+            }
+        });
 
         jRBCNPJ.setText("CNPJ");
+        jRBCNPJ.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jRBCNPJItemStateChanged(evt);
+            }
+        });
 
         jLabel5.setText("RG:");
 
@@ -452,7 +467,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                     .addComponent(jTFIDPessoa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFNome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTFRazaoSocial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(20, 20, 20)
                 .addGroup(jPPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jRBCPF)
                     .addComponent(jRBCNPJ)
@@ -498,6 +513,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jButton3.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
         jButton3.setText("Excluir");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5750_Knob_Cancel.png")); // NOI18N
         jButton4.setText("Cancelar");
@@ -1233,9 +1253,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
             }
         });
 
-        jTFData.setEditable(false);
-        jTFData.setName("data_cadastro"); // NOI18N
-
         jLabel4.setText("Data:");
 
         javax.swing.GroupLayout jPTipoPessoaLayout = new javax.swing.GroupLayout(jPTipoPessoa);
@@ -1260,7 +1277,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 71, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPTipoPessoaLayout.setVerticalGroup(
@@ -1270,7 +1287,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
-                        .addComponent(jTFData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPTipoPessoaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jRBCertificadora)
                         .addComponent(jRBFornecedor)
@@ -1337,11 +1354,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID Pessoa", "Login", "Descrição", "Razão Social", "CPF/CNPJ", "RG", "Sexo", "Data.Nasc", "Ultima alteração"
+                "ID Pessoa", "Tipo", "Login", "Descrição", "Razão Social", "CPF/CNPJ", "RG", "Sexo", "Data.Nasc", "Ultima alteração"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -1403,7 +1420,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel30)
                 .addGap(7, 7, 7)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 570, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -2130,60 +2147,69 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 
-        UltimaSequencia ultima;
-        
-        //Seta mascaras nos campos necessários
-        setaMascaras ();
-        
-        //Carrega conteudo das combobox
-        jCBTipoContato.addItem("Selecione tipo");
-        jCBTipoContato.addItem("Email");
-        jCBTipoContato.addItem("Telefone");
-        
-        dao_cidade.consultageral(cidade);
-        //Preenche dados nas ComboBox de cidade
-        array_cidade = combo.PreencherCombo(jCBCidade, "descricao",cidade.getRetorno(), "id_cidade" );
-        //seta no array da classe de cidade a lista de cidades listadas na combo
-        cidade.setArray_cidade(array_cidade);
-        
-        dao_tela.consultageral(tela);
-        //Preenche dados nas ComboBox de telas
-        array_tela = combo.PreencherCombo(jCBTela, "descricao",tela.getRetorno(), "id_tela" );
-        //seta no array da classe da tela a lista de telas listadas na combo
-        tela.setArray_tela(array_tela);
-  
-        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
-        situacao = Rotinas.INCLUIR;
-        
-        //habilita os botoes utilizados na inclusão e desabilita os restantes
-        validabotoes.ValidaEstado(jPBotoes, situacao);
-        
-        //Habilita os botoes especificos da tela
-        jBTAddContato.setEnabled(true);
-        jBTRemoveContato.setEnabled(true);
-        jBTAddEndereco.setEnabled(true);
-        jBTRemoveEndereco.setEnabled(true);
- 
-        //Seta a data atual no campo data
-        jTFData.setText(data.DataAtual());
-       
-        try {         
-            ultima = new UltimaSequencia();
-            //Gera id sequencial
-            int sequencia = (Integer) (ultima.ultimasequencia("PESSOA","ID_PESSOA"));
-            //Seta no campo id de pessoa o utltimo id gerado.
-            jTFIDPessoa.setText(Integer.toString(sequencia));
+        //retorna as permissoes de acesso do usuario  
+        dao_permissao.retornaDadosPermissao(acesso, permissao);
+        //Verifica se o usuario possui permissao para acessar essa tela
+        if (validaacesso.verificaAcesso("incluir", acesso, permissao) == true){
             
-        } catch (SQLException ex) {
-            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
-        }  
+            UltimaSequencia ultima;
         
-        //Habilita campos necessários
-        jRBPessoaFisica.setEnabled(true);
-        jRBPessoaJuridica.setEnabled(true);
-        validaCampos.habilitaCampos(jPEndereco);
-        jBTAddPermissao.setEnabled(true);
-        jBTRemovePermissao.setEnabled(true);
+            //Seta mascaras nos campos necessários
+            setaMascaras ();
+
+            //Carrega conteudo das combobox
+            jCBTipoContato.addItem("Selecione tipo");
+            jCBTipoContato.addItem("Email");
+            jCBTipoContato.addItem("Telefone");
+
+            dao_cidade.consultageral(cidade);
+            //Preenche dados nas ComboBox de cidade
+            array_cidade = combo.PreencherCombo(jCBCidade, "descricao",cidade.getRetorno(), "id_cidade" );
+            //seta no array da classe de cidade a lista de cidades listadas na combo
+            cidade.setArray_cidade(array_cidade);
+
+            dao_tela.consultageral(tela);
+            //Preenche dados nas ComboBox de telas
+            array_tela = combo.PreencherCombo(jCBTela, "descricao",tela.getRetorno(), "id_tela" );
+            //seta no array da classe da tela a lista de telas listadas na combo
+            tela.setArray_tela(array_tela);
+
+            //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+            situacao = Rotinas.INCLUIR;
+
+            //habilita os botoes utilizados na inclusão e desabilita os restantes
+            validabotoes.ValidaEstado(jPBotoes, situacao);
+
+            //Habilita os botoes especificos da tela
+            jBTAddContato.setEnabled(true);
+            jBTRemoveContato.setEnabled(true);
+            jBTAddEndereco.setEnabled(true);
+            jBTRemoveEndereco.setEnabled(true);
+
+            //Seta a data atual no campo data
+            jFTData.setEnabled(true);
+            jFTData.setText(data.DataAtual());
+
+            try {         
+                ultima = new UltimaSequencia();
+                //Gera id sequencial
+                int sequencia = (Integer) (ultima.ultimasequencia("PESSOA","ID_PESSOA"));
+                //Seta no campo id de pessoa o utltimo id gerado.
+                jTFIDPessoa.setText(Integer.toString(sequencia));
+
+            } catch (SQLException ex) {
+                Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+            }  
+
+            //Habilita campos necessários
+            jRBPessoaFisica.setEnabled(true);
+            jRBPessoaJuridica.setEnabled(true);
+            jBTAddPermissao.setEnabled(true);
+            jBTRemovePermissao.setEnabled(true);
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir pessoas no sistema"); 
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -2696,57 +2722,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBMostSenhaStateChanged
 
     private void jRBPessoaFisicaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRBPessoaFisicaItemStateChanged
-     //garante que sempre quando estiver selecionado pessoa fisica, pessoa juridica não estará selecionado
-        if(jRBPessoaFisica.isEnabled()){
-            if(jRBPessoaFisica.isSelected()){
-                
-                //desabilita campos de pessoa juridica
-                jRBPessoaJuridica.setSelected(false);
-                jRBPessoaFisica.setSelected(true);
-                jRBCertificadora.setSelected(false);
-                jRBFornecedor.setSelected(false);
-                jRBCertificadora.setEnabled(false);
-                jRBFornecedor.setEnabled(false);
-                jCBTipoContato.setEnabled(true);
-            
-                //Habilita campos de pessoa fisíca
-                jTFNome.setEnabled(true);
-                jFTDataNasc.setEnabled(true);
-                jRBCPF.setSelected(true);
-                jFTRG.setEnabled(true);
-                jFTCPFCNPJ.setEnabled(true);
-                jRBMasc.setEnabled(true);
-                jRBFem.setEnabled(true);
-                jTFNome.setEnabled(true);
-                validaCampos.habilitaCampos(jPPermissoes);
-                validaCampos.habilitaCampos(jPUsuario);
-                jBTAddPermissao.setEnabled(true);
-                jBTRemovePermissao.setEnabled(true);
-
-                //Desabilita campos de pessoa jurídica
-                jTFRazaoSocial.setEnabled(false);
-                jRBCNPJ.setSelected(false);
-                jCBInternacional.setEnabled(false);
-                jCBInternacional.setSelected(false);
-                JTFSite.setEnabled(false);
-                jTFRamo.setEnabled(false);
-                jCBCalibracoes.setEnabled(false);
-                
-                //limpa campos de pessoa jurídica
-                jTFRazaoSocial.setText("");
-                jCBInternacional.setSelected(false);
-                JTFSite.setText("");
-                jTFRamo.setText("");
-                jCBCalibracoes.setSelected(false);
-                jTFNome.setText("");
-                
-                //Seta mascara no campo de CPF
-                jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("###.###.###-##")));
-                //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
-                jFTCPFCNPJ.setValue("");
-                
-            }  
-        }
+        //Habilita campos do usuario
+        habilitaCamposUsuario();
     }//GEN-LAST:event_jRBPessoaFisicaItemStateChanged
 
     private void jRBPessoaJuridicaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaItemStateChanged
@@ -2783,82 +2760,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jRBPessoaJuridicaItemStateChanged
 
     private void jRBCertificadoraItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRBCertificadoraItemStateChanged
-         if(jRBCertificadora.isEnabled()){
-            if(jRBCertificadora.isSelected()){
-
-               //Habilita campos de pessoa jurídica
-               jRBCertificadora.setEnabled(true);
-               jRBCertificadora.setSelected(true);
-               jRBFornecedor.setEnabled(true);
-               jRBFornecedor.setSelected(false);
-               jRBCNPJ.setSelected(true);
-               if(!jCBInternacional.isSelected()){
-                jFTCPFCNPJ.setEnabled(true);    
-               }
-               jTFRazaoSocial.setEnabled(true);
-               jTFNome.setEnabled(true);
-               jCBCalibracoes.setEnabled(true);
-               jCBTipoContato.setEnabled(true);
-               jCBInternacional.setEnabled(true);
-
-               //Desabilita campos de pessoa física
-               JTFSite.setEnabled(false);
-               jTFRamo.setEnabled(false);
-               jFTDataNasc.setEnabled(false);
-               jFTRG.setEnabled(false);
-               jRBCPF.setSelected(false);
-               jRBMasc.setEnabled(false);
-               jRBFem.setEnabled(false);
-               jRBMasc.setSelected(false);
-               jRBFem.setSelected(false);
-               
-               //Seta mascara no campo de CNPJ
-               jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
-               //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
-               jFTCPFCNPJ.setValue("");
-              
-
-            }
-        }
+        habilitaCamposCertificadora();
     }//GEN-LAST:event_jRBCertificadoraItemStateChanged
 
     private void jRBFornecedorItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRBFornecedorItemStateChanged
-         
-         if(jRBFornecedor.isEnabled()){
-            if(jRBFornecedor.isSelected()){
-                
-                //Habilita campos de pessoa jurídica
-                jRBFornecedor.setEnabled(true);
-                jRBFornecedor.setSelected(true);
-                jRBCertificadora.setEnabled(true);
-                jRBCertificadora.setSelected(false);
-                jRBCNPJ.setSelected(true);
-                if(!jCBInternacional.isSelected()){
-                jFTCPFCNPJ.setEnabled(true);    
-                }
-                jTFRazaoSocial.setEnabled(true);
-                jTFNome.setEnabled(true);
-                JTFSite.setEnabled(true);
-                jTFRamo.setEnabled(true);
-                jCBTipoContato.setEnabled(true);
-                jCBInternacional.setEnabled(true);
-
-                //Desabilita campos de pessoa física
-                jFTDataNasc.setEnabled(false);
-                jFTRG.setEnabled(false);
-                jRBCPF.setSelected(false);
-                jRBMasc.setEnabled(false);
-                jRBFem.setEnabled(false);
-                jRBMasc.setSelected(false);
-                jRBFem.setSelected(false);
-                jCBCalibracoes.setEnabled(false);
-
-                //Seta mascara no campo de CNPJ
-                jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
-                //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
-                jFTCPFCNPJ.setValue("");
-            }
-         }
+        habilitaCamposFornecedor();
     }//GEN-LAST:event_jRBFornecedorItemStateChanged
 
     private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
@@ -2870,20 +2776,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowStateChanged
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        try {
-            //Inclui a opção todas telas como primeira opção
-            tela.setDescricao("Todas telas");
-            tela.setId_tela(1);
-            dao_tela.incluir(tela);
-            
-            //Inclui a a tela de Pessoas
-            tela.setDescricao("Pessoas");
-            tela.setId_tela(2);
-            dao_tela.incluir(tela);
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
-        }
+
     }//GEN-LAST:event_formWindowOpened
 
     private void jTFLoginFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTFLoginFocusLost
@@ -2899,178 +2792,186 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jTFLoginFocusLost
 
     private void jBTBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTBuscarActionPerformed
-        // TODO add your handling code here:
-        int id_busca;
-        String ds_busca;
-        
-        //Tira aspas simples da string para evitar código sql
-        validaCampos.IgnoraSQL(jTFFiltro);
+        //retorna as permissoes de acesso do usuario  
+        dao_permissao.retornaDadosPermissao(acesso, permissao);
+        //Verifica se o usuario possui permissao para acessar essa tela
+        if (validaacesso.verificaAcesso("consultar", acesso, permissao) == true){
 
-        switch (jCBBuscarPessoa.getSelectedIndex()) {
-        //Selecione pessoa (Consulta Geral) 
-        case 0:
-            //Geral
-            if(jCBBuscarPor.getSelectedIndex() == 0){
-                if(dao_pessoa.consultageral(pessoa) == false){
-                    JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
-                }    
-            //Código
-            }else if(jCBBuscarPor.getSelectedIndex() == 1){
-                if(!jTFFiltro.getText().equals("")){
-                    try {
-                        id_busca = Integer.parseInt(jTFFiltro.getText());
-                        pessoa.setId_pessoa(id_busca);
-                        if(dao_pessoa.consultacodigo(pessoa) == false){
-                            JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+            // TODO add your handling code here:
+            int id_busca;
+            String ds_busca;
+
+            //Tira aspas simples da string para evitar código sql
+            validaCampos.IgnoraSQL(jTFFiltro);
+
+            switch (jCBBuscarPessoa.getSelectedIndex()) {
+            //Selecione pessoa (Consulta Geral) 
+            case 0:
+                //Geral
+                if(jCBBuscarPor.getSelectedIndex() == 0){
+                    if(dao_pessoa.consultageral(pessoa) == false){
+                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                    }    
+                //Código
+                }else if(jCBBuscarPor.getSelectedIndex() == 1){
+                    if(!jTFFiltro.getText().equals("")){
+                        try {
+                            id_busca = Integer.parseInt(jTFFiltro.getText());
+                            pessoa.setId_pessoa(id_busca);
+                            if(dao_pessoa.consultacodigo(pessoa) == false){
+                                JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                            }
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                            jTFFiltro.grabFocus();
                         }
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
                         jTFFiltro.grabFocus();
                     }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
-                    jTFFiltro.grabFocus();
-                }
-            //Descrição
-            }else if (jCBBuscarPor.getSelectedIndex() == 2){
-                ds_busca = jTFFiltro.getText();
-                if(!ds_busca.equals("")){
-                    pessoa.setNome(ds_busca);
-                    if(dao_pessoa.consultadesc(pessoa) == false){
-                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
-                    }
-                }else{
-                     JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
-                     jTFFiltro.grabFocus();
-                }
-            }
-            //Preenche na JTABLE os dados das pessoas cadastradas
-            Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, pessoa.getRetorno());
-            break;
-                    
-        //Usuario 
-        case 1:
-            //Geral
-            if(jCBBuscarPor.getSelectedIndex() == 0){
-                if(dao_pessoa.consultageral(usuario) == false){
-                    JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
-                }    
-            //código
-            }else if(jCBBuscarPor.getSelectedIndex() == 1){
-                if(!jTFFiltro.getText().equals("")){
-                    try {
-                        id_busca = Integer.parseInt(jTFFiltro.getText());
-                        usuario.setId_pessoa(id_busca);
-                        if(dao_pessoa.consultacodigo(usuario) == false){
+                //Descrição
+                }else if (jCBBuscarPor.getSelectedIndex() == 2){
+                    ds_busca = jTFFiltro.getText();
+                    if(!ds_busca.equals("")){
+                        pessoa.setNome(ds_busca);
+                        if(dao_pessoa.consultadesc(pessoa) == false){
                             JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
                         }
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                    }else{
+                         JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                         jTFFiltro.grabFocus();
+                    }
+                }
+                //Preenche na JTABLE os dados das pessoas cadastradas
+                Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","tipo","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, pessoa.getRetorno());
+                break;
+
+            //Usuario 
+            case 1:
+                //Geral
+                if(jCBBuscarPor.getSelectedIndex() == 0){
+                    if(dao_pessoa.consultageral(usuario) == false){
+                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                    }    
+                //código
+                }else if(jCBBuscarPor.getSelectedIndex() == 1){
+                    if(!jTFFiltro.getText().equals("")){
+                        try {
+                            id_busca = Integer.parseInt(jTFFiltro.getText());
+                            usuario.setId_pessoa(id_busca);
+                            if(dao_pessoa.consultacodigo(usuario) == false){
+                                JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                            }
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                            jTFFiltro.grabFocus();
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
                         jTFFiltro.grabFocus();
                     }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
-                    jTFFiltro.grabFocus();
-                }
-            //Descrição
-            }else if(jCBBuscarPor.getSelectedIndex() == 2){
-                ds_busca = jTFFiltro.getText();
-                usuario.setNome(ds_busca);
-                if(!ds_busca.equals("")){
-                    if(dao_pessoa.consultadesc(usuario) == false){
-                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
-                    }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
-                    jTFFiltro.grabFocus();
-                } 
-            }
-            //Preenche na JTABLE os dados dos usuários cadastrados
-            Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, usuario.getRetorno());
-            break;
-        //Certificadora
-        case 2:
-            //Geral
-            if(jCBBuscarPor.getSelectedIndex() == 0){
-                if(dao_pessoa.consultageral(certificadora) == false){
-                    JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
-                }    
-            //código
-            }else if(jCBBuscarPor.getSelectedIndex() == 1){
-                if(!jTFFiltro.getText().equals("")){
-                    try {
-                        id_busca = Integer.parseInt(jTFFiltro.getText());
-                        certificadora.setId_pessoa(id_busca);
-                        if(dao_pessoa.consultacodigo(certificadora) == false){
+                //Descrição
+                }else if(jCBBuscarPor.getSelectedIndex() == 2){
+                    ds_busca = jTFFiltro.getText();
+                    usuario.setNome(ds_busca);
+                    if(!ds_busca.equals("")){
+                        if(dao_pessoa.consultadesc(usuario) == false){
                             JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
                         }
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
                         jTFFiltro.grabFocus();
-                    }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
-                    jTFFiltro.grabFocus();
+                    } 
                 }
-            //Descrição
-            }else if(jCBBuscarPor.getSelectedIndex() == 2){
-                ds_busca = jTFFiltro.getText();
-                if(!ds_busca.equals("")){
-                    certificadora.setNome(ds_busca);
-                    if(dao_pessoa.consultadesc(certificadora) == false){
-                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
-                    }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
-                    jTFFiltro.grabFocus();
-                } 
-            }
-            //Preenche na JTABLE os dados dos usuários cadastrados
-            Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, certificadora.getRetorno());
-            break;
-            
+                //Preenche na JTABLE os dados dos usuários cadastrados
+                Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","tipo","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, usuario.getRetorno());
+                break;
             //Certificadora
-        case 3:
-            //Geral
-            if(jCBBuscarPor.getSelectedIndex() == 0){
-                if(dao_pessoa.consultageral(fornecedor) == false){
-                    JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
-                }    
-            //código
-            }else if(jCBBuscarPor.getSelectedIndex() == 1){
-                if(!jTFFiltro.getText().equals("")){
-                    try {
-                        id_busca = Integer.parseInt(jTFFiltro.getText());
-                        fornecedor.setId_pessoa(id_busca);
-                        if(dao_pessoa.consultacodigo(fornecedor) == false){
-                            JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+            case 2:
+                //Geral
+                if(jCBBuscarPor.getSelectedIndex() == 0){
+                    if(dao_pessoa.consultageral(certificadora) == false){
+                        JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                    }    
+                //código
+                }else if(jCBBuscarPor.getSelectedIndex() == 1){
+                    if(!jTFFiltro.getText().equals("")){
+                        try {
+                            id_busca = Integer.parseInt(jTFFiltro.getText());
+                            certificadora.setId_pessoa(id_busca);
+                            if(dao_pessoa.consultacodigo(certificadora) == false){
+                                JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                            }
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                            jTFFiltro.grabFocus();
                         }
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
                         jTFFiltro.grabFocus();
                     }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
-                    jTFFiltro.grabFocus();
+                //Descrição
+                }else if(jCBBuscarPor.getSelectedIndex() == 2){
+                    ds_busca = jTFFiltro.getText();
+                    if(!ds_busca.equals("")){
+                        certificadora.setNome(ds_busca);
+                        if(dao_pessoa.consultadesc(certificadora) == false){
+                            JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                        jTFFiltro.grabFocus();
+                    } 
                 }
-            //Descrição
-            }else if(jCBBuscarPor.getSelectedIndex() == 2){
-                ds_busca = jTFFiltro.getText();
-                if(!ds_busca.equals("")){
-                    fornecedor.setNome(ds_busca);
-                    if(dao_pessoa.consultadesc(fornecedor) == false){
+                //Preenche na JTABLE os dados dos usuários cadastrados
+                Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","tipo","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, certificadora.getRetorno());
+                break;
+
+                //Certificadora
+            case 3:
+                //Geral
+                if(jCBBuscarPor.getSelectedIndex() == 0){
+                    if(dao_pessoa.consultageral(fornecedor) == false){
                         JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                    }    
+                //código
+                }else if(jCBBuscarPor.getSelectedIndex() == 1){
+                    if(!jTFFiltro.getText().equals("")){
+                        try {
+                            id_busca = Integer.parseInt(jTFFiltro.getText());
+                            fornecedor.setId_pessoa(id_busca);
+                            if(dao_pessoa.consultacodigo(fornecedor) == false){
+                                JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                            }
+                        } catch (Exception e) {
+                            JOptionPane.showMessageDialog(null, "Pelo código deve ser informado um valor inteiro");
+                            jTFFiltro.grabFocus();
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                        jTFFiltro.grabFocus();
                     }
-                }else{
-                    JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
-                    jTFFiltro.grabFocus();
-                } 
+                //Descrição
+                }else if(jCBBuscarPor.getSelectedIndex() == 2){
+                    ds_busca = jTFFiltro.getText();
+                    if(!ds_busca.equals("")){
+                        fornecedor.setNome(ds_busca);
+                        if(dao_pessoa.consultadesc(fornecedor) == false){
+                            JOptionPane.showMessageDialog(null, "Não foram encontrados registros referente ao filtro");
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Preencha o filtro para busca");
+                        jTFFiltro.grabFocus();
+                    } 
+                }
+                //Preenche na JTABLE os dados dos usuários cadastrados
+                Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","tipo","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, fornecedor.getRetorno());
+                break;
             }
-            //Preenche na JTABLE os dados dos usuários cadastrados
-            Jtable.PreencherJtableGenerico(jTBDadosPessoas, new String[]{"id_pessoa","login","nome","razao_social","cpf_cnpj","rg","sexo","dt_nasc","data_alter"}, fornecedor.getRetorno());
-            break;
+            Jtable.ajustarColunasDaTabela(jTBDadosPessoas);
+        }else{
+            JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar pessoas no sistema");
         }
-        Jtable.ajustarColunasDaTabela(jTBDadosPessoas);
     }//GEN-LAST:event_jBTBuscarActionPerformed
 
     private void jFTNumeroContatoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFTNumeroContatoMouseClicked
@@ -3095,13 +2996,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jFTNumeroContatoMouseClicked
 
     private void jTBDadosPessoasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBDadosPessoasMouseClicked
+        String rg;
         //Verifica se houve 2 cliques do mouse 
         if (evt.getClickCount() == 2) {
-
-            //recupera a linha clicada
+            
+             //recupera a linha clicada
             int linha = jTBDadosPessoas.getSelectedRow();
-            //recupera o id da pessoa selecionada
-            String codigo = (String) jTBDadosPessoas.getValueAt(linha, 0);
+           
+            //recupera o tipo para saber se é usuario, fornecedor ou certificadora
+            String tipo = (String ) jTBDadosPessoas.getValueAt(linha, 1);
             
             //Limpa os campos da tela pessoa
             validaCampos.LimparCampos(jPTipoPessoa);
@@ -3109,74 +3012,42 @@ public class InterfacePessoa extends javax.swing.JFrame {
             validaCampos.LimparJtable(jTBContato);
             validaCampos.LimparJtable(jTBEndereco);
             validaCampos.LimparJtable(jTBPermissoes);
-         
-            //retorna dados do usuário
-            if(jCBBuscarPessoa.getSelectedIndex() == 1){
-             
-                //retorna dados do usuario
-                usuario.setId_pessoa(Integer.parseInt(codigo));
-                dao_pessoa.retornardadosUsuario(usuario);
-                //retorna dados do endereço do usuário
-                endereco.setId_pessoa(Integer.parseInt(codigo));
-                dao_endereco.consultacodigo(endereco);
-                //retorna dados dos contatos do usuário
-                contato.setId_pessoa(Integer.parseInt(codigo));
-                dao_contato.consultacodigo(contato);
-                //retorna dados das permissões de acesso do usuario
-                permissao.setId_usuario(Integer.parseInt(codigo));
-                dao_permissao.consultacodigo(permissao);
-                
-                setcompUsuario();
-                
-                //Preenche na JTABLE de endereços todos endereços da pessoa
-                Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null","id_endereco","endereco.descricao","rua","numero","bairro","cep","cidade.descricao","uf"}, endereco.getRetorno());
-                
-                //Preenche na JTABLE de contatos todos contatos da pessoa
-                Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null","id_contato","tipo","descricao","numero","email"}, contato.getRetorno());
-                
-                //Preenche na JTABLE de contatos todos contatos da pessoa
-                Jtable.PreencherJtableGenerico(jTBPermissoes, new String[]{"null","id_permissao","id_tela","tela.descricao","acesso","inserir","alterar","excluir","consultar"}, permissao.getRetorno());
-                
-            //retorna dados da Certificadora
+            
+            //desabilita campos
+            validaCampos.desabilitaCampos(jPTipoPessoa);
+            validaCampos.desabilitaCampos(jPPessoa);
+            validaCampos.desabilitaCampos(jPEndereco);
+            validaCampos.desabilitaCampos(jPContato);
+            validaCampos.desabilitaCampos(jPPermissoes);
+            
+            //se é busca geral
+            if(jCBBuscarPessoa.getSelectedIndex() == 0){
+            
+                //Se for usuario
+                if(tipo.equals("U")){
+                    //seta na tela de cadastro os dados do usuario
+                    setaUsuarioTela();
+                //se for certificadora    
+                }else if (tipo.equals("C")){
+                    //seta na tela de cadastro os dados da certificadora
+                    setaCertificadoraTela();
+                //se for fonecedor     
+                }else if (tipo.equals("F")){
+                    //seta na tela de cadastro os dados do fornecedor
+                    setaFornecedorTela();
+                }
+            //se é busca de usuarios
+            }else if(jCBBuscarPessoa.getSelectedIndex() == 1){ 
+                 //seta na tela de cadastro os dados do usuario 
+                 setaUsuarioTela();
+            // se é busca de certificadoras
             }else if(jCBBuscarPessoa.getSelectedIndex() == 2){
-              
-                //retorna dados da certificadora
-                certificadora.setId_pessoa(Integer.parseInt(codigo));            
-                dao_pessoa.retornardadosCertificadora(certificadora);
-                //retorna dados do endereço da certificadora
-                endereco.setId_pessoa(Integer.parseInt(codigo));
-                dao_endereco.consultacodigo(endereco);
-                //retorna dados dos contatos da certificadora
-                contato.setId_pessoa(Integer.parseInt(codigo));
-                dao_contato.consultacodigo(contato);
-                
-                setcompCertificadora();
-                
-                //Preenche na JTABLE de endereços todos endereços da pessoa
-                Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null","id_endereco","endereco.descricao","rua","numero","bairro","cep","cidade.descricao","uf"}, endereco.getRetorno());
-                
-                //Preenche na JTABLE de contatos todos contatos da pessoa
-                Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null","id_contato","tipo","descricao","numero","email"}, contato.getRetorno());
-                
-            //retorna dados do fornecedor
+                //seta na tela de cadastro os dados da certificadora 
+                setaCertificadoraTela();    
+            //se é busca de fornecedores    
             }else if (jCBBuscarPessoa.getSelectedIndex() == 3){
-  
-                fornecedor.setId_pessoa(Integer.parseInt(codigo)); 
-                dao_pessoa.retornardadosFornecedor(fornecedor);
-                //retorna dados do endereço do fornecedor
-                endereco.setId_pessoa(Integer.parseInt(codigo));
-                dao_endereco.consultacodigo(endereco);
-                //retorna dados dos contatos do fornecedor
-                contato.setId_pessoa(Integer.parseInt(codigo));
-                dao_contato.consultacodigo(contato);
-                
-                setcompFornecedor();
-                
-                //Preenche na JTABLE de endereços todos endereços da pessoa
-                Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null","id_endereco","endereco.descricao","rua","numero","bairro","cep","cidade.descricao","uf"}, endereco.getRetorno());
-                
-                //Preenche na JTABLE de contatos todos contatos da pessoa
-                Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null","id_contato","tipo","descricao","numero","email"}, contato.getRetorno());
+                //seta na tela de cadastro os dados dos fornecedores
+                setaFornecedorTela();
             }
             
             jTBPessoas.setSelectedIndex(0); 
@@ -3206,13 +3077,64 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jRBFemItemStateChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        //Define a situação como alterar para habilitar os botoes utilizados apenas na inclusão
-        situacao = Rotinas.ALTERAR;
         
-        //habilita os botoes utilizados no alterar e desabilita os restantes
-        validabotoes.ValidaEstado(jPBotoes, situacao);
-       
+        //retorna as permissoes de acesso do usuario  
+        dao_permissao.retornaDadosPermissao(acesso, permissao);
+        //Verifica se o usuario possui permissao para acessar essa tela
+        if (validaacesso.verificaAcesso("alterar", acesso, permissao) == true){
+            //Define a situação como alterar para habilitar os botoes utilizados apenas na inclusão
+            situacao = Rotinas.ALTERAR;
+            validaCampos.habilitaCampos(jPTipoPessoa);
+            //habilita os botoes utilizados no alterar e desabilita os restantes
+            validabotoes.ValidaEstado(jPBotoes, situacao);
+        }else{
+            JOptionPane.showMessageDialog(null, "Você não possui permissões para alterar registros de pessoas no sistema");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        
+        //retorna as permissoes de acesso do usuario  
+        dao_permissao.retornaDadosPermissao(acesso, permissao);
+        //Verifica se o usuario possui permissao para acessar essa tela
+        if (validaacesso.verificaAcesso("excluir", acesso, permissao) == true){
+
+            //Seta o id da pessoa para exclusão
+            pessoa.setId_pessoa(Integer.parseInt(jTFIDPessoa.getText()));
+
+            if(pessoa.getId_pessoa() == acesso.getId_usuario()){
+                JOptionPane.showMessageDialog(null, "Impossível excluir o usuário logado");
+            }else{
+                if(mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0){
+                    //Inativa a pessoa
+                    dao_pessoa.inativaPessoa(pessoa);
+                    JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
+                    //Limpa os campos da tela pessoa
+                    validaCampos.LimparCampos(jPTipoPessoa);
+                    validaCampos.LimparCampos(jPPessoa);
+                    validaCampos.LimparJtable(jTBContato);
+                    validaCampos.LimparJtable(jTBEndereco);
+                    validaCampos.LimparJtable(jTBPermissoes);
+
+                    //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
+                    situacao = Rotinas.INICIAL;
+
+                    //habilita os botoes utilizados na inicialização da tela
+                    validabotoes.ValidaEstado(jPBotoes, situacao);
+                }
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir pessoas no sistema");
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jRBCNPJItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRBCNPJItemStateChanged
+       
+    }//GEN-LAST:event_jRBCNPJItemStateChanged
+
+    private void jRBCPFItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRBCPFItemStateChanged
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRBCPFItemStateChanged
 
     /**
      * @param args the command line arguments
@@ -3279,6 +3201,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JComboBox jCBTipoContato;
     private javax.swing.JFormattedTextField jFTCPFCNPJ;
     private javax.swing.JFormattedTextField jFTCep;
+    private javax.swing.JFormattedTextField jFTData;
     private javax.swing.JFormattedTextField jFTDataNasc;
     private javax.swing.JFormattedTextField jFTNumeroContato;
     private javax.swing.JFormattedTextField jFTRG;
@@ -3344,7 +3267,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JTable jTBPermissoes;
     private javax.swing.JTabbedPane jTBPessoas;
     private javax.swing.JTextField jTFBairro;
-    private javax.swing.JTextField jTFData;
     private javax.swing.JTextField jTFDescContato;
     private javax.swing.JTextField jTFDescEnd;
     private javax.swing.JTextField jTFEmail;
@@ -3367,7 +3289,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Pessoa
         usuario.setNome(jTFNome.getText());
         usuario.setCpf_cnpj(jFTCPFCNPJ.getText());
-        usuario.setData_cadastro(data_atual);
+        usuario.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
         usuario.setData_alter(data_atual);
         
         //Pessoa Fisíca
@@ -3398,7 +3320,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Pessoa
         certificadora.setNome(jTFNome.getText());
         certificadora.setCpf_cnpj(jFTCPFCNPJ.getText());
-        certificadora.setData_cadastro(data_atual);
+        certificadora.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
         certificadora.setData_alter(data_atual);
         
         //Pessoa Juridica
@@ -3431,7 +3353,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             fornecedor.setCpf_cnpj(jFTCPFCNPJ.getText());
         }
 
-        fornecedor.setData_cadastro(data_atual);
+        fornecedor.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
         fornecedor.setData_alter(data_atual);
         
         //Pessoa Juridica
@@ -3539,8 +3461,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //Dados de pessoa
         jTFIDPessoa.setText(Integer.toString(usuario.getId_pessoa()));
         jTFNome.setText(usuario.getNome());
+        //Seta mascara no campo de CPF
+        jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("###.###.###-##")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+        jFTCPFCNPJ.setValue("");
         jFTCPFCNPJ.setText(usuario.getCpf_cnpj());
-        jTFData.setText(data.organizaData(usuario.getData_cadastro()));
+        jFTData.setText(data.organizaData(usuario.getData_cadastro()));
         jFTDataNasc.setText(data.organizaData(usuario.getDt_nasc()));
         jFTRG.setText(usuario.getRg());
         jRBCPF.setSelected(true);
@@ -3562,8 +3488,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jTFIDPessoa.setText(Integer.toString(certificadora.getId_pessoa()));
         jTFNome.setText(certificadora.getNome());
         jTFRazaoSocial.setText(certificadora.getRazao_social());
+        //Seta mascara no campo de CNPJ
+        jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
+        jFTCPFCNPJ.setValue("");
         jFTCPFCNPJ.setText(certificadora.getCpf_cnpj());
-        jTFData.setText(data.organizaData(certificadora.getData_cadastro()));
+        jFTData.setText(data.organizaData(certificadora.getData_cadastro()));
         if(certificadora.getIn_calibracoes().equals("S")){
             jCBCalibracoes.setSelected(true);
         }else{
@@ -3585,8 +3515,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jTFIDPessoa.setText(Integer.toString(fornecedor.getId_pessoa()));
         jTFNome.setText(fornecedor.getNome());
         jTFRazaoSocial.setText(fornecedor.getRazao_social());
+        //Seta mascara no campo de CNPJ
+        jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
+        jFTCPFCNPJ.setValue("");
         jFTCPFCNPJ.setText(fornecedor.getCpf_cnpj());
-        jTFData.setText(data.organizaData(fornecedor.getData_cadastro()));
+        jFTData.setText(data.organizaData(fornecedor.getData_cadastro()));
         JTFSite.setText(fornecedor.getSite());
         jTFRamo.setText(fornecedor.getRamo());
         if(fornecedor.getInternacional().equals("S")){
@@ -3605,6 +3539,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jFTDataNasc.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##/##/####")));
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
         jFTDataNasc.setValue("");
+        //Seta mascara no campo  data atual
+        jFTData.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##/##/####")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+        jFTData.setValue("");
         //Seta mascara no campo de RG
         jFTRG.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###-#")));
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
@@ -3617,5 +3555,224 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jFTCep.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("#####-###")));
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
         jFTCep.setValue("");   
+    }
+    
+    public void setaUsuarioTela(){
+        
+        //recupera a linha clicada
+        int linha = jTBDadosPessoas.getSelectedRow();
+        //recupera o id da pessoa selecionada
+        String codigo = (String) jTBDadosPessoas.getValueAt(linha, 0);
+        
+        //retorna dados do usuario
+        usuario.setId_pessoa(Integer.parseInt(codigo));
+        dao_pessoa.retornardadosUsuario(usuario);
+        //retorna dados do endereço do usuário
+        endereco.setId_pessoa(Integer.parseInt(codigo));
+        dao_endereco.consultacodigo(endereco);
+        //retorna dados dos contatos do usuário
+        contato.setId_pessoa(Integer.parseInt(codigo));
+        dao_contato.consultacodigo(contato);
+        //retorna dados das permissões de acesso do usuario
+        permissao.setId_usuario(Integer.parseInt(codigo));
+        dao_permissao.consultacodigo(permissao);
+
+        setcompUsuario();
+
+        //Preenche na JTABLE de endereços todos endereços da pessoa
+        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null","id_endereco","endereco.descricao","rua","numero","bairro","cep","cidade.descricao","uf"}, endereco.getRetorno());
+
+        //Preenche na JTABLE de contatos todos contatos da pessoa
+        Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null","id_contato","tipo","descricao","numero","email"}, contato.getRetorno());
+
+        //Preenche na JTABLE de contatos todos contatos da pessoa
+        Jtable.PreencherJtableGenerico(jTBPermissoes, new String[]{"null","id_permissao","id_tela","tela.descricao","acesso","inserir","alterar","excluir","consultar"}, permissao.getRetorno());
+  
+    }
+    
+    public void setaCertificadoraTela(){
+        
+        //recupera a linha clicada
+        int linha = jTBDadosPessoas.getSelectedRow();
+        //recupera o id da pessoa selecionada
+        String codigo = (String) jTBDadosPessoas.getValueAt(linha, 0);
+        
+        //retorna dados da certificadora
+        certificadora.setId_pessoa(Integer.parseInt(codigo));            
+        dao_pessoa.retornardadosCertificadora(certificadora);
+        //retorna dados do endereço da certificadora
+        endereco.setId_pessoa(Integer.parseInt(codigo));
+        dao_endereco.consultacodigo(endereco);
+        //retorna dados dos contatos da certificadora
+        contato.setId_pessoa(Integer.parseInt(codigo));
+        dao_contato.consultacodigo(contato);
+
+        setcompCertificadora();
+
+        //Preenche na JTABLE de endereços todos endereços da pessoa
+        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null","id_endereco","endereco.descricao","rua","numero","bairro","cep","cidade.descricao","uf"}, endereco.getRetorno());
+
+        //Preenche na JTABLE de contatos todos contatos da pessoa
+        Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null","id_contato","tipo","descricao","numero","email"}, contato.getRetorno());
+    }
+    
+    public void setaFornecedorTela(){
+        
+        //recupera a linha clicada
+        int linha = jTBDadosPessoas.getSelectedRow();
+        //recupera o id da pessoa selecionada
+        String codigo = (String) jTBDadosPessoas.getValueAt(linha, 0);
+        
+        fornecedor.setId_pessoa(Integer.parseInt(codigo)); 
+        dao_pessoa.retornardadosFornecedor(fornecedor);
+        //retorna dados do endereço do fornecedor
+        endereco.setId_pessoa(Integer.parseInt(codigo));
+        dao_endereco.consultacodigo(endereco);
+        //retorna dados dos contatos do fornecedor
+        contato.setId_pessoa(Integer.parseInt(codigo));
+        dao_contato.consultacodigo(contato);
+
+        setcompFornecedor();
+
+        //Preenche na JTABLE de endereços todos endereços da pessoa
+        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null","id_endereco","endereco.descricao","rua","numero","bairro","cep","cidade.descricao","uf"}, endereco.getRetorno());
+
+        //Preenche na JTABLE de contatos todos contatos da pessoa
+        Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null","id_contato","tipo","descricao","numero","email"}, contato.getRetorno());
+    }
+    
+    public void habilitaCamposUsuario(){
+        
+        //garante que sempre quando estiver selecionado pessoa fisica, pessoa juridica não estará selecionado
+        if(jRBPessoaFisica.isEnabled()){
+            if(jRBPessoaFisica.isSelected()){
+                
+                //desabilita campos de pessoa juridica
+                jRBPessoaJuridica.setSelected(false);
+                jRBPessoaFisica.setSelected(true);
+                jRBCertificadora.setSelected(false);
+                jRBFornecedor.setSelected(false);
+                jRBCertificadora.setEnabled(false);
+                jRBFornecedor.setEnabled(false);
+                jCBTipoContato.setEnabled(true);
+            
+                //Habilita campos de pessoa fisíca
+                jTFNome.setEnabled(true);
+                jFTDataNasc.setEnabled(true);
+                jRBCPF.setSelected(true);
+                jFTRG.setEnabled(true);
+                jFTCPFCNPJ.setEnabled(true);
+                jRBMasc.setEnabled(true);
+                jRBFem.setEnabled(true);
+                jTFNome.setEnabled(true);
+                validaCampos.habilitaCampos(jPPermissoes);
+                validaCampos.habilitaCampos(jPUsuario);
+                validaCampos.habilitaCampos(jPEndereco);
+                jBTAddPermissao.setEnabled(true);
+                jBTRemovePermissao.setEnabled(true);
+
+                //Desabilita campos de pessoa jurídica
+                jTFRazaoSocial.setEnabled(false);
+                jRBCNPJ.setSelected(false);
+                jCBInternacional.setEnabled(false);
+                jCBInternacional.setSelected(false);
+                JTFSite.setEnabled(false);
+                jTFRamo.setEnabled(false);
+                jCBCalibracoes.setEnabled(false);
+                
+                //limpa campos de pessoa jurídica
+                jTFRazaoSocial.setText("");
+                jCBInternacional.setSelected(false);
+                JTFSite.setText("");
+                jTFRamo.setText("");
+                jCBCalibracoes.setSelected(false);
+                jTFNome.setText("");
+                
+                //Seta mascara no campo de CPF
+                jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("###.###.###-##")));
+                //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
+                jFTCPFCNPJ.setValue("");
+                      
+            }  
+        }
+        
+    }
+    
+    public void habilitaCamposCertificadora(){
+        
+        if(jRBCertificadora.isEnabled()){
+            if(jRBCertificadora.isSelected()){
+
+                //Habilita campos de pessoa jurídica
+                jRBCertificadora.setEnabled(true);
+                jRBCertificadora.setSelected(true);
+                jRBFornecedor.setEnabled(true);
+                jRBFornecedor.setSelected(false);
+                jRBCNPJ.setSelected(true);
+                if(!jCBInternacional.isSelected()){
+                 jFTCPFCNPJ.setEnabled(true);    
+                }
+                jTFRazaoSocial.setEnabled(true);
+                jTFNome.setEnabled(true);
+                jCBCalibracoes.setEnabled(true);
+                jCBTipoContato.setEnabled(true);
+                jCBInternacional.setEnabled(true);
+
+                //Desabilita campos de pessoa física
+                JTFSite.setEnabled(false);
+                jTFRamo.setEnabled(false);
+                jFTDataNasc.setEnabled(false);
+                jFTRG.setEnabled(false);
+                jRBCPF.setSelected(false);
+                jRBMasc.setEnabled(false);
+                jRBFem.setEnabled(false);
+                jRBMasc.setSelected(false);
+                jRBFem.setSelected(false);
+
+                //Seta mascara no campo de CNPJ
+                jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
+                //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
+                jFTCPFCNPJ.setValue("");
+            }
+        }   
+    }
+    
+    public void habilitaCamposFornecedor(){
+    
+        if(jRBFornecedor.isEnabled()){
+            if(jRBFornecedor.isSelected()){
+                
+                //Habilita campos de pessoa jurídica
+                jRBFornecedor.setEnabled(true);
+                jRBFornecedor.setSelected(true);
+                jRBCertificadora.setEnabled(true);
+                jRBCertificadora.setSelected(false);
+                jRBCNPJ.setSelected(true);
+                if(!jCBInternacional.isSelected()){
+                jFTCPFCNPJ.setEnabled(true);    
+                }
+                jTFRazaoSocial.setEnabled(true);
+                jTFNome.setEnabled(true);
+                JTFSite.setEnabled(true);
+                jTFRamo.setEnabled(true);
+                jCBTipoContato.setEnabled(true);
+                jCBInternacional.setEnabled(true);
+
+                //Desabilita campos de pessoa física
+                jFTDataNasc.setEnabled(false);
+                jFTRG.setEnabled(false);
+                jRBCPF.setSelected(false);
+                jRBMasc.setEnabled(false);
+                jRBFem.setEnabled(false);
+                jRBMasc.setSelected(false);
+                jRBFem.setSelected(false);
+                jCBCalibracoes.setEnabled(false);
+
+                //Seta mascara no campo de CNPJ
+                jFTCPFCNPJ.setFormatterFactory(new DefaultFormatterFactory( validaCampos.formata("##.###.###/####-##")));
+                //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
+                jFTCPFCNPJ.setValue("");
+            }
+         }
     }
 }

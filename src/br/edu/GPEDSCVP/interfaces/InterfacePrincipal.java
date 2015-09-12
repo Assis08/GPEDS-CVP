@@ -5,19 +5,41 @@
  */
 package br.edu.GPEDSCVP.interfaces;
 
+import br.edu.GPEDSCVP.classe.Acesso;
+import br.edu.GPEDSCVP.classe.Permissao;
+import br.edu.GPEDSCVP.classe.Tela;
+import br.edu.GPEDSCVP.dao.daoPermissao;
+import br.edu.GPEDSCVP.dao.daoTela;
+import br.edu.GPEDSCVP.validacao.ValidaAcesso;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Willys
  */
 public class InterfacePrincipal extends javax.swing.JFrame {
 
-    /**
-     * Creates new form InterfacePrincipal
-     */
+      daoTela dao_tela;
+      daoPermissao dao_permissao;
+      Acesso acesso;
+      Tela tela;
+      ValidaAcesso validaacesso;
+      Permissao permissao;
+      
     public InterfacePrincipal() {
         //Inicializa como tela inteira
         this.setExtendedState(MAXIMIZED_BOTH);
         initComponents();
+        
+        dao_permissao = new daoPermissao();
+        dao_tela = new daoTela();
+        acesso = new Acesso();
+        tela = new Tela();
+        validaacesso = new ValidaAcesso();
+        permissao = new Permissao();
     }
 
     /**
@@ -75,8 +97,35 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-       //Traz para tela a tela de cadastro de pessoas 
-       new InterfacePessoa().setVisible(true);
+      
+        try {
+            //Inclui a opção todas telas como primeira opção
+            tela.setDescricao("Todas telas");
+            tela.setId_tela(1);
+            dao_tela.incluir(tela);
+            
+            //Inclui a a tela de Pessoas
+            tela.setDescricao("Pessoas");
+            tela.setId_tela(2);
+            dao_tela.incluir(tela);
+            
+            //Armazena dados de acesso da tela para verificar permissões
+            acesso.setId_tela(2);
+            acesso.setNome_tela("Pessoas");
+            
+           //retorna as permissoes de acesso do usuario  
+           dao_permissao.retornaDadosPermissao(acesso, permissao);
+           //Verifica se o usuario possui permissao para acessar essa tela
+           if (validaacesso.verificaAcesso("acesso", acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas 
+                new InterfacePessoa().setVisible(true);
+           }else{
+               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
+           }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     /**

@@ -7,7 +7,6 @@ package br.edu.GPEDSCVP.classe;
 
 import java.sql.Date;
 import java.sql.ResultSet;
-import java.sql.Timestamp;
 
 /**
  *
@@ -22,6 +21,9 @@ public class Acesso {
     private static int id_usuario;
     private static String nome_usuario;
     private static String login_usuario;
+    private static int id_tela;
+    private static String nome_tela;
+    private static int in_gerente;
     
     public Acesso()
     {
@@ -85,6 +87,28 @@ public class Acesso {
         Acesso.login_usuario = login_usuario;
     }
 
-    
+    public static int getId_tela() {
+        return id_tela;
+    }
+
+    public static void setId_tela(int id_tela) {
+        Acesso.id_tela = id_tela;
+    }
+
+    public static String getNome_tela() {
+        return nome_tela;
+    }
+
+    public static void setNome_tela(String nome_tela) {
+        Acesso.nome_tela = nome_tela;
+    }
+
+    public static int getIn_gerente() {
+        return in_gerente;
+    }
+
+    public static void setIn_gerente(int in_gerente) {
+        Acesso.in_gerente = in_gerente;
+    }
 }
 

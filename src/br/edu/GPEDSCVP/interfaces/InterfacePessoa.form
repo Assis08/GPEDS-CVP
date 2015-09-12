@@ -191,7 +191,7 @@
                               <Component id="jTFNome" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jTFRazaoSocial" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jRBCPF" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jRBCNPJ" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -268,12 +268,16 @@
                   </Properties>
                   <Events>
                     <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jRBCPFMouseClicked"/>
+                    <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jRBCPFItemStateChanged"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JRadioButton" name="jRBCNPJ">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="CNPJ"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jRBCNPJItemStateChanged"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel5">
                   <Properties>
@@ -433,6 +437,9 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Excluir"/>
                   </Properties>
+                  <Events>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton3ActionPerformed"/>
+                  </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton4">
                   <Properties>
@@ -1419,7 +1426,7 @@
                           <EmptySpace pref="71" max="32767" attributes="0"/>
                           <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jTFData" min="-2" pref="108" max="-2" attributes="0"/>
+                          <Component id="jFTData" min="-2" pref="108" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
@@ -1431,7 +1438,7 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="103" alignment="0" groupAlignment="3" attributes="0">
                                   <Component id="jLabel4" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTFData" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jFTData" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="103" groupAlignment="3" attributes="0">
                                   <Component id="jRBCertificadora" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -1511,16 +1518,12 @@
                     <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jCBInternacionalStateChanged"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTFData">
-                  <Properties>
-                    <Property name="editable" type="boolean" value="false"/>
-                    <Property name="name" type="java.lang.String" value="data_cadastro" noResource="true"/>
-                  </Properties>
-                </Component>
                 <Component class="javax.swing.JLabel" name="jLabel4">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="Data:"/>
                   </Properties>
+                </Component>
+                <Component class="javax.swing.JFormattedTextField" name="jFTData">
                 </Component>
               </SubComponents>
             </Container>
@@ -1657,8 +1660,9 @@
                 <Component class="javax.swing.JTable" name="jTBDadosPessoas">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-                      <Table columnCount="9" rowCount="0">
+                      <Table columnCount="10" rowCount="0">
                         <Column editable="false" title="ID Pessoa" type="java.lang.Object"/>
+                        <Column editable="false" title="Tipo" type="java.lang.Object"/>
                         <Column editable="false" title="Login" type="java.lang.Object"/>
                         <Column editable="false" title="Descri&#xe7;&#xe3;o" type="java.lang.Object"/>
                         <Column editable="false" title="Raz&#xe3;o Social" type="java.lang.Object"/>
@@ -1671,6 +1675,11 @@
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
                       <TableColumnModel selectionModel="0">
+                        <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                          <Title/>
+                          <Editor/>
+                          <Renderer/>
+                        </Column>
                         <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                           <Title/>
                           <Editor/>

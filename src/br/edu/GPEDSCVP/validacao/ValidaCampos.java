@@ -14,6 +14,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.InputMismatchException;
+import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -57,6 +58,13 @@ public class ValidaCampos {
                         }
                    }
                } 
+               //Desabilita botoes do container
+               if (component instanceof JButton){
+                   JButton button = (JButton) component;
+                   if (button.isEnabled()){
+                        button.setEnabled(false);
+                   }
+               } 
                //Desabilita todas JFormattedTextField do container
                if (component instanceof JFormattedTextField){
                    JFormattedTextField field = (JFormattedTextField) component;
@@ -93,21 +101,29 @@ public class ValidaCampos {
         
         Component components[] = container.getComponents();
            for (Component component : components){   
-               //Desabilita todas JTextField do container
+               //Habilita todas JTextField do container
                if (component instanceof JTextField){
                    JTextField field = (JTextField) component;
                    if (!field.isEnabled()){
                         field.setEnabled(true); 
                    }
                } 
-               //Desabilita todas JFormattedTextField do container
+               //Habilita todas JFormattedTextField do container
                if (component instanceof JFormattedTextField){
                    JFormattedTextField field = (JFormattedTextField) component;
                    if (!field.isEnabled()){
                         field.setEnabled(true); 
                    }    
                }
-               //Desabilita todos JRadioButton do container
+               
+               //Habilita todos botoes do container
+               if (component instanceof JButton){
+                   JButton button = (JButton) component;
+                   if (!button.isEnabled()){
+                        button.setEnabled(true); 
+                   }    
+               }
+               //Habilita todos JRadioButton do container
                if (component instanceof JRadioButton){
                     JRadioButton JRBT = (JRadioButton) component; 
                     if(!JRBT.isEnabled()){
@@ -115,14 +131,14 @@ public class ValidaCampos {
                    }
                }
                
-               //Desabilita todos JCheckBox do container
+               //Habilita todos JCheckBox do container
                if (component instanceof JCheckBox){
                     JCheckBox JCB = (JCheckBox) component; 
                     if(!JCB.isEnabled()){
                         JCB.setEnabled(true);
                    }
                }
-               
+               //Habilita todos JComboBox do container
                if (component instanceof JComboBox){
                     JComboBox JCB = (JComboBox) component; 
                     if(!JCB.isEnabled()){

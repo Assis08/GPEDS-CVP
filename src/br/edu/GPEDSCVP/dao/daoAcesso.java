@@ -58,7 +58,7 @@ public class daoAcesso {
     
     //retorna dados do usuário logado
     public void retornaUsuarioLogado(Acesso acesso){
-        String sql = "select nome, usuario.id_usuario, usuario.login from pessoa"
+        String sql = "select nome, usuario.id_usuario, usuario.login, usuario.in_gerente from pessoa"
         +" inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
         +" inner join usuario on (usuario.id_usuario = pessoa_fisica.id_pessoa)"
         +" where pessoa.id_pessoa = "+ acesso.getId_usuario();
@@ -69,6 +69,7 @@ public class daoAcesso {
                 acesso.setId_usuario(conecta_banco.resultset.getInt("id_usuario"));
                 acesso.setLogin_usuario(conecta_banco.resultset.getString("login"));
                 acesso.setNome_usuario(conecta_banco.resultset.getString("nome"));
+                acesso.setIn_gerente(conecta_banco.resultset.getInt("in_gerente"));
 
          } catch (Exception e) {
              JOptionPane.showMessageDialog(null, "Falha ao retornar dados do usuário logado");
