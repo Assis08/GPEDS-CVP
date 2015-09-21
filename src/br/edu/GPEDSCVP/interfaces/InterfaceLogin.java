@@ -9,8 +9,8 @@ import br.edu.GPEDSCVP.classe.Acesso;
 import br.edu.GPEDSCVP.classe.Usuario;
 import br.edu.GPEDSCVP.dao.daoAcesso;
 import br.edu.GPEDSCVP.dao.daoPessoa;
-import br.edu.GPEDSCVP.validacao.Criptografia;
-import br.edu.GPEDSCVP.validacao.ValidaCampos;
+import br.edu.GPEDSCVP.util.Criptografia;
+import br.edu.GPEDSCVP.util.ValidaCampos;
 import java.sql.Date;
 import javax.swing.JOptionPane;
 

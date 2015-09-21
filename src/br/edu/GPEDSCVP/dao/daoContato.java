@@ -7,8 +7,9 @@ package br.edu.GPEDSCVP.dao;
 
 import br.edu.GPEDSCVP.classe.Contato;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
-import br.edu.GPEDSCVP.validacao.FormatarData;
-import br.edu.GPEDSCVP.validacao.UltimaSequencia;
+import br.edu.GPEDSCVP.util.FormatarData;
+import br.edu.GPEDSCVP.util.Rotinas;
+import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -52,37 +53,84 @@ public class daoContato {
                 conecta_banco.incluirSQL(sql);
     }
     //Método de incluir contato na Jtable
-    public void addContato(Contato contato) throws SQLException{
+    public void addContato(Contato contato , int situacao ) throws SQLException{
         DefaultTableModel TabelaContato = (DefaultTableModel)contato.getTabela().getModel();
         ultima = new UltimaSequencia();
         
-        Integer sequencia;
+        int sequencia;
         int totlinha = contato.getTabela().getRowCount();
-        //adiciona uma linha a mais
-        TabelaContato.setNumRows(totlinha + 1);
+      
         //se for a primeira linha, gera o id do contato referente ao ultimo cadastrado no banco
         if(totlinha ==0){
-        TabelaContato.setValueAt(ultima.ultimasequencia("CONTATO","ID_CONTATO"), totlinha, 1);
-        //se não for a primeira linha, gera o id do contato referente ao id da ulima linha da Jtable   
+            //adiciona uma linha a mais
+            TabelaContato.setNumRows(totlinha + 1);
+            
+            TabelaContato.setValueAt(ultima.ultimasequencia("CONTATO","ID_CONTATO"), totlinha, 1);
+            //Seta os demais valores dos campos em suas respectivas colunas
+            if(contato.getTipo().equals("E")){
+                TabelaContato.setValueAt("Email",totlinha,2);    
+            }else{
+                TabelaContato.setValueAt("Fone",totlinha,2);
+            }
+            TabelaContato.setValueAt(contato.getDescricao(),totlinha,3);
+            TabelaContato.setValueAt(contato.getFone(),totlinha,4);
+            TabelaContato.setValueAt(contato.getEmail(),totlinha,5);
+        //se não for a primeira linha, gera o id do contato referente ao id da ultima linha da Jtable   
         }else{
-            //armazena o ultimo id da Jtable
-            sequencia = (Integer) TabelaContato.getValueAt(totlinha-1, 1);
-            //seta o ultimo id na nova linha
-            TabelaContato.setValueAt(sequencia+1,totlinha, 1);    
+            for (int i = 0; i < totlinha; i++){
+                
+                Integer id_existente = Integer.parseInt(TabelaContato.getValueAt(i, 1).toString()); 
+           
+                //Se for um contato ja existente ja Jtable
+                if(contato.getId_contato() == id_existente){
+                    //Seta os novos valores no contato na Jtable
+                    if(contato.getTipo().equals("E")){
+                        TabelaContato.setValueAt("Email",i,2);    
+                    }else{
+                        TabelaContato.setValueAt("Fone",i,2);
+                    }
+                    TabelaContato.setValueAt(contato.getDescricao(),i,3);
+                    TabelaContato.setValueAt(contato.getFone(),i,4);
+                    TabelaContato.setValueAt(contato.getEmail(),i,5);
+                    break;
+                //Se não existe o contato na Jtable    
+                }else{
+
+                    //Chegou na ultima linha
+                    if( i == totlinha-1){
+                        //adiciona uma linha a mais
+                        TabelaContato.setNumRows(totlinha + 1);
+                        //Se estiver em modo de alteração
+                        if(situacao == Rotinas.ALTERAR){
+                           //Pega o ultimo ID do banco de dados
+                           sequencia = ultima.ultimasequencia("CONTATO","ID_CONTATO");
+                           //seta o ultimo id na nova linha
+                           TabelaContato.setValueAt(sequencia,totlinha, 1); 
+                        //Se não estiver em modo de alteração   
+                        }else{
+                            //armazena o ultimo id da Jtable
+                            sequencia = Integer.parseInt(TabelaContato.getValueAt(totlinha-1, 1).toString());
+                            //seta o ultimo id na nova linha
+                            TabelaContato.setValueAt(sequencia+1,totlinha, 1); 
+                        }
+
+                        //Seta os demais valores dos campos em suas respectivas colunas
+                        if(contato.getTipo().equals("E")){
+                            TabelaContato.setValueAt("Email",totlinha,2);    
+                        }else{
+                            TabelaContato.setValueAt("Fone",totlinha,2);
+                        }
+                        TabelaContato.setValueAt(contato.getDescricao(),totlinha,3);
+                        TabelaContato.setValueAt(contato.getFone(),totlinha,4);
+                        TabelaContato.setValueAt(contato.getEmail(),totlinha,5);
+                    }
+                }
+            }
         }
-        //Seta os demais valores dos campos em suas respectivas colunas
-        if(contato.getTipo().equals("E")){
-            TabelaContato.setValueAt("Email",totlinha,2);    
-        }else{
-            TabelaContato.setValueAt("Fone",totlinha,2);
-        }
-        TabelaContato.setValueAt(contato.getDescricao(),totlinha,3);
-        TabelaContato.setValueAt(contato.getFone(),totlinha,4);
-        TabelaContato.setValueAt(contato.getEmail(),totlinha,5);
     }
  
    
-     public void gravarContatos (Contato contato){
+    public void gravarContatos (Contato contato){
         String numero = "";
         String email = "";
         String tipo;
@@ -118,6 +166,68 @@ public class daoContato {
                     +email +"')";
             
             conecta_banco.incluirSQL(sql);
+        }
+     }
+    
+    
+    public void alterarContatos (Contato contato){
+        String numero = "";
+        String email = "";
+        String tipo;
+        DefaultTableModel tabela = (DefaultTableModel) contato.getTabela().getModel();
+        int totlinha = tabela.getRowCount();
+        for (int i = 0; i < totlinha; i++){
+            
+            Integer id = Integer.parseInt(tabela.getValueAt(i, 1).toString());
+            if(tabela.getValueAt(i, 2).equals("Email")){
+                tipo = "E";
+            }else{
+                tipo = "F";
+            }
+            String descricao = (String) tabela.getValueAt(i, 3);
+            if((tabela.getValueAt(i, 4)) != ""){
+                numero = (String) tabela.getValueAt(i, 4);
+            }else{
+                numero = "";
+            }
+            if((tabela.getValueAt(i, 5)) != ""){
+                email = (String) tabela.getValueAt(i, 5);
+            }else{
+                email = "";
+            }
+            
+            //Verifica se já existe o contato
+            String sql = "select * from contato where id_contato = "+ id;
+            try {
+                conecta_banco.executeSQL(sql);
+                conecta_banco.resultset.first();
+                //se existe o contato
+                if(id == conecta_banco.resultset.getInt("id_contato")){
+                    //apenas altera 
+                    sql = "UPDATE CONTATO SET ID_CONTATO = "+ id+","
+                    + "NUMERO = '" + numero+"',"
+                    + "DESCRICAO = '" + descricao+"',"
+                    + "TIPO = '" + tipo+"',"
+                    + "DATA_ALTER = '"+ FormatarData.dateParaTimeStamp(contato.getData_alter())+"',"
+                    + "EMAIL = '" + email+"'"  
+                    + " WHERE ID_CONTATO = " + id;
+            
+                    conecta_banco.atualizarSQL(sql);  
+                }
+                
+            } catch (Exception e) {
+                //Chegou aqui porque o contato não existe, então inclui
+                 sql = "INSERT INTO CONTATO VALUES ("
+                    +id + ","
+                    +contato.getId_pessoa()+",'"
+                    +numero +"','"
+                    +descricao + "','"
+                    +tipo + "','"
+                    + FormatarData.dateParaTimeStamp(contato.getData_alter())+"','"
+                    +email +"')";
+            
+                    conecta_banco.incluirSQL(sql);
+            }
         }
      }
      

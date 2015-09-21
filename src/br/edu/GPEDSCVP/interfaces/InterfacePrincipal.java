@@ -10,7 +10,7 @@ import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.dao.daoPermissao;
 import br.edu.GPEDSCVP.dao.daoTela;
-import br.edu.GPEDSCVP.validacao.ValidaAcesso;
+import br.edu.GPEDSCVP.util.ValidaAcesso;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -113,10 +113,14 @@ public class InterfacePrincipal extends javax.swing.JFrame {
             acesso.setId_tela(2);
             acesso.setNome_tela("Pessoas");
             
-           //retorna as permissoes de acesso do usuario  
-           dao_permissao.retornaDadosPermissao(acesso, permissao);
+            //se naõ for gerente
+            if(acesso.getIn_gerente() == 0){
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            } 
+          
            //Verifica se o usuario possui permissao para acessar essa tela
-           if (validaacesso.verificaAcesso("acesso", acesso, permissao) == true){
+           if (validaacesso.verificaAcesso("acesso",acesso, permissao) == true){
                 //Traz para tela a tela de cadastro de pessoas 
                 new InterfacePessoa().setVisible(true);
            }else{

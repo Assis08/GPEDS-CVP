@@ -8,10 +8,11 @@ package br.edu.GPEDSCVP.dao;
 import br.edu.GPEDSCVP.classe.Acesso;
 import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Pessoa;
+import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.classe.Usuario;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
-import br.edu.GPEDSCVP.validacao.FormatarData;
-import br.edu.GPEDSCVP.validacao.UltimaSequencia;
+import br.edu.GPEDSCVP.util.FormatarData;
+import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -61,6 +62,7 @@ public class daoPermissao {
     //Método de incluir endereco na Jtable
     public void addPermissao(Permissao permissao) throws SQLException{
         DefaultTableModel TabelaPermissao = (DefaultTableModel)permissao.getTabela().getModel();
+
         ultima = new UltimaSequencia();
         
         Integer sequencia;
@@ -72,6 +74,7 @@ public class daoPermissao {
             TabelaPermissao.setValueAt(ultima.ultimasequencia("PERMISSAO","ID_PERMISSAO"), totlinha, 1);
         //se não for a primeira linha, gera o id do contato referente ao id da ulima linha da Jtable   
         }else{
+            
             //armazena o ultimo id da Jtable
             sequencia = (Integer) TabelaPermissao.getValueAt(totlinha-1, 1);
             //seta o ultimo id na nova linha
@@ -163,6 +166,63 @@ public class daoPermissao {
         }
      }
      
+     public void alterarPermissao (Permissao permissao){
+       
+        DefaultTableModel tabela = (DefaultTableModel) permissao.getTabela().getModel();
+        int totlinha = tabela.getRowCount();
+        String acesso;
+        String inserir;
+        String alterar;
+        String excluir;
+        String consultar;
+        
+        for (int i = 0; i < totlinha; i++){
+            JOptionPane.showMessageDialog(null, tabela.getValueAt(i, 1));
+            JOptionPane.showMessageDialog(null, tabela.getValueAt(i, 2));
+            int id_permissao =  Integer.parseInt((String) tabela.getValueAt(i, 1));
+            int id_tela =  Integer.parseInt((String) tabela.getValueAt(i, 2));
+           
+            if(tabela.getValueAt(i, 4).equals("Sim")){
+                acesso = "S";
+            }else{
+                acesso = "N";
+            }
+            if(tabela.getValueAt(i, 5).equals("Sim")){
+                inserir = "S";
+            }else{
+                inserir = "N";
+            }
+            if(tabela.getValueAt(i, 6).equals("Sim")){
+                alterar = "S";
+            }else{
+                alterar = "N";
+            }
+            if(tabela.getValueAt(i, 7).equals("Sim")){
+                excluir = "S";
+            }else{
+                excluir = "N";
+            }
+            if(tabela.getValueAt(i, 8).equals("Sim")){
+                consultar = "S";
+            }else{
+                consultar = "N";
+            }
+            
+             String sql = "UPDATE PERMISSAO SET ID_PERMISSAO = "+ id_permissao+","
+                + "ID_TELA = " + id_tela+","
+                + "ACESSO = '" + acesso+"',"
+                + "INSERIR = '" + inserir+"',"
+                + "ALTERAR = '" + alterar+"',"
+                + "EXCLUIR = '" + excluir+"',"
+                + "CONSULTAR = '" + consultar+"',"
+                + "CONSULTAR = '" + consultar+"'," 
+                + "DATA_ALTER = '"+ FormatarData.dateParaTimeStamp(permissao.getData_alter())+"' "     
+                + "WHERE ID_PERMISSAO = " + id_permissao;
+             
+                conecta_banco.atualizarSQL(sql);
+        }
+     }
+     
     //consulta permissões pelo codigo da pessoa 
     public void consultacodigo(Permissao permissao){
 
@@ -175,7 +235,7 @@ public class daoPermissao {
     }
     
     public void retornaDadosPermissao(Acesso acesso, Permissao permissao){
-        
+
         conecta_banco.executeSQL("select * from permissao where id_usuario = "+ acesso.getId_usuario()+" and id_tela = "+ acesso.getId_tela());
         
         try {        

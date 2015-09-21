@@ -20,7 +20,7 @@ public class Usuario extends PessoaFisica
     public Usuario()
     {
         login = "";
-        senha = null;
+        senha = "";
         in_gerente = 0;
     }
 

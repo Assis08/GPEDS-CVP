@@ -3,16 +3,18 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package br.edu.GPEDSCVP.validacao;
+package br.edu.GPEDSCVP.util;
 
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
+import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableColumnModel;
@@ -47,6 +49,7 @@ public class ManipulaJtable {
         FormatarData data = new FormatarData();
         DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
         modelo.setNumRows(0);
+        //tabela.addPropertyChangeListener();
 
         try {
             while (resultSet.next()) {
@@ -58,8 +61,20 @@ public class ManipulaJtable {
                         row[i] = data.organizaData(resultSet.getObject(campos[i]));
                     } else if (resultSet.getObject(campos[i]) instanceof java.sql.Date) {
                         row[i] = data.organizaData(resultSet.getObject(campos[i]));
-                    } else {
-                        row[i] = resultSet.getString(campos[i]);
+                    } else if (resultSet.getObject(campos[i]) instanceof String){
+                        if(resultSet.getString(campos[i]).equals("S")){
+                            row[i] = "Sim";
+                        }else  if(resultSet.getString(campos[i]).equals("N")){
+                            row[i] = "Não";
+                        }else if (resultSet.getString(campos[i]).equals("F")){
+                            row[i] = "Fone";
+                        }else if (resultSet.getString(campos[i]).equals("E")){
+                            row[i] = "Email";
+                        }else{
+                             row[i] = resultSet.getString(campos[i]);
+                        }
+                    }else{
+                         row[i] = resultSet.getString(campos[i]);
                     }
                 }
                 modelo.addRow(row);
@@ -161,4 +176,43 @@ public class ManipulaJtable {
         ttabela.setRowHeight(20);
         ttabela.setIntercellSpacing(new Dimension(2, 2));
     }
+    
+    public boolean evitarDuplicacao(JTable tabela){
+        
+        DefaultTableModel TabelaPermissao = (DefaultTableModel)tabela.getModel();
+        
+        int row = TabelaPermissao.getRowCount();
+        int col = TabelaPermissao.getColumnCount();
+        
+        Object[][] dados = new Object[row][1];
+        String ValorInsirido=null;
+        for (int i = 0; i < row; i++) {
+            dados[i][0] = TabelaPermissao.getValueAt(i,0);
+            if(dados[i][0] == ValorInsirido){
+                //valor duplicado
+                return true;
+            }else{
+                //não duplicado
+                return false;
+            }
+        }
+         return false;
+    }
+    
+    
+    private void onCellEditor(JTable table, int column, int row, Object oldValue, Object newValue){
+        System.out.println("Coluna:" + column + "Valor novo: " + newValue + " Valor antigo: " + oldValue);
+        if (table == table) {
+            
+        }
+    }
+
+    class TableCellEditorAction extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            TableCellListener tbListener = (TableCellListener) e.getSource();
+            onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
+        }
+    }
+
 }

@@ -25,6 +25,7 @@ public class Permissao
     private String excluir;
     private String consultar;
     private Date data_alter;
+    private int in_gerente;
     private ResultSet retorno;
     private JTable tabela;
 
@@ -156,7 +157,13 @@ public class Permissao
     public void setNome_tela(String nome_tela) {
         this.nome_tela = nome_tela;
     }
-    
-    
+
+    public int getIn_gerente() {
+        return in_gerente;
+    }
+
+    public void setIn_gerente(int in_gerente) {
+        this.in_gerente = in_gerente;
+    }
 }
 

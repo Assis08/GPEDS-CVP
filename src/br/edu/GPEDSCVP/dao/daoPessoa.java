@@ -12,8 +12,8 @@ import br.edu.GPEDSCVP.classe.PessoaFisica;
 import br.edu.GPEDSCVP.classe.PessoaJuridica;
 import br.edu.GPEDSCVP.classe.Usuario;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
-import br.edu.GPEDSCVP.validacao.FormatarData;
-import br.edu.GPEDSCVP.validacao.UltimaSequencia;
+import br.edu.GPEDSCVP.util.FormatarData;
+import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
@@ -133,6 +133,41 @@ public class daoPessoa {
                 + pessoa.getRamo()+ "')"; 
                 
                conecta_banco.incluirSQL(sql);
+    }
+    
+    public void alterar(Usuario pessoa)throws SQLException
+    {
+     String sql = "UPDATE PESSOA SET ID_PESSOA = "+ pessoa.getId_pessoa()+","
+                + "NOME = '" + pessoa.getNome()+"',"
+                + "CPF_CNPJ = '" + pessoa.getCpf_cnpj()+"',"
+                + "DATA_ALTER = '" + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+"'"
+                + " WHERE PESSOA.ID_PESSOA = " + pessoa.getId_pessoa();
+     
+                conecta_banco.atualizarSQL(sql);
+                
+            sql = "UPDATE PESSOA_FISICA SET ID_PESSOA = "+ pessoa.getId_pessoa()+","
+                + "DT_NASC = '" + pessoa.getDt_nasc()+"',"
+                + "RG = '" + pessoa.getRg()+"',"
+                + "SEXO = '" + pessoa.getSexo()+"'"
+                + " WHERE PESSOA_FISICA.ID_PESSOA = " + pessoa.getId_pessoa();
+     
+                conecta_banco.atualizarSQL(sql);
+                //Se não foi digitada uma nova senha
+                if(pessoa.getSenha().replace(" ", "").equals("")){
+                  
+                    sql = "UPDATE USUARIO SET ID_USUARIO = "+ pessoa.getId_pessoa()+","
+                    + "LOGIN = '" + pessoa.getLogin()+"',"
+                    + "IN_GERENTE = " + pessoa.getIn_gerente()+""
+                    + " WHERE USUARIO.ID_USUARIO = " + pessoa.getId_pessoa();
+                }else{
+                    //Se foi digitada uma nova senha
+                    sql = "UPDATE USUARIO SET ID_USUARIO = "+ pessoa.getId_pessoa()+","
+                    + "LOGIN = '" + pessoa.getLogin()+"',"
+                    + "SENHA = '" + pessoa.getSenha()+"',"
+                    + "IN_GERENTE = " + pessoa.getIn_gerente()+""
+                    + " WHERE USUARIO.ID_USUARIO = " + pessoa.getId_pessoa();
+                }
+                conecta_banco.atualizarSQL(sql);    
     }
     //Valida se o CPF ou CNPJ já esta cadastrado
     public Boolean verificaCpfCnpj(Pessoa pessoa){
@@ -541,7 +576,7 @@ public class daoPessoa {
     public void retornardadosUsuario(Usuario pessoa) {
             
         conecta_banco.executeSQL("SELECT pessoa.id_pessoa, pessoa.nome, pessoa.cpf_cnpj, pessoa.data_cadastro,pessoa_fisica.dt_nasc,"
-        +" pessoa_fisica.rg,pessoa_fisica.sexo from pessoa" 
+        +" pessoa_fisica.rg,pessoa_fisica.sexo,usuario.login,usuario.senha,usuario.in_gerente from pessoa" 
         +" inner join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
         +" inner join usuario on (usuario.id_usuario = pessoa_fisica.id_pessoa)"
         +" where pessoa.id_pessoa = "+pessoa.getId_pessoa() +" and pessoa.in_ativo = 'A'");
@@ -556,7 +591,10 @@ public class daoPessoa {
             pessoa.setData_cadastro(conecta_banco.resultset.getDate("data_cadastro"));
             pessoa.setDt_nasc(conecta_banco.resultset.getDate("dt_nasc"));
             pessoa.setRg(conecta_banco.resultset.getString("rg"));
-            pessoa.setSexo(conecta_banco.resultset.getString("sexo")); 
+            pessoa.setSexo(conecta_banco.resultset.getString("sexo"));
+            pessoa.setLogin(conecta_banco.resultset.getString("login"));
+            pessoa.setSenha(conecta_banco.resultset.getString("senha"));
+            pessoa.setIn_gerente(conecta_banco.resultset.getInt("in_gerente"));
             
         } catch (SQLException ex) {
            JOptionPane.showMessageDialog(null, "Falha ao retornar dados da pessoa");

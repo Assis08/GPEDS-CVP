@@ -7,8 +7,9 @@ package br.edu.GPEDSCVP.dao;
 
 import br.edu.GPEDSCVP.classe.Endereco;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
-import br.edu.GPEDSCVP.validacao.FormatarData;
-import br.edu.GPEDSCVP.validacao.UltimaSequencia;
+import br.edu.GPEDSCVP.util.FormatarData;
+import br.edu.GPEDSCVP.util.Rotinas;
+import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -55,6 +56,82 @@ public class daoEndereco {
                 conecta_banco.incluirSQL(sql);
     }
     
+    
+    //Método de incluir contato na Jtable
+    public void addEndereco(Endereco endereco , int situacao ) throws SQLException{
+        DefaultTableModel TabelaEndereco = (DefaultTableModel)endereco.getTabela().getModel();
+        ultima = new UltimaSequencia();
+        
+        int sequencia;
+        int totlinha = endereco.getTabela().getRowCount();
+      
+        //se for a primeira linha, gera o id do endereço referente ao ultimo cadastrado no banco
+        if(totlinha ==0){
+            //adiciona uma linha a mais
+            TabelaEndereco.setNumRows(totlinha + 1);
+            
+            TabelaEndereco.setValueAt(ultima.ultimasequencia("ENDERECO","ID_ENDERECO"), totlinha, 1);
+            //Seta os demais valores dos campos em suas respectivas colunas
+            TabelaEndereco.setValueAt(endereco.getDescricao(),totlinha,2);
+            TabelaEndereco.setValueAt(endereco.getRua(),totlinha,3);
+            TabelaEndereco.setValueAt(endereco.getNumero(),totlinha,4);
+            TabelaEndereco.setValueAt(endereco.getBairro(),totlinha,5);
+            TabelaEndereco.setValueAt(endereco.getCep(),totlinha,6);
+            TabelaEndereco.setValueAt(endereco.getId_cidade(),totlinha,7); 
+            TabelaEndereco.setValueAt(endereco.getUf(), totlinha,8);
+        //se não for a primeira linha, gera o id do endereço referente ao id da ultima linha da Jtable   
+        }else{
+            for (int i = 0; i < totlinha; i++){
+                
+                Integer id_existente = Integer.parseInt(TabelaEndereco.getValueAt(i, 1).toString()); 
+           
+                //Se for um contato ja existente ja Jtable
+                if(endereco.getId_endereco()== id_existente){
+                    //Seta os novos valores no endereço na Jtable
+                    TabelaEndereco.setValueAt(endereco.getDescricao(),totlinha,2);
+                    TabelaEndereco.setValueAt(endereco.getRua(),totlinha,3);
+                    TabelaEndereco.setValueAt(endereco.getNumero(),totlinha,4);
+                    TabelaEndereco.setValueAt(endereco.getBairro(),totlinha,5);
+                    TabelaEndereco.setValueAt(endereco.getCep(),totlinha,6);
+                    TabelaEndereco.setValueAt(endereco.getId_cidade(),totlinha,7); 
+                    TabelaEndereco.setValueAt(endereco.getUf(), totlinha,8);
+                    break;
+                //Se não existe o endereço na Jtable    
+                }else{
+
+                    //Chegou na ultima linha
+                    if( i == totlinha-1){
+                        //adiciona uma linha a mais
+                        TabelaEndereco.setNumRows(totlinha + 1);
+                        //Se estiver em modo de alteração
+                        if(situacao == Rotinas.ALTERAR){
+                           //Pega o ultimo ID do banco de dados
+                           sequencia = ultima.ultimasequencia("ENDERECO","ID_ENDERECO");
+                           //seta o ultimo id na nova linha
+                           TabelaEndereco.setValueAt(sequencia,totlinha, 1); 
+                        //Se não estiver em modo de alteração   
+                        }else{
+                            //armazena o ultimo id da Jtable
+                            sequencia = Integer.parseInt(TabelaEndereco.getValueAt(totlinha-1, 1).toString());
+                            //seta o ultimo id na nova linha
+                            TabelaEndereco.setValueAt(sequencia+1,totlinha, 1); 
+                        }
+
+                        //Seta os demais valores dos campos em suas respectivas colunas
+                        TabelaEndereco.setValueAt(endereco.getDescricao(),totlinha,2);
+                        TabelaEndereco.setValueAt(endereco.getRua(),totlinha,3);
+                        TabelaEndereco.setValueAt(endereco.getNumero(),totlinha,4);
+                        TabelaEndereco.setValueAt(endereco.getBairro(),totlinha,5);
+                        TabelaEndereco.setValueAt(endereco.getCep(),totlinha,6);
+                        TabelaEndereco.setValueAt(endereco.getId_cidade(),totlinha,7); 
+                        TabelaEndereco.setValueAt(endereco.getUf(), totlinha,8);
+                    }
+                }
+            }
+        }
+    }
+    
+    /*
     //Método de incluir endereco na Jtable
     public void addEndereco(Endereco endereco) throws SQLException{
         DefaultTableModel TabelaEndereco = (DefaultTableModel)endereco.getTabela().getModel();
@@ -84,7 +161,7 @@ public class daoEndereco {
         TabelaEndereco.setValueAt(endereco.getId_cidade(),totlinha,7); 
         TabelaEndereco.setValueAt(endereco.getUf(), totlinha,8);
     }
-    
+        */
     public void gravarEndereco (Endereco endereco){
         DefaultTableModel tabela = (DefaultTableModel) endereco.getTabela().getModel();
         int totlinha = tabela.getRowCount();
@@ -125,5 +202,7 @@ public class daoEndereco {
        
             endereco.setRetorno(conecta_banco.resultset);
     }
+    
+
 
 }

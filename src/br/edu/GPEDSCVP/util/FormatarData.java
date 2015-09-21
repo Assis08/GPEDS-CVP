@@ -1,4 +1,4 @@
-package br.edu.GPEDSCVP.validacao;
+package br.edu.GPEDSCVP.util;
 
 import java.sql.Timestamp;
 import java.text.DateFormat;

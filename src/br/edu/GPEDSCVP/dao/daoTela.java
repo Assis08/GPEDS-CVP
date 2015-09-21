@@ -7,7 +7,7 @@ package br.edu.GPEDSCVP.dao;
 
 import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
-import br.edu.GPEDSCVP.validacao.UltimaSequencia;
+import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
