@@ -615,7 +615,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, true
+                true, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -830,14 +830,14 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Sel", "ID Endereço", "Descrição", "Rua", "Nº", "Bairro", "CEP", "Cidade", "UF"
+                "Sel", "ID Endereço", "Descrição", "Rua", "Nº", "Bairro", "CEP", "ID Cidade", "Cidade", "UF"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false
+                true, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -857,7 +857,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         if (jTBEndereco.getColumnModel().getColumnCount() > 0) {
             jTBEndereco.getColumnModel().getColumn(1).setMinWidth(1);
             jTBEndereco.getColumnModel().getColumn(2).setMinWidth(1);
-            jTBEndereco.getColumnModel().getColumn(7).setResizable(false);
+            jTBEndereco.getColumnModel().getColumn(8).setResizable(false);
         }
 
         jBTAddEndereco.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
@@ -1083,7 +1083,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                true, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -2230,6 +2230,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                     
                                     //Pega atributos da tela de contatos
                                     getContato();
+                                    
+                                    //Pega atributos da tela de endereco
+                                    getEndereco();
 
                                     //se não estiver preenchido os dados de contato
                                     if (validaCampos.VerificaJtable(jTBContato) == 0){
@@ -2296,13 +2299,13 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                     //Salva Pessoa com endereço 
 
                                                 //Inclui pessoa fisica
-                                                dao_pessoa.incluir(usuario);
+                                                dao_pessoa.alterar(usuario);
 
                                                 //Inclui endereço
-                                                dao_endereco.gravarEndereco(endereco);
+                                                dao_endereco.alterarEndereco(endereco);
 
                                                 //Inclui permissões
-                                                dao_permissao.gravarPermissao(permissao);
+                                                dao_permissao.alterarPermissao(permissao);
 
                                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
@@ -2422,19 +2425,19 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 }
                                             } else {
 
-                                                    //Salva Pessoa com contato e endereço 
+                                                //Salva Pessoa com contato e endereço 
                                                 //Inclui pessoa fisica
-                                                dao_pessoa.incluir(usuario);
+                                                dao_pessoa.alterar(usuario);
 
                                                 //Inclui contato
                                                 getContato();
-                                                dao_contato.gravarContatos(contato);
+                                                dao_contato.alterarContatos(contato);
 
                                                 //Inclui endereço
-                                                dao_endereco.gravarEndereco(endereco);
+                                                dao_endereco.alterarEndereco(endereco);
 
                                                 //Inclui permissoes
-                                                dao_permissao.gravarPermissao(permissao);
+                                                dao_permissao.alterarPermissao(permissao);
 
                                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
@@ -2754,7 +2757,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTRemoveEnderecoActionPerformed
 
     private void jBTAddEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddEnderecoActionPerformed
-        endereco = new Endereco();
+
         if (validaCampos.validacamposobrigatorios(jPEndereco, "ENDERECO") == 0) {
 
             if (jCBCidade.getSelectedIndex() == 0) {
@@ -2763,6 +2766,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                 //Pega dados da tela de endereco
                 getEndereco();
+                endereco.setId_cidade(cidade.getArray_cidade(jCBCidade.getSelectedIndex() - 1));
                 try {
                     //adiciona dados do endereço na Jtable de endereços
                     dao_endereco.addEndereco(endereco, situacao);
@@ -2776,6 +2780,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                     //ajusta largura das colunas de acordo com o tamanho do dado
                     Jtable.ajustarColunasDaTabela(jTBEndereco);
+                    
+                    endereco = new Endereco();
 
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Falha ao adicionar endereco");
@@ -3317,6 +3323,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             validaCampos.LimparCampos(jPTipoPessoa);
             validaCampos.LimparCampos(jPPessoa);
             validaCampos.LimparCampos(jPPermissoes);
+            validaCampos.LimparCampos(jPEndereco);
             validaCampos.LimparJtable(jTBContato);
             validaCampos.LimparJtable(jTBEndereco);
             validaCampos.LimparJtable(jTBPermissoes);
@@ -3328,6 +3335,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             validaCampos.desabilitaCampos(jPContato);
             validaCampos.desabilitaCampos(jPPermissoes);
             jTBContato.setEnabled(false);
+            jTBEndereco.setEnabled(false);
 
             //Carrega conteudo das combobox
             jCBTipoContato.removeAllItems();
@@ -3425,6 +3433,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 validaCampos.habilitaCampos(jPPermissoes);
                 validaCampos.habilitaCampos(jPContato);
                 jTBContato.setEnabled(true);
+                jTBEndereco.setEnabled(true);
+
                 jPFSenha.setEnabled(false);
                 //Desabilita campos de login e senha se o usuario logado for o usuario a ser alterado
                 if (acesso.getId_usuario() == Integer.parseInt(jTFIDPessoa.getText())) {
@@ -3436,11 +3446,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 habilitaCamposCertificadora();
                 validaCampos.habilitaCampos(jPEndereco);
                 validaCampos.habilitaCampos(jPContato);
+                jTBContato.setEnabled(true);
+                jTBEndereco.setEnabled(true);
             } else if (jRBFornecedor.isSelected()) {
                 //Habilita campos do fornecedor para edição
                 habilitaCamposFornecedor();
                 validaCampos.habilitaCampos(jPEndereco);
                 validaCampos.habilitaCampos(jPContato);
+                jTBContato.setEnabled(true);
+                jTBEndereco.setEnabled(true);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Você não possui permissões para alterar registros de pessoas no sistema");
@@ -3889,6 +3903,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         endereco.setData_alter(data_atual);
         endereco.setTabela(jTBEndereco);
         endereco.setUf(jTFUF.getText());
+        endereco.setDs_cidade(jCBCidade.getSelectedItem().toString());
 
         return endereco;
     }
@@ -4062,7 +4077,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         setcompUsuario();
 
         //Preenche na JTABLE de endereços todos endereços da pessoa
-        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null", "id_endereco", "endereco.descricao", "rua", "numero", "bairro", "cep", "cidade.descricao", "uf"}, endereco.getRetorno());
+        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null", "id_endereco", "endereco.descricao", "rua", "numero", "bairro", "cep","endereco.id_cidade","cidade.descricao", "uf"}, endereco.getRetorno());
 
         //Preenche na JTABLE de contatos todos contatos da pessoa
         Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null", "id_contato", "tipo", "descricao", "numero", "email"}, contato.getRetorno());
@@ -4159,11 +4174,17 @@ public class InterfacePessoa extends javax.swing.JFrame {
     public void setaJtableEnderecoTela(){
         
         //recupera a linha clicada
-        int linha = jTBContato.getSelectedRow();
+        int linha = jTBEndereco.getSelectedRow();
         Integer id_endereco = Integer.parseInt(jTBEndereco.getValueAt(linha, 1).toString());
+        String cidade =  jTBEndereco.getValueAt(linha, 8).toString();
         endereco.setId_endereco(id_endereco);
-        
-       
+        jTFDescEnd.setText(jTBEndereco.getValueAt(linha, 2).toString());
+        jTFRua.setText(jTBEndereco.getValueAt(linha, 3).toString());
+        jTFNumeroEnd.setText(jTBEndereco.getValueAt(linha, 4).toString());
+        jTFBairro.setText(jTBEndereco.getValueAt(linha, 5).toString());
+        jFTCep.setText(jTBEndereco.getValueAt(linha, 6).toString());
+        jCBCidade.setSelectedItem(cidade);
+        jTFUF.setText(jTBEndereco.getValueAt(linha, 9).toString());
     }
 
     public void habilitaCamposUsuario() {

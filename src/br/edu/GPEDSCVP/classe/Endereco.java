@@ -18,6 +18,7 @@ public class Endereco {
     private int id_endereco;
     private int id_pessoa;
     private int id_cidade;
+    private String ds_cidade;
     private String descricao;
     private String cep;
     private String rua;
@@ -137,5 +138,12 @@ public class Endereco {
     public void setUf(String uf) {
         this.uf = uf;
     }
-    
+
+    public String getDs_cidade() {
+        return ds_cidade;
+    }
+
+    public void setDs_cidade(String ds_cidade) {
+        this.ds_cidade = ds_cidade;
+    }
 }

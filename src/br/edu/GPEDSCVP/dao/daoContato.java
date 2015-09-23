@@ -37,7 +37,6 @@ public class daoContato {
     //Método de incluir contato no banco
     public void incluir(Contato contato)throws SQLException
     {
-       
         //Insert de contato
         ultima = new UltimaSequencia();
         int sequencia = (Integer) (ultima.ultimasequencia("CONTATO","ID_CONTATO"));

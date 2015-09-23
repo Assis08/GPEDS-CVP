@@ -177,8 +177,7 @@ public class daoPermissao {
         String consultar;
         
         for (int i = 0; i < totlinha; i++){
-            JOptionPane.showMessageDialog(null, tabela.getValueAt(i, 1));
-            JOptionPane.showMessageDialog(null, tabela.getValueAt(i, 2));
+        
             int id_permissao =  Integer.parseInt((String) tabela.getValueAt(i, 1));
             int id_tela =  Integer.parseInt((String) tabela.getValueAt(i, 2));
            
