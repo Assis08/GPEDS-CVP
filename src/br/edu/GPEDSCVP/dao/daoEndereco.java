@@ -11,7 +11,9 @@ import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.Rotinas;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -80,6 +82,7 @@ public class daoEndereco {
             TabelaEndereco.setValueAt(endereco.getId_cidade(),totlinha,7); 
             TabelaEndereco.setValueAt(endereco.getDs_cidade(),totlinha,8); 
             TabelaEndereco.setValueAt(endereco.getUf(), totlinha,9);
+            TabelaEndereco.setValueAt(0,totlinha,10);
         //se não for a primeira linha, gera o id do endereço referente ao id da ultima linha da Jtable   
         }else{
             for (int i = 0; i < totlinha; i++){
@@ -97,6 +100,7 @@ public class daoEndereco {
                     TabelaEndereco.setValueAt(endereco.getId_cidade(),i,7); 
                     TabelaEndereco.setValueAt(endereco.getDs_cidade(),i,8); 
                     TabelaEndereco.setValueAt(endereco.getUf(), i,9);
+                    TabelaEndereco.setValueAt(0,i,10);
                     break;
                 //Se não existe o endereço na Jtable    
                 }else{
@@ -128,6 +132,7 @@ public class daoEndereco {
                         TabelaEndereco.setValueAt(endereco.getId_cidade(),totlinha,7); 
                         TabelaEndereco.setValueAt(endereco.getDs_cidade(),totlinha,8);  
                         TabelaEndereco.setValueAt(endereco.getUf(), totlinha,9);
+                        TabelaEndereco.setValueAt(0,totlinha,10);
                     }
                 }
             }
@@ -163,7 +168,8 @@ public class daoEndereco {
         }
     }
 
-    public void alterarEndereco (Endereco endereco){
+    public void alterarEndereco (Endereco endereco, ArrayList<Integer> enderecos_deletados){
+        
         String rua = "";
         String descricao = "";
         String numero = "";
@@ -172,10 +178,16 @@ public class daoEndereco {
         Integer cidade;
         String uf = "";
         
+        if(!enderecos_deletados.isEmpty()){
+             JOptionPane.showMessageDialog(null, enderecos_deletados.get(0));
+        }
+       
+      
+        
         DefaultTableModel tabela = (DefaultTableModel) endereco.getTabela().getModel();
         int totlinha = tabela.getRowCount();
         for (int i = 0; i < totlinha; i++){
-
+            //JOptionPane.showMessageDialog(null, enderecos_deletados.get(i));
             Integer id = Integer.parseInt(tabela.getValueAt(i, 1).toString());
             descricao = (String) tabela.getValueAt(i, 2);
             rua = (String) tabela.getValueAt(i, 3);
@@ -183,8 +195,9 @@ public class daoEndereco {
             bairro = (String) tabela.getValueAt(i, 5);
             cep = (String) tabela.getValueAt(i, 6);
             Integer id_cidade = Integer.parseInt(tabela.getValueAt(i, 7).toString());
+            Integer exc = Integer.parseInt(tabela.getValueAt(i, 10).toString());
 
-            //Verifica se já existe o contato
+            //Verifica se já existe o endereco
             String sql = "select * from endereco where id_endereco = "+ id;
             try {
                 conecta_banco.executeSQL(sql);
@@ -204,9 +217,17 @@ public class daoEndereco {
             
                     conecta_banco.atualizarSQL(sql);  
                 }
+                //Se for um registro excluido da Jtable
+                if(exc == 1){
+                    //Exclui do banco
+                    sql = "DELETE FROM ENDERECO WHERE ID_ENDERECO = " + id;
+                    conecta_banco.atualizarSQL(sql);
+                }
                 
             } catch (Exception e) {
                 //Chegou aqui porque o endereco não existe, então inclui
+               
+                
                  sql = "INSERT INTO ENDERECO VALUES ("
                     +id + ","
                     +endereco.getId_pessoa()+","
@@ -221,13 +242,53 @@ public class daoEndereco {
                     conecta_banco.incluirSQL(sql);
             }
         }
+        
+        for(int i =0; i < enderecos_deletados.size(); i++ ){
+            JOptionPane.showMessageDialog(null, enderecos_deletados.get(i));
+        }
+    }
+    
+     //Método para remover um registro da Jtable
+    public void excluirEndereco(JTable jtable) {
+        DefaultTableModel tabela = (DefaultTableModel) jtable.getModel();
+        int totlinha = tabela.getRowCount();
+        Boolean sel = false;
+        Integer id_endereco;
+                
+        int opcao = JOptionPane.showConfirmDialog(null, "Deseja remover as linhas selecionadas? ",
+                "remover",
+                JOptionPane.YES_NO_OPTION);
+        if (opcao == JOptionPane.YES_OPTION) {
+            for (int i = totlinha - 1; i >= 0; i--) { 
+                if (tabela.getValueAt(i, 0) == null) {
+                    sel = false;
+                    break;
+                } else {
+                    Boolean selecionado = (Boolean) tabela.getValueAt(i, 0);
+                    if (selecionado == true) {
+                        sel = true;
+                        id_endereco = Integer.parseInt(tabela.getValueAt(i, 1).toString());
+                        //Deleta registro do banco
+                        String sql = "DELETE FROM ENDERECO WHERE ID_ENDERECO = "+ id_endereco;
+                        conecta_banco.atualizarSQL(sql);
+                        
+                        tabela.removeRow(i);
+                        break;
+                    }
+                }
+            }
+            if (sel == false) {
+                 JOptionPane.showMessageDialog(null, "Não ha nenhum registro selecionado !");
+            }
+        }
+
     }
 
     //consulta endereço pelo codigo da pessoa 
     public void consultacodigo(Endereco endereco){
 
        conecta_banco.executeSQL("select null, endereco.id_endereco, endereco.descricao, rua, numero, bairro, cep,endereco.id_cidade, cidade.descricao,"
-            +" cidade.uf from endereco"
+            +" cidade.uf, false from endereco"
             +" inner join cidade on (cidade.id_cidade = endereco.id_cidade)"
             +" where endereco.id_pessoa = "+endereco.getId_pessoa());
        

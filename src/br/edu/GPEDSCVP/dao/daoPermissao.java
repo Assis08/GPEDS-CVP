@@ -226,7 +226,7 @@ public class daoPermissao {
     public void consultacodigo(Permissao permissao){
 
        conecta_banco.executeSQL("select null,id_usuario, id_permissao, permissao.id_tela, tela.descricao, acesso, inserir, alterar, excluir,"
-               + " consultar from permissao" 
+               + " consultar,false from permissao" 
                + " inner join tela on (tela.id_tela = permissao.id_tela)"
                + " where permissao.id_usuario = "+permissao.getId_usuario());
        

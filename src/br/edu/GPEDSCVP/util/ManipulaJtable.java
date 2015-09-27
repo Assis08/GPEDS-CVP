@@ -5,6 +5,7 @@
  */
 package br.edu.GPEDSCVP.util;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FontMetrics;
@@ -14,6 +15,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -22,13 +24,15 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import javax.swing.text.TableView;
+import javax.swing.text.TableView.TableRow;
 
 /**
  *
  * @author Willys
  */
 public class ManipulaJtable {
-
+  
     public ManipulaJtable() {
     }
 
@@ -98,32 +102,44 @@ public class ManipulaJtable {
     }
 
     //Método para remover um registro da Jtable
-    public void removeItens(JTable jtable) {
+    public void removeItens(JTable jtable, int situacao) {
         DefaultTableModel tabela = (DefaultTableModel) jtable.getModel();
         int totlinha = tabela.getRowCount();
+        int totcolun = tabela.getColumnCount();
         Boolean sel = false;
-
-        int opcao = JOptionPane.showConfirmDialog(null, "Deseja remover as linhas selecionadas? ",
+        
+        int opcao = JOptionPane.showConfirmDialog(null, "Deseja remover os registros selecionados? ",
                 "remover",
                 JOptionPane.YES_NO_OPTION);
         if (opcao == JOptionPane.YES_OPTION) {
-            for (int i = totlinha - 1; i >= 0; i--) {
+            for (int i = totlinha - 1; i >= 0; i--) { 
                 if (tabela.getValueAt(i, 0) == null) {
+                    JOptionPane.showMessageDialog(null, "E nulo");
                     sel = false;
+                    break;
                 } else {
                     Boolean selecionado = (Boolean) tabela.getValueAt(i, 0);
+                    int id_registro = Integer.parseInt(tabela.getValueAt(i, 1).toString());
                     if (selecionado == true) {
-                        sel = true;
-                        tabela.removeRow(i);
+                        if(situacao == Rotinas.ALTERAR){
+                            sel = true;
+                            //seta o valor 1 na coluna excluido da jtable
+                            jtable.setValueAt(1, i, totcolun-1);
+                            jtable.setValueAt(false, i, 0);
+                        }else{
+                            tabela.removeRow(i);    
+                        } 
                     }
                 }
             }
             if (sel == false) {
-                JOptionPane.showMessageDialog(null, "Não ha nenhum registro selecionado !");
+                 JOptionPane.showMessageDialog(null, "Não ha nenhum registro selecionado !");
             }
         }
-
     }
+    
+   
+ 
 
     //Método para ajustar colunas da JTABLE de acordo com o tamanho do dado
 
@@ -214,5 +230,5 @@ public class ManipulaJtable {
             onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
         }
     }
-
+   
 }

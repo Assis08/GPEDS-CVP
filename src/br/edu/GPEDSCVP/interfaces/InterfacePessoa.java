@@ -34,17 +34,23 @@ import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.JFormattedTextField;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.text.DefaultFormatterFactory;
 
 /**
@@ -81,6 +87,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
     int situacao = Rotinas.PADRAO;
     int[] array_cidade;
     int[] array_tela;
+    private static ArrayList<Integer> enderecos_deletados;
+    int[] contatos_deletados;
+    int[] permissoes_deletadas;
     String alter_cpf_cnpj = "";
     String alter_rg = "";
     String alter_login = "";
@@ -93,11 +102,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         initComponents();
 
-       // jTBContato
-        
-        //new TableCellListener(jTBContato, new TableCellEditorAction());
-        
-        
+        //Cria renderer para as Jtable 
+        TableCellRenderer renderer = new EvenOddRenderer();
+        jTBContato.setDefaultRenderer(Object.class, renderer);
+        jTBEndereco.setDefaultRenderer(Object.class, renderer);
+        jTBPermissoes.setDefaultRenderer(Object.class, renderer);
 
         //Instancia de todas as classes
         Jtable = new ManipulaJtable();
@@ -122,6 +131,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         fornecedor = new Fornecedor();
         pessoa = new Pessoa();
         validaacesso = new ValidaAcesso();
+        enderecos_deletados = new ArrayList<>();
         try {
             validaCampos = new ValidaCampos();
         } catch (SQLException ex) {
@@ -608,14 +618,14 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Sel", "ID Contato", "Tipo", "Descrição", "Numero", "Email"
+                "Sel", "ID Contato", "Tipo", "Descrição", "Numero", "Email", "Excluido"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false
+                true, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -740,10 +750,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addGroup(jPContatoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPContatoLayout.createSequentialGroup()
-                        .addComponent(jBTAddContato, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(38, 38, 38)
                         .addComponent(jBTRemoveContato, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBTAddContato, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(33, 33, 33))
         );
 
@@ -830,14 +840,14 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Sel", "ID Endereço", "Descrição", "Rua", "Nº", "Bairro", "CEP", "ID Cidade", "Cidade", "UF"
+                "Sel", "ID Endereço", "Descrição", "Rua", "Nº", "Bairro", "CEP", "ID Cidade", "Cidade", "UF", "Excluido"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, false
+                true, false, false, false, false, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -1076,14 +1086,14 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Sel", "ID Permissao", "ID Tela", "Tela", "Acesso", "Inserir", "Alterar", "Excluir", "Consultar"
+                "Sel", "ID Permissao", "ID Tela", "Tela", "Acesso", "Inserir", "Alterar", "Excluir", "Consultar", "Excluido"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false
+                true, false, false, false, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -2302,7 +2312,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 dao_pessoa.alterar(usuario);
 
                                                 //Inclui endereço
-                                                dao_endereco.alterarEndereco(endereco);
+                                                dao_endereco.alterarEndereco(endereco, enderecos_deletados);
 
                                                 //Inclui permissões
                                                 dao_permissao.alterarPermissao(permissao);
@@ -2434,7 +2444,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 dao_contato.alterarContatos(contato);
 
                                                 //Inclui endereço
-                                                dao_endereco.alterarEndereco(endereco);
+                                                dao_endereco.alterarEndereco(endereco,enderecos_deletados);
 
                                                 //Inclui permissoes
                                                 dao_permissao.alterarPermissao(permissao);
@@ -2519,6 +2529,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
             //Seta mascaras nos campos necessários
             setaMascaras();
+            //inicializa os vetores das Jtable
+            inicializaVetores();
 
             //Carrega conteudo das combobox
             jCBTipoContato.removeAllItems();
@@ -2734,7 +2746,14 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jBTRemoveContatoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveContatoActionPerformed
         if (validaCampos.VerificaJtable(jTBContato) == 1) {
-            Jtable.removeItens(jTBContato);
+            int linha = jTBContato.getSelectedRow();
+            Integer exc = Integer.parseInt(jTBContato.getValueAt(linha, 6).toString());
+            //se não for um item removido
+            if (exc == 0) {
+                Jtable.removeItens(jTBContato, situacao);
+            }else{
+                JOptionPane.showMessageDialog(null, "Item já removido");
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Não possui contatos para remover");
         }
@@ -2750,7 +2769,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jBTRemoveEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveEnderecoActionPerformed
         if (validaCampos.VerificaJtable(jTBEndereco) == 1) {
-            Jtable.removeItens(jTBEndereco);
+            Jtable.removeItens(jTBEndereco, situacao);
         } else {
             JOptionPane.showMessageDialog(null, "Não possui endereços para remover");
         }
@@ -2767,6 +2786,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 //Pega dados da tela de endereco
                 getEndereco();
                 endereco.setId_cidade(cidade.getArray_cidade(jCBCidade.getSelectedIndex() - 1));
+               
                 try {
                     //adiciona dados do endereço na Jtable de endereços
                     dao_endereco.addEndereco(endereco, situacao);
@@ -2800,7 +2820,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jFTCPFCNPJMouseExited
 
     private void jCBCidadeItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBCidadeItemStateChanged
-
+       
     }//GEN-LAST:event_jCBCidadeItemStateChanged
 
     private void jCBCidadeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCBCidadeMouseClicked
@@ -2882,7 +2902,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBCidadePopupMenuWillBecomeVisible
 
     private void jCBCidadePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBCidadePopupMenuWillBecomeInvisible
-        //Verifica se o campo está habilitado
+          //Verifica se o campo está habilitado
         if ((jCBCidade.isEnabled())) {
             if (jCBCidade.getSelectedIndex() == 0) {
                 jTFUF.setText("");
@@ -3005,7 +3025,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jBTRemovePermissaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemovePermissaoActionPerformed
         if (validaCampos.VerificaJtable(jTBPermissoes) == 1) {
-            Jtable.removeItens(jTBPermissoes);
+            Jtable.removeItens(jTBPermissoes, situacao);
         } else {
             JOptionPane.showMessageDialog(null, "Não possui itens para remover");
         }
@@ -3423,7 +3443,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
             //Define a situação como alterar para habilitar os botoes utilizados apenas na inclusão
             situacao = Rotinas.ALTERAR;
             validabotoes.ValidaEstado(jPBotoes, situacao);
-
+            
+            //inicializa os vetores das Jtable
+            inicializaVetores();
+            
             validaCampos.habilitaCampos(jPTipoPessoa);
 
             if (jRBPessoaFisica.isSelected()) {
@@ -3555,8 +3578,16 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jTBContatoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBContatoMouseClicked
          //Verifica se houve 2 cliques do mouse 
         if(jTBContato.isEnabled()){
+            int linha = jTBContato.getSelectedRow();
+            Integer exc = Integer.parseInt(jTBContato.getValueAt(linha, 6).toString());
+            //se foi 2 cliks e não for um item removido
             if (evt.getClickCount() == 2) {
-                setaJtableContatoTela();
+                if(exc == 0){
+                    setaJtableContatoTela();
+                }else{
+                    jCBTipoContato.setSelectedIndex(0);
+                }
+                
             }
         }
        
@@ -3617,8 +3648,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jTBEnderecoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBEnderecoMouseClicked
         //Verifica se houve 2 cliques do mouse 
         if(jTBEndereco.isEnabled()){
+            int linha = jTBEndereco.getSelectedRow();
+            Integer exc = Integer.parseInt(jTBEndereco.getValueAt(linha, 10).toString());
             if (evt.getClickCount() == 2) {
-                setaJtableEnderecoTela();
+                if(exc == 0){
+                    setaJtableEnderecoTela();
+                } 
             }
         }
     }//GEN-LAST:event_jTBEnderecoMouseClicked
@@ -3894,6 +3929,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
         int id_pessoa = Integer.parseInt(jTFIDPessoa.getText());
 
         endereco.setId_pessoa(id_pessoa);
+   
+        
         endereco.setId_cidade(cidade.getId_cidade()); // id de cidade é setado no momento que é selecionado a cidade no combobox
         endereco.setDescricao(jTFDescEnd.getText());
         endereco.setCep(jFTCep.getText());
@@ -3904,7 +3941,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
         endereco.setTabela(jTBEndereco);
         endereco.setUf(jTFUF.getText());
         endereco.setDs_cidade(jCBCidade.getSelectedItem().toString());
-
         return endereco;
     }
 
@@ -4053,6 +4089,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
         //limpa campo depois que setou a mascara. obs: não ira afetar a mascara.
         jFTCep.setValue("");
     }
+    
+    public void inicializaVetores(){
+        enderecos_deletados = new ArrayList<>();
+    }
 
     public void setaUsuarioTela() {
 
@@ -4077,13 +4117,13 @@ public class InterfacePessoa extends javax.swing.JFrame {
         setcompUsuario();
 
         //Preenche na JTABLE de endereços todos endereços da pessoa
-        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null", "id_endereco", "endereco.descricao", "rua", "numero", "bairro", "cep","endereco.id_cidade","cidade.descricao", "uf"}, endereco.getRetorno());
+        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null", "id_endereco", "endereco.descricao", "rua", "numero", "bairro", "cep","endereco.id_cidade","cidade.descricao", "uf", "false"}, endereco.getRetorno());
 
         //Preenche na JTABLE de contatos todos contatos da pessoa
-        Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null", "id_contato", "tipo", "descricao", "numero", "email"}, contato.getRetorno());
+        Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null", "id_contato", "tipo", "descricao", "numero", "email","false"}, contato.getRetorno());
 
         //Preenche na JTABLE de contatos todos contatos da pessoa
-        Jtable.PreencherJtableGenerico(jTBPermissoes, new String[]{"null", "id_permissao", "id_tela", "tela.descricao", "acesso", "inserir", "alterar", "excluir", "consultar"}, permissao.getRetorno());
+        Jtable.PreencherJtableGenerico(jTBPermissoes, new String[]{"null", "id_permissao", "id_tela", "tela.descricao", "acesso", "inserir", "alterar", "excluir", "consultar","false"}, permissao.getRetorno());
 
     }
 
@@ -4366,5 +4406,46 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     }
     */
+    
+    
+    
+  class EvenOddRenderer implements TableCellRenderer {
+
+  public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+ 
+  public Component getTableCellRendererComponent(JTable table, Object value,
+      boolean isSelected, boolean hasFocus, int row, int column) {
+    Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
+        table, value, isSelected, hasFocus, row, column);
+    ((JLabel) renderer).setOpaque(true);
+    Color foreground, background;
+     int totcolun = table.getColumnCount();
+   
+     Integer exc = 0;
+
+ 
+         exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
+    
+     
+     if(isSelected){
+         if(exc == 1){
+            background = Color.RED;
+            renderer.setBackground(background);
+         }
+     }
+   
+     if(!isSelected){
+        if(exc == 1){
+            background = Color.RED;
+            renderer.setBackground(background);
+        }else{
+            background = Color.WHITE;
+            renderer.setBackground(background);
+        }
+     }
+    return renderer;
+  }
+}
+
     
 }

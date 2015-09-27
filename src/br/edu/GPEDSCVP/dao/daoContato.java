@@ -74,6 +74,7 @@ public class daoContato {
             TabelaContato.setValueAt(contato.getDescricao(),totlinha,3);
             TabelaContato.setValueAt(contato.getFone(),totlinha,4);
             TabelaContato.setValueAt(contato.getEmail(),totlinha,5);
+            TabelaContato.setValueAt(0,totlinha,6);
         //se não for a primeira linha, gera o id do contato referente ao id da ultima linha da Jtable   
         }else{
             for (int i = 0; i < totlinha; i++){
@@ -91,6 +92,7 @@ public class daoContato {
                     TabelaContato.setValueAt(contato.getDescricao(),i,3);
                     TabelaContato.setValueAt(contato.getFone(),i,4);
                     TabelaContato.setValueAt(contato.getEmail(),i,5);
+                    TabelaContato.setValueAt(0,i,6);
                     break;
                 //Se não existe o contato na Jtable    
                 }else{
@@ -122,13 +124,13 @@ public class daoContato {
                         TabelaContato.setValueAt(contato.getDescricao(),totlinha,3);
                         TabelaContato.setValueAt(contato.getFone(),totlinha,4);
                         TabelaContato.setValueAt(contato.getEmail(),totlinha,5);
+                        TabelaContato.setValueAt(0,totlinha,6);
                     }
                 }
             }
         }
     }
  
-   
     public void gravarContatos (Contato contato){
         String numero = "";
         String email = "";
@@ -194,6 +196,7 @@ public class daoContato {
             }else{
                 email = "";
             }
+            Integer exc = Integer.parseInt(tabela.getValueAt(i, 6).toString());
             
             //Verifica se já existe o contato
             String sql = "select * from contato where id_contato = "+ id;
@@ -214,9 +217,18 @@ public class daoContato {
                     conecta_banco.atualizarSQL(sql);  
                 }
                 
+                
+                 //Se for um registro excluido da Jtable
+                if(exc == 1){
+                    //Exclui do banco
+                    sql = "DELETE FROM CONTATO WHERE ID_CONTATO = " + id;
+                    conecta_banco.atualizarSQL(sql);
+                }
+                
             } catch (Exception e) {
                 //Chegou aqui porque o contato não existe, então inclui
-                 sql = "INSERT INTO CONTATO VALUES ("
+                if(exc == 0){
+                      sql = "INSERT INTO CONTATO VALUES ("
                     +id + ","
                     +contato.getId_pessoa()+",'"
                     +numero +"','"
@@ -226,6 +238,7 @@ public class daoContato {
                     +email +"')";
             
                     conecta_banco.incluirSQL(sql);
+                }
             }
         }
      }
@@ -234,7 +247,7 @@ public class daoContato {
     public void consultacodigo(Contato contato){
 
        conecta_banco.executeSQL("select null,contato.id_pessoa,contato.id_contato,contato.tipo, contato.descricao,"
-            + " contato.numero, contato.email from contato"
+            + " contato.numero, contato.email, false from contato"
             + " where contato.id_pessoa = "+contato.getId_pessoa());
        
             contato.setRetorno(conecta_banco.resultset);
