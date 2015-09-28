@@ -105,8 +105,16 @@ public class daoContato {
                         if(situacao == Rotinas.ALTERAR){
                            //Pega o ultimo ID do banco de dados
                            sequencia = ultima.ultimasequencia("CONTATO","ID_CONTATO");
-                           //seta o ultimo id na nova linha
-                           TabelaContato.setValueAt(sequencia,totlinha, 1); 
+                           
+                           if(sequencia > Integer.parseInt(TabelaContato.getValueAt(totlinha-1, 1).toString())){
+                                //seta o ultimo id na nova linha
+                                TabelaContato.setValueAt(sequencia,totlinha, 1); 
+                           }else{
+                                //armazena o ultimo id da Jtable
+                                sequencia = Integer.parseInt(TabelaContato.getValueAt(totlinha-1, 1).toString());
+                                //seta o ultimo id na nova linha
+                                TabelaContato.setValueAt(sequencia+1,totlinha, 1); 
+                           }
                         //Se não estiver em modo de alteração   
                         }else{
                             //armazena o ultimo id da Jtable
@@ -248,7 +256,7 @@ public class daoContato {
 
        conecta_banco.executeSQL("select null,contato.id_pessoa,contato.id_contato,contato.tipo, contato.descricao,"
             + " contato.numero, contato.email, false from contato"
-            + " where contato.id_pessoa = "+contato.getId_pessoa());
+            + " where contato.id_pessoa = "+contato.getId_pessoa()+" order by id_contato asc");
        
             contato.setRetorno(conecta_banco.resultset);
     }

@@ -87,13 +87,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
     int situacao = Rotinas.PADRAO;
     int[] array_cidade;
     int[] array_tela;
-    private static ArrayList<Integer> enderecos_deletados;
-    int[] contatos_deletados;
-    int[] permissoes_deletadas;
     String alter_cpf_cnpj = "";
     String alter_rg = "";
     String alter_login = "";
     String numero_contato;
+    boolean valida_permissoes = true;
 
     /**
      * Creates new form InterfacePessoa
@@ -131,7 +129,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
         fornecedor = new Fornecedor();
         pessoa = new Pessoa();
         validaacesso = new ValidaAcesso();
-        enderecos_deletados = new ArrayList<>();
         try {
             validaCampos = new ValidaCampos();
         } catch (SQLException ex) {
@@ -1104,6 +1101,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTBPermissoes.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTBPermissoesMouseClicked(evt);
+            }
+        });
         jScrollPane3.setViewportView(jTBPermissoes);
         if (jTBPermissoes.getColumnModel().getColumnCount() > 0) {
             jTBPermissoes.getColumnModel().getColumn(1).setMinWidth(1);
@@ -1215,8 +1217,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 757, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBTAddPermissao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBTRemovePermissao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jBTRemovePermissao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBTAddPermissao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel4Layout.createSequentialGroup()
@@ -1515,7 +1517,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTBPessoas, javax.swing.GroupLayout.PREFERRED_SIZE, 676, Short.MAX_VALUE)
+            .addComponent(jTBPessoas, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(900, 714));
@@ -2312,7 +2314,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 dao_pessoa.alterar(usuario);
 
                                                 //Inclui endereço
-                                                dao_endereco.alterarEndereco(endereco, enderecos_deletados);
+                                                dao_endereco.alterarEndereco(endereco);
 
                                                 //Inclui permissões
                                                 dao_permissao.alterarPermissao(permissao);
@@ -2444,7 +2446,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 dao_contato.alterarContatos(contato);
 
                                                 //Inclui endereço
-                                                dao_endereco.alterarEndereco(endereco,enderecos_deletados);
+                                                dao_endereco.alterarEndereco(endereco);
 
                                                 //Inclui permissoes
                                                 dao_permissao.alterarPermissao(permissao);
@@ -2529,8 +2531,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
             //Seta mascaras nos campos necessários
             setaMascaras();
-            //inicializa os vetores das Jtable
-            inicializaVetores();
 
             //Carrega conteudo das combobox
             jCBTipoContato.removeAllItems();
@@ -2769,7 +2769,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jBTRemoveEnderecoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveEnderecoActionPerformed
         if (validaCampos.VerificaJtable(jTBEndereco) == 1) {
-            Jtable.removeItens(jTBEndereco, situacao);
+            int linha = jTBEndereco.getSelectedRow();
+            Integer exc = Integer.parseInt(jTBEndereco.getValueAt(linha, 10).toString());
+            //se não for um item removido
+            if (exc == 0) {
+                Jtable.removeItens(jTBEndereco, situacao);
+            }else{
+                JOptionPane.showMessageDialog(null, "Item já removido");
+            }
+            
         } else {
             JOptionPane.showMessageDialog(null, "Não possui endereços para remover");
         }
@@ -2987,8 +2995,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jRBMascStateChanged
 
     private void jBTAddPermissaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddPermissaoActionPerformed
-        permissao = new Permissao();
-
+     
         //Se a opção gerente não estiver selecionada
         if (!jCBGerente.isSelected()) {
             if (jCBTela.getSelectedIndex() == 0) {
@@ -2996,11 +3003,14 @@ public class InterfacePessoa extends javax.swing.JFrame {
             } else {
                 //Pega dados da tela de endereco
                 getPermissoes();
+
+                permissao.setId_tela(tela.getArray_tela(jCBTela.getSelectedIndex() - 1));
                 try {
-                    //verifica se a permissão ja foi adicionada
-                    if (Jtable.evitarDuplicacao(jTBPermissoes) == false) {
+                    JOptionPane.showMessageDialog(null, jCBTela.getSelectedItem().toString());
+                    //verifica se a permissão ja foi adicionada pra determinada tela
+                    if (Jtable.evitarDuplicacao(jTBPermissoes, jCBTela.getSelectedItem().toString()) == false) {
                         //adiciona dados do endereço na Jtable de endereços
-                        dao_permissao.addPermissao(permissao);
+                        dao_permissao.addPermissao(permissao,situacao);
                         //limpa campos de permissoes
                         validaCampos.LimparCampos(jPPermissoes);
 
@@ -3013,6 +3023,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                     } else {
                         JOptionPane.showMessageDialog(null, "Permissão já adicionada!");
                     }
+                        
+                    permissao = new Permissao();
 
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Falha ao adicionar permissão");
@@ -3025,7 +3037,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
     private void jBTRemovePermissaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemovePermissaoActionPerformed
         if (validaCampos.VerificaJtable(jTBPermissoes) == 1) {
-            Jtable.removeItens(jTBPermissoes, situacao);
+            int linha = jTBPermissoes.getSelectedRow();
+            Integer exc = Integer.parseInt(jTBPermissoes.getValueAt(linha, 9).toString());
+            //se não for um item removido
+            if (exc == 0) {
+                Jtable.removeItens(jTBPermissoes, situacao);
+            }else{
+                JOptionPane.showMessageDialog(null, "Item já removido");
+            }
+            
         } else {
             JOptionPane.showMessageDialog(null, "Não possui itens para remover");
         }
@@ -3356,6 +3376,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             validaCampos.desabilitaCampos(jPPermissoes);
             jTBContato.setEnabled(false);
             jTBEndereco.setEnabled(false);
+            jTBPermissoes.setEnabled(false);
 
             //Carrega conteudo das combobox
             jCBTipoContato.removeAllItems();
@@ -3444,9 +3465,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
             situacao = Rotinas.ALTERAR;
             validabotoes.ValidaEstado(jPBotoes, situacao);
             
-            //inicializa os vetores das Jtable
-            inicializaVetores();
-            
             validaCampos.habilitaCampos(jPTipoPessoa);
 
             if (jRBPessoaFisica.isSelected()) {
@@ -3457,6 +3475,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 validaCampos.habilitaCampos(jPContato);
                 jTBContato.setEnabled(true);
                 jTBEndereco.setEnabled(true);
+                jTBPermissoes.setEnabled(true);
 
                 jPFSenha.setEnabled(false);
                 //Desabilita campos de login e senha se o usuario logado for o usuario a ser alterado
@@ -3657,6 +3676,19 @@ public class InterfacePessoa extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jTBEnderecoMouseClicked
+
+    private void jTBPermissoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBPermissoesMouseClicked
+        //Verifica se houve 2 cliques do mouse 
+        if(jTBPermissoes.isEnabled()){
+            int linha = jTBPermissoes.getSelectedRow();
+            Integer exc = Integer.parseInt(jTBPermissoes.getValueAt(linha, 9).toString());
+            if (evt.getClickCount() == 2) {
+                if(exc == 0){
+                    setaJtablePermissoesTela();
+                } 
+            }
+        }
+    }//GEN-LAST:event_jTBPermissoesMouseClicked
 
     /**
      * @param args the command line arguments
@@ -3951,9 +3983,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         permissao.setId_usuario(id_pessoa);
         permissao.setId_tela(tela.getId_tela());
+        permissao.setNome_tela(jCBTela.getSelectedItem().toString());
         permissao.setData_alter(data_atual);
         permissao.setTabela(jTBPermissoes);
-        permissao.setNome_tela(tela.getDescricao());
+       // permissao.setNome_tela(tela.getDescricao());
         permissao.setAcesso("N");
 
         if (jCBAlterar.isSelected()) {
@@ -3979,6 +4012,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
             permissao.setAcesso("S");
         } else {
             permissao.setInserir("N");
+        }
+        if(jCBGerente.isSelected()){
+            permissao.setIn_gerente(1);
+        }else{
+            permissao.setIn_gerente(0);
         }
         return permissao;
     }
@@ -4090,10 +4128,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jFTCep.setValue("");
     }
     
-    public void inicializaVetores(){
-        enderecos_deletados = new ArrayList<>();
-    }
-
     public void setaUsuarioTela() {
 
         //recupera a linha clicada
@@ -4124,7 +4158,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         //Preenche na JTABLE de contatos todos contatos da pessoa
         Jtable.PreencherJtableGenerico(jTBPermissoes, new String[]{"null", "id_permissao", "id_tela", "tela.descricao", "acesso", "inserir", "alterar", "excluir", "consultar","false"}, permissao.getRetorno());
-
     }
 
     public void setaCertificadoraTela() {
@@ -4225,6 +4258,35 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jFTCep.setText(jTBEndereco.getValueAt(linha, 6).toString());
         jCBCidade.setSelectedItem(cidade);
         jTFUF.setText(jTBEndereco.getValueAt(linha, 9).toString());
+    }
+    
+     public void setaJtablePermissoesTela(){
+        //recupera a linha clicada
+        int linha = jTBPermissoes.getSelectedRow();
+        Integer id_permissao = Integer.parseInt(jTBPermissoes.getValueAt(linha, 1).toString());
+        String tela =  jTBPermissoes.getValueAt(linha, 3).toString();
+        permissao.setId_permissao(id_permissao);
+        if(jTBPermissoes.getValueAt(linha, 5).equals("Sim")){
+            jCBInserir.setSelected(true);
+        }else{
+            jCBInserir.setSelected(false);
+        }
+        if(jTBPermissoes.getValueAt(linha, 6).equals("Sim")){
+            jCBAlterar.setSelected(true);
+        }else{
+            jCBAlterar.setSelected(false);
+        }
+        if(jTBPermissoes.getValueAt(linha, 7).equals("Sim")){
+            jCBExcluir.setSelected(true);
+        }else{
+            jCBExcluir.setSelected(false);
+        }
+        if(jTBPermissoes.getValueAt(linha, 8).equals("Sim")){
+            jCBConsultar.setSelected(true);
+        }else{
+            jCBConsultar.setSelected(false);
+        }
+        jCBTela.setSelectedItem(tela);
     }
 
     public void habilitaCamposUsuario() {

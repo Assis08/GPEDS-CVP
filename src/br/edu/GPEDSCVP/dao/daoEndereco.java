@@ -63,6 +63,7 @@ public class daoEndereco {
     public void addEndereco(Endereco endereco , int situacao ) throws SQLException{
         DefaultTableModel TabelaEndereco = (DefaultTableModel)endereco.getTabela().getModel();
         ultima = new UltimaSequencia();
+        int cont_ult_id = 0; 
         
         int sequencia;
         int totlinha = endereco.getTabela().getRowCount();
@@ -113,8 +114,17 @@ public class daoEndereco {
                         if(situacao == Rotinas.ALTERAR){
                            //Pega o ultimo ID do banco de dados
                            sequencia = ultima.ultimasequencia("ENDERECO","ID_ENDERECO");
-                           //seta o ultimo id na nova linha
-                           TabelaEndereco.setValueAt(sequencia,totlinha, 1); 
+                           //Verifica se o ultimo id gerado é diferente ao id do ultimo registro da jtable
+                           if(sequencia > Integer.parseInt(TabelaEndereco.getValueAt(totlinha-1, 1).toString())){
+                                //seta o ultimo id na nova linha
+                                TabelaEndereco.setValueAt(sequencia,totlinha, 1); 
+                           }else{
+                                //armazena o ultimo id da Jtable
+                                sequencia = Integer.parseInt(TabelaEndereco.getValueAt(totlinha-1, 1).toString());
+                                //seta o ultimo id na nova linha
+                                TabelaEndereco.setValueAt(sequencia+1,totlinha, 1); 
+                           }
+                          
                         //Se não estiver em modo de alteração   
                         }else{
                             //armazena o ultimo id da Jtable
@@ -168,7 +178,7 @@ public class daoEndereco {
         }
     }
 
-    public void alterarEndereco (Endereco endereco, ArrayList<Integer> enderecos_deletados){
+    public void alterarEndereco (Endereco endereco){
         
         String rua = "";
         String descricao = "";
@@ -178,16 +188,10 @@ public class daoEndereco {
         Integer cidade;
         String uf = "";
         
-        if(!enderecos_deletados.isEmpty()){
-             JOptionPane.showMessageDialog(null, enderecos_deletados.get(0));
-        }
-       
-      
-        
         DefaultTableModel tabela = (DefaultTableModel) endereco.getTabela().getModel();
         int totlinha = tabela.getRowCount();
         for (int i = 0; i < totlinha; i++){
-            //JOptionPane.showMessageDialog(null, enderecos_deletados.get(i));
+           
             Integer id = Integer.parseInt(tabela.getValueAt(i, 1).toString());
             descricao = (String) tabela.getValueAt(i, 2);
             rua = (String) tabela.getValueAt(i, 3);
@@ -227,7 +231,6 @@ public class daoEndereco {
             } catch (Exception e) {
                 //Chegou aqui porque o endereco não existe, então inclui
                
-                
                  sql = "INSERT INTO ENDERECO VALUES ("
                     +id + ","
                     +endereco.getId_pessoa()+","
@@ -242,10 +245,7 @@ public class daoEndereco {
                     conecta_banco.incluirSQL(sql);
             }
         }
-        
-        for(int i =0; i < enderecos_deletados.size(); i++ ){
-            JOptionPane.showMessageDialog(null, enderecos_deletados.get(i));
-        }
+
     }
     
      //Método para remover um registro da Jtable
@@ -290,7 +290,7 @@ public class daoEndereco {
        conecta_banco.executeSQL("select null, endereco.id_endereco, endereco.descricao, rua, numero, bairro, cep,endereco.id_cidade, cidade.descricao,"
             +" cidade.uf, false from endereco"
             +" inner join cidade on (cidade.id_cidade = endereco.id_cidade)"
-            +" where endereco.id_pessoa = "+endereco.getId_pessoa());
+            +" where endereco.id_pessoa = "+endereco.getId_pessoa()+" order by id_endereco asc");
        
             endereco.setRetorno(conecta_banco.resultset);
     }

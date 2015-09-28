@@ -193,26 +193,22 @@ public class ManipulaJtable {
         ttabela.setIntercellSpacing(new Dimension(2, 2));
     }
     
-    public boolean evitarDuplicacao(JTable tabela){
+    public boolean evitarDuplicacao(JTable tabela, String valor){
         
         DefaultTableModel TabelaPermissao = (DefaultTableModel)tabela.getModel();
+      
+        int tot_row = TabelaPermissao.getRowCount();
+        int tot_col = TabelaPermissao.getColumnCount();
         
-        int row = TabelaPermissao.getRowCount();
-        int col = TabelaPermissao.getColumnCount();
-        
-        Object[][] dados = new Object[row][1];
-        String ValorInsirido=null;
-        for (int i = 0; i < row; i++) {
-            dados[i][0] = TabelaPermissao.getValueAt(i,0);
-            if(dados[i][0] == ValorInsirido){
-                //valor duplicado
-                return true;
-            }else{
-                //não duplicado
-                return false;
+        for(int i_row = 0; i_row < tot_row; i_row++){
+            for(int i_colun = 1; i_colun< tot_col; i_colun++){
+                if(TabelaPermissao.getValueAt(i_row, i_colun).toString().equals(valor)){
+                    //valor duplicado
+                    return true;
+                }
             }
         }
-         return false;
+        return false;
     }
     
     
