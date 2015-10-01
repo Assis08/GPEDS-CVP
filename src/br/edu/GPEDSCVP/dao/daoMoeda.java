@@ -10,6 +10,7 @@ import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import javax.swing.JOptionPane;
 
 /**
@@ -37,7 +38,7 @@ public class daoMoeda {
     //Método de incluir contato no banco
     public void incluir(Moeda moeda)throws SQLException
     {
-        //Insert de contato
+        //Insert de moeda
         ultima = new UltimaSequencia();
         int sequencia = (Integer) (ultima.ultimasequencia("MOEDA","ID_MOEDA"));
         String sql = "INSERT INTO MOEDA VALUES ("
@@ -48,5 +49,46 @@ public class daoMoeda {
 
                 conecta_banco.incluirSQL(sql);
     }
+    
+     //Método de incluir contato no banco
+    public void excluir(Moeda moeda)throws SQLIntegrityConstraintViolationException
+    {
+        //excluir de moeda
+        String sql = "DELETE FROM MOEDA WHERE ID_MOEDA = "+moeda.getId_moeda();
+
+        try {
+            conecta_banco.atualizarSQL(sql);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao excluir moeda");
+        }
+            
+       
+        
+    }
+    
+     public void consultaGeral(Moeda moeda){
+        
+        conecta_banco.executeSQL("select * from moeda");
+
+        moeda.setRetorno(conecta_banco.resultset);
+      
+    }
+     
+    public void retornardadosMoeda(Moeda moeda) {
+            
+        conecta_banco.executeSQL("select * from moeda where id_moeda = "+moeda.getId_moeda());
+       
+        try {        
+            conecta_banco.resultset.first();
+            
+            moeda.setId_moeda(conecta_banco.resultset.getInt("id_moeda"));
+            moeda.setDecricao(conecta_banco.resultset.getString("descricao"));
+            moeda.setUnidade(conecta_banco.resultset.getString("unidade"));
+          
+            
+        } catch (SQLException ex) {
+           JOptionPane.showMessageDialog(null, "Falha ao retornar dados da moeda");
+        }
+     } 
     
 }

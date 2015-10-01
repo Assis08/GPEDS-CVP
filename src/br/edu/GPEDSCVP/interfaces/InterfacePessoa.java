@@ -13,8 +13,6 @@ import br.edu.GPEDSCVP.classe.Endereco;
 import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Pessoa;
-import br.edu.GPEDSCVP.classe.PessoaFisica;
-import br.edu.GPEDSCVP.classe.PessoaJuridica;
 import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.classe.Usuario;
 import br.edu.GPEDSCVP.dao.daoAcesso;
@@ -30,23 +28,16 @@ import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.Mensagens;
 import br.edu.GPEDSCVP.util.ManipulaJtable;
 import br.edu.GPEDSCVP.util.Rotinas;
-import br.edu.GPEDSCVP.util.TableCellListener;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -102,7 +93,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         initComponents();
 
-        //Cria renderer para as Jtable 
+        //Cria renderer para as Jtable  
         TableCellRenderer renderer = new EvenOddRenderer();
         jTBContato.setDefaultRenderer(Object.class, renderer);
         jTBEndereco.setDefaultRenderer(Object.class, renderer);
