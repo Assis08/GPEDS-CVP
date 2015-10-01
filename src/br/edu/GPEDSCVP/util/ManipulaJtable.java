@@ -70,9 +70,9 @@ public class ManipulaJtable {
                             row[i] = "Sim";
                         }else  if(resultSet.getString(campos[i]).equals("N")){
                             row[i] = "Não";
-                        }else if (resultSet.getString(campos[i]).equals("F")){
+                        }else if ((resultSet.getString(campos[i]).equals("F")) && (tabela.getName().equals("Contato")) ){
                             row[i] = "Fone";
-                        }else if (resultSet.getString(campos[i]).equals("E")){
+                        }else if ((resultSet.getString(campos[i]).equals("E")) && (tabela.getName().equals("Contato")) ){
                             row[i] = "Email";
                         }else{
                              row[i] = resultSet.getString(campos[i]);
@@ -101,42 +101,40 @@ public class ManipulaJtable {
         }
     }
 
-    //Método para remover um registro da Jtable
+     //Método para remover um registro da Jtable
     public void removeItens(JTable jtable, int situacao) {
         DefaultTableModel tabela = (DefaultTableModel) jtable.getModel();
         int totlinha = tabela.getRowCount();
         int totcolun = tabela.getColumnCount();
         Boolean sel = false;
+        Boolean achou = false;
         
         int opcao = JOptionPane.showConfirmDialog(null, "Deseja remover os registros selecionados? ",
                 "remover",
                 JOptionPane.YES_NO_OPTION);
         if (opcao == JOptionPane.YES_OPTION) {
-            for (int i = totlinha - 1; i >= 0; i--) { 
-                if (tabela.getValueAt(i, 0) == null) {
-                    JOptionPane.showMessageDialog(null, "E nulo");
-                    sel = false;
-                    break;
-                } else {
-                    Boolean selecionado = (Boolean) tabela.getValueAt(i, 0);
-                    int id_registro = Integer.parseInt(tabela.getValueAt(i, 1).toString());
-                    if (selecionado == true) {
-                        if(situacao == Rotinas.ALTERAR){
-                            sel = true;
-                            //seta o valor 1 na coluna excluido da jtable
-                            jtable.setValueAt(1, i, totcolun-1);
-                            jtable.setValueAt(false, i, 0);
-                        }else{
-                            tabela.removeRow(i);    
-                        } 
-                    }
+        //Percorre linhas da jtable
+        for(int i =0; i < totlinha; i++){
+            sel = (Boolean) tabela.getValueAt(i, 0);
+            //Se a linha estiver selecionada
+            if(sel != null){
+                //ativa flag que achou uma linha selecionada
+                achou = true;
+                if(situacao == Rotinas.ALTERAR){
+                    //seta o valor 1 na coluna excluido da jtable
+                    jtable.setValueAt(1, i, totcolun-1);
+                    jtable.setValueAt(false, i, 0);
+                }else{
+                    tabela.removeRow(i);
                 }
             }
-            if (sel == false) {
-                 JOptionPane.showMessageDialog(null, "Não ha nenhum registro selecionado !");
-            }
+        }
+        if(achou == false){
+            JOptionPane.showMessageDialog(null, "Nehuma linha selecionada!");
+        }
         }
     }
+    
     
    
  

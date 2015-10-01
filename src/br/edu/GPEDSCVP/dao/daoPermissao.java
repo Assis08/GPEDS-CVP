@@ -107,7 +107,7 @@ public class daoPermissao {
             for (int i = 0; i < totlinha; i++){
                 
                 Integer id_existente = Integer.parseInt(TabelaPermissao.getValueAt(i, 1).toString()); 
-           
+                
                 //Se for um contato ja existente ja Jtable
                 if(permissao.getId_permissao()== id_existente){
                     //Seta os novos valores no endereço na Jtable
@@ -327,12 +327,7 @@ public class daoPermissao {
                     
                     conecta_banco.atualizarSQL(sql); 
                 }
-                //Se for um registro excluido da Jtable
-                if(exc == 1){
-                    //Exclui o registro
-                    sql = "DELETE FROM PERMISSAO WHERE ID_PERMISSAO = " + id_permissao;
-                    conecta_banco.atualizarSQL(sql);
-                }
+              
             } catch (Exception e) {
                 //Chegou aqui porque o endereco não existe, então inclui
                 sql = "INSERT INTO PERMISSAO VALUES ("
@@ -348,6 +343,13 @@ public class daoPermissao {
 
                 conecta_banco.incluirSQL(sql);
             } 
+            
+            //Se for um registro excluido da Jtable
+              if(exc == 1){
+                  //Exclui o registro
+                  sql = "DELETE FROM PERMISSAO WHERE ID_PERMISSAO = " + id_permissao;
+                  conecta_banco.atualizarSQL(sql);
+              }
         }
      }
      
@@ -363,15 +365,15 @@ public class daoPermissao {
     }
     
     public void retornaDadosPermissao(Acesso acesso, Permissao permissao){
-
+    
         conecta_banco.executeSQL("select * from permissao where id_usuario = "+ acesso.getId_usuario()+" and id_tela = "+ acesso.getId_tela());
         
         try {        
- 
+            
             conecta_banco.resultset.first();
             
             permissao.setId_usuario(conecta_banco.resultset.getInt("id_usuario"));
-            permissao.setId_permissao(conecta_banco.resultset.getInt("id_permissao"));
+           // permissao.setId_permissao(conecta_banco.resultset.getInt("id_permissao"));
             permissao.setId_tela(conecta_banco.resultset.getInt("id_tela"));
             permissao.setAcesso(conecta_banco.resultset.getString("acesso"));
             permissao.setInserir(conecta_banco.resultset.getString("inserir"));
@@ -381,7 +383,7 @@ public class daoPermissao {
             permissao.setData_alter(conecta_banco.resultset.getDate("data_alter"));
             
         } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao retornar dados das permissões de acesso");
+            
         }
     }
 }

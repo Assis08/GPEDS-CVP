@@ -225,14 +225,6 @@ public class daoContato {
                     conecta_banco.atualizarSQL(sql);  
                 }
                 
-                
-                 //Se for um registro excluido da Jtable
-                if(exc == 1){
-                    //Exclui do banco
-                    sql = "DELETE FROM CONTATO WHERE ID_CONTATO = " + id;
-                    conecta_banco.atualizarSQL(sql);
-                }
-                
             } catch (Exception e) {
                 //Chegou aqui porque o contato não existe, então inclui
                 if(exc == 0){
@@ -247,6 +239,12 @@ public class daoContato {
             
                     conecta_banco.incluirSQL(sql);
                 }
+            }
+            //Se for um registro excluido da Jtable
+            if(exc == 1){
+                //Exclui do banco
+                sql = "DELETE FROM CONTATO WHERE ID_CONTATO = " + id;
+                conecta_banco.atualizarSQL(sql);
             }
         }
      }

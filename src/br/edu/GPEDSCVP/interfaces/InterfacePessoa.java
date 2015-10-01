@@ -17,6 +17,7 @@ import br.edu.GPEDSCVP.classe.PessoaFisica;
 import br.edu.GPEDSCVP.classe.PessoaJuridica;
 import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.classe.Usuario;
+import br.edu.GPEDSCVP.dao.daoAcesso;
 import br.edu.GPEDSCVP.dao.daoCidade;
 import br.edu.GPEDSCVP.dao.daoContato;
 import br.edu.GPEDSCVP.dao.daoEndereco;
@@ -69,6 +70,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     daoCidade dao_cidade;
     daoEndereco dao_endereco;
     daoPermissao dao_permissao;
+    daoAcesso dao_acesso;
     daoTela dao_tela;
     Certificadora certificadora;
     Fornecedor fornecedor;
@@ -117,6 +119,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         dao_cidade = new daoCidade();
         dao_endereco = new daoEndereco();
         dao_permissao = new daoPermissao();
+        dao_acesso = new daoAcesso();
         dao_tela = new daoTela();
         contato = new Contato();
         endereco = new Endereco();
@@ -543,7 +546,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_5122_pencil_48.png")); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\32x32\\document-pencil-icon (Custom).png")); // NOI18N
         jButton2.setText("Alterar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -633,6 +636,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTBContato.setName("Contato"); // NOI18N
         jTBContato.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBContatoMouseClicked(evt);
@@ -642,6 +646,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
         if (jTBContato.getColumnModel().getColumnCount() > 0) {
             jTBContato.getColumnModel().getColumn(1).setMinWidth(1);
             jTBContato.getColumnModel().getColumn(2).setMinWidth(1);
+            jTBContato.getColumnModel().getColumn(6).setMinWidth(0);
+            jTBContato.getColumnModel().getColumn(6).setPreferredWidth(0);
+            jTBContato.getColumnModel().getColumn(6).setMaxWidth(0);
         }
 
         jLabel8.setText("Tipo:");
@@ -855,6 +862,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTBEndereco.setName("Endereco"); // NOI18N
         jTBEndereco.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBEnderecoMouseClicked(evt);
@@ -1101,6 +1109,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTBPermissoes.setName("Permissao"); // NOI18N
         jTBPermissoes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBPermissoesMouseClicked(evt);
@@ -1448,6 +1457,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTBDadosPessoas.setName("Pessoas"); // NOI18N
         jTBDadosPessoas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBDadosPessoasMouseClicked(evt);
@@ -1502,9 +1512,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
                     .addComponent(jBTBuscar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel30)
-                .addGap(7, 7, 7)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 551, Short.MAX_VALUE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 541, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21))
         );
 
         jTBPessoas.addTab("Consulta", jPanel2);
@@ -1517,7 +1527,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTBPessoas, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+            .addComponent(jTBPessoas, javax.swing.GroupLayout.PREFERRED_SIZE, 676, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(900, 714));
@@ -2262,6 +2272,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                     dao_pessoa.alterar(usuario);
                                                     //altera permissão
                                                     dao_permissao.alterarPermissao(permissao);
+                                                    
+                                                    //atualiza dados do usuario logado
+                                                    dao_acesso.retornaUsuarioLogado(acesso);
 
                                                     JOptionPane.showMessageDialog(null, "Alterado com Sucesso");
 
@@ -2308,16 +2321,19 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                     jTBPAdicionais.setSelectedIndex(1);
                                                 }
                                             } else {
-                                                    //Salva Pessoa com endereço 
+                                                //Salva Pessoa com endereço 
 
-                                                //Inclui pessoa fisica
+                                                //altera pessoa fisica
                                                 dao_pessoa.alterar(usuario);
 
-                                                //Inclui endereço
+                                                //altera endereço
                                                 dao_endereco.alterarEndereco(endereco);
 
-                                                //Inclui permissões
+                                                //altera permissões
                                                 dao_permissao.alterarPermissao(permissao);
+                                                
+                                                //atualiza dados do usuario logado
+                                                dao_acesso.retornaUsuarioLogado(acesso);
 
                                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
@@ -2380,13 +2396,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 if (retorno_mensagem == 0) {
                                                     //Salva Pessoa sem endereço 
 
-                                                    //Inclui pessoa fisica
+                                                    //altera pessoa fisica
                                                     dao_pessoa.alterar(usuario);
 
-                                                    //Inclui contato
+                                                    //altera contato
                                                     dao_contato.alterarContatos(contato);
-                                                    //Inclui permissões de acesso
+                                                    //altera permissões de acesso
                                                     dao_permissao.alterarPermissao(permissao);
+                                                    //atualiza dados do usuario logado
+                                                    dao_acesso.retornaUsuarioLogado(acesso);
 
                                                     JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
@@ -2438,18 +2456,21 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                             } else {
 
                                                 //Salva Pessoa com contato e endereço 
-                                                //Inclui pessoa fisica
+                                                //altera pessoa fisica
                                                 dao_pessoa.alterar(usuario);
 
-                                                //Inclui contato
+                                                //altera contato
                                                 getContato();
                                                 dao_contato.alterarContatos(contato);
 
-                                                //Inclui endereço
+                                                //altera endereço
                                                 dao_endereco.alterarEndereco(endereco);
 
-                                                //Inclui permissoes
+                                                //altera permissoes
                                                 dao_permissao.alterarPermissao(permissao);
+                                                
+                                                //atualiza dados do usuario logado
+                                                dao_acesso.retornaUsuarioLogado(acesso);
 
                                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
 
@@ -2524,8 +2545,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
             dao_permissao.retornaDadosPermissao(acesso, permissao);
         }
 
-        //Verifica se o usuario possui permissao para acessar essa tela
-        if (validaacesso.verificaAcesso("incluir", acesso, permissao) == true) {
+        //Verifica se o usuario possui permissao para incluir registros nessa tela
+        if (validaacesso.verificaAcesso("inserir", acesso, permissao) == true) {
 
             UltimaSequencia ultima;
 
@@ -2574,7 +2595,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 jTFIDPessoa.setText(Integer.toString(sequencia));
 
             } catch (SQLException ex) {
-                Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(null, "Fallha ao iniciar a inserção de pessoas");
             }
 
             //Habilita campos necessários
@@ -2790,7 +2811,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
             if (jCBCidade.getSelectedIndex() == 0) {
                 JOptionPane.showMessageDialog(null, "Favor, selecione uma cidade");
             } else {
-
                 //Pega dados da tela de endereco
                 getEndereco();
                 endereco.setId_cidade(cidade.getArray_cidade(jCBCidade.getSelectedIndex() - 1));
@@ -3006,7 +3026,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                 permissao.setId_tela(tela.getArray_tela(jCBTela.getSelectedIndex() - 1));
                 try {
-                    JOptionPane.showMessageDialog(null, jCBTela.getSelectedItem().toString());
+                   
                     //verifica se a permissão ja foi adicionada pra determinada tela
                     if (Jtable.evitarDuplicacao(jTBPermissoes, jCBTela.getSelectedItem().toString()) == false) {
                         //adiciona dados do endereço na Jtable de endereços
@@ -4476,17 +4496,17 @@ public class InterfacePessoa extends javax.swing.JFrame {
   public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
  
   public Component getTableCellRendererComponent(JTable table, Object value,
-      boolean isSelected, boolean hasFocus, int row, int column) {
+    boolean isSelected, boolean hasFocus, int row, int column) {
     Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
         table, value, isSelected, hasFocus, row, column);
     ((JLabel) renderer).setOpaque(true);
     Color foreground, background;
-     int totcolun = table.getColumnCount();
+    int totcolun = table.getColumnCount();
    
-     Integer exc = 0;
+    Integer exc = 0;
 
  
-         exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
+    exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
     
      
      if(isSelected){

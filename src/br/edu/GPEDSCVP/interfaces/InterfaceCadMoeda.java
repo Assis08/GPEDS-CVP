@@ -5,17 +5,63 @@
  */
 package br.edu.GPEDSCVP.interfaces;
 
+import br.edu.GPEDSCVP.classe.Acesso;
+import br.edu.GPEDSCVP.classe.Moeda;
+import br.edu.GPEDSCVP.classe.Permissao;
+import br.edu.GPEDSCVP.dao.daoAcesso;
+import br.edu.GPEDSCVP.dao.daoMoeda;
+import br.edu.GPEDSCVP.dao.daoPermissao;
+import br.edu.GPEDSCVP.util.Rotinas;
+import br.edu.GPEDSCVP.util.UltimaSequencia;
+import br.edu.GPEDSCVP.util.ValidaAcesso;
+import br.edu.GPEDSCVP.util.ValidaBotoes;
+import br.edu.GPEDSCVP.util.ValidaCampos;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Willys
  */
 public class InterfaceCadMoeda extends javax.swing.JFrame {
 
-    /**
-     * Creates new form InterfaceCadMoeda
-     */
+    Acesso acesso;
+    Moeda moeda;
+    daoPermissao dao_permissao;
+    daoAcesso dao_acesso;
+    daoMoeda dao_moeda;
+    Permissao permissao;
+    ValidaAcesso valida_acesso;
+    ValidaBotoes valida_botoes;
+    ValidaCampos valida_campos;
+    int situacao = Rotinas.PADRAO;
+    
     public InterfaceCadMoeda() {
         initComponents();
+        acesso = new Acesso();
+        moeda = new Moeda();
+        dao_permissao = new daoPermissao();
+        dao_acesso = new daoAcesso();
+        dao_moeda = new daoMoeda();
+        permissao = new Permissao();
+        valida_acesso = new ValidaAcesso();
+        valida_botoes = new ValidaBotoes();
+        try {
+            valida_campos = new ValidaCampos();
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfaceCadMoeda.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        //desabilita campos da tela de moeda
+        valida_campos.desabilitaCampos(jPMoeda);
+        
+        //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
+        situacao = Rotinas.INICIAL;
+
+        //habilita os botoes utilizados na inicialização da tela
+        valida_botoes.ValidaEstado(jPBotoes, situacao);
     }
 
     /**
@@ -36,12 +82,25 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTFUnidade = new javax.swing.JTextField();
         jPBotoes = new javax.swing.JPanel();
+        jBTNovo = new javax.swing.JButton();
+        jBTAlterar = new javax.swing.JButton();
+        jBTExcluir = new javax.swing.JButton();
+        jBTGravar = new javax.swing.JButton();
+        jBTCancelar = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTBConsultaMoedas = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Cadastro de Moedas");
+
+        jTabbedPane1.setName(""); // NOI18N
+
+        jPMoeda.setToolTipText("");
 
         jLabel1.setText("ID Moeda:");
 
+        jTFIDMoeda.setEditable(false);
+        jTFIDMoeda.setName("id_moeda"); // NOI18N
         jTFIDMoeda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jTFIDMoedaActionPerformed(evt);
@@ -50,17 +109,88 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
 
         jLabel2.setText("Descrição:");
 
+        jTFDescricao.setToolTipText("Descrição");
+        jTFDescricao.setName("descricao"); // NOI18N
+
         jLabel3.setText("Unidade:");
+
+        jTFUnidade.setToolTipText("Unidade");
+        jTFUnidade.setName("unidade"); // NOI18N
+
+        jBTNovo.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\add.png")); // NOI18N
+        jBTNovo.setText("Novo");
+        jBTNovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTNovoActionPerformed(evt);
+            }
+        });
+
+        jBTAlterar.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\page_white_edit.png")); // NOI18N
+        jBTAlterar.setText("Alterar");
+        jBTAlterar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTAlterarActionPerformed(evt);
+            }
+        });
+
+        jBTExcluir.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\delete.png")); // NOI18N
+        jBTExcluir.setText("Excluir");
+        jBTExcluir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTExcluirActionPerformed(evt);
+            }
+        });
+
+        jBTGravar.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\disk_black.png")); // NOI18N
+        jBTGravar.setText("Gravar");
+        jBTGravar.setName("descricao"); // NOI18N
+        jBTGravar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                jBTGravarMouseExited(evt);
+            }
+        });
+        jBTGravar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTGravarActionPerformed(evt);
+            }
+        });
+
+        jBTCancelar.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\decline.png")); // NOI18N
+        jBTCancelar.setText("Cancelar");
+        jBTCancelar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTCancelarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPBotoesLayout = new javax.swing.GroupLayout(jPBotoes);
         jPBotoes.setLayout(jPBotoesLayout);
         jPBotoesLayout.setHorizontalGroup(
             jPBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPBotoesLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jBTNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jBTAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jBTExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jBTGravar, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jBTCancelar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPBotoesLayout.setVerticalGroup(
             jPBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 65, Short.MAX_VALUE)
+            .addGroup(jPBotoesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBTGravar, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBTExcluir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBTAlterar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBTNovo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBTCancelar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout jPMoedaLayout = new javax.swing.GroupLayout(jPMoeda);
@@ -70,20 +200,20 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
             .addGroup(jPMoedaLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPMoedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPMoedaLayout.createSequentialGroup()
-                        .addComponent(jPBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())
+                    .addComponent(jLabel1)
+                    .addComponent(jTFIDMoeda, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPMoedaLayout.createSequentialGroup()
                         .addGroup(jPMoedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel1)
-                            .addComponent(jTFIDMoeda, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
+                            .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
                         .addGroup(jPMoedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3)
-                            .addComponent(jTFUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(64, 64, 64))))
+                            .addComponent(jTFUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel3))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(jPMoedaLayout.createSequentialGroup()
+                .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPMoedaLayout.setVerticalGroup(
             jPMoedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -93,13 +223,15 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTFIDMoeda, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(jPMoedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPMoedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPMoedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPMoedaLayout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPMoedaLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                 .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -107,15 +239,39 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Cadastro", jPMoeda);
 
+        jTBConsultaMoedas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID Moeda", "Descrição", "Unidade"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTBConsultaMoedas);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 395, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 497, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 272, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Consulta", jPanel2);
@@ -124,19 +280,112 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTabbedPane1)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jTabbedPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
-        pack();
+        setSize(new java.awt.Dimension(542, 331));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTFIDMoedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFIDMoedaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTFIDMoedaActionPerformed
+
+    private void jBTNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoActionPerformed
+        UltimaSequencia ultima;
+        //atualiza dados do usuario logado
+        dao_acesso.retornaUsuarioLogado(acesso);
+        //habilita campos da tela
+        valida_campos.habilitaCampos(jPMoeda);
+        //se não for gerente
+        if (acesso.getIn_gerente() == 0) {
+            //retorna as permissoes de acesso do usuario  
+            dao_permissao.retornaDadosPermissao(acesso, permissao);
+        }
+
+        //Verifica se o usuario possui permissao para incluir registros nessa tela
+        if (valida_acesso.verificaAcesso("inserir", acesso, permissao) == true) {
+            
+            //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+            situacao = Rotinas.INCLUIR;
+
+            //habilita os botoes utilizados na inclusão e desabilita os restantes
+            valida_botoes.ValidaEstado(jPBotoes, situacao);
+
+            try {
+                //Gera id sequencial
+                ultima = new UltimaSequencia();
+                int sequencia = (Integer) (ultima.ultimasequencia("MOEDA", "ID_MOEDA"));
+                //seta id no campo id_moeda
+                jTFIDMoeda.setText(Integer.toString(sequencia));
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de moedas");
+            }
+           
+
+            
+        }else{
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir moedas no sistema");
+        }
+    }//GEN-LAST:event_jBTNovoActionPerformed
+
+    private void jBTAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAlterarActionPerformed
+
+     
+    }//GEN-LAST:event_jBTAlterarActionPerformed
+
+    private void jBTExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTExcluirActionPerformed
+
+    }//GEN-LAST:event_jBTExcluirActionPerformed
+
+    private void jBTGravarMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBTGravarMouseExited
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBTGravarMouseExited
+
+    private void jBTGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTGravarActionPerformed
+        int retorno_mensagem;
+        //Se for inclusão
+        if (situacao == Rotinas.INCLUIR) {
+            if (valida_campos.validacamposobrigatorios(jPMoeda, "MOEDA") == 0) {
+                try {
+                    //pega dados da moeda na tela
+                    getMoeda();
+                    //inclui moeda
+                    dao_moeda.incluir(moeda);
+                    JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                    //limpa campos 
+                    valida_campos.LimparCampos(jPMoeda);
+                    
+                    //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                    situacao = Rotinas.INICIAL;
+
+                    //habilita os botoes utilizados na inclusão e desabilita os restantes
+                    valida_botoes.ValidaEstado(jPBotoes, situacao);
+                    
+                    //desabilita campos
+                    valida_campos.desabilitaCampos(jPMoeda);
+                    
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Falha ao incluir moeda");
+                }
+            }
+        }else if(situacao == Rotinas.ALTERAR) {
+            
+        }
+
+    }//GEN-LAST:event_jBTGravarActionPerformed
+
+    private void jBTCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTCancelarActionPerformed
+     
+    }//GEN-LAST:event_jBTCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -174,15 +423,42 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBTAlterar;
+    private javax.swing.JButton jBTCancelar;
+    private javax.swing.JButton jBTExcluir;
+    private javax.swing.JButton jBTGravar;
+    private javax.swing.JButton jBTNovo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPBotoes;
     private javax.swing.JPanel jPMoeda;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTBConsultaMoedas;
     private javax.swing.JTextField jTFDescricao;
     private javax.swing.JTextField jTFIDMoeda;
     private javax.swing.JTextField jTFUnidade;
     private javax.swing.JTabbedPane jTabbedPane1;
     // End of variables declaration//GEN-END:variables
+
+
+ //Pega dados da moeda na tela
+    public Moeda getMoeda() {
+        moeda = new Moeda();
+        
+        Date data_atual = new Date(System.currentTimeMillis());
+        
+        int id_moeda = Integer.parseInt(jTFIDMoeda.getText());
+        moeda.setDecricao(jTFDescricao.getText());
+        moeda.setUnidade(jTFUnidade.getText());
+        moeda.setData_alter(data_atual);
+      
+        return moeda;
+    }
+
+
+
+
+
 }

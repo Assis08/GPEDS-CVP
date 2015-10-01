@@ -221,13 +221,7 @@ public class daoEndereco {
             
                     conecta_banco.atualizarSQL(sql);  
                 }
-                //Se for um registro excluido da Jtable
-                if(exc == 1){
-                    //Exclui do banco
-                    sql = "DELETE FROM ENDERECO WHERE ID_ENDERECO = " + id;
-                    conecta_banco.atualizarSQL(sql);
-                }
-                
+
             } catch (Exception e) {
                 //Chegou aqui porque o endereco não existe, então inclui
                
@@ -243,6 +237,13 @@ public class daoEndereco {
                     + FormatarData.dateParaTimeStamp(endereco.getData_alter())+"')";
             
                     conecta_banco.incluirSQL(sql);
+            }
+            
+            //Se for um registro excluido da Jtable
+            if(exc == 1){
+                //Exclui do banco
+                sql = "DELETE FROM ENDERECO WHERE ID_ENDERECO = " + id;
+                conecta_banco.atualizarSQL(sql);
             }
         }
 
