@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.text.DefaultFormatterFactory;
 
 /**
  *
@@ -96,18 +97,19 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTFDescricao = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTFUnidade = new javax.swing.JTextField();
         jPBotoes = new javax.swing.JPanel();
         jBTNovo = new javax.swing.JButton();
         jBTAlterar = new javax.swing.JButton();
         jBTExcluir = new javax.swing.JButton();
         jBTGravar = new javax.swing.JButton();
         jBTCancelar = new javax.swing.JButton();
+        jFTUnidade = new javax.swing.JFormattedTextField();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTBConsultaMoedas = new javax.swing.JTable();
 
         setTitle("Cadastro de Moedas");
+        setResizable(false);
 
         jTBMoeda.setName(""); // NOI18N
         jTBMoeda.addChangeListener(new javax.swing.event.ChangeListener() {
@@ -134,9 +136,6 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         jTFDescricao.setName("descricao"); // NOI18N
 
         jLabel3.setText("Unidade:");
-
-        jTFUnidade.setToolTipText("Unidade");
-        jTFUnidade.setName("unidade"); // NOI18N
 
         jBTNovo.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\add.png")); // NOI18N
         jBTNovo.setText("Novo");
@@ -214,6 +213,14 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jFTUnidade.setToolTipText("Unidade");
+        jFTUnidade.setName("unidade"); // NOI18N
+        jFTUnidade.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jFTUnidadeMouseClicked(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPMoedaLayout = new javax.swing.GroupLayout(jPMoeda);
         jPMoeda.setLayout(jPMoedaLayout);
         jPMoedaLayout.setHorizontalGroup(
@@ -229,8 +236,8 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                             .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addGroup(jPMoedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTFUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))))
+                            .addComponent(jLabel3)
+                            .addComponent(jFTUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(jPMoedaLayout.createSequentialGroup()
                 .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -248,12 +255,13 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                     .addGroup(jPMoedaLayout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPMoedaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jFTUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPMoedaLayout.createSequentialGroup()
                         .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTFUnidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
+                        .addGap(26, 26, 26)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
                 .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -362,15 +370,29 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de moedas");
             }
            
-
-            
         }else{
             JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir moedas no sistema");
         }
     }//GEN-LAST:event_jBTNovoActionPerformed
 
     private void jBTAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAlterarActionPerformed
+        //se naõ for gerente
+        if (acesso.getIn_gerente() == 0) {
+            //retorna as permissoes de acesso do usuario  
+            dao_permissao.retornaDadosPermissao(acesso, permissao);
+        }
 
+        //Verifica se o usuario possui permissao para acessar essa tela
+        if (valida_acesso.verificaAcesso("alterar", acesso, permissao) == true) {
+            situacao = Rotinas.ALTERAR;
+            valida_botoes.ValidaEstado(jPBotoes, situacao);
+            
+            valida_campos.habilitaCampos(jPMoeda);
+
+         
+        }else{
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para alterar moedas no sistema");
+        }
      
     }//GEN-LAST:event_jBTAlterarActionPerformed
 
@@ -400,7 +422,7 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                     valida_campos.desabilitaCampos(jPMoeda);
                  }
              } catch (SQLIntegrityConstraintViolationException ex) {
-                 JOptionPane.showMessageDialog(null, "Impossível excluir esse registro, ele está sendo utilizado em outros registros no sistema!");
+                 JOptionPane.showMessageDialog(null, "Registro não pode ser excluido pois ele está sendo utilizado em outros registros no sistema!");
              }
         }else{
             JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir moedas no sistema");
@@ -439,7 +461,30 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                 }
             }
         }else if(situacao == Rotinas.ALTERAR) {
-            
+            //pega dados da moeda na tela
+            if (valida_campos.validacamposobrigatorios(jPMoeda, "MOEDA") == 0) {
+                try {
+                    getMoeda();
+                    //altera moeda
+                    dao_moeda.alterar(moeda);
+
+                     JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                    //limpa campos 
+                    valida_campos.LimparCampos(jPMoeda);
+
+                    //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                    situacao = Rotinas.INICIAL;
+
+                    //habilita os botoes utilizados na inclusão e desabilita os restantes
+                    valida_botoes.ValidaEstado(jPBotoes, situacao);
+
+                    //desabilita campos
+                    valida_campos.desabilitaCampos(jPMoeda);
+
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Falha ao alterar moeda");
+                }
+            }
         }
 
     }//GEN-LAST:event_jBTGravarActionPerformed
@@ -512,9 +557,18 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
 
             //habilita os botoes utilizados na inclusão e desabilita os restantes
             valida_botoes.ValidaEstado(jPBotoes, situacao);
+            
+            valida_campos.desabilitaCampos(jPMoeda);
          
         }
     }//GEN-LAST:event_jTBConsultaMoedasMouseClicked
+
+    private void jFTUnidadeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFTUnidadeMouseClicked
+         //Seta mascara no campo de CNPJ
+        jFTUnidade.setFormatterFactory(new DefaultFormatterFactory(valida_campos.limitaCaracteres("***")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
+        jFTUnidade.setValue("");
+    }//GEN-LAST:event_jFTUnidadeMouseClicked
 
     /**
      * @param args the command line arguments
@@ -557,6 +611,7 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
     private javax.swing.JButton jBTExcluir;
     private javax.swing.JButton jBTGravar;
     private javax.swing.JButton jBTNovo;
+    private javax.swing.JFormattedTextField jFTUnidade;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -568,7 +623,6 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTBMoeda;
     private javax.swing.JTextField jTFDescricao;
     private javax.swing.JTextField jTFIDMoeda;
-    private javax.swing.JTextField jTFUnidade;
     // End of variables declaration//GEN-END:variables
 
  //Pega dados da moeda na tela
@@ -578,8 +632,9 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         Date data_atual = new Date(System.currentTimeMillis());
         
         int id_moeda = Integer.parseInt(jTFIDMoeda.getText());
+        moeda.setId_moeda(id_moeda);
         moeda.setDecricao(jTFDescricao.getText());
-        moeda.setUnidade(jTFUnidade.getText());
+        moeda.setUnidade(jFTUnidade.getText());
         moeda.setData_alter(data_atual);
       
         return moeda;
@@ -590,7 +645,7 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         //Dados da moeda
         jTFIDMoeda.setText(Integer.toString(moeda.getId_moeda()));
         jTFDescricao.setText(moeda.getDecricao());
-        jTFUnidade.setText(moeda.getUnidade());
+        jFTUnidade.setText(moeda.getUnidade());
     }
 
 

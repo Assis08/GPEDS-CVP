@@ -397,6 +397,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jFTCPFCNPJ.setToolTipText("CPF/CNPJ");
         jFTCPFCNPJ.setName("cpf_cnpj"); // NOI18N
         jFTCPFCNPJ.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jFTCPFCNPJMouseClicked(evt);
+            }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 jFTCPFCNPJMouseExited(evt);
             }
@@ -3700,6 +3703,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jTBPermissoesMouseClicked
+
+    private void jFTCPFCNPJMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFTCPFCNPJMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFTCPFCNPJMouseClicked
 
     /**
      * @param args the command line arguments

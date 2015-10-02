@@ -198,7 +198,7 @@ public class ValidaCampos {
                                     if (field.getName().equals(atributo)){
                                         if (field.getText().equals("") || (field.getText().equals("  /  /    ")) || (field.getText().equals("  .   .   /    -  ")) ||
                                         (field.getText().equals("   .   .   -  ")) ||(field.getText().equals("  .   .   - ")) ||(field.getText().equals("(  )    -    ")) || 
-                                                (field.getText().equals("     -   ")) || (field.getText().equals("(  )         ")))  {
+                                                (field.getText().equals("     -   ")) || (field.getText().equals("(  )         "))|| (field.getText().equals("   ")))  {
                                         JOptionPane.showMessageDialog(null, "campo: "+ field.getToolTipText()+ " é obrigatorio");
                                         
                                         field.grabFocus(); 
@@ -229,6 +229,20 @@ public class ValidaCampos {
           JOptionPane.showMessageDialog(null,"Erro: "+error_mask);
       }
        return null;
+    }
+    
+     //Método para criar e retornar uma mascara(JTextField) por parâmetro 
+    public static MaskFormatter limitaCaracteres (String mascara) {
+   
+       try {
+            MaskFormatter mascara_string = new MaskFormatter(mascara);   
+            //tf_CPF = new javax.swing.JFormattedTextField(mascara_cpf);
+            return mascara_string;
+      }
+      catch (Exception error_mask) {
+          JOptionPane.showMessageDialog(null,"Erro: "+error_mask);
+      }
+     return null; 
     }
     
     //Método para limpar dados de uma Jtable

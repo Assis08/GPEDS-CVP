@@ -60,13 +60,21 @@ public class daoMoeda {
             conecta_banco.atualizarSQL(sql);
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Falha ao excluir moeda");
-        }
-            
-       
-        
+        }  
     }
     
-     public void consultaGeral(Moeda moeda){
+    public void alterar(Moeda moeda)throws SQLException
+    {
+     String sql = "UPDATE MOEDA SET ID_MOEDA = "+ moeda.getId_moeda()+","
+                + "DESCRICAO = '" + moeda.getDecricao()+"',"
+                + "UNIDADE = '" + moeda.getUnidade()+"',"
+                + "DATA_ALTER = '" + FormatarData.dateParaTimeStamp(moeda.getData_alter())+"'"
+                + " WHERE ID_MOEDA = " + moeda.getId_moeda();
+     
+                conecta_banco.atualizarSQL(sql);
+    }
+    
+    public void consultaGeral(Moeda moeda){
         
         conecta_banco.executeSQL("select * from moeda");
 
