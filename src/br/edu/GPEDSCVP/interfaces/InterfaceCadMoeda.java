@@ -111,7 +111,7 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         setTitle("Cadastro de Moedas");
         setResizable(false);
 
-        jTBMoeda.setName(""); // NOI18N
+        jTBMoeda.setName("Alterar Valor Moeda"); // NOI18N
         jTBMoeda.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jTBMoedaStateChanged(evt);
@@ -279,7 +279,7 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID Moeda", "Descrição", "Unidade", "Ultima alteração"
+                "ID Moeda", "Descrição", "Unidade", "Última alteração"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -559,7 +559,6 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
             valida_botoes.ValidaEstado(jPBotoes, situacao);
             
             valida_campos.desabilitaCampos(jPMoeda);
-         
         }
     }//GEN-LAST:event_jTBConsultaMoedasMouseClicked
 
@@ -647,10 +646,4 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         jTFDescricao.setText(moeda.getDecricao());
         jFTUnidade.setText(moeda.getUnidade());
     }
-
-
-
-
-
-
 }

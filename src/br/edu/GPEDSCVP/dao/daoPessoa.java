@@ -169,6 +169,57 @@ public class daoPessoa {
                 }
                 conecta_banco.atualizarSQL(sql);    
     }
+    
+    public void alterar(Certificadora pessoa)throws SQLException
+    {
+     String sql = "UPDATE PESSOA SET ID_PESSOA = "+ pessoa.getId_pessoa()+","
+                + "NOME = '" + pessoa.getNome()+"',"
+                + "CPF_CNPJ = '" + pessoa.getCpf_cnpj()+"',"
+                + "DATA_ALTER = '" + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+"'"
+                + " WHERE PESSOA.ID_PESSOA = " + pessoa.getId_pessoa();
+     
+                conecta_banco.atualizarSQL(sql);
+                
+            sql = "UPDATE PESSOA_JURIDICA SET ID_PESSOA = "+ pessoa.getId_pessoa()+","
+                + "RAZAO_SOCIAL = '" + pessoa.getRazao_social()+"',"
+                + "INTERNACIONAL = '" + pessoa.getInternacional()+"'"
+                + " WHERE PESSOA_JURIDICA.ID_PESSOA = " + pessoa.getId_pessoa();
+     
+                conecta_banco.atualizarSQL(sql);
+                 
+            sql = "UPDATE CERTIFICADORA SET ID_PESSOA = "+ pessoa.getId_pessoa()+","
+                + "IN_CALIBRACOES = '" + pessoa.getIn_calibracoes()+"'"
+                + " WHERE CERTIFICADORA.ID_PESSOA = " + pessoa.getId_pessoa();
+               
+                conecta_banco.atualizarSQL(sql);    
+    }
+    
+    
+     public void alterar(Fornecedor pessoa)throws SQLException
+    {
+     String sql = "UPDATE PESSOA SET ID_PESSOA = "+ pessoa.getId_pessoa()+","
+                + "NOME = '" + pessoa.getNome()+"',"
+                + "CPF_CNPJ = '" + pessoa.getCpf_cnpj()+"',"
+                + "DATA_ALTER = '" + FormatarData.dateParaTimeStamp(pessoa.getData_alter())+"'"
+                + " WHERE PESSOA.ID_PESSOA = " + pessoa.getId_pessoa();
+     
+                conecta_banco.atualizarSQL(sql);
+                
+            sql = "UPDATE PESSOA_JURIDICA SET ID_PESSOA = "+ pessoa.getId_pessoa()+","
+                + "RAZAO_SOCIAL = '" + pessoa.getRazao_social()+"',"
+                + "INTERNACIONAL = '" + pessoa.getInternacional()+"',"
+                + " WHERE PESSOA_JURIDICA.ID_PESSOA = " + pessoa.getId_pessoa();
+     
+                conecta_banco.atualizarSQL(sql);
+                 
+            sql = "UPDATE FORNECEDOR SET ID_PESSOA = "+ pessoa.getId_pessoa()+","
+                + "SITE = '" + pessoa.getSite()+"',"
+                + "RAMO = '" + pessoa.getRamo()+"'"
+                + " WHERE FORNECEDOR.ID_PESSOA = " + pessoa.getId_pessoa();
+               
+                conecta_banco.atualizarSQL(sql);    
+    }
+    
     //Valida se o CPF ou CNPJ já esta cadastrado
     public Boolean verificaCpfCnpj(Pessoa pessoa){
         String sql = "select * from pessoa where pessoa.cpf_cnpj = '"+ pessoa.getCpf_cnpj()+"' and pessoa.in_ativo = 'A'";

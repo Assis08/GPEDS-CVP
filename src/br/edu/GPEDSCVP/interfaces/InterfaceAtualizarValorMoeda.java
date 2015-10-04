@@ -5,17 +5,69 @@
  */
 package br.edu.GPEDSCVP.interfaces;
 
+import br.edu.GPEDSCVP.classe.Acesso;
+import br.edu.GPEDSCVP.classe.AtualizacaoMoeda;
+import br.edu.GPEDSCVP.classe.Moeda;
+import br.edu.GPEDSCVP.classe.Permissao;
+import br.edu.GPEDSCVP.dao.daoAcesso;
+import br.edu.GPEDSCVP.dao.daoMoeda;
+import br.edu.GPEDSCVP.dao.daoPermissao;
+import br.edu.GPEDSCVP.interfaces.InterfacePessoa.EvenOddRenderer;
+import br.edu.GPEDSCVP.util.ManipulaJtable;
+import br.edu.GPEDSCVP.util.Mensagens;
+import br.edu.GPEDSCVP.util.TableCellListener;
+import br.edu.GPEDSCVP.util.ValidaAcesso;
+import br.edu.GPEDSCVP.util.ValidaBotoes;
+import java.awt.event.ActionEvent;
+import java.sql.Date;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.AbstractAction;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
+
 /**
  *
  * @author Willys
  */
 public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
 
-    /**
-     * Creates new form InterfaceAtualizarValorMoeda
-     */
+    Acesso acesso;
+    AtualizacaoMoeda atualizacao_moeda;
+    Moeda moeda;
+    Mensagens mensagem;
+    daoPermissao dao_permissao;
+    daoAcesso dao_acesso;
+    daoMoeda dao_moeda;
+    Permissao permissao;
+    ValidaAcesso valida_acesso;
+    ValidaBotoes valida_botoes;
+    ManipulaJtable Jtable;
+    
     public InterfaceAtualizarValorMoeda() {
         initComponents();
+        
+        acesso = new Acesso();
+        moeda = new Moeda();
+        dao_permissao = new daoPermissao();
+        dao_acesso = new daoAcesso();
+        dao_moeda = new daoMoeda();
+        permissao = new Permissao();
+        valida_acesso = new ValidaAcesso();
+        valida_botoes = new ValidaBotoes();
+        Jtable = new ManipulaJtable();
+        mensagem = new Mensagens();
+        atualizacao_moeda = new AtualizacaoMoeda();
+        
+        new TableCellListener(jTBAtualizarMoedas, new TableCellEditorAction());
+
+        //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
+        jTBAtualizarMoedas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
+        //atualiza dados do usuario logado
+        dao_acesso.retornaUsuarioLogado(acesso);
     }
 
     /**
@@ -28,27 +80,39 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTBAtualizarMoedas = new javax.swing.JTable();
 
+        setTitle("Atualização do valor das moedas");
         setResizable(false);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTBAtualizarMoedas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID Moeda", "Descrição", "Valor", "Ultima atualização"
+                "ID Moeda", "Descrição", "Unidade", "Valor", "Última atualização", "Alterado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, false
+                false, false, false, true, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
+        jTBAtualizarMoedas.setName("Atualizar Valor Moeda"); // NOI18N
+        jScrollPane1.setViewportView(jTBAtualizarMoedas);
+        if (jTBAtualizarMoedas.getColumnModel().getColumnCount() > 0) {
+            jTBAtualizarMoedas.getColumnModel().getColumn(5).setMinWidth(0);
+            jTBAtualizarMoedas.getColumnModel().getColumn(5).setPreferredWidth(0);
+            jTBAtualizarMoedas.getColumnModel().getColumn(5).setMaxWidth(0);
+        }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -58,12 +122,33 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(391, 249));
+        setSize(new java.awt.Dimension(391, 242));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+          //Se não for gerente
+            if (acesso.getIn_gerente() == 0) {
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            }
+
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
+                //faz uma consulta geral de moedas no banco
+                dao_moeda.consultaGeralAtualizacao(atualizacao_moeda);
+                //preenche dados na jtable
+                Jtable.PreencherJtableGenerico(jTBAtualizarMoedas, new String[]{"id_moeda", "descricao","unidade","valor", "data_atualizacao","false"}, atualizacao_moeda.getRetorno());
+                //ajusta largura das colunas
+                Jtable.ajustarColunasDaTabela(jTBAtualizarMoedas);
+            }else{
+                JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar moedas no sistema");
+               
+            } 
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -102,6 +187,82 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTBAtualizarMoedas;
     // End of variables declaration//GEN-END:variables
+
+     public AtualizacaoMoeda getAtualizacao() {
+        //  Variaveis e conversões
+        Date data_atual = new Date(System.currentTimeMillis());
+       
+        atualizacao_moeda.setTabela(jTBAtualizarMoedas);
+        atualizacao_moeda.setData_alter(data_atual);
+   
+        return atualizacao_moeda;
+    }
+    
+    private void onCellEditor(JTable table, int column, int row, Object oldValue, Object newValue){
+        System.out.println("Coluna:" + column + "Valor novo: " + newValue + " Valor antigo: " + oldValue);
+        if (table == jTBAtualizarMoedas) {
+            //Se o valor novo não for vazio 
+            if(!newValue.toString().replace(" ", "").equals("")){
+                if(column == 3 ){
+                    try { 
+                        //verifica se o valor setado é um valor double
+                        double valor = 0;
+                        valor = Double.parseDouble(table.getValueAt(row, column).toString().replace(",", "."));
+                        table.setValueAt(1, row, 5);
+                        
+                        //Se não for gerente
+                        if (acesso.getIn_gerente() == 0) {
+                            //retorna as permissoes de acesso do usuario  
+                            dao_permissao.retornaDadosPermissao(acesso, permissao);
+                        }
+
+                        //Verifica se o usuario possui permissao para alterar dados dessa tela
+                        if (valida_acesso.verificaAcesso("alterar", acesso, permissao) == true) {
+                            getAtualizacao();
+                            try {
+                                dao_moeda.incluirAtualizacao(atualizacao_moeda);
+                               // JOptionPane.showMessageDialog(null, "Atualizado com Sucesso!");
+
+                                //faz uma consulta geral de moedas no banco
+                                dao_moeda.consultaGeralAtualizacao(atualizacao_moeda);
+                                //preenche dados na jtable
+                                Jtable.PreencherJtableGenerico(jTBAtualizarMoedas, new String[]{"id_moeda", "descricao","unidade","valor", "data_atualizacao","false"}, atualizacao_moeda.getRetorno());
+                                //ajusta largura das colunas
+                                Jtable.ajustarColunasDaTabela(jTBAtualizarMoedas);
+
+                            } catch (SQLException ex) {
+                                JOptionPane.showMessageDialog(null, "Falha ao alterar valores das moedas");
+                            }
+
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Você não possui permissões para alterar valores das moedas no sistema");
+                            table.setValueAt(oldValue, row, column);
+                        } 
+                        
+                    } catch (Exception e) {
+                        //se não for double, emite a mensagem e retorna para o valor que estava
+                        JOptionPane.showMessageDialog(null, "O valor da moeda deve ser numérico!");  
+                        table.setValueAt(oldValue, row, column);
+                    }
+                }
+            }else
+            {
+                //seta na jtable o valor que estava antes de apagar
+                table.setValueAt(oldValue, row, column);
+            }
+  
+        }
+    }
+
+    class TableCellEditorAction extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            TableCellListener tbListener = (TableCellListener) e.getSource();
+            
+            onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
+        }
+    }
+
 }

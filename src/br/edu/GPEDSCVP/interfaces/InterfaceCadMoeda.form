@@ -44,7 +44,7 @@
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="jTBMoeda">
       <Properties>
-        <Property name="name" type="java.lang.String" value="" noResource="true"/>
+        <Property name="name" type="java.lang.String" value="Alterar Valor Moeda" noResource="true"/>
       </Properties>
       <Events>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jTBMoedaStateChanged"/>
@@ -306,7 +306,7 @@
                         <Column editable="false" title="ID Moeda" type="java.lang.Object"/>
                         <Column editable="false" title="Descri&#xe7;&#xe3;o" type="java.lang.Object"/>
                         <Column editable="false" title="Unidade" type="java.lang.Object"/>
-                        <Column editable="false" title="Ultima altera&#xe7;&#xe3;o" type="java.lang.Object"/>
+                        <Column editable="false" title="&#xda;ltima altera&#xe7;&#xe3;o" type="java.lang.Object"/>
                       </Table>
                     </Property>
                     <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
