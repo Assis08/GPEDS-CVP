@@ -1085,6 +1085,9 @@
                             </Property>
                             <Property name="text" type="java.lang.String" value="Nova"/>
                           </Properties>
+                          <Events>
+                            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBTNovaCidadeActionPerformed"/>
+                          </Events>
                         </Component>
                       </SubComponents>
                     </Container>

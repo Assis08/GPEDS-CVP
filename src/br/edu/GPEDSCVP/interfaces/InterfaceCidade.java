@@ -18,6 +18,11 @@ import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /**
  *
@@ -51,6 +56,27 @@ public class InterfaceCidade extends javax.swing.JFrame {
         valida_acesso = new ValidaAcesso();
         valida_botoes = new ValidaBotoes();
         mensagem = new Mensagens();
+        try {
+            valida_campos = new ValidaCampos();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao iniciar registro");
+        }
+        
+        
+        //desabilita campos da tela de moeda
+        valida_campos.desabilitaCampos(jPCidade);
+        
+        //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
+        jTBConsultaCidades.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
+        //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
+        situacao = Rotinas.INICIAL;
+
+        //habilita os botoes utilizados na inicialização da tela
+        valida_botoes.ValidaEstado(jPBotoes, situacao);
+        
+        //atualiza dados do usuario logado
+        dao_acesso.retornaUsuarioLogado(acesso);
     }
 
     /**
@@ -78,8 +104,10 @@ public class InterfaceCidade extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jBTNovoEstado = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTBConsultaCidades = new javax.swing.JTable();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Cadastro de Cidades");
 
         jBTNovo.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\add.png")); // NOI18N
         jBTNovo.setText("Novo");
@@ -221,15 +249,33 @@ public class InterfaceCidade extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Cadastro", jPCidade);
 
+        jTBConsultaCidades.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID Cidade", "Descrição", "UF", "Última alteração"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTBConsultaCidades);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 500, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 500, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 225, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
         );
 
         jTabbedPane1.addTab("Consulta", jPanel1);
@@ -245,11 +291,42 @@ public class InterfaceCidade extends javax.swing.JFrame {
             .addComponent(jTabbedPane1)
         );
 
-        pack();
+        setSize(new java.awt.Dimension(521, 291));
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBTNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoActionPerformed
-        
+        UltimaSequencia ultima;
+       
+        //habilita campos da tela
+        valida_campos.habilitaCampos(jPCidade);
+        //se não for gerente
+        if (acesso.getIn_gerente() == 0) {
+            //retorna as permissoes de acesso do usuario  
+            dao_permissao.retornaDadosPermissao(acesso, permissao);
+        }
+
+        //Verifica se o usuario possui permissao para incluir registros nessa tela
+        if (valida_acesso.verificaAcesso("inserir", acesso, permissao) == true) {
+            
+            //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+            situacao = Rotinas.INCLUIR;
+
+            //habilita os botoes utilizados na inclusão e desabilita os restantes
+            valida_botoes.ValidaEstado(jPBotoes, situacao);
+
+            try {
+                //Gera id sequencial
+                ultima = new UltimaSequencia();
+                int sequencia = (Integer) (ultima.ultimasequencia("CIDADE", "ID_CIDADE"));
+                //seta id no campo id_moeda
+                jTFIDCidade.setText(Integer.toString(sequencia));
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de cidades");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir cidades no sistema");
+        }
     }//GEN-LAST:event_jBTNovoActionPerformed
 
     private void jBTAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAlterarActionPerformed
@@ -326,6 +403,8 @@ public class InterfaceCidade extends javax.swing.JFrame {
     private javax.swing.JPanel jPBotoes;
     private javax.swing.JPanel jPCidade;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTBConsultaCidades;
     private javax.swing.JTextField jTFDescricao;
     private javax.swing.JTextField jTFIDCidade;
     private javax.swing.JTabbedPane jTabbedPane1;

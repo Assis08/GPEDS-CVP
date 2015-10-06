@@ -63,7 +63,7 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         try {
             valida_campos = new ValidaCampos();
         } catch (SQLException ex) {
-            Logger.getLogger(InterfaceCadMoeda.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(null, "Falha ao iniciar registro");
         }
         //desabilita campos da tela de moeda
         valida_campos.desabilitaCampos(jPMoeda);

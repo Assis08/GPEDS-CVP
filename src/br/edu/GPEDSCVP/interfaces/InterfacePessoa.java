@@ -897,6 +897,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jBTNovaCidade.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\add.png")); // NOI18N
         jBTNovaCidade.setText("Nova");
+        jBTNovaCidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTNovaCidadeActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPEnderecoLayout = new javax.swing.GroupLayout(jPEndereco);
         jPEndereco.setLayout(jPEnderecoLayout);
@@ -956,9 +961,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jPEnderecoLayout.setVerticalGroup(
             jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPEnderecoLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPEnderecoLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel19)
                             .addComponent(jLabel20))
@@ -967,7 +972,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
                             .addComponent(jTFRua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTFDescEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPEnderecoLayout.createSequentialGroup()
-                        .addContainerGap()
                         .addComponent(jLabel21)
                         .addGap(4, 4, 4)
                         .addComponent(jTFNumeroEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -4189,6 +4193,44 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jTBPessoasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBPessoasMouseClicked
        
     }//GEN-LAST:event_jTBPessoasMouseClicked
+
+    private void jBTNovaCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovaCidadeActionPerformed
+        try {
+            //atualiza dados do usuario logado
+            dao_acesso.retornaUsuarioLogado(acesso);
+            
+            //Inclui a opção todas telas como primeira opção
+            tela.setDescricao("Todas telas");
+            tela.setId_tela(1);
+            dao_tela.incluir(tela);
+            
+            //Inclui a tela de Moedas
+            tela.setDescricao("Cidades");
+            tela.setId_tela(5);
+            dao_tela.incluir(tela);
+            
+            //Armazena dados de acesso da tela para verificar permissões
+            acesso.setId_tela(5);
+            acesso.setNome_tela("Cidades");
+            
+            //se naõ for gerente
+            if(acesso.getIn_gerente() == 0){
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            } 
+          
+           //Verifica se o usuario possui permissao para acessar essa tela
+           if (validaacesso.verificaAcesso("acesso",acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas 
+                new InterfaceCidade().setVisible(true);
+           }else{
+               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
+           }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jBTNovaCidadeActionPerformed
 
     /**
      * @param args the command line arguments
