@@ -5,6 +5,7 @@
  */
 package br.edu.GPEDSCVP.conexao;
 
+import br.edu.GPEDSCVP.util.ExcessaoBanco;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -86,7 +87,7 @@ public class ConexaoBanco {
     }
     
     
-    public void atualizarSQL(String sql){
+    public int atualizarSQL(String sql){
     try{
         statement = ConexaoBanco.createStatement(
             ResultSet.TYPE_SCROLL_SENSITIVE,ResultSet.CONCUR_READ_ONLY);
@@ -98,20 +99,26 @@ public class ConexaoBanco {
         }
         */
     }catch (SQLException sqlex){
-        if (sqlex.getErrorCode() == 2292){
-            JOptionPane.showConfirmDialog(null, "O registro não pode set"
-            + "atualizado porque ele está sendo utilizada em outro cadastro/movimento");
-        }else{
-            JOptionPane.showConfirmDialog(null, "Não foi possivel"
+        if (sqlex.getErrorCode() == 1451){
+            JOptionPane.showMessageDialog(null, "O registro não pode ser "
+            + "excluido porque ele está sendo utilizado em outro cadastro/movimento");
+            retorno = 0;
+            return ExcessaoBanco.ERRO_CHAVE_ESTRANGEIRA;
+        }else if(sqlex.getErrorCode() == 1406){
+                JOptionPane.showMessageDialog(null, "Valor inserido excede o limite máximo de caracteres do campo");
+                return ExcessaoBanco.ERRO_LIMITE_CARACTERES;
+            }else {
+            JOptionPane.showMessageDialog(null, "Não foi possivel"
             + "executar o comando sql de exclusão," + sqlex + ", o sql passado foi"
             + sql);
+            retorno = 0;
+            return ExcessaoBanco.OUTROS_ERROS;
         }
-        retorno = 0;
+    }
+    return ExcessaoBanco.SEM_ERROS;
     }
     
-    }
-    
-    public void incluirSQL(String sql)
+    public int incluirSQL(String sql)
     {
         try
         {
@@ -122,10 +129,19 @@ public class ConexaoBanco {
         }
         catch(SQLException sqlex)
         {
-            if(sqlex.getErrorCode() == 1)
+            if(sqlex.getErrorCode() == 1){
                 JOptionPane.showMessageDialog(null, "O registro não pode ser incluido pois ja esta cadastrado");
-            else
+                return ExcessaoBanco.ERRO_EXISTENCIA_REGISTRO;
+            }else if(sqlex.getErrorCode() == 1406){
+                JOptionPane.showMessageDialog(null, "Valor inserido excede o limite máximo de caracteres do campo");
+                return ExcessaoBanco.ERRO_LIMITE_CARACTERES;
+            }  
+            else{
                 JOptionPane.showMessageDialog(null, (new StringBuilder()).append("Não foi possivel executar o comando sql,").append(sqlex).append(", o sql passado foi").append(sql).toString());
+                return ExcessaoBanco.OUTROS_ERROS;
+            }
+                
         }
+        return ExcessaoBanco.SEM_ERROS;
     }
 }

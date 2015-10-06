@@ -207,7 +207,7 @@ public class daoPessoa {
                 
             sql = "UPDATE PESSOA_JURIDICA SET ID_PESSOA = "+ pessoa.getId_pessoa()+","
                 + "RAZAO_SOCIAL = '" + pessoa.getRazao_social()+"',"
-                + "INTERNACIONAL = '" + pessoa.getInternacional()+"',"
+                + "INTERNACIONAL = '" + pessoa.getInternacional()+"'"
                 + " WHERE PESSOA_JURIDICA.ID_PESSOA = " + pessoa.getId_pessoa();
      
                 conecta_banco.atualizarSQL(sql);
@@ -681,7 +681,7 @@ public class daoPessoa {
     public void retornardadosFornecedor(Fornecedor pessoa) {
             
         conecta_banco.executeSQL("SELECT pessoa.id_pessoa, pessoa.nome, pessoa.cpf_cnpj, pessoa.data_cadastro,pessoa_juridica.razao_social,pessoa_juridica.internacional,fornecedor.site,"
-        +" fornecedor.ramo from pessoa"
+        +" fornecedor.ramo,false from pessoa"
         +" inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa)"
         +" inner join fornecedor on (fornecedor.id_pessoa = pessoa_juridica.id_pessoa)"
         +" where pessoa.id_pessoa = "+pessoa.getId_pessoa() +" and pessoa.in_ativo = 'A'");

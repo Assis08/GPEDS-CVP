@@ -107,7 +107,7 @@ public class daoPermissao {
             for (int i = 0; i < totlinha; i++){
                 
                 Integer id_existente = Integer.parseInt(TabelaPermissao.getValueAt(i, 1).toString()); 
-                
+             
                 //Se for um contato ja existente ja Jtable
                 if(permissao.getId_permissao()== id_existente){
                     //Seta os novos valores no endereço na Jtable

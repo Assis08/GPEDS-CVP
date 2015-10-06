@@ -79,6 +79,8 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         
         //atualiza dados do usuario logado
         dao_acesso.retornaUsuarioLogado(acesso);
+        //seta mascaras nos campos especificos que precisam de mascaras
+        setaMascaras();
     }
 
     /**
@@ -404,26 +406,25 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
 
         //Verifica se o usuario possui permissao para excluir registros nessa tela
         if (valida_acesso.verificaAcesso("excluir", acesso, permissao) == true) {
-             try {
+             
                  if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
                      
-                    dao_moeda.excluir(moeda);
-                    JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
-                    //limpa campos 
-                    valida_campos.LimparCampos(jPMoeda);
+                    if(dao_moeda.excluir(moeda) == true){
+                        JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
+                        //limpa campos 
+                        valida_campos.LimparCampos(jPMoeda);
 
-                    //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
-                    situacao = Rotinas.INICIAL;
+                        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                        situacao = Rotinas.INICIAL;
 
-                    //habilita os botoes utilizados na inclusão e desabilita os restantes
-                    valida_botoes.ValidaEstado(jPBotoes, situacao);
+                        //habilita os botoes utilizados na inclusão e desabilita os restantes
+                        valida_botoes.ValidaEstado(jPBotoes, situacao);
 
-                    //desabilita campos
-                    valida_campos.desabilitaCampos(jPMoeda);
+                        //desabilita campos
+                        valida_campos.desabilitaCampos(jPMoeda);
+                    }
+                  
                  }
-             } catch (SQLIntegrityConstraintViolationException ex) {
-                 JOptionPane.showMessageDialog(null, "Registro não pode ser excluido pois ele está sendo utilizado em outros registros no sistema!");
-             }
         }else{
             JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir moedas no sistema");
         }
@@ -442,8 +443,8 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                     //pega dados da moeda na tela
                     getMoeda();
                     //inclui moeda
-                    dao_moeda.incluir(moeda);
-                    JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                    if(dao_moeda.incluir(moeda) == true){
+                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                     //limpa campos 
                     valida_campos.LimparCampos(jPMoeda);
                     
@@ -455,7 +456,7 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                     
                     //desabilita campos
                     valida_campos.desabilitaCampos(jPMoeda);
-                    
+                    }
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Falha ao incluir moeda");
                 }
@@ -466,21 +467,20 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                 try {
                     getMoeda();
                     //altera moeda
-                    dao_moeda.alterar(moeda);
+                    if(dao_moeda.alterar(moeda) == true){
+                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                        //limpa campos 
+                        valida_campos.LimparCampos(jPMoeda);
 
-                     JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
-                    //limpa campos 
-                    valida_campos.LimparCampos(jPMoeda);
+                        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                        situacao = Rotinas.INICIAL;
 
-                    //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
-                    situacao = Rotinas.INICIAL;
+                        //habilita os botoes utilizados na inclusão e desabilita os restantes
+                        valida_botoes.ValidaEstado(jPBotoes, situacao);
 
-                    //habilita os botoes utilizados na inclusão e desabilita os restantes
-                    valida_botoes.ValidaEstado(jPBotoes, situacao);
-
-                    //desabilita campos
-                    valida_campos.desabilitaCampos(jPMoeda);
-
+                        //desabilita campos
+                        valida_campos.desabilitaCampos(jPMoeda);
+                    }
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Falha ao alterar moeda");
                 }
@@ -563,10 +563,17 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBConsultaMoedasMouseClicked
 
     private void jFTUnidadeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFTUnidadeMouseClicked
-         //Seta mascara no campo de CNPJ
-        jFTUnidade.setFormatterFactory(new DefaultFormatterFactory(valida_campos.limitaCaracteres("***")));
-        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
-        jFTUnidade.setValue("");
+/*
+        if (jFTUnidade.toString().equals("")) {
+            jFTUnidade.setValue("");
+        }else{
+            //Seta mascara no campo de CNPJ
+            jFTUnidade.setFormatterFactory(new DefaultFormatterFactory(valida_campos.limitaCaracteres("***")));
+            //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
+            jFTUnidade.setValue("");
+        }
+        */
+       
     }//GEN-LAST:event_jFTUnidadeMouseClicked
 
     /**
@@ -645,5 +652,12 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         jTFIDMoeda.setText(Integer.toString(moeda.getId_moeda()));
         jTFDescricao.setText(moeda.getDecricao());
         jFTUnidade.setText(moeda.getUnidade());
+    }
+    
+    private void setaMascaras(){
+        //Seta mascara no campo de CNPJ
+        jFTUnidade.setFormatterFactory(new DefaultFormatterFactory(valida_campos.limitaCaracteres("***")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
+        jFTUnidade.setValue("");
     }
 }

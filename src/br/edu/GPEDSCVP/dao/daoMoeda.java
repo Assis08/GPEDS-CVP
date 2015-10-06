@@ -8,6 +8,7 @@ package br.edu.GPEDSCVP.dao;
 import br.edu.GPEDSCVP.classe.AtualizacaoMoeda;
 import br.edu.GPEDSCVP.classe.Moeda;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
+import br.edu.GPEDSCVP.util.ExcessaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.SQLException;
@@ -38,53 +39,91 @@ public class daoMoeda {
     
     
     //Método de incluir contato no banco
-    public void incluir(Moeda moeda)throws SQLException
+    public boolean incluir(Moeda moeda)throws SQLException
     {
         //Insert de moeda
         ultima = new UltimaSequencia();
+        int resultado;
+        
         int sequencia = (Integer) (ultima.ultimasequencia("MOEDA","ID_MOEDA"));
         String sql = "INSERT INTO MOEDA VALUES ("
                 + sequencia + ",'"
                 + moeda.getDecricao()+ "','"
                 + moeda.getUnidade()+ "','"
                 +FormatarData.dateParaTimeStamp(moeda.getData_alter())+"')";
+        
+                resultado = conecta_banco.incluirSQL(sql);
+
+               if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+                   return false;
+               }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+                   return false;
+               }else{
+                    //Insert de atualização da moeda
+                    ultima = new UltimaSequencia();
+                    sequencia = (Integer) (ultima.ultimasequencia("ATUALIZACAO_MOEDA","ID_ATUALIZACAO"));
+                    sql = "INSERT INTO ATUALIZACAO_MOEDA VALUES ("
+                        + sequencia + ","
+                        + moeda.getId_moeda()+ ",'"
+                        +FormatarData.dateParaTimeStamp(moeda.getData_alter())+"',"
+                        +0.00+")";
 
                 conecta_banco.incluirSQL(sql);
+               }
                 
-         //Insert de atualização da moeda
-        ultima = new UltimaSequencia();
-        sequencia = (Integer) (ultima.ultimasequencia("ATUALIZACAO_MOEDA","ID_ATUALIZACAO"));
-        sql = "INSERT INTO ATUALIZACAO_MOEDA VALUES ("
-                + sequencia + ","
-                + moeda.getId_moeda()+ ",'"
-                +FormatarData.dateParaTimeStamp(moeda.getData_alter())+"',"
-                +0.00+")";
-
-                conecta_banco.incluirSQL(sql);        
+            return true;    
     }
     
      //Método de incluir contato no banco
-    public void excluir(Moeda moeda)throws SQLIntegrityConstraintViolationException
+    public boolean excluir(Moeda moeda) 
     {
-        //excluir de moeda
-        String sql = "DELETE FROM MOEDA WHERE ID_MOEDA = "+moeda.getId_moeda();
-
+        int result;
+        
         try {
+            //exclui todas atualizações de valores da moeda
+            String sql = "DELETE FROM ATUALIZACAO_MOEDA WHERE ID_MOEDA = "+moeda.getId_moeda();
             conecta_banco.atualizarSQL(sql);
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Falha ao excluir moeda");
-        }  
+            //excluir de moeda
+            sql = "DELETE FROM MOEDA WHERE ID_MOEDA = "+moeda.getId_moeda();
+
+            result = conecta_banco.atualizarSQL(sql);
+            
+            if(result == ExcessaoBanco.ERRO_CHAVE_ESTRANGEIRA){
+                return false;
+            } else if (result == ExcessaoBanco.OUTROS_ERROS){
+                return false;
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Falha ao tentar excluir moeda");
+        }
+       
+        
+       
+        
+        return true;
     }
     
-    public void alterar(Moeda moeda)throws SQLException
+    public boolean alterar(Moeda moeda)throws SQLException
     {
+     int result;
      String sql = "UPDATE MOEDA SET ID_MOEDA = "+ moeda.getId_moeda()+","
                 + "DESCRICAO = '" + moeda.getDecricao()+"',"
                 + "UNIDADE = '" + moeda.getUnidade()+"',"
                 + "DATA_ALTER = '" + FormatarData.dateParaTimeStamp(moeda.getData_alter())+"'"
                 + " WHERE ID_MOEDA = " + moeda.getId_moeda();
      
-                conecta_banco.atualizarSQL(sql);
+                result = conecta_banco.atualizarSQL(sql);
+                
+                if(result == ExcessaoBanco.ERRO_CHAVE_ESTRANGEIRA){
+                    return false;
+                }else if (result == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+                    return false;
+                }else if(result == ExcessaoBanco.OUTROS_ERROS) {
+                    return false;
+                }
+                
+                return true;
     }
     
     public void incluirAtualizacao(AtualizacaoMoeda atualizacao)throws SQLException

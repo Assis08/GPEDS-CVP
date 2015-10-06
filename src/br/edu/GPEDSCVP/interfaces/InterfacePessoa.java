@@ -84,7 +84,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
     String alter_rg = "";
     String alter_login = "";
     String numero_contato;
-    boolean valida_permissoes = true;
+    static boolean valida_duplicacao = true;
+    static String tela_alteracao;
 
     /**
      * Creates new form InterfacePessoa
@@ -252,6 +253,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jTBEndereco = new javax.swing.JTable();
         jBTAddEndereco = new javax.swing.JButton();
         jBTRemoveEndereco = new javax.swing.JButton();
+        jBTNovaCidade = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPPermissoes = new javax.swing.JPanel();
         jLabel15 = new javax.swing.JLabel();
@@ -308,6 +310,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
         addWindowStateListener(new java.awt.event.WindowStateListener() {
             public void windowStateChanged(java.awt.event.WindowEvent evt) {
                 formWindowStateChanged(evt);
+            }
+        });
+
+        jTBPessoas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTBPessoasMouseClicked(evt);
             }
         });
 
@@ -806,7 +814,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             }
         });
 
-        jLabel24.setText("Cidade");
+        jLabel24.setText("Cidade:");
 
         jTFRua.setToolTipText("Rua");
         jTFRua.setName("rua"); // NOI18N
@@ -867,6 +875,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
             jTBEndereco.getColumnModel().getColumn(1).setMinWidth(1);
             jTBEndereco.getColumnModel().getColumn(2).setMinWidth(1);
             jTBEndereco.getColumnModel().getColumn(8).setResizable(false);
+            jTBEndereco.getColumnModel().getColumn(10).setMinWidth(0);
+            jTBEndereco.getColumnModel().getColumn(10).setPreferredWidth(0);
+            jTBEndereco.getColumnModel().getColumn(10).setMaxWidth(0);
         }
 
         jBTAddEndereco.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
@@ -883,6 +894,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 jBTRemoveEnderecoActionPerformed(evt);
             }
         });
+
+        jBTNovaCidade.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\add.png")); // NOI18N
+        jBTNovaCidade.setText("Nova");
 
         javax.swing.GroupLayout jPEnderecoLayout = new javax.swing.GroupLayout(jPEndereco);
         jPEndereco.setLayout(jPEnderecoLayout);
@@ -902,8 +916,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                             .addComponent(jFTCep, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel23))
                         .addGap(11, 11, 11)
-                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel24)
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(jPEnderecoLayout.createSequentialGroup()
+                                .addComponent(jLabel24)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jBTNovaCidade))
                             .addComponent(jCBCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -922,12 +939,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
                             .addComponent(jTFDescEnd)
                             .addGroup(jPEnderecoLayout.createSequentialGroup()
                                 .addComponent(jLabel19)
-                                .addGap(0, 264, Short.MAX_VALUE)))
+                                .addGap(0, 265, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTFRua, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel20))
-                        .addGap(9, 9, 9)
+                            .addGroup(jPEnderecoLayout.createSequentialGroup()
+                                .addComponent(jLabel20)
+                                .addGap(391, 391, 391))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPEnderecoLayout.createSequentialGroup()
+                                .addComponent(jTFRua, javax.swing.GroupLayout.PREFERRED_SIZE, 405, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                         .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTFNumeroEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel21))))
@@ -936,16 +956,21 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jPEnderecoLayout.setVerticalGroup(
             jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPEnderecoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel19)
-                    .addComponent(jLabel20)
-                    .addComponent(jLabel21))
-                .addGap(4, 4, 4)
-                .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFDescEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFRua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTFNumeroEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPEnderecoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel19)
+                            .addComponent(jLabel20))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTFRua, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTFDescEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPEnderecoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel21)
+                        .addGap(4, 4, 4)
+                        .addComponent(jTFNumeroEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPEnderecoLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -953,7 +978,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                             .addComponent(jLabel23)
                             .addComponent(jLabel22)
                             .addComponent(jLabel24)
-                            .addComponent(jLabel25))
+                            .addComponent(jLabel25)
+                            .addComponent(jBTNovaCidade))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jTFUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -969,7 +995,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                         .addComponent(jBTAddEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBTRemoveEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(90, Short.MAX_VALUE))
+                        .addContainerGap(83, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
 
@@ -1114,6 +1140,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
             jTBPermissoes.getColumnModel().getColumn(1).setMinWidth(1);
             jTBPermissoes.getColumnModel().getColumn(2).setMinWidth(1);
             jTBPermissoes.getColumnModel().getColumn(7).setResizable(false);
+            jTBPermissoes.getColumnModel().getColumn(9).setMinWidth(0);
+            jTBPermissoes.getColumnModel().getColumn(9).setPreferredWidth(0);
+            jTBPermissoes.getColumnModel().getColumn(9).setMaxWidth(0);
         }
 
         jBTAddPermissao.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
@@ -2228,7 +2257,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Falha ao incluir a Pessoa");
             }
         } else if (situacao == Rotinas.ALTERAR) {
-
             try {
 
                 if (jRBPessoaFisica.isSelected()) {
@@ -2538,7 +2566,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                     getEndereco();
 
                                     //se não estiver preenchido os dados de contato
-                                    if ((jCBTipoContato.getSelectedIndex() == 0)) {
+                                     if (validaCampos.VerificaJtable(jTBContato) == 0) {
                                         //Retorno da mensagem: 0-sim 1-não;
                                         retorno_mensagem = mensagem.ValidaMensagem("Deseja salvar registro sem o contato?");
 
@@ -2743,7 +2771,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                     getEndereco();
 
                                     //se não estiver preenchido os dados de contato
-                                    if ((jCBTipoContato.getSelectedIndex() == 0)) {
+                                     if (validaCampos.VerificaJtable(jTBContato) == 0) {
 
                                         //Retorno da mensagem: 0-sim 1-não;
                                         retorno_mensagem = mensagem.ValidaMensagem("Deseja salvar registro sem o contato?");
@@ -3436,26 +3464,47 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                 permissao.setId_tela(tela.getArray_tela(jCBTela.getSelectedIndex() - 1));
                 try {
-                   
-                    //verifica se a permissão ja foi adicionada pra determinada tela
-                    if (Jtable.evitarDuplicacao(jTBPermissoes, jCBTela.getSelectedItem().toString()) == false) {
-                        //adiciona dados do endereço na Jtable de endereços
-                        dao_permissao.addPermissao(permissao,situacao);
-                        //limpa campos de permissoes
-                        validaCampos.LimparCampos(jPPermissoes);
+                    if(valida_duplicacao == true){
+                        //verifica se a permissão ja foi adicionada pra determinada tela
+                        if (Jtable.evitarDuplicacao(jTBPermissoes, jCBTela.getSelectedItem().toString()) == false) {
 
-                        //Carrega novamente a combo de telas
-                        dao_tela.consultageral(tela);
-                        combo.PreencherCombo(jCBTela, "descricao", tela.getRetorno(), "id_tela");
+                            //adiciona dados do endereço na Jtable de endereços
+                            dao_permissao.addPermissao(permissao,situacao);
+                            //limpa campos de permissoes
+                            validaCampos.LimparCampos(jPPermissoes);
 
-                        //ajusta largura das colunas de acordo com o tamanho do dado
-                        Jtable.ajustarColunasDaTabela(jTBPermissoes);
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Permissão já adicionada!");
-                    }
+                            //Carrega novamente a combo de telas
+                            dao_tela.consultageral(tela);
+                            combo.PreencherCombo(jCBTela, "descricao", tela.getRetorno(), "id_tela");
+
+                            //ajusta largura das colunas de acordo com o tamanho do dado
+                            Jtable.ajustarColunasDaTabela(jTBPermissoes);
+                            
+                            valida_duplicacao = false;
+                            
+                            permissao = new Permissao();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Permissão já adicionada!");
+                        }
                         
-                    permissao = new Permissao();
+                    }else{
+                          //adiciona dados do endereço na Jtable de endereços
+                            dao_permissao.addPermissao(permissao,situacao);
+                            //limpa campos de permissoes
+                            validaCampos.LimparCampos(jPPermissoes);
 
+                            //Carrega novamente a combo de telas
+                            dao_tela.consultageral(tela);
+                            combo.PreencherCombo(jCBTela, "descricao", tela.getRetorno(), "id_tela");
+
+                            //ajusta largura das colunas de acordo com o tamanho do dado
+                            Jtable.ajustarColunasDaTabela(jTBPermissoes);
+                            
+                            valida_duplicacao = false;
+                            
+                            permissao = new Permissao();
+                    }
+                  
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Falha ao adicionar permissão");
                 }
@@ -3486,12 +3535,20 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBGerenteStateChanged
 
     private void jCBTelaPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBTelaPopupMenuWillBecomeInvisible
+        
+        String tela_setada;
         if ((jCBTela.isEnabled())) {
             if (jCBTela.getSelectedIndex() != 0) {
                 //pega o id da cidade selecionada
                 // -1 foi utilizado pelo fato de adicionar um valor padrao no primeiro item da combo
                 tela.setId_tela(tela.getArray_tela(jCBTela.getSelectedIndex() - 1));
-
+                tela_setada = jCBTela.getSelectedItem().toString();
+                //garante que sempre vai validar duplicação de telas nas permissões de acesso quando mudar de tela na combobox
+                if(tela_setada.equals(tela_alteracao)){
+                    valida_duplicacao = false;
+                }else{
+                    valida_duplicacao = true;
+                }
                 //retorna os dados da tela pelo id
                 dao_tela.retornardados(tela);
 
@@ -3782,7 +3839,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         //Verifica se houve 2 cliques do mouse 
         if (evt.getClickCount() == 2) {
-
+         
             //recupera a linha clicada
             int linha = jTBDadosPessoas.getSelectedRow();
 
@@ -3862,6 +3919,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
             situacao = Rotinas.PADRAO;
             //habilita os botoes utilizados na alteraçao e exclusão e desabilita os restantes
             validabotoes.ValidaEstado(jPBotoes, situacao);
+            
+            //limpa consulta
+            validaCampos.LimparJtable(jTBDadosPessoas);
         }
         //Ajusta largura das colunas da jtable de acordo com o tamanho do dado
         Jtable.ajustarColunasDaTabela(jTBContato);
@@ -4114,7 +4174,9 @@ public class InterfacePessoa extends javax.swing.JFrame {
             Integer exc = Integer.parseInt(jTBPermissoes.getValueAt(linha, 9).toString());
             if (evt.getClickCount() == 2) {
                 if(exc == 0){
+                    valida_duplicacao = false;
                     setaJtablePermissoesTela();
+                    tela_alteracao = jCBTela.getSelectedItem().toString();
                 } 
             }
         }
@@ -4123,6 +4185,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jFTCPFCNPJMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFTCPFCNPJMouseClicked
         // TODO add your handling code here:
     }//GEN-LAST:event_jFTCPFCNPJMouseClicked
+
+    private void jTBPessoasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBPessoasMouseClicked
+       
+    }//GEN-LAST:event_jTBPessoasMouseClicked
 
     /**
      * @param args the command line arguments
@@ -4166,6 +4232,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private javax.swing.JButton jBTAddEndereco;
     private javax.swing.JButton jBTAddPermissao;
     private javax.swing.JButton jBTBuscar;
+    private javax.swing.JButton jBTNovaCidade;
     private javax.swing.JButton jBTRemoveContato;
     private javax.swing.JButton jBTRemoveEndereco;
     private javax.swing.JButton jBTRemovePermissao;
@@ -4613,9 +4680,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         setcompCertificadora();
 
-        //Preenche na JTABLE de endereços todos endereços da pessoa
-        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null", "id_endereco", "endereco.descricao", "rua", "numero", "bairro", "cep", "cidade.descricao", "uf","false"}, endereco.getRetorno());
-
+       //Preenche na JTABLE de endereços todos endereços da pessoa
+        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null", "id_endereco", "endereco.descricao", "rua", "numero", "bairro", "cep","endereco.id_cidade","cidade.descricao", "uf", "false"}, endereco.getRetorno());
         //Preenche na JTABLE de contatos todos contatos da pessoa
         Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null", "id_contato", "tipo", "descricao", "numero", "email","false"}, contato.getRetorno());
     }
@@ -4639,10 +4705,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
         setcompFornecedor();
 
         //Preenche na JTABLE de endereços todos endereços da pessoa
-        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null", "id_endereco", "endereco.descricao", "rua", "numero", "bairro", "cep", "cidade.descricao", "uf"}, endereco.getRetorno());
+        Jtable.PreencherJtableGenerico(jTBEndereco, new String[]{"null", "id_endereco", "endereco.descricao", "rua", "numero", "bairro", "cep","endereco.id_cidade","cidade.descricao", "uf", "false"}, endereco.getRetorno());
 
         //Preenche na JTABLE de contatos todos contatos da pessoa
-        Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null", "id_contato", "tipo", "descricao", "numero", "email"}, contato.getRetorno());
+        Jtable.PreencherJtableGenerico(jTBContato, new String[]{"null", "id_contato", "tipo", "descricao", "numero", "email","false"}, contato.getRetorno());
     }
     
     public void setaJtableContatoTela(){

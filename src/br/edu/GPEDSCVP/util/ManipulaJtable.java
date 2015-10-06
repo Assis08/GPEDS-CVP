@@ -124,6 +124,9 @@ public class ManipulaJtable {
                     //seta o valor 1 na coluna excluido da jtable
                     jtable.setValueAt(1, i, totcolun-1);
                     jtable.setValueAt(false, i, 0);
+                    //habilita e desabilita para atualizar o jtable (caso contrario pinta de vermelho só quando clica na linha)
+                    jtable.setEnabled(false);
+                    jtable.setEnabled(true);
                 }else{
                     tabela.removeRow(i);
                 }
