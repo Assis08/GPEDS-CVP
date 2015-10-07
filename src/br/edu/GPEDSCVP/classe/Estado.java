@@ -15,12 +15,14 @@ import javax.swing.JTable;
  */
 public class Estado {
     
+    private int id_uf;
     private String uf;
     private int id_pais;
     private String descricao;
     private Date data_alter;
     private JTable tabela;
     private ResultSet retorno;
+    private int[] array_estado;
 
     public Estado() {
         uf = "";
@@ -75,5 +77,13 @@ public class Estado {
 
     public void setRetorno(ResultSet retorno) {
         this.retorno = retorno;
+    }
+
+    public int getArray_estado(int posicao) {
+        return array_estado[posicao];
+    }
+
+    public void setArray_estado(int[] array_estado) {
+        this.array_estado = array_estado;
     }
 }

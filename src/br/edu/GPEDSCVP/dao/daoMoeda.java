@@ -159,12 +159,14 @@ public class daoMoeda {
         moeda.setRetorno(conecta_banco.resultset);
       
     }
-    
+    //traz apenas a última atualizações de cada moeda
     public void consultaGeralAtualizacao(AtualizacaoMoeda atualizacao){
         
-        conecta_banco.executeSQL("select moeda.id_moeda,moeda.descricao,moeda.unidade,valor,atualizacao_moeda.data_atualizacao, false"
-                +" from atualizacao_moeda" 
-                +" inner join moeda on (moeda.id_moeda = atualizacao_moeda.id_moeda)");
+        conecta_banco.executeSQL("select moeda.id_moeda,moeda.descricao,moeda.unidade,valor,atualizacao_moeda.data_atualizacao,false from atualizacao_moeda"+
+                                " inner join moeda on (moeda.id_moeda = atualizacao_moeda.id_moeda)"+
+                                " inner join (select id_moeda, max(atualizacao_moeda.data_atualizacao) data_atualizacao from atualizacao_moeda"+
+                                " group by id_moeda) sub on (sub.id_moeda = atualizacao_moeda.id_moeda and sub.data_atualizacao = atualizacao_moeda.data_atualizacao)"+
+                                " group by (atualizacao_moeda.id_moeda)");
 
         atualizacao.setRetorno(conecta_banco.resultset);
       

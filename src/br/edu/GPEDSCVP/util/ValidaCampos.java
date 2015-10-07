@@ -207,6 +207,18 @@ public class ValidaCampos {
                                         }
                                     }                                 
                                 }
+                            }else if (component instanceof JComboBox){
+                                JComboBox combo = (JComboBox) component;
+                                if (combo.isEnabled()){
+                                    if (combo.getName().equals(atributo)){
+                                        if(combo.getSelectedIndex() == 0){
+                                            JOptionPane.showMessageDialog(null, "Caixa de seleção: "+ combo.getToolTipText()+ " é obrigatorio");
+                                            retorno = 1;
+                                            break;
+                                        }
+                                    }
+                                }
+                                
                             }
                         }                   
                     }

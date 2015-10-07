@@ -542,6 +542,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jButton1.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
         jButton1.setText("Novo");
+        jButton1.setToolTipText("Cidade");
+        jButton1.setName("ID_CIDADE"); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -785,7 +787,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jLabel25.setText("UF:");
 
-        jCBCidade.setName("cidade"); // NOI18N
+        jCBCidade.setName("id_cidade"); // NOI18N
         jCBCidade.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jCBCidadeMouseClicked(evt);
@@ -1023,6 +1025,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jLabel15.setText("Permissões de acesso:");
 
+        jCBTela.setToolTipText("Tela");
+        jCBTela.setName("id_tela"); // NOI18N
         jCBTela.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -2977,6 +2981,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Falha ao alterar pessoa");
             }
         }
+    //Garante que sempre que atualizar uma pessoa, irá retornar os dados do usuário logado novamente 
+    dao_acesso.retornaUsuarioLogado(acesso);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

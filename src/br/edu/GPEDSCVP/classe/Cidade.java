@@ -16,6 +16,7 @@ import javax.swing.JTable;
 public class Cidade {
     
     private int id_cidade;
+    private int id_uf;
     private String uf;
     private String descricao;
     private Date data_alter;
@@ -28,6 +29,7 @@ public class Cidade {
         uf = "";
         descricao = "";
         data_alter = null;
+        id_uf =0;
     }
 
     public int getId_cidade() {
@@ -85,4 +87,13 @@ public class Cidade {
     public void setArray_cidade(int[] array_cidade) {
         this.array_cidade = array_cidade;
     }
+
+    public int getId_uf() {
+        return id_uf;
+    }
+
+    public void setId_uf(int id_uf) {
+        this.id_uf = id_uf;
+    }
+
 }

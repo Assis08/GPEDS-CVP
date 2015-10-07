@@ -7,6 +7,8 @@ package br.edu.GPEDSCVP.dao;
 
 import br.edu.GPEDSCVP.classe.Cidade;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
+import br.edu.GPEDSCVP.util.ExcessaoBanco;
+import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -53,6 +55,32 @@ public class daoCidade {
             JOptionPane.showMessageDialog(null, "Falha ao retornar dados de cidade");
         }
        
+    }
+     
+    //Método de incluir cidade no banco
+    public boolean incluir(Cidade cidade)throws SQLException
+    {
+        //Insert de cidade
+        ultima = new UltimaSequencia();
+        int resultado;
+        
+        int sequencia = (Integer) (ultima.ultimasequencia("CIDADE","ID_CIDADE"));
+        String sql = "INSERT INTO CIDADE VALUES ("
+                + sequencia + ","
+                + cidade.getId_uf()+ ",'"
+                + cidade.getUf()+ "','"
+                + cidade.getDescricao()+ "','"
+                +FormatarData.dateParaTimeStamp(cidade.getData_alter())+"')";
+        
+                resultado = conecta_banco.incluirSQL(sql);
+
+               if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+                   return false;
+               }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+                   return false;
+               }
+
+            return true;    
     }
     
 }

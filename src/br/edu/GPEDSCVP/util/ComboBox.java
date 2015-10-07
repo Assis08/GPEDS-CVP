@@ -36,7 +36,7 @@ public class ComboBox {
             //cidade.setArray_cidade(array);
             return array;
         }catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "DADOS NÃO ENCONTRADOS");
+           // JOptionPane.showMessageDialog(null, "DADOS NÃO ENCONTRADOS");
         }
         return null;
     }
