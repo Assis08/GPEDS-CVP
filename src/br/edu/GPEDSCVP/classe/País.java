@@ -17,9 +17,11 @@ public class País {
     
     private int id_pais;
     private String descricao;
+    private String sigla;
     private Date data_alter;
     private JTable tabela;
     private ResultSet retorno;
+    private int[] array_pais;
 
     public País() {
         id_pais = 0;
@@ -66,4 +68,21 @@ public class País {
     public void setRetorno(ResultSet retorno) {
         this.retorno = retorno;
     }
+    
+    public int getArray_pais(int posicao) {
+        return array_pais[posicao];
+    }
+
+    public void setArray_pais(int[] array_pais) {
+        this.array_pais = array_pais;
+    }
+
+    public String getSigla() {
+        return sigla;
+    }
+
+    public void setSigla(String sigla) {
+        this.sigla = sigla;
+    }
+
 }

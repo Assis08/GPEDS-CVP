@@ -563,17 +563,7 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBConsultaMoedasMouseClicked
 
     private void jFTUnidadeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFTUnidadeMouseClicked
-/*
-        if (jFTUnidade.toString().equals("")) {
-            jFTUnidade.setValue("");
-        }else{
-            //Seta mascara no campo de CNPJ
-            jFTUnidade.setFormatterFactory(new DefaultFormatterFactory(valida_campos.limitaCaracteres("***")));
-            //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
-            jFTUnidade.setValue("");
-        }
-        */
-       
+
     }//GEN-LAST:event_jFTUnidadeMouseClicked
 
     /**

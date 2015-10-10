@@ -34,6 +34,14 @@ public class daoCidade {
         }
     }
     
+    public void consultaGeral(Cidade cidade){
+        
+        conecta_banco.executeSQL("select * from cidade");
+
+        cidade.setRetorno(conecta_banco.resultset);
+      
+    }
+    
     public void consultageral(Cidade cidade){
         String sql = "select * from cidade";
         conecta_banco.executeSQL(sql);
@@ -48,6 +56,7 @@ public class daoCidade {
             conecta_banco.resultset.first();
             cidade.setId_cidade(conecta_banco.resultset.getInt("id_cidade"));
             cidade.setUf(conecta_banco.resultset.getString("uf"));
+            cidade.setId_uf(conecta_banco.resultset.getInt("id_uf"));
             cidade.setDescricao(conecta_banco.resultset.getString("descricao"));
             cidade.setData_alter(conecta_banco.resultset.getDate("data_alter"));
            
@@ -81,6 +90,51 @@ public class daoCidade {
                }
 
             return true;    
+    }
+    
+    public boolean alterar(Cidade cidade)throws SQLException
+    {
+     int result;
+     String sql = "UPDATE CIDADE SET ID_CIDADE= "+ cidade.getId_cidade()+","
+                + "ID_UF = " + cidade.getId_uf()+","
+                + "UF = '" + cidade.getUf()+"',"
+                + "DESCRICAO = '" + cidade.getDescricao()+"',"
+                + "DATA_ALTER = '" + FormatarData.dateParaTimeStamp(cidade.getData_alter())+"'"
+                + " WHERE ID_CIDADE = " + cidade.getId_cidade();
+     
+                result = conecta_banco.atualizarSQL(sql);
+                
+                if(result == ExcessaoBanco.ERRO_CHAVE_ESTRANGEIRA){
+                    return false;
+                }else if (result == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+                    return false;
+                }else if(result == ExcessaoBanco.OUTROS_ERROS) {
+                    return false;
+                }
+                
+                return true;
+    }
+    
+    //Método de excluir moeda no banco
+    public boolean excluir(Cidade cidade) 
+    {
+        int result;
+        
+        try {
+            //exclui todas atualizações de valores da moeda
+            String sql = "DELETE FROM CIDADE WHERE ID_CIDADE = "+cidade.getId_cidade();
+            result = conecta_banco.atualizarSQL(sql);
+          
+            if(result == ExcessaoBanco.ERRO_CHAVE_ESTRANGEIRA){
+                return false;
+            } else if (result == ExcessaoBanco.OUTROS_ERROS){
+                return false;
+            }
+            
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Falha ao tentar excluir moeda");
+        }
+        return true;
     }
     
 }

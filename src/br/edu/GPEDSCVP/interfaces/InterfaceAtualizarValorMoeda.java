@@ -21,11 +21,15 @@ import br.edu.GPEDSCVP.util.ValidaBotoes;
 import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
 /**
@@ -62,7 +66,10 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
         atualizacao_moeda = new AtualizacaoMoeda();
         
         new TableCellListener(jTBAtualizarMoedas, new TableCellEditorAction());
-
+        
+        //Seta mascara na coluna de valor da jtable
+        Jtable.setarMascara(jTBAtualizarMoedas, jFTMascara, "#.##",3);
+        
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBAtualizarMoedas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         
@@ -81,6 +88,7 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
 
         jScrollPane1 = new javax.swing.JScrollPane();
         jTBAtualizarMoedas = new javax.swing.JTable();
+        jFTMascara = new javax.swing.JFormattedTextField();
 
         setTitle("Atualização do valor das moedas");
         setResizable(false);
@@ -95,7 +103,7 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID Moeda", "Descrição", "Unidade", "Valor", "Última atualização", "Alterado"
+                "ID Moeda", "Descrição", "Unidade", "Valor R$", "Última atualização", "Alterado"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -114,18 +122,26 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
             jTBAtualizarMoedas.getColumnModel().getColumn(5).setMaxWidth(0);
         }
 
+        jFTMascara.setText("jFormattedTextField1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 375, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jFTMascara, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jFTMascara, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        setSize(new java.awt.Dimension(391, 242));
+        setSize(new java.awt.Dimension(390, 242));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -186,6 +202,7 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JFormattedTextField jFTMascara;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTBAtualizarMoedas;
     // End of variables declaration//GEN-END:variables
@@ -208,10 +225,13 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
                 if(column == 3 ){
                     try { 
                         //verifica se o valor setado é um valor double
-                        double valor = 0;
-                        valor = Double.parseDouble(table.getValueAt(row, column).toString().replace(",", "."));
+
+
+                        Double valor = Double.parseDouble(table.getValueAt(row, column).toString());
+                       
                         table.setValueAt(1, row, 5);
-                        
+                        //Seta valor com ponto em vez de virgula
+                        table.setValueAt(valor, row, column);
                         //Se não for gerente
                         if (acesso.getIn_gerente() == 0) {
                             //retorna as permissoes de acesso do usuario  
@@ -264,5 +284,4 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
             onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
         }
     }
-
 }

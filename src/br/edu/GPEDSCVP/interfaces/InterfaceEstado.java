@@ -6,13 +6,14 @@
 package br.edu.GPEDSCVP.interfaces;
 
 import br.edu.GPEDSCVP.classe.Acesso;
-import br.edu.GPEDSCVP.classe.Cidade;
 import br.edu.GPEDSCVP.classe.Estado;
+import br.edu.GPEDSCVP.classe.País;
 import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.dao.daoAcesso;
 import br.edu.GPEDSCVP.dao.daoCidade;
 import br.edu.GPEDSCVP.dao.daoEstado;
+import br.edu.GPEDSCVP.dao.daoPaís;
 import br.edu.GPEDSCVP.dao.daoPermissao;
 import br.edu.GPEDSCVP.dao.daoTela;
 import br.edu.GPEDSCVP.util.ComboBox;
@@ -29,19 +30,21 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.text.DefaultFormatterFactory;
 
 /**
  *
  * @author Willys
  */
-public class InterfaceCidade extends javax.swing.JFrame {
+public class InterfaceEstado extends javax.swing.JFrame {
 
-    Cidade cidade;
+    País pais;
     Estado estado;
     Tela tela;
     daoTela dao_tela;
     ComboBox combo;
     daoCidade dao_cidade;
+    daoPaís dao_pais;
     daoEstado dao_estado;
     Acesso acesso;
     Mensagens mensagem;
@@ -52,21 +55,22 @@ public class InterfaceCidade extends javax.swing.JFrame {
     ValidaBotoes valida_botoes;
     ValidaCampos valida_campos;
     ManipulaJtable Jtable;
-    int[] array_estado;
- 
+    int[] array_pais;
     int situacao = Rotinas.PADRAO;
-    public InterfaceCidade() {
+    
+    public InterfaceEstado() {
         initComponents();
         
-        cidade = new Cidade();
+        pais = new País();
         estado = new Estado(); 
         tela = new Tela();
         dao_tela = new daoTela();
         dao_cidade = new daoCidade();
-        dao_estado = new daoEstado();
+        dao_pais = new daoPaís();
         acesso = new Acesso();
         dao_permissao = new daoPermissao();
         dao_acesso = new daoAcesso();
+        dao_estado = new daoEstado();
         permissao = new Permissao();
         valida_acesso = new ValidaAcesso();
         valida_botoes = new ValidaBotoes();
@@ -79,12 +83,11 @@ public class InterfaceCidade extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar registro");
         }
         
-        
         //desabilita campos da tela de moeda
-        valida_campos.desabilitaCampos(jPCidade);
+        valida_campos.desabilitaCampos(jPEstado);
         
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
-        jTBConsultaCidades.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBConsultaEstados.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -95,11 +98,13 @@ public class InterfaceCidade extends javax.swing.JFrame {
         //atualiza dados do usuario logado
         dao_acesso.retornaUsuarioLogado(acesso);
         
-        dao_estado.consultageral(estado);
+        dao_pais.consultaGeral(pais);
         //Preenche dados nas ComboBox de cidade
-        array_estado = combo.PreencherCombo(jCBUF, "uf", estado.getRetorno(), "id_uf");
+        array_pais = combo.PreencherCombo(jCBPais, "sigla", pais.getRetorno(), "id_pais");
         //seta no array da classe de cidade a lista de cidades listadas na combo
-        estado.setArray_estado(array_estado);
+        pais.setArray_pais(array_pais);
+        //Seta mascara nos campos que necessitam de mascara
+        setaMascaras();
     }
 
     /**
@@ -111,34 +116,33 @@ public class InterfaceCidade extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox();
-        jTBCidade = new javax.swing.JTabbedPane();
-        jPCidade = new javax.swing.JPanel();
+        jTBEstado = new javax.swing.JTabbedPane();
+        jPEstado = new javax.swing.JPanel();
         jPBotoes = new javax.swing.JPanel();
         jBTNovo = new javax.swing.JButton();
         jBTAlterar = new javax.swing.JButton();
         jBTExcluir = new javax.swing.JButton();
         jBTGravar = new javax.swing.JButton();
         jBTCancelar = new javax.swing.JButton();
-        jTFIDCidade = new javax.swing.JTextField();
+        jTFIDUF = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTFDescricao = new javax.swing.JTextField();
-        jCBUF = new javax.swing.JComboBox();
+        jCBPais = new javax.swing.JComboBox();
         jLabel3 = new javax.swing.JLabel();
-        jBTNovoEstado = new javax.swing.JButton();
+        jBTNovoPais = new javax.swing.JButton();
+        jFTUF = new javax.swing.JFormattedTextField();
+        jLabel4 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTBConsultaCidades = new javax.swing.JTable();
+        jTBConsultaEstados = new javax.swing.JTable();
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        setTitle("Cadastro de Cidades");
+        setTitle("Cadastro de Estados");
         setResizable(false);
 
-        jTBCidade.addChangeListener(new javax.swing.event.ChangeListener() {
+        jTBEstado.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jTBCidadeStateChanged(evt);
+                jTBEstadoStateChanged(evt);
             }
         });
 
@@ -217,107 +221,129 @@ public class InterfaceCidade extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTFIDCidade.setEditable(false);
-        jTFIDCidade.setName(""); // NOI18N
+        jTFIDUF.setEditable(false);
+        jTFIDUF.setToolTipText("ID UF");
+        jTFIDUF.setName("ID_UF"); // NOI18N
 
-        jLabel1.setText("ID CIdade:");
+        jLabel1.setText("ID UF:");
 
         jLabel2.setText("Descrição:");
 
         jTFDescricao.setToolTipText("Descrição");
         jTFDescricao.setName("descricao"); // NOI18N
 
-        jCBUF.setToolTipText("UF");
-        jCBUF.setName("uf"); // NOI18N
-        jCBUF.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+        jCBPais.setToolTipText("País");
+        jCBPais.setName("id_pais"); // NOI18N
+        jCBPais.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                jCBUFPopupMenuWillBecomeInvisible(evt);
+                jCBPaisPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
             }
         });
 
-        jLabel3.setText("UF:");
+        jLabel3.setText("País:");
 
-        jBTNovoEstado.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\add.png")); // NOI18N
-        jBTNovoEstado.setText("Novo");
-        jBTNovoEstado.addActionListener(new java.awt.event.ActionListener() {
+        jBTNovoPais.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\add.png")); // NOI18N
+        jBTNovoPais.setText("Novo");
+        jBTNovoPais.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBTNovoEstadoActionPerformed(evt);
+                jBTNovoPaisActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout jPCidadeLayout = new javax.swing.GroupLayout(jPCidade);
-        jPCidade.setLayout(jPCidadeLayout);
-        jPCidadeLayout.setHorizontalGroup(
-            jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jFTUF.setToolTipText("UF");
+        jFTUF.setName("uf"); // NOI18N
+        jFTUF.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jFTUFFocusLost(evt);
+            }
+        });
+
+        jLabel4.setText("UF");
+
+        javax.swing.GroupLayout jPEstadoLayout = new javax.swing.GroupLayout(jPEstado);
+        jPEstado.setLayout(jPEstadoLayout);
+        jPEstadoLayout.setHorizontalGroup(
+            jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPCidadeLayout.createSequentialGroup()
+            .addGroup(jPEstadoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jTFIDCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(jPCidadeLayout.createSequentialGroup()
-                        .addComponent(jCBUF, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jBTNovoEstado)))
+                .addGroup(jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPEstadoLayout.createSequentialGroup()
+                        .addGroup(jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3)
+                            .addGroup(jPEstadoLayout.createSequentialGroup()
+                                .addComponent(jCBPais, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jBTNovoPais))))
+                    .addGroup(jPEstadoLayout.createSequentialGroup()
+                        .addGroup(jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTFIDUF, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(32, 32, 32)
+                        .addGroup(jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jFTUF, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPCidadeLayout.setVerticalGroup(
-            jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCidadeLayout.createSequentialGroup()
+        jPEstadoLayout.setVerticalGroup(
+            jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPEstadoLayout.createSequentialGroup()
                 .addGap(20, 20, 20)
-                .addComponent(jLabel1)
+                .addGroup(jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel4))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTFIDCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTFIDUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jFTUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPCidadeLayout.createSequentialGroup()
+                .addGroup(jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPEstadoLayout.createSequentialGroup()
                         .addComponent(jLabel2)
-                        .addGap(8, 8, 8)
-                        .addGroup(jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCBUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBTNovoEstado)))
-                    .addGroup(jPCidadeLayout.createSequentialGroup()
+                        .addGap(30, 30, 30))
+                    .addGroup(jPEstadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jCBPais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBTNovoPais)
+                        .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPEstadoLayout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(31, 31, 31)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 98, Short.MAX_VALUE)
                 .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jTBCidade.addTab("Cadastro", jPCidade);
+        jTBEstado.addTab("Cadastro", jPEstado);
 
-        jTBConsultaCidades.setModel(new javax.swing.table.DefaultTableModel(
+        jTBConsultaEstados.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID Cidade", "Descrição", "UF", "Última alteração"
+                "ID UF", "UF", "Descrição", "ID País", "País", "Última alteração"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jTBConsultaCidades.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTBConsultaEstados.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTBConsultaCidadesMouseClicked(evt);
+                jTBConsultaEstadosMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTBConsultaCidades);
+        jScrollPane1.setViewportView(jTBConsultaEstados);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -327,70 +353,70 @@ public class InterfaceCidade extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
         );
 
-        jTBCidade.addTab("Consulta", jPanel1);
+        jTBEstado.addTab("Consulta", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTBCidade)
+            .addComponent(jTBEstado)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTBCidade, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jTBEstado, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
-        setSize(new java.awt.Dimension(518, 291));
+        setSize(new java.awt.Dimension(518, 338));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBTNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoActionPerformed
         UltimaSequencia ultima;
-       
+
         //habilita campos da tela
-        valida_campos.habilitaCampos(jPCidade);
+        valida_campos.habilitaCampos(jPEstado);
         //se não for gerente
         if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario  
+            //retorna as permissoes de acesso do usuario
             dao_permissao.retornaDadosPermissao(acesso, permissao);
         }
 
         //Verifica se o usuario possui permissao para incluir registros nessa tela
         if (valida_acesso.verificaAcesso("inserir", acesso, permissao) == true) {
-            
+
             //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
             situacao = Rotinas.INCLUIR;
 
             //habilita os botoes utilizados na inclusão e desabilita os restantes
             valida_botoes.ValidaEstado(jPBotoes, situacao);
-            
-            dao_estado.consultageral(estado);
-            //Preenche dados nas ComboBox de cidade
-            array_estado = combo.PreencherCombo(jCBUF, "uf", estado.getRetorno(), "id_uf");
-            //seta no array da classe de cidade a lista de cidades listadas na combo
-            estado.setArray_estado(array_estado);
+
+            dao_pais.consultaGeral(pais);
+            //Preenche dados nas ComboBox de país
+            array_pais = combo.PreencherCombo(jCBPais, "sigla", pais.getRetorno(), "id_pais");
+            //seta no array da classe de país a lista de países listados na combo
+            pais.setArray_pais(array_pais);
 
             try {
                 //Gera id sequencial
                 ultima = new UltimaSequencia();
-                int sequencia = (Integer) (ultima.ultimasequencia("CIDADE", "ID_CIDADE"));
-                //seta id no campo id_moeda
-                jTFIDCidade.setText(Integer.toString(sequencia));
+                int sequencia = (Integer) (ultima.ultimasequencia("ESTADO", "ID_UF"));
+                //seta id no campo id_uf
+                jTFIDUF.setText(Integer.toString(sequencia));
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de cidades");
+                JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de estados");
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir cidades no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir estados no sistema");
         }
     }//GEN-LAST:event_jBTNovoActionPerformed
 
     private void jBTAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAlterarActionPerformed
-         //se naõ for gerente
+        //se naõ for gerente
         if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario  
+            //retorna as permissoes de acesso do usuario
             dao_permissao.retornaDadosPermissao(acesso, permissao);
         }
 
@@ -398,43 +424,43 @@ public class InterfaceCidade extends javax.swing.JFrame {
         if (valida_acesso.verificaAcesso("alterar", acesso, permissao) == true) {
             situacao = Rotinas.ALTERAR;
             valida_botoes.ValidaEstado(jPBotoes, situacao);
-            
-            valida_campos.habilitaCampos(jPCidade);
+
+            valida_campos.habilitaCampos(jPEstado);
 
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para alterar cidades no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para alterar estados no sistema");
         }
     }//GEN-LAST:event_jBTAlterarActionPerformed
 
     private void jBTExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTExcluirActionPerformed
         if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario  
+            //retorna as permissoes de acesso do usuario
             dao_permissao.retornaDadosPermissao(acesso, permissao);
         }
 
         //Verifica se o usuario possui permissao para excluir registros nessa tela
         if (valida_acesso.verificaAcesso("excluir", acesso, permissao) == true) {
-             
-                 if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
-                     
-                    if(dao_cidade.excluir(cidade) == true){
-                        JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
-                        //limpa campos 
-                        valida_campos.LimparCampos(jPCidade);
 
-                        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
-                        situacao = Rotinas.INICIAL;
+            if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
 
-                        //habilita os botoes utilizados na inclusão e desabilita os restantes
-                        valida_botoes.ValidaEstado(jPBotoes, situacao);
+                if(dao_estado.excluir(estado) == true){
+                    JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
+                    //limpa campos
+                    valida_campos.LimparCampos(jPEstado);
 
-                        //desabilita campos
-                        valida_campos.desabilitaCampos(jPCidade);
-                    }
-                  
-                 }
+                    //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                    situacao = Rotinas.INICIAL;
+
+                    //habilita os botoes utilizados na inclusão e desabilita os restantes
+                    valida_botoes.ValidaEstado(jPBotoes, situacao);
+
+                    //desabilita campos
+                    valida_campos.desabilitaCampos(jPEstado);
+                }
+
+            }
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir cidades no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir estados no sistema");
         }
     }//GEN-LAST:event_jBTExcluirActionPerformed
 
@@ -445,18 +471,18 @@ public class InterfaceCidade extends javax.swing.JFrame {
     private void jBTGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTGravarActionPerformed
         //Se for inclusão
         if (situacao == Rotinas.INCLUIR) {
-            if (valida_campos.validacamposobrigatorios(jPCidade, "CIDADE") == 0) {
+            if (valida_campos.validacamposobrigatorios(jPEstado, "ESTADO") == 0) {
 
                 try {
-                    
-                    //pega dados da moeda na tela
-                    getCidade();
-                    //inclui moeda
-                    if(dao_cidade.incluir(cidade) == true){
-                        //se ocorreu tudo bem na inclusão
+
+                    //pega dados da cidade na tela
+                    getEstado();
+                    //inclui cidade
+                    if(dao_estado.incluir(estado) == true){
+                        //se ocorreu tudo certo na inclusão
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
-                        //limpa campos 
-                        valida_campos.LimparCampos(jPCidade);
+                        //limpa campos
+                        valida_campos.LimparCampos(jPEstado);
 
                         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                         situacao = Rotinas.INICIAL;
@@ -465,23 +491,24 @@ public class InterfaceCidade extends javax.swing.JFrame {
                         valida_botoes.ValidaEstado(jPBotoes, situacao);
 
                         //desabilita campos
-                        valida_campos.desabilitaCampos(jPCidade);
+                        valida_campos.desabilitaCampos(jPEstado);
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao incluir moeda");
+                    JOptionPane.showMessageDialog(null, "Falha ao incluir estado");
                 }
-             
+
             }
+        //Se for alteração
         }else if(situacao == Rotinas.ALTERAR) {
-            //pega dados da moeda na tela
-            if (valida_campos.validacamposobrigatorios(jPCidade, "CIDADE") == 0) {
+            //pega dados de estado na tela
+            if (valida_campos.validacamposobrigatorios(jPEstado, "ESTADO") == 0) {
                 try {
-                    getCidade();
-                    //altera moeda
-                    if(dao_cidade.alterar(cidade) == true){
-                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
-                        //limpa campos 
-                        valida_campos.LimparCampos(jPCidade);
+                    getEstado();
+                    //altera estado
+                    if(dao_estado.alterar(estado) == true){
+                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                        //limpa campos
+                        valida_campos.LimparCampos(jPEstado);
 
                         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                         situacao = Rotinas.INICIAL;
@@ -490,18 +517,18 @@ public class InterfaceCidade extends javax.swing.JFrame {
                         valida_botoes.ValidaEstado(jPBotoes, situacao);
 
                         //desabilita campos
-                        valida_campos.desabilitaCampos(jPCidade);
+                        valida_campos.desabilitaCampos(jPEstado);
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao alterar cidade");
+                    JOptionPane.showMessageDialog(null, "Falha ao alterar estado");
                 }
             }
         }
     }//GEN-LAST:event_jBTGravarActionPerformed
 
     private void jBTCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTCancelarActionPerformed
-        //limpa campos 
-        valida_campos.LimparCampos(jPCidade);
+        //limpa campos
+        valida_campos.LimparCampos(jPEstado);
 
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
         situacao = Rotinas.INICIAL;
@@ -510,11 +537,15 @@ public class InterfaceCidade extends javax.swing.JFrame {
         valida_botoes.ValidaEstado(jPBotoes, situacao);
 
         //desabilita campos
-        valida_campos.desabilitaCampos(jPCidade);
+        valida_campos.desabilitaCampos(jPEstado);
     }//GEN-LAST:event_jBTCancelarActionPerformed
 
-    private void jBTNovoEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoEstadoActionPerformed
-        try {
+    private void jCBPaisPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBPaisPopupMenuWillBecomeInvisible
+
+    }//GEN-LAST:event_jCBPaisPopupMenuWillBecomeInvisible
+
+    private void jBTNovoPaisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoPaisActionPerformed
+         try {
             //atualiza dados do usuario logado
             dao_acesso.retornaUsuarioLogado(acesso);
             
@@ -523,14 +554,14 @@ public class InterfaceCidade extends javax.swing.JFrame {
             tela.setId_tela(1);
             dao_tela.incluir(tela);
             
-            //Inclui a tela de Moedas
-            tela.setDescricao("Estados");
-            tela.setId_tela(6);
+            //Inclui a tela de Países
+            tela.setDescricao("Países");
+            tela.setId_tela(7);
             dao_tela.incluir(tela);
             
             //Armazena dados de acesso da tela para verificar permissões
-            acesso.setId_tela(6);
-            acesso.setNome_tela("Estados");
+            acesso.setId_tela(7);
+            acesso.setNome_tela("Países");
             
             //se naõ for gerente
             if(acesso.getIn_gerente() == 0){
@@ -540,8 +571,8 @@ public class InterfaceCidade extends javax.swing.JFrame {
           
            //Verifica se o usuario possui permissao para acessar essa tela
            if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
-                //Traz para tela a tela de cadastro de pessoas 
-                new InterfaceEstado().setVisible(true);
+                //Traz para tela a tela de cadastro de Países 
+                new InterfacePaís().setVisible(true);
            }else{
                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
            }
@@ -549,77 +580,78 @@ public class InterfaceCidade extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jBTNovoEstadoActionPerformed
+    }//GEN-LAST:event_jBTNovoPaisActionPerformed
 
-    private void jTBCidadeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBCidadeStateChanged
-         if(jTBCidade.getSelectedIndex() == 1){
-             //Se não for gerente
-            if (acesso.getIn_gerente() == 0) {
-                //retorna as permissoes de acesso do usuario  
-                dao_permissao.retornaDadosPermissao(acesso, permissao);
-            }
-
-            //Verifica se o usuario possui permissao para acessar essa tela
-            if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
-                //faz uma consulta geral de cidade no banco
-                dao_cidade.consultaGeral(cidade);
-                //preenche dados na jtable
-                Jtable.PreencherJtableGenerico(jTBConsultaCidades, new String[]{"id_cidade", "descricao", "uf", "data_alter"}, cidade.getRetorno());
-                //ajusta largura das colunas
-                Jtable.ajustarColunasDaTabela(jTBConsultaCidades);
-            }else{
-                JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar cidades no sistema");
-                //retorna para a tela de cadastro
-                jTBCidade.setSelectedIndex(0);
-            } 
-        }
-    }//GEN-LAST:event_jTBCidadeStateChanged
-
-    private void jTBConsultaCidadesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaCidadesMouseClicked
-        //Verifica se houve 2 cliques do mouse 
+    private void jTBConsultaEstadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaEstadosMouseClicked
+        //Verifica se houve 2 cliques do mouse
         if (evt.getClickCount() == 2) {
 
             //recupera a linha clicada
-            int linha = jTBConsultaCidades.getSelectedRow();
-            
-            //Limpa os campos da tela cidade
-            valida_campos.LimparCampos(jPCidade);
-            
-            //recupera o id da cidade selecionada
-            String codigo = (String) jTBConsultaCidades.getValueAt(linha, 0);
+            int linha = jTBConsultaEstados.getSelectedRow();
 
-            //retorna dados da cidade
-            cidade.setId_cidade(Integer.parseInt(codigo));
-            dao_cidade.retornardados(cidade);
-            
-            //Carrega estados na combobox de uf
-            dao_estado.consultageral(estado);
-            //Preenche dados nas ComboBox de cidade
-            array_estado = combo.PreencherCombo(jCBUF, "uf", estado.getRetorno(), "id_uf");
-            //seta no array da classe de cidade a lista de cidades listadas na combo
-            estado.setArray_estado(array_estado);
-            
-            //Seta na tela de cadastro os dados da cidade
-            setcompCidade();
-            //retorna para tela de cadastro 
-            jTBCidade.setSelectedIndex(0);
-           
-            
+            //Limpa os campos da tela estado
+            valida_campos.LimparCampos(jPEstado);
+
+            //recupera o id de estado selecionado
+            String codigo = (String) jTBConsultaEstados.getValueAt(linha, 0);
+
+            //retorna dados do estado
+            estado.setId_uf(Integer.parseInt(codigo));
+            dao_estado.retornardados(estado);
+
+            //Carrega países na combobox de países
+            dao_pais.consultaGeral(pais);
+            //Preenche dados nas ComboBox de países
+            array_pais = combo.PreencherCombo(jCBPais, "sigla", pais.getRetorno(), "id_pais");
+            //seta no array da classe de país a lista de países listadas na combo
+            pais.setArray_pais(array_pais);
+
+            //Seta na tela de cadastro os dados do estado
+            setcompEstado();
+            //retorna para tela de cadastro
+            jTBEstado.setSelectedIndex(0);
+
             //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
             situacao = Rotinas.PADRAO;
 
             //habilita os botoes utilizados na inclusão e desabilita os restantes
             valida_botoes.ValidaEstado(jPBotoes, situacao);
-            
-            //desabilita campos da tela de cidade
-            valida_campos.desabilitaCampos(jPCidade);
+
+            //desabilita campos da tela de estado
+            valida_campos.desabilitaCampos(jPEstado);
         }
-    }//GEN-LAST:event_jTBConsultaCidadesMouseClicked
+    }//GEN-LAST:event_jTBConsultaEstadosMouseClicked
 
-    private void jCBUFPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBUFPopupMenuWillBecomeInvisible
+    private void jTBEstadoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBEstadoStateChanged
+        if(jTBEstado.getSelectedIndex() == 1){
+            //Se não for gerente
+            if (acesso.getIn_gerente() == 0) {
+                //retorna as permissoes de acesso do usuario
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            }
 
-      
-    }//GEN-LAST:event_jCBUFPopupMenuWillBecomeInvisible
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
+                //faz uma consulta geral de estados no banco
+                dao_estado.consultageral(estado);
+                //preenche dados na jtable
+                Jtable.PreencherJtableGenerico(jTBConsultaEstados, new String[]{"id_uf", "uf", "descricao","id_pais","sigla", "data_alter"}, estado.getRetorno());
+                //ajusta largura das colunas
+                Jtable.ajustarColunasDaTabela(jTBConsultaEstados);
+            }else{
+                JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar estados no sistema");
+                //retorna para a tela de cadastro
+                jTBEstado.setSelectedIndex(0);
+            }
+        }
+    }//GEN-LAST:event_jTBEstadoStateChanged
+
+    private void jFTUFFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTUFFocusLost
+        if(jFTUF.getText().replace(" ", "").equals("")){
+            jFTUF.setText("");
+            jFTUF.setValue("");
+        }
+    }//GEN-LAST:event_jFTUFFocusLost
 
     /**
      * @param args the command line arguments
@@ -632,26 +664,26 @@ public class InterfaceCidade extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfaceCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfaceEstado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfaceCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfaceEstado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfaceCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfaceEstado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfaceCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfaceEstado.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InterfaceCidade().setVisible(true);
+                new InterfaceEstado().setVisible(true);
             }
         });
     }
@@ -662,43 +694,52 @@ public class InterfaceCidade extends javax.swing.JFrame {
     private javax.swing.JButton jBTExcluir;
     private javax.swing.JButton jBTGravar;
     private javax.swing.JButton jBTNovo;
-    private javax.swing.JButton jBTNovoEstado;
-    private javax.swing.JComboBox jCBUF;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JButton jBTNovoPais;
+    private javax.swing.JComboBox jCBPais;
+    private javax.swing.JFormattedTextField jFTUF;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPBotoes;
-    private javax.swing.JPanel jPCidade;
+    private javax.swing.JPanel jPEstado;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTBCidade;
-    private javax.swing.JTable jTBConsultaCidades;
+    private javax.swing.JTable jTBConsultaEstados;
+    private javax.swing.JTabbedPane jTBEstado;
     private javax.swing.JTextField jTFDescricao;
-    private javax.swing.JTextField jTFIDCidade;
+    private javax.swing.JTextField jTFIDUF;
     // End of variables declaration//GEN-END:variables
-
-    //Pega dados da cidade na tela
-    public Cidade getCidade() {
-        cidade = new Cidade();
+    
+    //Pega dados de estado na tela
+    public Estado getEstado() {
+        estado = new Estado();
         
         Date data_atual = new Date(System.currentTimeMillis());
         
-        int id_cidade = Integer.parseInt(jTFIDCidade.getText());
-        cidade.setId_cidade(id_cidade);
-        cidade.setDescricao(jTFDescricao.getText());
-        cidade.setUf(jCBUF.getSelectedItem().toString());
-        cidade.setId_uf(estado.getArray_estado(jCBUF.getSelectedIndex() - 1));
-        cidade.setData_alter(data_atual);
+        int id_estado = Integer.parseInt(jTFIDUF.getText());
+        estado.setId_uf(id_estado);
+        estado.setDescricao(jTFDescricao.getText());
+        estado.setUf(jFTUF.getText());
+        estado.setId_pais(pais.getArray_pais(jCBPais.getSelectedIndex() - 1));
+        estado.setSigla_pais(jCBPais.getSelectedItem().toString());
+        estado.setData_alter(data_atual);
       
-        return cidade;
+        return estado;
     }
     
-        public void setcompCidade(){
-        //Seta dados da cidade na tela
-        jTFIDCidade.setText(Integer.toString(cidade.getId_cidade()));
-        jTFDescricao.setText(cidade.getDescricao());
-        jCBUF.setSelectedItem(cidade.getUf());
+    public void setcompEstado(){
+        //Seta dados de estado na tela
+        jTFIDUF.setText(Integer.toString(estado.getId_uf()));
+        jFTUF.setText(estado.getUf());
+        jTFDescricao.setText(estado.getDescricao());
+        jCBPais.setSelectedItem(estado.getSigla_pais());
     }
-
+    
+    private void setaMascaras(){
+        //Seta mascara no campo de UF
+        jFTUF.setFormatterFactory(new DefaultFormatterFactory(valida_campos.limitaCaracteres("UU")));
+        //limpa campo depois que setou a mascara. obs: não ira afetar a mascara
+        jFTUF.setValue("");
+    }
 }

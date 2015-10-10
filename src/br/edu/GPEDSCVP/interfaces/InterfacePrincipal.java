@@ -54,25 +54,27 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+        jMBMenuPrincipal = new javax.swing.JMenuBar();
+        jMCadastros = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
+        jMenuItem3 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
+        jMenuItem5 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
-        jMenu4 = new javax.swing.JMenu();
+        jMAlterarMoeda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Tela Principal");
 
-        jMenuBar1.addFocusListener(new java.awt.event.FocusAdapter() {
+        jMBMenuPrincipal.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                jMenuBar1FocusGained(evt);
+                jMBMenuPrincipalFocusGained(evt);
             }
         });
 
-        jMenu1.setText("Cadastros");
+        jMCadastros.setText("Cadastros");
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, 0));
         jMenuItem1.setText("Pessoas");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -88,50 +90,76 @@ public class InterfacePrincipal extends javax.swing.JFrame {
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
             }
         });
-        jMenu1.add(jMenuItem1);
+        jMCadastros.add(jMenuItem1);
 
-        jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_M, 0));
         jMenuItem2.setText("Moedas");
         jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMenuItem2ActionPerformed(evt);
             }
         });
-        jMenu1.add(jMenuItem2);
+        jMCadastros.add(jMenuItem2);
 
-        jMenuBar1.add(jMenu1);
-
-        jMenu3.setText("Gerenciar Projetos");
-        jMenuBar1.add(jMenu3);
-
-        jMenu4.setText("Atualizar Moeda");
-        jMenu4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu4MouseClicked(evt);
+        jMenuItem3.setText("Cidades");
+        jMenuItem3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem3ActionPerformed(evt);
             }
         });
-        jMenu4.addMenuListener(new javax.swing.event.MenuListener() {
+        jMCadastros.add(jMenuItem3);
+
+        jMenuItem4.setText("Estados");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMCadastros.add(jMenuItem4);
+
+        jMenuItem5.setText("Países");
+        jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem5ActionPerformed(evt);
+            }
+        });
+        jMCadastros.add(jMenuItem5);
+
+        jMBMenuPrincipal.add(jMCadastros);
+
+        jMenu3.setText("Gerenciar Projetos");
+        jMBMenuPrincipal.add(jMenu3);
+
+        jMAlterarMoeda.setText("Atualizar Moeda");
+        jMAlterarMoeda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMAlterarMoedaMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jMAlterarMoedaMouseEntered(evt);
+            }
+        });
+        jMAlterarMoeda.addMenuListener(new javax.swing.event.MenuListener() {
             public void menuCanceled(javax.swing.event.MenuEvent evt) {
             }
             public void menuDeselected(javax.swing.event.MenuEvent evt) {
             }
             public void menuSelected(javax.swing.event.MenuEvent evt) {
-                jMenu4MenuSelected(evt);
+                jMAlterarMoedaMenuSelected(evt);
             }
         });
-        jMenu4.addItemListener(new java.awt.event.ItemListener() {
+        jMAlterarMoeda.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jMenu4ItemStateChanged(evt);
+                jMAlterarMoedaItemStateChanged(evt);
             }
         });
-        jMenu4.addActionListener(new java.awt.event.ActionListener() {
+        jMAlterarMoeda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenu4ActionPerformed(evt);
+                jMAlterarMoedaActionPerformed(evt);
             }
         });
-        jMenuBar1.add(jMenu4);
+        jMBMenuPrincipal.add(jMAlterarMoeda);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(jMBMenuPrincipal);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -184,6 +212,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
+        jMCadastros.setSelected(false);
     }//GEN-LAST:event_jMenuItem1ActionPerformed
 
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
@@ -222,65 +251,190 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
+        jMCadastros.setSelected(false);
     }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     private void jMenuItem1AncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_jMenuItem1AncestorAdded
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuItem1AncestorAdded
 
-    private void jMenu4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenu4ActionPerformed
-       
-    }//GEN-LAST:event_jMenu4ActionPerformed
-
-    private void jMenu4ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jMenu4ItemStateChanged
+    private void jMAlterarMoedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMAlterarMoedaActionPerformed
         
-    }//GEN-LAST:event_jMenu4ItemStateChanged
+    }//GEN-LAST:event_jMAlterarMoedaActionPerformed
 
-    private void jMenu4MenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jMenu4MenuSelected
-         
-    }//GEN-LAST:event_jMenu4MenuSelected
+    private void jMAlterarMoedaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jMAlterarMoedaItemStateChanged
+        
+    }//GEN-LAST:event_jMAlterarMoedaItemStateChanged
 
-    private void jMenuBar1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jMenuBar1FocusGained
+    private void jMAlterarMoedaMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jMAlterarMoedaMenuSelected
+
+    }//GEN-LAST:event_jMAlterarMoedaMenuSelected
+
+    private void jMBMenuPrincipalFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jMBMenuPrincipalFocusGained
         // TODO add your handling code here:
-    }//GEN-LAST:event_jMenuBar1FocusGained
+    }//GEN-LAST:event_jMBMenuPrincipalFocusGained
 
-    private void jMenu4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu4MouseClicked
+    private void jMAlterarMoedaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMAlterarMoedaMouseClicked
+          jMAlterarMoeda.setSelected(false);
+        
         try {
-          //atualiza dados do usuario logado
-          dao_acesso.retornaUsuarioLogado(acesso);
+            //atualiza dados do usuario logado
+            dao_acesso.retornaUsuarioLogado(acesso);
+            
+            //Inclui a opção todas telas como primeira opção
+            tela.setDescricao("Todas telas");
+            tela.setId_tela(1);
+            dao_tela.incluir(tela);
+            
+            //Inclui a tela de Moedas
+            tela.setDescricao("Atualizar valor moedas");
+            tela.setId_tela(4);
+            dao_tela.incluir(tela);
+            
+            //Armazena dados de acesso da tela para verificar permissões
+            acesso.setId_tela(4);
+            acesso.setNome_tela("Atualizar valor moedas");
+            
+            //se naõ for gerente
+            if(acesso.getIn_gerente() == 0){
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            } 
+          
+           //Verifica se o usuario possui permissao para acessar essa tela
+           if (validaacesso.verificaAcesso("acesso",acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas 
+                new InterfaceAtualizarValorMoeda().setVisible(true);
+           }else{
+               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
+           }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jMAlterarMoedaMouseClicked
 
-          //Inclui a opção todas telas como primeira opção
-          tela.setDescricao("Todas telas");
-          tela.setId_tela(1);
-          dao_tela.incluir(tela);
+    private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
+          try {
+            //atualiza dados do usuario logado
+            dao_acesso.retornaUsuarioLogado(acesso);
+            
+            //Inclui a opção todas telas como primeira opção
+            tela.setDescricao("Todas telas");
+            tela.setId_tela(1);
+            dao_tela.incluir(tela);
+            
+            //Inclui a tela de Moedas
+            tela.setDescricao("Cidades");
+            tela.setId_tela(5);
+            dao_tela.incluir(tela);
+            
+            //Armazena dados de acesso da tela para verificar permissões
+            acesso.setId_tela(5);
+            acesso.setNome_tela("Cidades");
+            
+            //se naõ for gerente
+            if(acesso.getIn_gerente() == 0){
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            } 
+          
+           //Verifica se o usuario possui permissao para acessar essa tela
+           if (validaacesso.verificaAcesso("acesso",acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas 
+                new InterfaceCidade().setVisible(true);
+           }else{
+               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
+           }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+          
+        jMCadastros.setSelected(false);
+    }//GEN-LAST:event_jMenuItem3ActionPerformed
 
-          //Inclui a tela de Moedas
-          tela.setDescricao("Atualizar valor moedas");
-          tela.setId_tela(4);
-          dao_tela.incluir(tela);
+    private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
+         try {
+            //atualiza dados do usuario logado
+            dao_acesso.retornaUsuarioLogado(acesso);
+            
+            //Inclui a opção todas telas como primeira opção
+            tela.setDescricao("Todas telas");
+            tela.setId_tela(1);
+            dao_tela.incluir(tela);
+            
+            //Inclui a tela de Moedas
+            tela.setDescricao("Países");
+            tela.setId_tela(7);
+            dao_tela.incluir(tela);
+            
+            //Armazena dados de acesso da tela para verificar permissões
+            acesso.setId_tela(7);
+            acesso.setNome_tela("Países");
+            
+            //se naõ for gerente
+            if(acesso.getIn_gerente() == 0){
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            } 
+          
+           //Verifica se o usuario possui permissao para acessar essa tela
+           if (validaacesso.verificaAcesso("acesso",acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas 
+                new InterfacePaís().setVisible(true);
+           }else{
+               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
+           }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jMCadastros.setSelected(false);
+    }//GEN-LAST:event_jMenuItem5ActionPerformed
 
-          //Armazena dados de acesso da tela para verificar permissões
-          acesso.setId_tela(4);
-          acesso.setNome_tela("Atualizar valor moedas");
+    private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
+         try {
+            //atualiza dados do usuario logado
+            dao_acesso.retornaUsuarioLogado(acesso);
+            
+            //Inclui a opção todas telas como primeira opção
+            tela.setDescricao("Todas telas");
+            tela.setId_tela(1);
+            dao_tela.incluir(tela);
+            
+            //Inclui a tela de Moedas
+            tela.setDescricao("Estados");
+            tela.setId_tela(6);
+            dao_tela.incluir(tela);
+            
+            //Armazena dados de acesso da tela para verificar permissões
+            acesso.setId_tela(6);
+            acesso.setNome_tela("Estados");
+            
+            //se naõ for gerente
+            if(acesso.getIn_gerente() == 0){
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            } 
+          
+           //Verifica se o usuario possui permissao para acessar essa tela
+           if (validaacesso.verificaAcesso("acesso",acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas 
+                new InterfaceEstado().setVisible(true);
+           }else{
+               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
+           }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jMCadastros.setSelected(false);
+    }//GEN-LAST:event_jMenuItem4ActionPerformed
 
-          //se naõ for gerente
-          if(acesso.getIn_gerente() == 0){
-              //retorna as permissoes de acesso do usuario  
-              dao_permissao.retornaDadosPermissao(acesso, permissao);
-          } 
-
-         //Verifica se o usuario possui permissao para acessar essa tela
-         if (validaacesso.verificaAcesso("acesso",acesso, permissao) == true){
-              //Traz para tela a tela de cadastro de pessoas 
-              new InterfaceAtualizarValorMoeda().setVisible(true);
-         }else{
-             JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
-         }
-
-      } catch (SQLException ex) {
-          Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
-      }
-    }//GEN-LAST:event_jMenu4MouseClicked
+    private void jMAlterarMoedaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMAlterarMoedaMouseEntered
+      
+    }//GEN-LAST:event_jMAlterarMoedaMouseEntered
 
     /**
      * @param args the command line arguments
@@ -318,11 +472,14 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMAlterarMoeda;
+    private javax.swing.JMenuBar jMBMenuPrincipal;
+    private javax.swing.JMenu jMCadastros;
     private javax.swing.JMenu jMenu3;
-    private javax.swing.JMenu jMenu4;
-    private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
+    private javax.swing.JMenuItem jMenuItem3;
+    private javax.swing.JMenuItem jMenuItem4;
+    private javax.swing.JMenuItem jMenuItem5;
     // End of variables declaration//GEN-END:variables
 }

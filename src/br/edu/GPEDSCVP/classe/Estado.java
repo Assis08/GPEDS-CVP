@@ -19,22 +19,42 @@ public class Estado {
     private String uf;
     private int id_pais;
     private String descricao;
+    private String sigla_pais;
     private Date data_alter;
     private JTable tabela;
     private ResultSet retorno;
     private int[] array_estado;
 
     public Estado() {
+        id_uf = 0;
         uf = "";
         id_pais = 0;
         descricao = "";
+        sigla_pais = "";
         data_alter = null;
     }
 
+    public int getId_uf() {
+        return id_uf;
+    }
+
+    public void setId_uf(int id_uf) {
+        this.id_uf = id_uf;
+    }
+    
     public String getUf() {
         return uf;
     }
 
+    public String getSigla_pais() {
+        return sigla_pais;
+    }
+
+    public void setSigla_pais(String sigla_pais) {
+        this.sigla_pais = sigla_pais;
+    }
+
+    
     public void setUf(String uf) {
         this.uf = uf;
     }

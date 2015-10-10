@@ -14,9 +14,14 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.AbstractAction;
+import javax.swing.DefaultCellEditor;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableColumnModel;
@@ -24,6 +29,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import javax.swing.text.MaskFormatter;
 import javax.swing.text.TableView;
 import javax.swing.text.TableView.TableRow;
 
@@ -226,6 +232,21 @@ public class ManipulaJtable {
             TableCellListener tbListener = (TableCellListener) e.getSource();
             onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
         }
+    }
+    //Método para serar mascara em uma determinada coluna da jtable
+    public void setarMascara(JTable tabela, JFormattedTextField jftmascara, String mascara, int numColuna){
+       
+        try {  
+            MaskFormatter formato_mascara = new MaskFormatter(mascara);
+             jftmascara = new JFormattedTextField(formato_mascara);  
+        } catch (ParseException ex) {
+            Logger.getLogger(ManipulaJtable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        TableColumn col = tabela.getColumnModel().getColumn(numColuna);  
+    
+        col.setCellEditor(new DefaultCellEditor(jftmascara));      
+
     }
    
 }

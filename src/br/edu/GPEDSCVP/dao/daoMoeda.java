@@ -38,7 +38,7 @@ public class daoMoeda {
     }
     
     
-    //Método de incluir contato no banco
+    //Método de incluir moeda no banco
     public boolean incluir(Moeda moeda)throws SQLException
     {
         //Insert de moeda
@@ -74,7 +74,7 @@ public class daoMoeda {
             return true;    
     }
     
-     //Método de incluir contato no banco
+    //Método de excluir moeda no banco
     public boolean excluir(Moeda moeda) 
     {
         int result;
@@ -97,17 +97,14 @@ public class daoMoeda {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Falha ao tentar excluir moeda");
         }
-       
-        
-       
-        
+
         return true;
     }
     
     public boolean alterar(Moeda moeda)throws SQLException
     {
-     int result;
-     String sql = "UPDATE MOEDA SET ID_MOEDA = "+ moeda.getId_moeda()+","
+        int result;
+        String sql = "UPDATE MOEDA SET ID_MOEDA = "+ moeda.getId_moeda()+","
                 + "DESCRICAO = '" + moeda.getDecricao()+"',"
                 + "UNIDADE = '" + moeda.getUnidade()+"',"
                 + "DATA_ALTER = '" + FormatarData.dateParaTimeStamp(moeda.getData_alter())+"'"

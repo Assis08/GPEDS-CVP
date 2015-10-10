@@ -808,6 +808,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 jCBCidadeItemStateChanged(evt);
             }
         });
+        jCBCidade.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBCidadeActionPerformed(evt);
+            }
+        });
         jCBCidade.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
@@ -918,11 +923,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
                             .addGroup(jPEnderecoLayout.createSequentialGroup()
                                 .addComponent(jLabel22)
                                 .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(5, 5, 5)
                         .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jFTCep, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel23))
-                        .addGap(11, 11, 11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(jPEnderecoLayout.createSequentialGroup()
                                 .addComponent(jLabel24)
@@ -977,31 +982,28 @@ public class InterfacePessoa extends javax.swing.JFrame {
                         .addComponent(jLabel21)
                         .addGap(4, 4, 4)
                         .addComponent(jTFNumeroEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPEnderecoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel23)
-                            .addComponent(jLabel22)
-                            .addComponent(jLabel24)
-                            .addComponent(jLabel25)
-                            .addComponent(jBTNovaCidade))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTFUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCBCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPEnderecoLayout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTFBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jFTCep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel24)
+                        .addComponent(jLabel25)
+                        .addComponent(jBTNovaCidade))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel22)
+                        .addComponent(jLabel23)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTFUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCBCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jFTCep, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTFBairro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPEnderecoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPEnderecoLayout.createSequentialGroup()
                         .addComponent(jBTAddEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBTRemoveEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(83, Short.MAX_VALUE))
+                        .addContainerGap(89, Short.MAX_VALUE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)))
         );
 
@@ -1582,6 +1584,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                                     //Pega atributos da tela de permissões de acesso
                                     getPermissoes();
+                                    
+                                    //Pega atributos da tela de endereço
+                                    getEndereco();
+                                    
+                                    //Pega atributos da tela de contato
+                                    getContato();
 
                                     //se não estiver preenchido os dados de contato
                                     if ((jCBTipoContato.getSelectedIndex() == 0)) {
@@ -1720,7 +1728,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                     dao_pessoa.incluir(usuario);
 
                                                     //Inclui contato
-                                                    getContato();
                                                     dao_contato.gravarContatos(contato);
                                                     //Inclui permissões de acesso
                                                     dao_permissao.gravarPermissao(permissao);
@@ -1779,7 +1786,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 dao_pessoa.incluir(usuario);
 
                                                 //Inclui contato
-                                                getContato();
                                                 dao_contato.gravarContatos(contato);
 
                                                 //Inclui endereço
@@ -1852,6 +1858,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                 if (validaCampos.validacamposobrigatorios(jPPessoa, "CERTIFICADORA") == 0) {
                                     //Pega atributos da tela de cadastro de pessoa juridica.
                                     getcompCertificadora();
+                                    
+                                    //Pega atributos da tela de endereço
+                                    getEndereco();
+                                    
+                                    //Pega atributos da tela de contato
+                                    getContato();
 
                                     //se não estiver preenchido os dados de contato
                                     if ((jCBTipoContato.getSelectedIndex() == 0)) {
@@ -1962,7 +1974,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                     dao_pessoa.incluir(certificadora);
 
                                                     //Inclui contato
-                                                    getContato();
                                                     dao_contato.gravarContatos(contato);
 
                                                     JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
@@ -2007,7 +2018,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                 dao_pessoa.incluir(certificadora);
 
                                                 //Inclui contato
-                                                getContato();
                                                 dao_contato.gravarContatos(contato);
 
                                                 //Inclui endereço
@@ -2058,6 +2068,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                 if (validaCampos.validacamposobrigatorios(jPPessoa, "FORNECEDOR") == 0) {
                                     //Pega atributos da tela de cadastro de pessoa juridica.
                                     getcompFornecedor();
+                                    
+                                    //Pega atributos da tela de endereço
+                                    getEndereco();
+                                    
+                                    //Pega atributos da tela de contato
+                                    getContato();
 
                                     //se não estiver preenchido os dados de contato
                                     if ((jCBTipoContato.getSelectedIndex() == 0)) {
@@ -2169,8 +2185,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
                                                     //Inclui fornecedor
                                                     dao_pessoa.incluir(fornecedor);
 
-                                                    //Inclui contato
-                                                    getContato();
                                                     dao_contato.gravarContatos(contato);
 
                                                     JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
@@ -2211,7 +2225,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
                                                 //Salva certificadora com contato e endereço 
                                                 //Inclui contato
-                                                getContato();
                                                 dao_contato.gravarContatos(contato);
 
                                                 //Inclui endereço
@@ -4238,6 +4251,10 @@ public class InterfacePessoa extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jBTNovaCidadeActionPerformed
 
+    private void jCBCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCidadeActionPerformed
+       
+    }//GEN-LAST:event_jCBCidadeActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -5019,8 +5036,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }
     */
     
-    
-    
+
   class EvenOddRenderer implements TableCellRenderer {
 
   public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
@@ -5058,6 +5074,4 @@ public class InterfacePessoa extends javax.swing.JFrame {
     return renderer;
   }
 }
-
-    
 }
