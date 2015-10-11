@@ -137,6 +137,7 @@ public class InterfaceEstado extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTBConsultaEstados = new javax.swing.JTable();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Estados");
         setResizable(false);
 
@@ -241,6 +242,7 @@ public class InterfaceEstado extends javax.swing.JFrame {
                 jCBPaisPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                jCBPaisPopupMenuWillBecomeVisible(evt);
             }
         });
 
@@ -652,6 +654,14 @@ public class InterfaceEstado extends javax.swing.JFrame {
             jFTUF.setValue("");
         }
     }//GEN-LAST:event_jFTUFFocusLost
+
+    private void jCBPaisPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBPaisPopupMenuWillBecomeVisible
+        dao_pais.consultaGeral(pais);
+        //Preenche dados nas ComboBox de país
+        array_pais = combo.PreencherCombo(jCBPais, "sigla", pais.getRetorno(), "id_pais");
+        //seta no array da classe de país a lista de países listados na combo
+        pais.setArray_pais(array_pais);
+    }//GEN-LAST:event_jCBPaisPopupMenuWillBecomeVisible
 
     /**
      * @param args the command line arguments

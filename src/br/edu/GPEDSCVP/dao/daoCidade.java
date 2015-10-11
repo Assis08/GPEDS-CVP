@@ -48,7 +48,7 @@ public class daoCidade {
         cidade.setRetorno(conecta_banco.resultset);
     }
     
-     public void retornardados(Cidade cidade){
+    public void retornardados(Cidade cidade){
         String sql = "select * from cidade where id_cidade = "+ cidade.getId_cidade();
            
         conecta_banco.executeSQL(sql);

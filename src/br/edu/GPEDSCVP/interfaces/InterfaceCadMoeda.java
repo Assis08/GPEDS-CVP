@@ -110,6 +110,7 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         jTBConsultaMoedas = new javax.swing.JTable();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Moedas");
         setResizable(false);
 

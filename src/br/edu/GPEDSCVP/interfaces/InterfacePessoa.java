@@ -787,6 +787,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jLabel25.setText("UF:");
 
+        jCBCidade.setToolTipText("Cidade");
         jCBCidade.setName("id_cidade"); // NOI18N
         jCBCidade.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -1379,6 +1380,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
         });
 
         jLabel4.setText("Data:");
+
+        jFTData.setEditable(false);
 
         javax.swing.GroupLayout jPTipoPessoaLayout = new javax.swing.GroupLayout(jPTipoPessoa);
         jPTipoPessoa.setLayout(jPTipoPessoaLayout);
@@ -3313,8 +3316,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBCidadeItemStateChanged
 
     private void jCBCidadeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCBCidadeMouseClicked
-        // TODO add your handling code here:
-
+      
     }//GEN-LAST:event_jCBCidadeMouseClicked
 
     private void jCBCidadeInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jCBCidadeInputMethodTextChanged
@@ -3387,7 +3389,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBInternacionalStateChanged
 
     private void jCBCidadePopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBCidadePopupMenuWillBecomeVisible
-
+         dao_cidade.consultageral(cidade);
+        //Preenche dados nas ComboBox de cidade
+        array_cidade = combo.PreencherCombo(jCBCidade, "descricao", cidade.getRetorno(), "id_cidade");
+        //seta no array da classe de cidade a lista de cidades listadas na combo
+        cidade.setArray_cidade(array_cidade);
     }//GEN-LAST:event_jCBCidadePopupMenuWillBecomeVisible
 
     private void jCBCidadePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBCidadePopupMenuWillBecomeInvisible

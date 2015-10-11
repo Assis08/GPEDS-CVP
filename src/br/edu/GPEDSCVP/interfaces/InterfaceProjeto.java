@@ -6,16 +6,14 @@
 package br.edu.GPEDSCVP.interfaces;
 
 import br.edu.GPEDSCVP.classe.Acesso;
-import br.edu.GPEDSCVP.classe.Cidade;
-import br.edu.GPEDSCVP.classe.Estado;
 import br.edu.GPEDSCVP.classe.Permissao;
+import br.edu.GPEDSCVP.classe.Projeto;
 import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.dao.daoAcesso;
-import br.edu.GPEDSCVP.dao.daoCidade;
-import br.edu.GPEDSCVP.dao.daoEstado;
 import br.edu.GPEDSCVP.dao.daoPermissao;
+import br.edu.GPEDSCVP.dao.daoProjeto;
 import br.edu.GPEDSCVP.dao.daoTela;
-import br.edu.GPEDSCVP.util.ComboBox;
+import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.ManipulaJtable;
 import br.edu.GPEDSCVP.util.Mensagens;
 import br.edu.GPEDSCVP.util.Rotinas;
@@ -34,57 +32,52 @@ import javax.swing.JTable;
  *
  * @author Willys
  */
-public class InterfaceCidade extends javax.swing.JFrame {
+public class InterfaceProjeto extends javax.swing.JFrame {
 
-    Cidade cidade;
-    Estado estado;
+    Projeto projeto;
     Tela tela;
     daoTela dao_tela;
-    ComboBox combo;
-    daoCidade dao_cidade;
-    daoEstado dao_estado;
     Acesso acesso;
     Mensagens mensagem;
     daoPermissao dao_permissao;
     daoAcesso dao_acesso;
+    daoProjeto dao_projeto;
     Permissao permissao;
     ValidaAcesso valida_acesso;
     ValidaBotoes valida_botoes;
     ValidaCampos valida_campos;
     ManipulaJtable Jtable;
-    int[] array_estado;
- 
+    FormatarData data;
     int situacao = Rotinas.PADRAO;
-    public InterfaceCidade() {
+    
+    public InterfaceProjeto() {
         initComponents();
         
-        cidade = new Cidade();
-        estado = new Estado(); 
+        projeto = new Projeto();
         tela = new Tela();
         dao_tela = new daoTela();
-        dao_cidade = new daoCidade();
-        dao_estado = new daoEstado();
+        dao_projeto = new daoProjeto();
         acesso = new Acesso();
+        mensagem = new Mensagens();
         dao_permissao = new daoPermissao();
         dao_acesso = new daoAcesso();
         permissao = new Permissao();
         valida_acesso = new ValidaAcesso();
         valida_botoes = new ValidaBotoes();
-        mensagem = new Mensagens();
-        combo = new ComboBox();
-        Jtable = new ManipulaJtable();
+        data = new FormatarData();
         try {
             valida_campos = new ValidaCampos();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar registro");
         }
+        Jtable = new ManipulaJtable();
         
         
-        //desabilita campos da tela de moeda
-        valida_campos.desabilitaCampos(jPCidade);
+        //desabilita campos da tela de projeto
+        valida_campos.desabilitaCampos(jPProjeto);
         
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
-        jTBConsultaCidades.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBConsultaProjetos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -94,12 +87,6 @@ public class InterfaceCidade extends javax.swing.JFrame {
         
         //atualiza dados do usuario logado
         dao_acesso.retornaUsuarioLogado(acesso);
-        
-        dao_estado.consultageral(estado);
-        //Preenche dados nas ComboBox de cidade
-        array_estado = combo.PreencherCombo(jCBUF, "uf", estado.getRetorno(), "id_uf");
-        //seta no array da classe de cidade a lista de cidades listadas na combo
-        estado.setArray_estado(array_estado);
     }
 
     /**
@@ -111,35 +98,31 @@ public class InterfaceCidade extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jComboBox1 = new javax.swing.JComboBox();
-        jTBCidade = new javax.swing.JTabbedPane();
-        jPCidade = new javax.swing.JPanel();
+        jTBProjeto = new javax.swing.JTabbedPane();
+        jPProjeto = new javax.swing.JPanel();
         jPBotoes = new javax.swing.JPanel();
         jBTNovo = new javax.swing.JButton();
         jBTAlterar = new javax.swing.JButton();
         jBTExcluir = new javax.swing.JButton();
         jBTGravar = new javax.swing.JButton();
         jBTCancelar = new javax.swing.JButton();
-        jTFIDCidade = new javax.swing.JTextField();
+        jTFIDProjeto = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jTFDescricao = new javax.swing.JTextField();
-        jCBUF = new javax.swing.JComboBox();
-        jLabel3 = new javax.swing.JLabel();
-        jBTNovoEstado = new javax.swing.JButton();
+        jFTData = new javax.swing.JFormattedTextField();
+        jLabel5 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTBConsultaCidades = new javax.swing.JTable();
-
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jTBConsultaProjetos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("Cadastro de Cidades");
+        setTitle("Cadastro de Projetos");
         setResizable(false);
 
-        jTBCidade.addChangeListener(new javax.swing.event.ChangeListener() {
+        jTBProjeto.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jTBCidadeStateChanged(evt);
+                jTBProjetoStateChanged(evt);
             }
         });
 
@@ -218,92 +201,73 @@ public class InterfaceCidade extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTFIDCidade.setEditable(false);
-        jTFIDCidade.setName(""); // NOI18N
+        jTFIDProjeto.setEditable(false);
+        jTFIDProjeto.setToolTipText("ID Projeto");
+        jTFIDProjeto.setName("id_projeto"); // NOI18N
 
-        jLabel1.setText("ID Cidade:");
+        jLabel1.setText("ID Projeto:");
 
         jLabel2.setText("Descrição:");
 
         jTFDescricao.setToolTipText("Descrição");
         jTFDescricao.setName("descricao"); // NOI18N
 
-        jCBUF.setToolTipText("UF");
-        jCBUF.setName("uf"); // NOI18N
-        jCBUF.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                jCBUFPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                jCBUFPopupMenuWillBecomeVisible(evt);
-            }
-        });
+        jFTData.setEditable(false);
+        jFTData.setToolTipText("Data");
+        jFTData.setName(""); // NOI18N
 
-        jLabel3.setText("UF:");
+        jLabel5.setText("Data:");
 
-        jBTNovoEstado.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\add.png")); // NOI18N
-        jBTNovoEstado.setText("Novo");
-        jBTNovoEstado.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBTNovoEstadoActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPCidadeLayout = new javax.swing.GroupLayout(jPCidade);
-        jPCidade.setLayout(jPCidadeLayout);
-        jPCidadeLayout.setHorizontalGroup(
-            jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout jPProjetoLayout = new javax.swing.GroupLayout(jPProjeto);
+        jPProjeto.setLayout(jPProjetoLayout);
+        jPProjetoLayout.setHorizontalGroup(
+            jPProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(jPCidadeLayout.createSequentialGroup()
+            .addGroup(jPProjetoLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jTFIDCidade, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(jPCidadeLayout.createSequentialGroup()
-                        .addComponent(jCBUF, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jBTNovoEstado)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPProjetoLayout.createSequentialGroup()
+                        .addGroup(jPProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jTFIDProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
-        jPCidadeLayout.setVerticalGroup(
-            jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCidadeLayout.createSequentialGroup()
-                .addGap(20, 20, 20)
-                .addComponent(jLabel1)
+        jPProjetoLayout.setVerticalGroup(
+            jPProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPProjetoLayout.createSequentialGroup()
+                .addGroup(jPProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPProjetoLayout.createSequentialGroup()
+                        .addGap(20, 20, 20)
+                        .addComponent(jLabel1))
+                    .addGroup(jPProjetoLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTFIDCidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPCidadeLayout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(8, 8, 8)
-                        .addGroup(jPCidadeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCBUF, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBTNovoEstado)))
-                    .addGroup(jPCidadeLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(31, 31, 31)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
+                .addComponent(jTFIDProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addGap(3, 3, 3)
+                .addComponent(jTFDescricao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 99, Short.MAX_VALUE)
                 .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        jTBCidade.addTab("Cadastro", jPCidade);
+        jTBProjeto.addTab("Cadastro", jPProjeto);
 
-        jTBConsultaCidades.setModel(new javax.swing.table.DefaultTableModel(
+        jTBConsultaProjetos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID Cidade", "Descrição", "UF", "Última alteração"
+                "ID Projeto", "Descrição", "Data cadastro", "Última alteração"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -314,12 +278,12 @@ public class InterfaceCidade extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTBConsultaCidades.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTBConsultaProjetos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTBConsultaCidadesMouseClicked(evt);
+                jTBConsultaProjetosMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTBConsultaCidades);
+        jScrollPane1.setViewportView(jTBConsultaProjetos);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -329,70 +293,69 @@ public class InterfaceCidade extends javax.swing.JFrame {
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 225, Short.MAX_VALUE)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 272, Short.MAX_VALUE)
         );
 
-        jTBCidade.addTab("Consulta", jPanel1);
+        jTBProjeto.addTab("Consulta", jPanel1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTBCidade)
+            .addComponent(jTBProjeto)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTBCidade, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addComponent(jTBProjeto, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
-        setSize(new java.awt.Dimension(518, 291));
+        setSize(new java.awt.Dimension(518, 338));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBTNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoActionPerformed
         UltimaSequencia ultima;
-       
+
         //habilita campos da tela
-        valida_campos.habilitaCampos(jPCidade);
+        valida_campos.habilitaCampos(jPProjeto);
         //se não for gerente
         if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario  
+            //retorna as permissoes de acesso do usuario
             dao_permissao.retornaDadosPermissao(acesso, permissao);
         }
 
         //Verifica se o usuario possui permissao para incluir registros nessa tela
         if (valida_acesso.verificaAcesso("inserir", acesso, permissao) == true) {
-            
+
             //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
             situacao = Rotinas.INCLUIR;
 
             //habilita os botoes utilizados na inclusão e desabilita os restantes
             valida_botoes.ValidaEstado(jPBotoes, situacao);
-            
-            dao_estado.consultageral(estado);
-            //Preenche dados nas ComboBox de cidade
-            array_estado = combo.PreencherCombo(jCBUF, "uf", estado.getRetorno(), "id_uf");
-            //seta no array da classe de cidade a lista de cidades listadas na combo
-            estado.setArray_estado(array_estado);
 
             try {
                 //Gera id sequencial
                 ultima = new UltimaSequencia();
-                int sequencia = (Integer) (ultima.ultimasequencia("CIDADE", "ID_CIDADE"));
-                //seta id no campo id_moeda
-                jTFIDCidade.setText(Integer.toString(sequencia));
+                int sequencia = (Integer) (ultima.ultimasequencia("PROJETO", "ID_PROJETO"));
+                //seta id no campo id_projeto
+                jTFIDProjeto.setText(Integer.toString(sequencia));
+                
+                //Seta a data atual no campo data
+                jFTData.setEnabled(true);
+                jFTData.setText(data.DataAtual());
+                
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de cidades");
+                JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de projetos");
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir cidades no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir projetos no sistema");
         }
     }//GEN-LAST:event_jBTNovoActionPerformed
 
     private void jBTAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAlterarActionPerformed
-         //se naõ for gerente
+        //se naõ for gerente
         if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario  
+            //retorna as permissoes de acesso do usuario
             dao_permissao.retornaDadosPermissao(acesso, permissao);
         }
 
@@ -400,43 +363,43 @@ public class InterfaceCidade extends javax.swing.JFrame {
         if (valida_acesso.verificaAcesso("alterar", acesso, permissao) == true) {
             situacao = Rotinas.ALTERAR;
             valida_botoes.ValidaEstado(jPBotoes, situacao);
-            
-            valida_campos.habilitaCampos(jPCidade);
+
+            valida_campos.habilitaCampos(jPProjeto);
 
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para alterar cidades no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para alterar projetos no sistema");
         }
     }//GEN-LAST:event_jBTAlterarActionPerformed
 
     private void jBTExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTExcluirActionPerformed
         if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario  
+            //retorna as permissoes de acesso do usuario
             dao_permissao.retornaDadosPermissao(acesso, permissao);
         }
 
         //Verifica se o usuario possui permissao para excluir registros nessa tela
         if (valida_acesso.verificaAcesso("excluir", acesso, permissao) == true) {
-             
-                 if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
-                     
-                    if(dao_cidade.excluir(cidade) == true){
-                        JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
-                        //limpa campos 
-                        valida_campos.LimparCampos(jPCidade);
 
-                        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
-                        situacao = Rotinas.INICIAL;
+            if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
 
-                        //habilita os botoes utilizados na inclusão e desabilita os restantes
-                        valida_botoes.ValidaEstado(jPBotoes, situacao);
+                if(dao_projeto.inativaProjeto(projeto) == true){
+                    JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
+                    //limpa campos
+                    valida_campos.LimparCampos(jPProjeto);
 
-                        //desabilita campos
-                        valida_campos.desabilitaCampos(jPCidade);
-                    }
-                  
-                 }
+                    //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                    situacao = Rotinas.INICIAL;
+
+                    //habilita os botoes utilizados na inclusão e desabilita os restantes
+                    valida_botoes.ValidaEstado(jPBotoes, situacao);
+
+                    //desabilita campos
+                    valida_campos.desabilitaCampos(jPProjeto);
+                }
+
+            }
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir cidades no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir projetos no sistema");
         }
     }//GEN-LAST:event_jBTExcluirActionPerformed
 
@@ -447,18 +410,17 @@ public class InterfaceCidade extends javax.swing.JFrame {
     private void jBTGravarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTGravarActionPerformed
         //Se for inclusão
         if (situacao == Rotinas.INCLUIR) {
-            if (valida_campos.validacamposobrigatorios(jPCidade, "CIDADE") == 0) {
+            if (valida_campos.validacamposobrigatorios(jPProjeto, "PROJETO") == 0) {
 
                 try {
-                    
-                    //pega dados da moeda na tela
-                    getCidade();
-                    //inclui moeda
-                    if(dao_cidade.incluir(cidade) == true){
+                    //pega dados do projeto na tela
+                    getProjeto();
+                    //inclui projeto
+                    if(dao_projeto.incluir(projeto) == true){
                         //se ocorreu tudo bem na inclusão
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
-                        //limpa campos 
-                        valida_campos.LimparCampos(jPCidade);
+                        //limpa campos
+                        valida_campos.LimparCampos(jPProjeto);
 
                         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                         situacao = Rotinas.INICIAL;
@@ -467,23 +429,23 @@ public class InterfaceCidade extends javax.swing.JFrame {
                         valida_botoes.ValidaEstado(jPBotoes, situacao);
 
                         //desabilita campos
-                        valida_campos.desabilitaCampos(jPCidade);
+                        valida_campos.desabilitaCampos(jPProjeto);
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao incluir moeda");
+                    JOptionPane.showMessageDialog(null, "Falha ao incluir projeto");
                 }
-             
+
             }
         }else if(situacao == Rotinas.ALTERAR) {
-            //pega dados da moeda na tela
-            if (valida_campos.validacamposobrigatorios(jPCidade, "CIDADE") == 0) {
+            //pega dados do projeto na tela
+            if (valida_campos.validacamposobrigatorios(jPProjeto, "PROJETO") == 0) {
                 try {
-                    getCidade();
-                    //altera moeda
-                    if(dao_cidade.alterar(cidade) == true){
-                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
-                        //limpa campos 
-                        valida_campos.LimparCampos(jPCidade);
+                    getProjeto();
+                    //altera projeto
+                    if(dao_projeto.alterar(projeto) == true){
+                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                        //limpa campos
+                        valida_campos.LimparCampos(jPProjeto);
 
                         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                         situacao = Rotinas.INICIAL;
@@ -492,18 +454,18 @@ public class InterfaceCidade extends javax.swing.JFrame {
                         valida_botoes.ValidaEstado(jPBotoes, situacao);
 
                         //desabilita campos
-                        valida_campos.desabilitaCampos(jPCidade);
+                        valida_campos.desabilitaCampos(jPProjeto);
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao alterar cidade");
+                    JOptionPane.showMessageDialog(null, "Falha ao alterar projeto");
                 }
             }
         }
     }//GEN-LAST:event_jBTGravarActionPerformed
 
     private void jBTCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTCancelarActionPerformed
-        //limpa campos 
-        valida_campos.LimparCampos(jPCidade);
+        //limpa campos
+        valida_campos.LimparCampos(jPProjeto);
 
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
         situacao = Rotinas.INICIAL;
@@ -512,124 +474,65 @@ public class InterfaceCidade extends javax.swing.JFrame {
         valida_botoes.ValidaEstado(jPBotoes, situacao);
 
         //desabilita campos
-        valida_campos.desabilitaCampos(jPCidade);
+        valida_campos.desabilitaCampos(jPProjeto);
     }//GEN-LAST:event_jBTCancelarActionPerformed
 
-    private void jBTNovoEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoEstadoActionPerformed
-        try {
-            //atualiza dados do usuario logado
-            dao_acesso.retornaUsuarioLogado(acesso);
-            
-            //Inclui a opção todas telas como primeira opção
-            tela.setDescricao("Todas telas");
-            tela.setId_tela(1);
-            dao_tela.incluir(tela);
-            
-            //Inclui a tela de Moedas
-            tela.setDescricao("Estados");
-            tela.setId_tela(6);
-            dao_tela.incluir(tela);
-            
-            //Armazena dados de acesso da tela para verificar permissões
-            acesso.setId_tela(6);
-            acesso.setNome_tela("Estados");
-            
-            //se naõ for gerente
-            if(acesso.getIn_gerente() == 0){
-                //retorna as permissoes de acesso do usuario  
-                dao_permissao.retornaDadosPermissao(acesso, permissao);
-            } 
-          
-           //Verifica se o usuario possui permissao para acessar essa tela
-           if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
-                //Traz para tela a tela de cadastro de pessoas 
-                new InterfaceEstado().setVisible(true);
-           }else{
-               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
-           }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }//GEN-LAST:event_jBTNovoEstadoActionPerformed
-
-    private void jTBCidadeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBCidadeStateChanged
-         if(jTBCidade.getSelectedIndex() == 1){
-             //Se não for gerente
-            if (acesso.getIn_gerente() == 0) {
-                //retorna as permissoes de acesso do usuario  
-                dao_permissao.retornaDadosPermissao(acesso, permissao);
-            }
-
-            //Verifica se o usuario possui permissao para acessar essa tela
-            if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
-                //faz uma consulta geral de cidade no banco
-                dao_cidade.consultaGeral(cidade);
-                //preenche dados na jtable
-                Jtable.PreencherJtableGenerico(jTBConsultaCidades, new String[]{"id_cidade", "descricao", "uf", "data_alter"}, cidade.getRetorno());
-                //ajusta largura das colunas
-                Jtable.ajustarColunasDaTabela(jTBConsultaCidades);
-            }else{
-                JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar cidades no sistema");
-                //retorna para a tela de cadastro
-                jTBCidade.setSelectedIndex(0);
-            } 
-        }
-    }//GEN-LAST:event_jTBCidadeStateChanged
-
-    private void jTBConsultaCidadesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaCidadesMouseClicked
-        //Verifica se houve 2 cliques do mouse 
+    private void jTBConsultaProjetosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaProjetosMouseClicked
+        //Verifica se houve 2 cliques do mouse
         if (evt.getClickCount() == 2) {
 
             //recupera a linha clicada
-            int linha = jTBConsultaCidades.getSelectedRow();
-            
-            //Limpa os campos da tela cidade
-            valida_campos.LimparCampos(jPCidade);
-            
-            //recupera o id da cidade selecionada
-            String codigo = (String) jTBConsultaCidades.getValueAt(linha, 0);
+            int linha = jTBConsultaProjetos.getSelectedRow();
 
-            //retorna dados da cidade
-            cidade.setId_cidade(Integer.parseInt(codigo));
-            dao_cidade.retornardados(cidade);
-            
-            //Carrega estados na combobox de uf
-            dao_estado.consultageral(estado);
-            //Preenche dados nas ComboBox de cidade
-            array_estado = combo.PreencherCombo(jCBUF, "uf", estado.getRetorno(), "id_uf");
-            //seta no array da classe de cidade a lista de cidades listadas na combo
-            estado.setArray_estado(array_estado);
-            
-            //Seta na tela de cadastro os dados da cidade
-            setcompCidade();
-            //retorna para tela de cadastro 
-            jTBCidade.setSelectedIndex(0);
-           
-            
+            //Limpa os campos da tela de projeto
+            valida_campos.LimparCampos(jPProjeto);
+
+            //recupera o id do projeto selecionada
+            String codigo = (String) jTBConsultaProjetos.getValueAt(linha, 0);
+
+            //retorna dados do projeto
+            projeto.setId_projeto(Integer.parseInt(codigo));
+            dao_projeto.retornardados(projeto);
+
+            //Seta na tela de cadastro os dados do projeto
+            setcompProjeto();
+            //retorna para tela de cadastro
+            jTBProjeto.setSelectedIndex(0);
+
             //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
             situacao = Rotinas.PADRAO;
 
             //habilita os botoes utilizados na inclusão e desabilita os restantes
             valida_botoes.ValidaEstado(jPBotoes, situacao);
-            
-            //desabilita campos da tela de cidade
-            valida_campos.desabilitaCampos(jPCidade);
+
+            //desabilita campos da tela de projeto
+            valida_campos.desabilitaCampos(jPProjeto);
         }
-    }//GEN-LAST:event_jTBConsultaCidadesMouseClicked
+    }//GEN-LAST:event_jTBConsultaProjetosMouseClicked
 
-    private void jCBUFPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBUFPopupMenuWillBecomeInvisible
+    private void jTBProjetoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBProjetoStateChanged
+        if(jTBProjeto.getSelectedIndex() == 1){
+            //Se não for gerente
+            if (acesso.getIn_gerente() == 0) {
+                //retorna as permissoes de acesso do usuario
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            }
 
-      
-    }//GEN-LAST:event_jCBUFPopupMenuWillBecomeInvisible
-
-    private void jCBUFPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBUFPopupMenuWillBecomeVisible
-        dao_estado.consultageral(estado);
-        //Preenche dados nas ComboBox de cidade
-        array_estado = combo.PreencherCombo(jCBUF, "uf", estado.getRetorno(), "id_uf");
-        //seta no array da classe de cidade a lista de cidades listadas na combo
-        estado.setArray_estado(array_estado);
-    }//GEN-LAST:event_jCBUFPopupMenuWillBecomeVisible
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
+                //faz uma consulta geral de projetos no banco
+                dao_projeto.consultaGeral(projeto);
+                //preenche dados na jtable
+                Jtable.PreencherJtableGenerico(jTBConsultaProjetos, new String[]{"id_projeto","descricao","data_cadastro", "data_alter"}, projeto.getRetorno());
+                //ajusta largura das colunas
+                Jtable.ajustarColunasDaTabela(jTBConsultaProjetos);
+            }else{
+                JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar projetos no sistema");
+                //retorna para a tela de cadastro
+                jTBProjeto.setSelectedIndex(0);
+            }
+        }
+    }//GEN-LAST:event_jTBProjetoStateChanged
 
     /**
      * @param args the command line arguments
@@ -642,26 +545,26 @@ public class InterfaceCidade extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Windows".equals(info.getName())) {
+                if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(InterfaceCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfaceProjeto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(InterfaceCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfaceProjeto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(InterfaceCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfaceProjeto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(InterfaceCidade.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(InterfaceProjeto.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new InterfaceCidade().setVisible(true);
+                new InterfaceProjeto().setVisible(true);
             }
         });
     }
@@ -672,43 +575,40 @@ public class InterfaceCidade extends javax.swing.JFrame {
     private javax.swing.JButton jBTExcluir;
     private javax.swing.JButton jBTGravar;
     private javax.swing.JButton jBTNovo;
-    private javax.swing.JButton jBTNovoEstado;
-    private javax.swing.JComboBox jCBUF;
-    private javax.swing.JComboBox jComboBox1;
+    private javax.swing.JFormattedTextField jFTData;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPBotoes;
-    private javax.swing.JPanel jPCidade;
+    private javax.swing.JPanel jPProjeto;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTabbedPane jTBCidade;
-    private javax.swing.JTable jTBConsultaCidades;
+    private javax.swing.JTable jTBConsultaProjetos;
+    private javax.swing.JTabbedPane jTBProjeto;
     private javax.swing.JTextField jTFDescricao;
-    private javax.swing.JTextField jTFIDCidade;
+    private javax.swing.JTextField jTFIDProjeto;
     // End of variables declaration//GEN-END:variables
 
-    //Pega dados da cidade na tela
-    public Cidade getCidade() {
-        cidade = new Cidade();
+    //Pega dados do projeto na tela
+    public Projeto getProjeto() {
+        projeto = new Projeto();
         
         Date data_atual = new Date(System.currentTimeMillis());
         
-        int id_cidade = Integer.parseInt(jTFIDCidade.getText());
-        cidade.setId_cidade(id_cidade);
-        cidade.setDescricao(jTFDescricao.getText());
-        cidade.setUf(jCBUF.getSelectedItem().toString());
-        cidade.setId_uf(estado.getArray_estado(jCBUF.getSelectedIndex() - 1));
-        cidade.setData_alter(data_atual);
+        int id_projeto = Integer.parseInt(jTFIDProjeto.getText());
+        projeto.setId_projeto(id_projeto);
+        projeto.setDescricao(jTFDescricao.getText());
+        projeto.setData_alter(data_atual);
+        projeto.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
       
-        return cidade;
+        return projeto;
     }
     
-    public void setcompCidade(){
-        //Seta dados da cidade na tela
-        jTFIDCidade.setText(Integer.toString(cidade.getId_cidade()));
-        jTFDescricao.setText(cidade.getDescricao());
-        jCBUF.setSelectedItem(cidade.getUf());
+    public void setcompProjeto(){
+        //Seta dados do projeto na tela
+        jTFIDProjeto.setText(Integer.toString(projeto.getId_projeto()));
+        jTFDescricao.setText(projeto.getDescricao());
+        jFTData.setText(data.dateParaString(projeto.getData_cadastro()));
     }
 
 }

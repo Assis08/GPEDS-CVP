@@ -90,6 +90,7 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
         jTBAtualizarMoedas = new javax.swing.JTable();
         jFTMascara = new javax.swing.JFormattedTextField();
 
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Atualização do valor das moedas");
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
