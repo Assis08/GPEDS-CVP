@@ -39,7 +39,6 @@ public class daoProjeto {
         conecta_banco.executeSQL("select * from projeto where in_ativo = 'A'");
 
         projeto.setRetorno(conecta_banco.resultset);
-      
     }
     
     //Método de incluir projeto no banco
@@ -70,22 +69,22 @@ public class daoProjeto {
     public boolean alterar(Projeto projeto)throws SQLException
     {
         int result;
-            String sql = "UPDATE PROJETO SET ID_PROJETO = "+ projeto.getId_projeto()+","
-                + "DESCRICAO = '" + projeto.getDescricao()+"',"
-                + "DATA_ALTER = '" + FormatarData.dateParaTimeStamp(projeto.getData_alter())+"'"
-                + " WHERE ID_PROJETO = " + projeto.getId_projeto();
-     
-                result = conecta_banco.atualizarSQL(sql);
-                
-                if(result == ExcessaoBanco.ERRO_CHAVE_ESTRANGEIRA){
-                    return false;
-                }else if (result == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
-                    return false;
-                }else if(result == ExcessaoBanco.OUTROS_ERROS) {
-                    return false;
-                }
-                
-                return true;
+        String sql = "UPDATE PROJETO SET ID_PROJETO = "+ projeto.getId_projeto()+","
+            + "DESCRICAO = '" + projeto.getDescricao()+"',"
+            + "DATA_ALTER = '" + FormatarData.dateParaTimeStamp(projeto.getData_alter())+"'"
+            + " WHERE ID_PROJETO = " + projeto.getId_projeto();
+
+            result = conecta_banco.atualizarSQL(sql);
+
+            if(result == ExcessaoBanco.ERRO_CHAVE_ESTRANGEIRA){
+                return false;
+            }else if (result == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+                return false;
+            }else if(result == ExcessaoBanco.OUTROS_ERROS) {
+                return false;
+            }
+
+            return true;
     }
     
     public void retornardados(Projeto projeto){
