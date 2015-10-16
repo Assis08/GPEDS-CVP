@@ -5,6 +5,9 @@
  */
 package br.edu.GPEDSCVP.classe;
 
+import java.io.File;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Date;
 import java.sql.ResultSet;
 import javax.swing.JTable;
@@ -13,40 +16,21 @@ import javax.swing.JTable;
  *
  * @author Willys
  */
-public class Componente {
+public class Datasheet {
     
-    private int id_componente;
-    private int id_material;
     private int id_datasheet;
     private String descricao;
-    private String tipo;
-    private String revisao;
-    private Date data_alter;
+    private byte[] arquivo;
     private Date data_cadastro;
     private JTable tabela;
     private ResultSet retorno;
+    private int[] array_datasheet;
 
-    public Componente() {
-        id_componente = 0;
-        id_material = 0;
+    public Datasheet() {
         id_datasheet = 0;
         descricao = "";
-        tipo = "";
-        revisao = "";
-        data_alter = null;
-        data_cadastro = null;
-    }
-
-    public int getId_componente() {
-        return id_componente;
-    }
-
-    public void setId_componente(int id_componente) {
-        this.id_componente = id_componente;
-    }
-
-    public int getId_material() {
-        return id_material;
+        arquivo = null;
+        data_cadastro = null; 
     }
 
     public int getId_datasheet() {
@@ -55,10 +39,6 @@ public class Componente {
 
     public void setId_datasheet(int id_datasheet) {
         this.id_datasheet = id_datasheet;
-    }
-    
-    public void setId_material(int id_material) {
-        this.id_material = id_material;
     }
 
     public String getDescricao() {
@@ -69,28 +49,12 @@ public class Componente {
         this.descricao = descricao;
     }
 
-    public String getTipo() {
-        return tipo;
+    public byte[] getArquivo() {
+        return arquivo;
     }
 
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getRevisao() {
-        return revisao;
-    }
-
-    public void setRevisao(String revisao) {
-        this.revisao = revisao;
-    }
-    
-    public Date getData_alter() {
-        return data_alter;
-    }
-
-    public void setData_alter(Date data_alter) {
-        this.data_alter = data_alter;
+    public void setArquivo(byte[] arquivo) {
+        this.arquivo = arquivo;
     }
 
     public Date getData_cadastro() {
@@ -115,5 +79,13 @@ public class Componente {
 
     public void setRetorno(ResultSet retorno) {
         this.retorno = retorno;
+    }
+
+    public int[] getArray_datasheet() {
+        return array_datasheet;
+    }
+
+    public void setArray_datasheet(int[] array_datasheet) {
+        this.array_datasheet = array_datasheet;
     }
 }

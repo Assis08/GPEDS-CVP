@@ -36,8 +36,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="jTBCidade" pref="496" max="32767" attributes="0"/>
+              <Component id="jTBCidade" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -538,12 +537,21 @@
                   <Group type="102" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jCBBuscarPor" alignment="0" min="-2" pref="124" max="-2" attributes="0"/>
-                          <Component id="jLabel14" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
+                          <Component id="jCBBuscarPor" min="-2" pref="106" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
+                          <Group type="102" attributes="0">
+                              <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
+                              <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jCBBuscarPor1" min="-2" pref="124" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace min="-2" pref="7" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
                               <Component id="jTFFiltro" min="-2" pref="305" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
@@ -551,8 +559,9 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jBTVerDatasheet" min="-2" max="-2" attributes="0"/>
                           </Group>
+                          <Component id="jLabel29" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="123" max="32767" attributes="0"/>
+                      <EmptySpace pref="22" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
@@ -564,16 +573,22 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jLabel14" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jLabel29" alignment="3" min="-2" max="-2" attributes="0"/>
-                      </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="jCBBuscarPor" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jTFFiltro" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jBTBuscar" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jBTVerDatasheet" alignment="0" min="-2" pref="24" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" attributes="0">
+                              <Group type="103" groupAlignment="0" attributes="0">
+                                  <Component id="jLabel14" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jLabel29" alignment="1" min="-2" max="-2" attributes="0"/>
+                              </Group>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="3" attributes="0">
+                                  <Component id="jCBBuscarPor" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jTFFiltro" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jBTBuscar" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jCBBuscarPor1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="jBTVerDatasheet" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
+                              </Group>
+                          </Group>
+                          <Component id="jLabel15" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="180" max="-2" attributes="0"/>
@@ -732,7 +747,7 @@
             <Component class="javax.swing.JButton" name="jBTVerDatasheet">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/br/edu/GPEDSCVP/imagens/eye.png"/>
+                  <Image iconType="3" name="/br/edu/GPEDSCVP/icones/eye.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Ver datasheet"/>
               </Properties>
@@ -743,6 +758,22 @@
             <Component class="javax.swing.JLabel" name="jLabel9">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Composi&#xe7;&#xe3;o:"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JComboBox" name="jCBBuscarPor1">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="3">
+                    <StringItem index="0" value="Geral"/>
+                    <StringItem index="1" value="Eletr&#xf4;nico"/>
+                    <StringItem index="2" value="Mec&#xe2;nico"/>
+                  </StringArray>
+                </Property>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JLabel" name="jLabel15">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Tipo:"/>
               </Properties>
             </Component>
           </SubComponents>

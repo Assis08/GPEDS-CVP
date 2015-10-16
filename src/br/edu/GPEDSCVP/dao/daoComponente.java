@@ -66,7 +66,7 @@ public class daoComponente {
     
     //Consulta geral de componentes
     public void consultageral(Componente componente){
-        conecta_banco.executeSQL("select id_componente,tipo,componente.descricao,revisao,material.id_material,material.descricao,datasheet,"
+        conecta_banco.executeSQL("select null, id_componente,tipo,componente.descricao,revisao,material.id_material,material.descricao,datasheet,"
                                + " data_cadastro,componente.data_alter from componente"
                                + " inner join material on (componente.id_material = material.id_material)"
                                + " order by id_componente asc");

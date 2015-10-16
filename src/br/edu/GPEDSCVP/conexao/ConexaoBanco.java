@@ -8,6 +8,7 @@ package br.edu.GPEDSCVP.conexao;
 import br.edu.GPEDSCVP.util.ExcessaoBanco;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -84,6 +85,18 @@ public class ConexaoBanco {
             metaData = resultset.getMetaData();
         }
         catch(SQLException erro) { }
+    }
+    
+    
+     public void executeSQL(String sqlConsulta, Object... parametros) throws SQLException {
+       
+        PreparedStatement ps = ConexaoBanco.prepareStatement(sqlConsulta);
+        for (int i = 0; i < parametros.length; i++) {
+            int index = i + 1;
+            ps.setObject(index, parametros[i]);
+        }
+        ps.execute();
+        ps.close();
     }
     
     
