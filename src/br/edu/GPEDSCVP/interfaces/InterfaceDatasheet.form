@@ -39,6 +39,7 @@
   <SubComponents>
     <Container class="javax.swing.JTabbedPane" name="jTBDatasheet">
       <Events>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTBDatasheetMouseClicked"/>
         <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jTBDatasheetStateChanged"/>
       </Events>
 

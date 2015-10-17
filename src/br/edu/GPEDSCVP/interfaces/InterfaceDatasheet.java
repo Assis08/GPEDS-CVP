@@ -61,6 +61,7 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
     ManipulaJtable Jtable;
     int situacao = Rotinas.PADRAO;
     static byte[] arquivo;
+    static boolean importou_arquivo = false;
     
     public InterfaceDatasheet() {
         initComponents();
@@ -140,6 +141,11 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
         setTitle("Cadastro de Datasheets");
         setResizable(false);
 
+        jTBDatasheet.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTBDatasheetMouseClicked(evt);
+            }
+        });
         jTBDatasheet.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 jTBDatasheetStateChanged(evt);
@@ -467,7 +473,7 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
 
             if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
 
-                if(dao_cidade.excluir(cidade) == true){
+                if(dao_datasheet.excluir(datasheet) == true){
                     JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
                     //limpa campos
                     valida_campos.LimparCampos(jPDatasheet);
@@ -484,7 +490,7 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
 
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir cidades no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir datasheets no sistema");
         }
     }//GEN-LAST:event_jBTExcluirActionPerformed
 
@@ -496,39 +502,42 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
         //Se for inclusão
         if (situacao == Rotinas.INCLUIR) {
             if (valida_campos.validacamposobrigatorios(jPDatasheet, "DATASHEET") == 0) {
+                if(importou_arquivo == true){
 
-                try {
+                    try {
 
-                    //pega dados do datasheet na tela
-                    getDatasheet();
-                    //inclui dataasheet
-                    if(dao_datasheet.incluir(datasheet) == true){
-                        //se ocorreu tudo bem na inclusão
-                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
-                        //limpa campos
-                        valida_campos.LimparCampos(jPDatasheet);
+                        //pega dados do datasheet na tela
+                        getDatasheet();
+                        //inclui dataasheet
+                        if(dao_datasheet.incluir(datasheet) == true){
+                            //se ocorreu tudo bem na inclusão
+                            JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                            //limpa campos
+                            valida_campos.LimparCampos(jPDatasheet);
 
-                        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
-                        situacao = Rotinas.INICIAL;
+                            //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                            situacao = Rotinas.INICIAL;
 
-                        //habilita os botoes utilizados na inclusão e desabilita os restantes
-                        valida_botoes.ValidaEstado(jPBotoes, situacao);
+                            //habilita os botoes utilizados na inclusão e desabilita os restantes
+                            valida_botoes.ValidaEstado(jPBotoes, situacao);
 
-                        //desabilita campos
-                        valida_campos.desabilitaCampos(jPDatasheet);
+                            //desabilita campos
+                            valida_campos.desabilitaCampos(jPDatasheet);
+                        }
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Falha ao incluir datasheet");
                     }
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao incluir datasheet");
+                }else{
+                    JOptionPane.showMessageDialog(null, "Deve selecionar o arquivo do datasheet para continuar!");
                 }
-
             }
         }else if(situacao == Rotinas.ALTERAR) {
             //pega dados do datasheet na tela
-            if (valida_campos.validacamposobrigatorios(jPDatasheet, "CIDADE") == 0) {
+            if (valida_campos.validacamposobrigatorios(jPDatasheet, "DATASHEET") == 0) {
                 try {
                     getDatasheet();
                     //altera moeda
-                    if(dao_datasheet.alterar(datasheet) == true){
+                    if(dao_datasheet.alterar(datasheet,importou_arquivo) == true){
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
                         valida_campos.LimparCampos(jPDatasheet);
@@ -591,13 +600,15 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
             //habilita os botoes utilizados na inclusão e desabilita os restantes
             valida_botoes.ValidaEstado(jPBotoes, situacao);
 
-            //desabilita campos da tela de cidade
+            //desabilita campos da tela de datasheet
             valida_campos.desabilitaCampos(jPDatasheet);
         }
     }//GEN-LAST:event_jTBConsultaDatasheetMouseClicked
 
     private void jTBDatasheetStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBDatasheetStateChanged
-       
+        if(jTBDatasheet.getSelectedIndex() == 1){  
+            valida_campos.LimparJtable(jTBConsultaDatasheet);
+        }      
     }//GEN-LAST:event_jTBDatasheetStateChanged
 
     private void jBTBuscarDatasheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTBuscarDatasheetActionPerformed
@@ -621,11 +632,14 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
                               
                 jTFDescricao.setText(nome_arquivo.replace(".pdf", ""));
                 arquivo = bytes;
+                importou_arquivo = true;
 
                 }else{
                     JOptionPane.showMessageDialog(null, "O Arquivo deve ser .pdf!");
+                    importou_arquivo = false;
                 }
             } catch (Exception e) {
+                importou_arquivo = false;
             }
 
     }//GEN-LAST:event_jBTBuscarDatasheetActionPerformed
@@ -685,33 +699,38 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
 
     private void jBTVerDatasheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTVerDatasheetActionPerformed
         byte[] arquivo_banco;
+        File f = null;
+        String nome_arquivo;
+
         try {
             //recupera a linha clicada
             int linha = jTBConsultaDatasheet.getSelectedRow();
             //recupera o id do datasheet
             int id = Integer.parseInt(jTBConsultaDatasheet.getValueAt(linha, 0).toString());
-            datasheet.setId_datasheet(id);
-            arquivo_banco = dao_datasheet.retornaArquivo(datasheet);
-            
-            
-            File f = new File( "C:\\Users\\Willys\\Desktop\\teste.pdf");
-            FileOutputStream fos = new FileOutputStream( f);
-            fos.write( arquivo_banco );
-            fos.close();
-
-            
-
             try {
-                // Desktop.getDesktop().open(arquivo_banco); 
-                //java.awt.Desktop.getDesktop().open(new File(caminho));
-            } catch (Exception ex) {
-               // JOptionPane.showMessageDialog(null, "Arquivo não encontrado");
+                
+                datasheet.setId_datasheet(id);
+                arquivo_banco = dao_datasheet.retornaArquivo(datasheet);
+                //cria arquivo no diretório
+                nome_arquivo = datasheet.getDescricao().replace(".pdf", "");
+                f = new File( "C:\\Users\\Willys\\Desktop\\"+nome_arquivo+".pdf");
+                FileOutputStream fos = new FileOutputStream( f);
+                fos.write( arquivo_banco );
+                Desktop.getDesktop().open(f);
+                fos.close();
+                
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, "Arquivo já está aberto");
             }
-
+            
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Nehuma linha foi selecionada!");
+            JOptionPane.showMessageDialog(null, "Nenhuma linha foi selecionada!");
         }
     }//GEN-LAST:event_jBTVerDatasheetActionPerformed
+
+    private void jTBDatasheetMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBDatasheetMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTBDatasheetMouseClicked
 
     /**
      * @param args the command line arguments
@@ -775,7 +794,7 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
     private javax.swing.JTextField jTFIDDatasheet;
     // End of variables declaration//GEN-END:variables
 
-//Pega dados da cidade na tela
+    //Pega dados do datasheet na tela
     public Datasheet getDatasheet() {
         datasheet = new Datasheet();
         
@@ -784,11 +803,19 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
         int id_datasheet = Integer.parseInt(jTFIDDatasheet.getText());
         datasheet.setId_datasheet(id_datasheet);
         datasheet.setDescricao(jTFDescricao.getText());
-        if(!arquivo.equals(null)){
+        if(importou_arquivo == true){
             datasheet.setArquivo(arquivo);
         }
+
         datasheet.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
-      
+        
         return datasheet;
+    }
+    
+     public void setcompDatasheet(){
+        //Seta dados do datasheet na tela
+        jTFIDDatasheet.setText(Integer.toString(datasheet.getId_datasheet()));
+        jTFDescricao.setText(datasheet.getDescricao());
+        jFTData.setText(data.dateParaString(datasheet.getData_cadastro()));
     }
 }

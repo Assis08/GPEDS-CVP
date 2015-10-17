@@ -88,15 +88,35 @@ public class ConexaoBanco {
     }
     
     
-     public void executeSQL(String sqlConsulta, Object... parametros) throws SQLException {
+     public int executeSQL(String sqlConsulta, Object... parametros){
        
-        PreparedStatement ps = ConexaoBanco.prepareStatement(sqlConsulta);
-        for (int i = 0; i < parametros.length; i++) {
-            int index = i + 1;
-            ps.setObject(index, parametros[i]);
+         try {
+            PreparedStatement ps = ConexaoBanco.prepareStatement(sqlConsulta);
+            for (int i = 0; i < parametros.length; i++) {
+                int index = i + 1;
+                ps.setObject(index, parametros[i]);
+            }
+            ps.execute();
+            ps.close();
+         } catch (SQLException sqlex) {
+            if(sqlex.getErrorCode() == 1){
+                JOptionPane.showMessageDialog(null, "O registro não pode ser incluido pois já esta cadastrado");
+                return ExcessaoBanco.ERRO_EXISTENCIA_REGISTRO;
+            }else if(sqlex.getErrorCode() == 1406){
+                JOptionPane.showMessageDialog(null, "Valor inserido excede o limite máximo de caracteres do campo");
+                return ExcessaoBanco.ERRO_LIMITE_CARACTERES;
+            }else if (sqlex.getErrorCode() == 1118)  {
+                JOptionPane.showMessageDialog(null, "Arquivo excede o limite máximo permitido (5MB)");
+                return ExcessaoBanco.ERRO_LIMITE_ARQUIVO;
+            }
+            else{
+                JOptionPane.showMessageDialog(null, sqlex.getErrorCode());
+                JOptionPane.showMessageDialog(null, (new StringBuilder()).append("Não foi possivel executar o comando sql,").append(sqlex).append(", o sql passado foi").append(sqlConsulta).toString());
+                return ExcessaoBanco.OUTROS_ERROS;
+            }
+                
         }
-        ps.execute();
-        ps.close();
+        return ExcessaoBanco.SEM_ERROS;
     }
     
     

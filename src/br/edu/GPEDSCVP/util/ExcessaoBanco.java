@@ -14,5 +14,6 @@ public class ExcessaoBanco {
     public static final int ERRO_CHAVE_ESTRANGEIRA = 1;
     public static final int ERRO_EXISTENCIA_REGISTRO = 2;
     public static final int ERRO_LIMITE_CARACTERES= 3;
-    public static final int OUTROS_ERROS = 4;
+    public static final int ERRO_LIMITE_ARQUIVO= 4;
+    public static final int OUTROS_ERROS = 5;
 }
