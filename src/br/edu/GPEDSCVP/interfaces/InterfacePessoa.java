@@ -5057,16 +5057,28 @@ public class InterfacePessoa extends javax.swing.JFrame {
     int totcolun = table.getColumnCount();
    
     Integer exc = 0;
+    Boolean sel = false;
 
  
     exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
+    sel = (Boolean) table.getValueAt(row, 0);
     
      
-     if(isSelected){
-         if(exc == 1){
-            background = Color.RED;
-            renderer.setBackground(background);
-         }
+    if(isSelected){
+        if(exc == 1){
+           background = Color.RED;
+           renderer.setBackground(background);
+        }
+        //garante que quando estiver selecinado é true e caso contrario e false (nunca sera nulo)
+        
+        if(sel != null){
+            if(sel == true){
+                table.setValueAt(true, row, 0);
+            }else{
+                table.setValueAt(false, row, 0);
+            }
+            
+        }       
      }
    
      if(!isSelected){

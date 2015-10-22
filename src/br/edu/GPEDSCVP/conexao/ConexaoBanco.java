@@ -110,7 +110,6 @@ public class ConexaoBanco {
                 return ExcessaoBanco.ERRO_LIMITE_ARQUIVO;
             }
             else{
-                JOptionPane.showMessageDialog(null, sqlex.getErrorCode());
                 JOptionPane.showMessageDialog(null, (new StringBuilder()).append("Não foi possivel executar o comando sql,").append(sqlex).append(", o sql passado foi").append(sqlConsulta).toString());
                 return ExcessaoBanco.OUTROS_ERROS;
             }

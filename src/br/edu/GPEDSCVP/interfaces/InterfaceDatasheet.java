@@ -711,18 +711,20 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
                 
                 datasheet.setId_datasheet(id);
                 arquivo_banco = dao_datasheet.retornaArquivo(datasheet);
-                //cria arquivo no diretório
+                //cria arquivo pdf temporário
                 nome_arquivo = datasheet.getDescricao().replace(".pdf", "");
-                f = new File( "C:\\Users\\Willys\\Desktop\\"+nome_arquivo+".pdf");
-                FileOutputStream fos = new FileOutputStream( f);
+                f = File.createTempFile(nome_arquivo, ".pdf");
+                FileOutputStream fos = new FileOutputStream(f);
+                //escreve bytes no arquivo
                 fos.write( arquivo_banco );
+                //abre arquivo
                 Desktop.getDesktop().open(f);
                 fos.close();
-                
+                //deleta arquivo quando fechar a aplicação
+                f.deleteOnExit();
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(null, "Arquivo já está aberto");
             }
-            
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Nenhuma linha foi selecionada!");
         }

@@ -23,7 +23,7 @@ public class Componente {
     private String revisao;
     private Date data_alter;
     private Date data_cadastro;
-    private JTable tabela;
+    private static JTable tabela;
     private ResultSet retorno;
 
     public Componente() {

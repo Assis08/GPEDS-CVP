@@ -124,17 +124,20 @@ public class ManipulaJtable {
             sel = (Boolean) tabela.getValueAt(i, 0);
             //Se a linha estiver selecionada
             if(sel != null){
-                //ativa flag que achou uma linha selecionada
-                achou = true;
-                if(situacao == Rotinas.ALTERAR){
-                    //seta o valor 1 na coluna excluido da jtable
-                    jtable.setValueAt(1, i, totcolun-1);
-                    jtable.setValueAt(false, i, 0);
-                    //habilita e desabilita para atualizar o jtable (caso contrario pinta de vermelho só quando clica na linha)
-                    jtable.setEnabled(false);
-                    jtable.setEnabled(true);
-                }else{
-                    tabela.removeRow(i);
+                if(sel == true){
+
+                    //ativa flag que achou uma linha selecionada
+                    achou = true;
+                    if(situacao == Rotinas.ALTERAR){
+                        //seta o valor 1 na coluna excluido da jtable
+                        jtable.setValueAt(1, i, totcolun-1);
+                        jtable.setValueAt(false, i, 0);
+                        //habilita e desabilita para atualizar o jtable (caso contrario pinta de vermelho só quando clica na linha)
+                        jtable.setEnabled(false);
+                        jtable.setEnabled(true);
+                    }else{
+                        tabela.removeRow(i);
+                    }
                 }
             }
         }
@@ -202,17 +205,23 @@ public class ManipulaJtable {
     
     public boolean evitarDuplicacao(JTable tabela, String valor){
         
-        DefaultTableModel TabelaPermissao = (DefaultTableModel)tabela.getModel();
+        DefaultTableModel Tabela = (DefaultTableModel)tabela.getModel();
       
-        int tot_row = TabelaPermissao.getRowCount();
-        int tot_col = TabelaPermissao.getColumnCount();
+        int tot_row = Tabela.getRowCount();
+        int tot_col = Tabela.getColumnCount();
         
         for(int i_row = 0; i_row < tot_row; i_row++){
             for(int i_colun = 1; i_colun< tot_col; i_colun++){
-                if(TabelaPermissao.getValueAt(i_row, i_colun).toString().equals(valor)){
+                //se for um valor diferente de null
+                if(Tabela.getValueAt(i_row, i_colun)!= null){
+                    if(Tabela.getValueAt(i_row, i_colun).toString().equals(valor)){
                     //valor duplicado
                     return true;
+                    }    
                 }
+               
+                
+                
             }
         }
         return false;

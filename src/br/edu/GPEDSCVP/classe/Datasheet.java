@@ -81,11 +81,12 @@ public class Datasheet {
         this.retorno = retorno;
     }
 
-    public int[] getArray_datasheet() {
-        return array_datasheet;
+    public int getArray_datasheet(int posicao) {
+        return array_datasheet[posicao];
     }
 
     public void setArray_datasheet(int[] array_datasheet) {
         this.array_datasheet = array_datasheet;
     }
+   
 }
