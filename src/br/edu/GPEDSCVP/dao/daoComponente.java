@@ -8,6 +8,7 @@ package br.edu.GPEDSCVP.dao;
 import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
 import br.edu.GPEDSCVP.classe.Fornecedor;
+import br.edu.GPEDSCVP.classe.FornecedoresComponente;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.ExcessaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
@@ -170,6 +171,29 @@ public class daoComponente {
             "A",
             FormatarData.dateParaSQLDate(composicao.getData_cadastro()),
             FormatarData.dateParaTimeStamp(composicao.getData_alter()));
+        }
+     }
+    
+    public void gravarFornecedores (FornecedoresComponente fornecedor){
+        Integer id_funcionario;
+        Integer id_componente;
+     
+        
+        DefaultTableModel tabela = (DefaultTableModel) fornecedor.getTabela().getModel();
+        int totlinha = tabela.getRowCount();
+        for (int i = 0; i < totlinha; i++){
+            
+            id_componente = fornecedor.getId_componente();
+            id_funcionario = Integer.parseInt(tabela.getValueAt(i, 1).toString());
+         
+            int sequencia = (Integer) (ultima.ultimasequencia("FORNECEDOR_COMPONENTE","ID_FORNECEDORES_COMP"));
+            conecta_banco.executeSQL("INSERT INTO fornecedor_componente (id_fornecedores_comp, id_pessoa, id_componente,data_alter,data_cadastro) "
+            + "VALUES (?, ?, ?, ?, ?) ",
+            sequencia,
+            id_funcionario,
+            id_componente,
+            FormatarData.dateParaTimeStamp(fornecedor.getData_alter()),
+            FormatarData.dateParaSQLDate(fornecedor.getData_cadastro()));
         }
      }
     
@@ -388,7 +412,6 @@ public class daoComponente {
                                 }
                                 TabelaComposicao.setValueAt(qntd, totlinha_componente, 6); 
                             }
-
                         }  
                     }
                 } 
@@ -454,7 +477,6 @@ public class daoComponente {
                                 TabelaFornecedoresComp.setValueAt(cnpj, totlinha_fornec_comp, 3);
                                 TabelaFornecedoresComp.setValueAt(site, totlinha_fornec_comp, 4);
                             }
-
                         }  
                     }
                 } 

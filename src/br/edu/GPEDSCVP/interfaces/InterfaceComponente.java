@@ -10,6 +10,7 @@ import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
 import br.edu.GPEDSCVP.classe.Datasheet;
 import br.edu.GPEDSCVP.classe.Fornecedor;
+import br.edu.GPEDSCVP.classe.FornecedoresComponente;
 import br.edu.GPEDSCVP.classe.Material;
 import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Tela;
@@ -50,6 +51,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
     Componente componente;
     Fornecedor fornecedor;
+    FornecedoresComponente fornec_comp;
     ComposicaoComponente composicao;
     Material material;
     Tela tela;
@@ -80,6 +82,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         
         componente = new Componente();
         fornecedor = new Fornecedor();
+        fornec_comp = new FornecedoresComponente();
         composicao = new ComposicaoComponente();
         material = new Material();
         datasheet = new Datasheet();
@@ -975,13 +978,16 @@ public class InterfaceComponente extends javax.swing.JFrame {
                     if(dao_componente.incluir(componente,jCBTipo.getSelectedItem().toString()) == true){
                         
                        getComposicao();
+                       getFornecedores();
                        dao_componente.gravarComposicao(composicao);
+                       dao_componente.gravarFornecedores(fornec_comp);
                         
                         //se ocorreu tudo bem na inclusão
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
                         valida_campos.LimparCampos(jPComponente);
                         valida_campos.LimparJtable(jTBComposicao);
+                        valida_campos.LimparJtable(jTBFornecedores);
                         
                         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                         situacao = Rotinas.INICIAL;
@@ -1369,6 +1375,20 @@ public class InterfaceComponente extends javax.swing.JFrame {
         composicao.setTabela(jTBComposicao);
         
         return composicao;
+    }
+    
+     public FornecedoresComponente getFornecedores(){
+        
+         
+        fornec_comp = new FornecedoresComponente();
+        
+        Date data_atual = new Date(System.currentTimeMillis());
+        fornec_comp.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
+        fornec_comp.setData_alter(data_atual);
+        fornec_comp.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
+        fornec_comp.setTabela(jTBFornecedores);
+        
+        return fornec_comp;
     }
 
 }
