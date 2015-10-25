@@ -9,6 +9,7 @@ import br.edu.GPEDSCVP.classe.Acesso;
 import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
 import br.edu.GPEDSCVP.classe.Datasheet;
+import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.Material;
 import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Tela;
@@ -35,6 +36,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -46,6 +49,7 @@ import javax.swing.JTable;
 public class InterfaceComponente extends javax.swing.JFrame {
 
     Componente componente;
+    Fornecedor fornecedor;
     ComposicaoComponente composicao;
     Material material;
     Tela tela;
@@ -75,6 +79,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         initComponents();
         
         componente = new Componente();
+        fornecedor = new Fornecedor();
         composicao = new ComposicaoComponente();
         material = new Material();
         datasheet = new Datasheet();
@@ -108,6 +113,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBConsultaComponentes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBComposicao.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBFornecedores.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -188,6 +194,12 @@ public class InterfaceComponente extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jCBBuscarPor1 = new javax.swing.JComboBox();
         jLabel15 = new javax.swing.JLabel();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        jTBConsultaFornecedores = new javax.swing.JTable();
+        jScrollPane6 = new javax.swing.JScrollPane();
+        jTBCotatoFornecedores = new javax.swing.JTable();
+        jLabel11 = new javax.swing.JLabel();
+        jLabel12 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Componentes");
@@ -339,14 +351,14 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Sel", "ID Componente", "Tipo", "Componente", "ID Material", "Material", "Qntd", "Estado"
+                "Sel", "ID Componente", "Tipo", "Componente", "ID Material", "Material", "Qntd"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false
+                true, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -410,12 +422,19 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID Fornecedor", "Descrição", "Email", "Fone"
+                "sel", "ID Fornecedor", "Descrição", "CNPJ", "Site"
             }
         ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
+            boolean[] canEdit = new boolean [] {
+                true, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
@@ -451,9 +470,12 @@ public class InterfaceComponente extends javax.swing.JFrame {
             .addGroup(jPComponenteLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPComponenteLayout.createSequentialGroup()
-                        .addGroup(jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPComponenteLayout.createSequentialGroup()
+                    .addGroup(jPComponenteLayout.createSequentialGroup()
+                        .addComponent(jLabel10)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPComponenteLayout.createSequentialGroup()
+                        .addGroup(jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPComponenteLayout.createSequentialGroup()
                                 .addGroup(jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                                     .addGroup(jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel4)
@@ -485,30 +507,26 @@ public class InterfaceComponente extends javax.swing.JFrame {
                                         .addComponent(jLabel7)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPComponenteLayout.createSequentialGroup()
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPComponenteLayout.createSequentialGroup()
                                 .addComponent(jScrollPane2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jBTAddComposicao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jBTRemoveComposicao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                        .addGap(26, 26, 26))
-                    .addGroup(jPComponenteLayout.createSequentialGroup()
-                        .addGroup(jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel8)
+                                    .addComponent(jBTRemoveComposicao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(jPComponenteLayout.createSequentialGroup()
-                                .addComponent(jCBDatasheet, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel8)
+                                    .addGroup(jPComponenteLayout.createSequentialGroup()
+                                        .addComponent(jCBDatasheet, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jBTNovoDatasheet))
+                                    .addComponent(jLabel2)
+                                    .addComponent(jScrollPane4))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBTNovoDatasheet))
-                            .addComponent(jLabel2)
-                            .addComponent(jScrollPane4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBTAddFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBTRemoveFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(22, 22, 22))
-                    .addGroup(jPComponenteLayout.createSequentialGroup()
-                        .addComponent(jLabel10)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGroup(jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jBTAddFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jBTRemoveFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(26, 26, 26))))
         );
         jPComponenteLayout.setVerticalGroup(
             jPComponenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -647,39 +665,99 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
         jLabel15.setText("Tipo:");
 
+        jTBConsultaFornecedores.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID Cidade", "Descrição", "UF", "Última alteração"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTBConsultaFornecedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTBConsultaFornecedoresMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(jTBConsultaFornecedores);
+
+        jTBCotatoFornecedores.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Descrição", "Email", "Fone"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTBCotatoFornecedores.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTBCotatoFornecedoresMouseClicked(evt);
+            }
+        });
+        jScrollPane6.setViewportView(jTBCotatoFornecedores);
+
+        jLabel11.setText("Contato:");
+
+        jLabel12.setText("Fornecedores:");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel9)
-                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addComponent(jCBBuscarPor, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel14)
+                                    .addComponent(jCBBuscarPor, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(4, 4, 4)
+                                        .addComponent(jLabel15))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jCBBuscarPor1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(7, 7, 7)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jBTBuscar)
+                                        .addGap(18, 18, 18)
+                                        .addComponent(jBTVerDatasheet))
+                                    .addComponent(jLabel29)))
+                            .addComponent(jLabel9))
+                        .addGap(0, 12, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane5)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(jLabel15))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCBBuscarPor1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(7, 7, 7)
+                                .addComponent(jLabel12)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBTBuscar)
-                                .addGap(18, 18, 18)
-                                .addComponent(jBTVerDatasheet))
-                            .addComponent(jLabel29))
-                        .addGap(0, 12, Short.MAX_VALUE)))
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel11))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -700,11 +778,22 @@ public class InterfaceComponente extends javax.swing.JFrame {
                             .addComponent(jBTVerDatasheet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel9)
-                .addGap(4, 4, 4)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(4, 4, 4)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel12)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -884,11 +973,16 @@ public class InterfaceComponente extends javax.swing.JFrame {
                     getComponente();
                     //inclui componente
                     if(dao_componente.incluir(componente,jCBTipo.getSelectedItem().toString()) == true){
+                        
+                       getComposicao();
+                       dao_componente.gravarComposicao(composicao);
+                        
                         //se ocorreu tudo bem na inclusão
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
                         valida_campos.LimparCampos(jPComponente);
-
+                        valida_campos.LimparJtable(jTBComposicao);
+                        
                         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                         situacao = Rotinas.INICIAL;
 
@@ -1089,8 +1183,51 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTRemoveFornecedoresActionPerformed
 
     private void jBTAddFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddFornecedorActionPerformed
-        // TODO add your handling code here:
+        try {
+            //atualiza dados do usuario logado
+            dao_acesso.retornaUsuarioLogado(acesso);
+            
+            //Inclui a opção todas telas como primeira opção
+            tela.setDescricao("Todas telas");
+            tela.setId_tela(1);
+            dao_tela.incluir(tela);
+            
+            //Inclui a tela de Pessoas
+            tela.setDescricao("Pessoas");
+            tela.setId_tela(2);
+            dao_tela.incluir(tela);
+            
+            //Armazena dados de acesso da tela para verificar permissões
+            acesso.setId_tela(2);
+            acesso.setNome_tela("Pessoas");
+            
+            //se naõ for gerente
+            if(acesso.getIn_gerente() == 0){
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            } 
+          
+           //Verifica se o usuario possui permissao para acessar essa tela
+           if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas 
+                fornecedor.setTabela(jTBFornecedores);
+                new InterfaceConsultaFornecedores().setVisible(true);
+           }else{
+               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
+           }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBTAddFornecedorActionPerformed
+
+    private void jTBConsultaFornecedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaFornecedoresMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTBConsultaFornecedoresMouseClicked
+
+    private void jTBCotatoFornecedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBCotatoFornecedoresMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTBCotatoFornecedoresMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1149,6 +1286,8 @@ public class InterfaceComponente extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField jFTData;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel2;
@@ -1167,10 +1306,14 @@ public class InterfaceComponente extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JTabbedPane jTBCidade;
     private javax.swing.JTable jTBComposicao;
     private javax.swing.JTable jTBConsultaComponentes;
     private javax.swing.JTable jTBConsultaComposicao;
+    private javax.swing.JTable jTBConsultaFornecedores;
+    private javax.swing.JTable jTBCotatoFornecedores;
     private javax.swing.JTable jTBFornecedores;
     private javax.swing.JTextField jTFDescrição;
     private javax.swing.JTextField jTFFiltro;
@@ -1188,7 +1331,12 @@ public class InterfaceComponente extends javax.swing.JFrame {
         int id_componente = Integer.parseInt(jTFIDComponente.getText());
         componente.setId_componente(id_componente);
         if(jCBTipo.getSelectedItem().equals("Mecânico")){
-            componente.setId_material(material.getArray_material(jCBMaterial.getSelectedIndex() - 1));
+            if(jCBMaterial.getSelectedIndex() > 0){
+                componente.setId_material(material.getArray_material(jCBMaterial.getSelectedIndex() - 1));
+            }else{
+                componente.setId_material(0);
+            }
+            
         }
         componente.setDescricao(jTFDescrição.getText());
         if(jCBTipo.getSelectedItem().equals("Eletrônico")){
@@ -1207,6 +1355,20 @@ public class InterfaceComponente extends javax.swing.JFrame {
         componente.setData_alter(data_atual);
       
         return componente;
+    }
+    
+    public ComposicaoComponente getComposicao(){
+        
+         
+        composicao = new ComposicaoComponente();
+        
+        Date data_atual = new Date(System.currentTimeMillis());
+        
+        composicao.setData_alter(data_atual);
+        composicao.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
+        composicao.setTabela(jTBComposicao);
+        
+        return composicao;
     }
 
 }

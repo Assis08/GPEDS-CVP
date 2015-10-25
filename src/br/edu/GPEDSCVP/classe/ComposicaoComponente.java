@@ -5,6 +5,7 @@
  */
 package br.edu.GPEDSCVP.classe;
 
+import java.sql.Date;
 import javax.swing.JTable;
 
 /**
@@ -15,11 +16,16 @@ public class ComposicaoComponente {
     
     private int qntd;
     private int id_componente;
+    private Date data_cadastro;
+    private Date data_alter;
     private static JTable tabela;
+    
 
     public ComposicaoComponente() {
         qntd = 0;
         id_componente = 0;
+        data_cadastro = null;
+        data_alter = null;
     }
 
     public int getQntd() {
@@ -44,5 +50,21 @@ public class ComposicaoComponente {
 
     public void setId_componente(int id_componente) {
         this.id_componente = id_componente;
+    }
+
+    public Date getData_cadastro() {
+        return data_cadastro;
+    }
+
+    public void setData_cadastro(Date data_cadastro) {
+        this.data_cadastro = data_cadastro;
+    }
+
+    public Date getData_alter() {
+        return data_alter;
+    }
+
+    public void setData_alter(Date data_alter) {
+        this.data_alter = data_alter;
     }
 }

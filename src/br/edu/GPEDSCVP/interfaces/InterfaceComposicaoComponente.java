@@ -23,11 +23,10 @@ import br.edu.GPEDSCVP.util.ManipulaJtable;
 import br.edu.GPEDSCVP.util.Mensagens;
 import br.edu.GPEDSCVP.util.Rotinas;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
-import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.sql.SQLException;
@@ -35,8 +34,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 /**
@@ -71,6 +71,27 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
         //Cria renderer para as Jtable  
         TableCellRenderer renderer = new EvenOddRenderer();
         jTBConsultaComponentes.setDefaultRenderer(Object.class, renderer);
+
+        jTBConsultaComponentes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {  
+        @Override  
+        public void valueChanged(ListSelectionEvent evt) {  
+        if (evt.getValueIsAdjusting())  
+            return;  
+        int selected = jTBConsultaComponentes.getSelectedRow(); //Use getSelectedRows se vc permite seleção múltipla  
+            //faça algo com selected  
+        }  
+        } ); 
+        
+        /*
+        jTBConsultaComponentes.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                mouseClickedCellJtable(evt);
+            }
+        });
+        */
+        //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
+        jTBConsultaComponentes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         
         componente = new Componente();
         composicao = new ComposicaoComponente();
@@ -157,6 +178,17 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBConsultaComponentesMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jTBConsultaComponentesMouseEntered(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                jTBConsultaComponentesMousePressed(evt);
+            }
+        });
+        jTBConsultaComponentes.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jTBConsultaComponentesMouseDragged(evt);
+            }
         });
         jScrollPane1.setViewportView(jTBConsultaComponentes);
 
@@ -200,32 +232,34 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(6, 6, 6)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addComponent(jCBBuscarPor, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel15)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(2, 2, 2)
-                                .addComponent(jCBTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel29)
-                                .addGap(0, 448, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTFFiltro)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBTBuscar)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBTVerDatasheet))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jBTConcluir))
-                    .addComponent(jScrollPane1))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel14)
+                                    .addComponent(jCBBuscarPor, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel15)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(2, 2, 2)
+                                        .addComponent(jCBTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jLabel29)
+                                        .addGap(0, 448, Short.MAX_VALUE))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTFFiltro)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jBTBuscar)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jBTVerDatasheet)))))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -323,7 +357,6 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
                 jTBConsultaComponentes.setValueAt("", linha, 11);
             }
         }
-       
     }//GEN-LAST:event_jTBConsultaComponentesMouseClicked
 
     private void jBTBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTBuscarActionPerformed
@@ -345,8 +378,6 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
             //Tira aspas simples da string para evitar código sql
             valida_campos.IgnoraSQL(jTFFiltro);
             
-           
-
             switch (jCBTipo.getSelectedIndex()) {
                 //Tipo : Consulta Geral
                 case 0:
@@ -366,7 +397,6 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
                                 JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
                                 jTFFiltro.grabFocus();
                             }
-
                             break;
                         case 2:
                             //Consulta geral de componentes pela descrição
@@ -376,6 +406,7 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
                                 dao_componente.consultageralDescricao(componente);
                             }else{
                                 JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                jTFFiltro.grabFocus();
                             }
                             break;
                     }
@@ -383,7 +414,7 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
                 //Tipo: Eletrônico
                 case 1:
                     
-                      //Combobox buscar por: geral
+                     //Combobox buscar por: geral
                     switch(jCBBuscarPor.getSelectedIndex()){
                         case 0:
                             //Consulta geral de componentes
@@ -408,6 +439,40 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
                                 dao_componente.consultaeletronicoDescricao(componente);
                             }else{
                                 JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
+                    }
+                    break;
+                    
+                case 2:
+                    
+                    //Combobox buscar por: geral
+                    switch(jCBBuscarPor.getSelectedIndex()){
+                        case 0:
+                            //Consulta geral de componentes
+                            dao_componente.consultageralMecanicos(componente);
+                            break;
+                        case 1:
+                            //Consulta geral de componentes por código
+                            try {
+                                id_busca = Integer.parseInt(jTFFiltro.getText());
+                                componente.setId_componente(id_busca);
+                                dao_componente.consultamecanicoCodigo(componente);
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
+                        case 2:
+                            //Consulta geral de componentes pela descrição
+                            ds_busca = jTFFiltro.getText();
+                            if(!ds_busca.replace(" ", "").equals("")){
+                                componente.setDescricao(ds_busca);
+                                dao_componente.consultamecanicoDescricao(componente);
+                            }else{
+                                JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                jTFFiltro.grabFocus();
                             }
                             break;
                     }
@@ -416,6 +481,9 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
             //Preenche na JTABLE os dados dos componentes cadastrados
             Jtable.PreencherJtableGenerico(jTBConsultaComponentes, new String[]{"null","id_componente", "tipo", "componente.descricao", "revisao", "id_material", "material.descricao","componente.id_datasheet",
             "datasheet.descricao","componente.data_cadastro","componente.data_alter"}, componente.getRetorno());
+            
+            //ajusta largura das colunas
+            Jtable.ajustarColunasDaTabela(jTBConsultaComponentes);
             
             //Jtable.ajustarColunasDaTabela(jTBConsultaComponentes);
         } else {
@@ -471,10 +539,23 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
 
         try {
             dao_componente.addComposicao(componente,jTBConsultaComponentes);
+            Jtable.ajustarColunasDaTabela(componente.getTabela());
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar composição");
         }
     }//GEN-LAST:event_jBTConcluirActionPerformed
+
+    private void jTBConsultaComponentesMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaComponentesMousePressed
+
+    }//GEN-LAST:event_jTBConsultaComponentesMousePressed
+
+    private void jTBConsultaComponentesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaComponentesMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTBConsultaComponentesMouseEntered
+
+    private void jTBConsultaComponentesMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaComponentesMouseDragged
+        
+    }//GEN-LAST:event_jTBConsultaComponentesMouseDragged
 
     /**
      * @param args the command line arguments
@@ -535,6 +616,7 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
  
     public Component getTableCellRendererComponent(JTable table, Object value,
     boolean isSelected, boolean hasFocus, int row, int column) {
+        
         Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
         table, value, isSelected, hasFocus, row, column);
         ((JLabel) renderer).setOpaque(true);
@@ -554,11 +636,28 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
                     table.setValueAt(false, row, 0);
                     table.setValueAt("", row, 11);
                 }
-            
             }       
         }
     return renderer;
-  }
+    }
 }
-
+    
+    public void mouseClickedCellJtable(MouseEvent evt){
+        int row = jTBConsultaComponentes.rowAtPoint(evt.getPoint());
+        int col = jTBConsultaComponentes.columnAtPoint(evt.getPoint());
+        if (row >= 0 && col >= 0) {
+            JOptionPane.showMessageDialog(null, row);
+            JOptionPane.showMessageDialog(null, col);
+        }
+    }
+    /*
+    public void mouseClicked(java.awt.event.MouseEvent evt) {
+        int row = jTBConsultaComponentes.rowAtPoint(evt.getPoint());
+        int col = jTBConsultaComponentes.columnAtPoint(evt.getPoint());
+        if (row >= 0 && col >= 0) {
+            JOptionPane.showMessageDialog(null, row);
+            JOptionPane.showMessageDialog(null, col);
+        }
+    }
+    */
 }

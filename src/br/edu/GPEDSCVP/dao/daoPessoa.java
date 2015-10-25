@@ -386,7 +386,7 @@ public class daoPessoa {
     //Consulta pelo código geral
     public boolean consultacodigo(Fornecedor pessoa) {
         
-         conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+         conecta_banco.executeSQL("select null, pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,fornecedor.site,pessoa.cpf_cnpj,"
             + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
             + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
             + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
@@ -491,7 +491,7 @@ public class daoPessoa {
     
     //Consulta geral de fornecedores
     public boolean consultageral(Fornecedor pessoa){
-         conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+         conecta_banco.executeSQL("select null, pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,fornecedor.site,pessoa.cpf_cnpj,"
             + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
             + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
             + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
@@ -599,14 +599,14 @@ public class daoPessoa {
     //Consulta pela descrição de fornecedores
     public boolean consultadesc(Fornecedor pessoa){
         
-            conecta_banco.executeSQL("select pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,pessoa.cpf_cnpj,"
+            conecta_banco.executeSQL("select null, pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,fornecedor.site,pessoa.cpf_cnpj,"
             + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
             + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
             + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
             + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"
             + "inner join fornecedor on (fornecedor.id_pessoa = pessoa.id_pessoa )"
-            + "where pessoa.nome = '"+pessoa.getNome()+"' and pessoa.in_ativo = 'A'");
-        
+            + "where pessoa.nome like '"+pessoa.getNome()+"%' and pessoa.in_ativo = 'A'");
+
         pessoa.setRetorno(conecta_banco.resultset);
         //Rotina para verificar se retornou algum registro
         /*

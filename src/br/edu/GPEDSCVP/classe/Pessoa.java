@@ -8,6 +8,7 @@ package br.edu.GPEDSCVP.classe;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import javax.swing.JTable;
 
 /**
  *
@@ -21,6 +22,7 @@ public class Pessoa
     private Date data_cadastro;
     private Date data_alter;
     private ResultSet retorno;
+    private static JTable tabela;
     
     public Pessoa()
     {
@@ -91,5 +93,14 @@ public class Pessoa
     {
         this.retorno = retorno;
     }
+
+    public JTable getTabela() {
+        return tabela;
+    }
+
+    public void setTabela(JTable tabela) {
+        this.tabela = tabela;
+    }
+                 
 }
 

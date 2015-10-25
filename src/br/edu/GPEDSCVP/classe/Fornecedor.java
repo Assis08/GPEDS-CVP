@@ -5,6 +5,8 @@
  */
 package br.edu.GPEDSCVP.classe;
 
+import javax.swing.JTable;
+
 /**
  *
  * @author Willys
@@ -39,7 +41,5 @@ public class Fornecedor extends PessoaJuridica
     {
         this.ramo = ramo;
     }
-
-    
 }
 
