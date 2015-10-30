@@ -6,6 +6,7 @@
 package br.edu.GPEDSCVP.classe;
 
 import java.sql.Date;
+import java.sql.ResultSet;
 import javax.swing.JTable;
 
 /**
@@ -19,6 +20,7 @@ public class FornecedoresComponente {
     private Date data_cadastro;
     private Date data_alter;
     private static JTable tabela;
+    private ResultSet retorno;
 
     public FornecedoresComponente() {
         id_fornecedor = 0;
@@ -65,5 +67,13 @@ public class FornecedoresComponente {
 
     public static void setTabela(JTable tabela) {
         FornecedoresComponente.tabela = tabela;
+    }
+
+    public ResultSet getRetorno() {
+        return retorno;
+    }
+
+    public void setRetorno(ResultSet retorno) {
+        this.retorno = retorno;
     }
 }

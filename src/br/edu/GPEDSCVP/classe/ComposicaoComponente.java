@@ -6,6 +6,7 @@
 package br.edu.GPEDSCVP.classe;
 
 import java.sql.Date;
+import java.sql.ResultSet;
 import javax.swing.JTable;
 
 /**
@@ -16,9 +17,11 @@ public class ComposicaoComponente {
     
     private int qntd;
     private int id_componente;
+    private int id_subcomponente;
     private Date data_cadastro;
     private Date data_alter;
     private static JTable tabela;
+    private ResultSet retorno;
     
 
     public ComposicaoComponente() {
@@ -66,5 +69,21 @@ public class ComposicaoComponente {
 
     public void setData_alter(Date data_alter) {
         this.data_alter = data_alter;
+    }
+
+    public ResultSet getRetorno() {
+        return retorno;
+    }
+
+    public void setRetorno(ResultSet retorno) {
+        this.retorno = retorno;
+    } 
+
+    public int getId_subcomponente() {
+        return id_subcomponente;
+    }
+
+    public void setId_subcomponente(int id_subcomponente) {
+        this.id_subcomponente = id_subcomponente;
     }
 }

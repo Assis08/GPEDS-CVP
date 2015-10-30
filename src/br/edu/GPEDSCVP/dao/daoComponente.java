@@ -147,7 +147,7 @@ public class daoComponente {
     }
     
     public void gravarComposicao (ComposicaoComponente composicao){
-        Integer id_componente;
+        Integer id_subcomponente;
         String tipo;
         String descricao;
         Integer qntd;
@@ -156,17 +156,18 @@ public class daoComponente {
         int totlinha = tabela.getRowCount();
         for (int i = 0; i < totlinha; i++){
             
-            id_componente = Integer.parseInt(tabela.getValueAt(i, 1).toString());
+            id_subcomponente = Integer.parseInt(tabela.getValueAt(i, 1).toString());
             tipo = tabela.getValueAt(i, 2).toString();
             descricao = tabela.getValueAt(i, 3).toString();
             qntd = Integer.parseInt(tabela.getValueAt(i, 6).toString());
             
                     
             int sequencia = (Integer) (ultima.ultimasequencia("COMPOSICAO_COMPONENTE","ID_SUBCOMPONENTE"));
-            conecta_banco.executeSQL("INSERT INTO composicao_componente (id_subcomponente, id_componente, qntd, estado,data_cadastro,data_alter) "
-            + "VALUES (?, ?, ?, ?, ?, ?) ",
+            conecta_banco.executeSQL("INSERT INTO composicao_componente (id_composicao,id_subcomponente, id_componente, qntd, estado,data_cadastro,data_alter) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
             sequencia,
-            id_componente,
+            id_subcomponente,
+            composicao.getId_componente(),
             qntd,
             "A",
             FormatarData.dateParaSQLDate(composicao.getData_cadastro()),
@@ -196,6 +197,15 @@ public class daoComponente {
             FormatarData.dateParaSQLDate(fornecedor.getData_cadastro()));
         }
      }
+    
+    //Consulta pelo codigo de componentes seus fornecedores
+    public void consultaCodigoComponente(ComposicaoComponente composicao){
+        conecta_banco.executeSQL("select id_subcomponente, tipo, componente.descricao, material.id_material, material.descricao, qntd from composicao_componente" +
+                                " inner join componente on (componente.id_componente = composicao_componente.id_subcomponente)" +
+                                " left join material on (componente.id_material = material.id_material)" +
+                                " where composicao_componente.id_componente = "+composicao.getId_componente()+" order by id_subcomponente asc");
+        composicao.setRetorno(conecta_banco.resultset);
+    }
     
     //Consulta geral de componentes
     public void consultageral(Componente componente){

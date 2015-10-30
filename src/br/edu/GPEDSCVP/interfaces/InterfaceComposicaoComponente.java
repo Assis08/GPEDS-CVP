@@ -540,6 +540,7 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
         try {
             dao_componente.addComposicao(componente,jTBConsultaComponentes);
             Jtable.ajustarColunasDaTabela(componente.getTabela());
+            this.dispose();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar composição");
         }

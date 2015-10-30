@@ -8,6 +8,7 @@ package br.edu.GPEDSCVP.interfaces;
 import br.edu.GPEDSCVP.classe.Acesso;
 import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
+import br.edu.GPEDSCVP.classe.Contato;
 import br.edu.GPEDSCVP.classe.Datasheet;
 import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.FornecedoresComponente;
@@ -17,8 +18,11 @@ import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.dao.daoAcesso;
 import br.edu.GPEDSCVP.dao.daoCidade;
 import br.edu.GPEDSCVP.dao.daoComponente;
+import br.edu.GPEDSCVP.dao.daoComposicaoComponente;
+import br.edu.GPEDSCVP.dao.daoContato;
 import br.edu.GPEDSCVP.dao.daoDatasheet;
 import br.edu.GPEDSCVP.dao.daoEstado;
+import br.edu.GPEDSCVP.dao.daoFornecedoresComponente;
 import br.edu.GPEDSCVP.dao.daoMaterial;
 import br.edu.GPEDSCVP.dao.daoPermissao;
 import br.edu.GPEDSCVP.dao.daoTela;
@@ -50,6 +54,7 @@ import javax.swing.JTable;
 public class InterfaceComponente extends javax.swing.JFrame {
 
     Componente componente;
+    Contato contato;
     Fornecedor fornecedor;
     FornecedoresComponente fornec_comp;
     ComposicaoComponente composicao;
@@ -60,8 +65,11 @@ public class InterfaceComponente extends javax.swing.JFrame {
     ComboBox combo;
     daoCidade dao_cidade;
     daoEstado dao_estado;
+    daoContato dao_contato;
     daoDatasheet dao_datasheet;
     daoComponente dao_componente;
+    daoComposicaoComponente dao_composicao;
+    daoFornecedoresComponente dao_fornec_comp;
     daoMaterial dao_material;
     Acesso acesso;
     Mensagens mensagem;
@@ -81,6 +89,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         initComponents();
         
         componente = new Componente();
+        contato = new Contato();
         fornecedor = new Fornecedor();
         fornec_comp = new FornecedoresComponente();
         composicao = new ComposicaoComponente();
@@ -89,8 +98,11 @@ public class InterfaceComponente extends javax.swing.JFrame {
         tela = new Tela();
         dao_tela = new daoTela();
         dao_cidade = new daoCidade();
+        dao_contato = new daoContato();
         dao_datasheet = new daoDatasheet();
         dao_estado = new daoEstado();
+        dao_composicao = new daoComposicaoComponente();
+        dao_fornec_comp = new daoFornecedoresComponente();
         acesso = new Acesso();
         dao_permissao = new daoPermissao();
         dao_acesso = new daoAcesso();
@@ -117,6 +129,9 @@ public class InterfaceComponente extends javax.swing.JFrame {
         jTBConsultaComponentes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBComposicao.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBFornecedores.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBConsultaComposicao.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBConsultaFornecedores.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBContatoFornecedores.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -195,12 +210,12 @@ public class InterfaceComponente extends javax.swing.JFrame {
         jTBConsultaComposicao = new javax.swing.JTable();
         jBTVerDatasheet = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
-        jCBBuscarPor1 = new javax.swing.JComboBox();
+        jCBTipoConsulta = new javax.swing.JComboBox();
         jLabel15 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTBConsultaFornecedores = new javax.swing.JTable();
         jScrollPane6 = new javax.swing.JScrollPane();
-        jTBCotatoFornecedores = new javax.swing.JTable();
+        jTBContatoFornecedores = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
 
@@ -636,17 +651,18 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID Cidade", "Descrição", "UF", "Última alteração"
+                "ID Componente", "Tipo", "Descricao", "ID Material", "Material", "Qntd"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTBConsultaComposicao.setName("Composicao"); // NOI18N
         jTBConsultaComposicao.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBConsultaComposicaoMouseClicked(evt);
@@ -664,7 +680,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
         jLabel9.setText("Composição:");
 
-        jCBBuscarPor1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Geral", "Eletrônico", "Mecânico" }));
+        jCBTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Geral", "Eletrônico", "Mecânico" }));
 
         jLabel15.setText("Tipo:");
 
@@ -673,7 +689,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID Cidade", "Descrição", "UF", "Última alteração"
+                "ID Fornecedor", "Descrição", "CNPJ", "Site"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -691,7 +707,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         });
         jScrollPane5.setViewportView(jTBConsultaFornecedores);
 
-        jTBCotatoFornecedores.setModel(new javax.swing.table.DefaultTableModel(
+        jTBContatoFornecedores.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -707,12 +723,12 @@ public class InterfaceComponente extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTBCotatoFornecedores.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTBContatoFornecedores.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTBCotatoFornecedoresMouseClicked(evt);
+                jTBContatoFornecedoresMouseClicked(evt);
             }
         });
-        jScrollPane6.setViewportView(jTBCotatoFornecedores);
+        jScrollPane6.setViewportView(jTBContatoFornecedores);
 
         jLabel11.setText("Contato:");
 
@@ -739,7 +755,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
                                         .addComponent(jLabel15))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jCBBuscarPor1, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addComponent(jCBTipoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(7, 7, 7)
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -753,14 +769,14 @@ public class InterfaceComponente extends javax.swing.JFrame {
                         .addGap(0, 12, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane5)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLabel12)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jLabel12)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel11))))
+                            .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jLabel11)
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -777,7 +793,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
                             .addComponent(jCBBuscarPor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBTBuscar)
-                            .addComponent(jCBBuscarPor1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCBTipoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBTVerDatasheet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -873,7 +889,32 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTNovoMaterialActionPerformed
 
     private void jTBConsultaComponentesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaComponentesMouseClicked
-       
+        //Verifica se houve 1 clique do mouse
+        if (evt.getClickCount() == 1) {
+            //recupera a linha clicada
+            int linha = jTBConsultaComponentes.getSelectedRow();
+            Integer id_comp = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 0).toString());
+
+            //busca composição do componente clicado
+            composicao.setId_componente(id_comp);
+            dao_composicao.consultaCodigoComponente(composicao);
+            
+            //busca fornecedores do componente clicado
+            fornec_comp.setId_componente(id_comp);
+            dao_fornec_comp.consultaFornecedoresComponente(fornec_comp);
+            
+             //Preenche na JTABLE os dados dos componentes cadastrados
+            Jtable.PreencherJtableGenerico(jTBConsultaComposicao, new String[]{"id_subcomponente", "tipo", "componente.descricao", "material.id_material", "material.descricao", "qntd"}, composicao.getRetorno());
+            Jtable.ajustarColunasDaTabela(jTBConsultaComposicao);
+            //Preenche na JTABLE os dados dos fornecedores dos componentes 
+            Jtable.PreencherJtableGenerico(jTBConsultaFornecedores, new String[]{"id_pessoa", "nome", "cpf_cnpj", "site"}, fornec_comp.getRetorno());
+            Jtable.ajustarColunasDaTabela(jTBConsultaFornecedores);
+            
+        //Verifica se houve 2 cliques do mouse
+        }else  if (evt.getClickCount() == 2){
+            
+        }
+
     }//GEN-LAST:event_jTBConsultaComponentesMouseClicked
 
     private void jTBCidadeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBCidadeStateChanged
@@ -1072,19 +1113,123 @@ public class InterfaceComponente extends javax.swing.JFrame {
         //Verifica se o usuario possui permissao para acessar essa tela
         if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
 
-            // TODO add your handling code here:
-            int id_busca;
-            String ds_busca;
+            //Se não for gerente
+        if (acesso.getIn_gerente() == 0) {
+            //retorna as permissoes de acesso do usuario
+            dao_permissao.retornaDadosPermissao(acesso, permissao);
+        }
+
+        //Verifica se o usuario possui permissao para acessar essa tela
+        if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
+
+            // recupera linha selecionada
+            int linha = jTBConsultaComponentes.getSelectedRow(); 
+            int id_busca = 0;
+            String ds_busca = "";
 
             //Tira aspas simples da string para evitar código sql
             valida_campos.IgnoraSQL(jTFFiltro);
-
-            switch (jCBBuscarPor.getSelectedIndex()) {
-                //Selecione pessoa (Consulta Geral)
+            
+            switch (jCBTipoConsulta.getSelectedIndex()) {
+                //Tipo : Consulta Geral
                 case 0:
-                    //Consulta geral de componentes
-                    dao_componente.consultageral(componente);
-                break;
+                    //Combobox buscar por: geral
+                    switch(jCBBuscarPor.getSelectedIndex()){
+                        case 0:
+                            //Consulta geral de componentes
+                            dao_componente.consultageral(componente);
+                            break;
+                        case 1:
+                            //Consulta geral de componentes por código
+                            try {
+                                id_busca = Integer.parseInt(jTFFiltro.getText());
+                                componente.setId_componente(id_busca);
+                                dao_componente.consultageralCodigo(componente);
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
+                        case 2:
+                            //Consulta geral de componentes pela descrição
+                            ds_busca = jTFFiltro.getText();
+                            if(!ds_busca.replace(" ", "").equals("")){
+                                componente.setDescricao(ds_busca);
+                                dao_componente.consultageralDescricao(componente);
+                            }else{
+                                JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
+                    }
+                    break;
+                //Tipo: Eletrônico
+                case 1:
+                    
+                     //Combobox buscar por: geral
+                    switch(jCBBuscarPor.getSelectedIndex()){
+                        case 0:
+                            //Consulta geral de componentes
+                            dao_componente.consultageralEletronicos(componente);
+                            break;
+                        case 1:
+                            //Consulta geral de componentes por código
+                            try {
+                                id_busca = Integer.parseInt(jTFFiltro.getText());
+                                componente.setId_componente(id_busca);
+                                dao_componente.consultaeletronicoCodigo(componente);
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
+                        case 2:
+                            //Consulta geral de componentes pela descrição
+                            ds_busca = jTFFiltro.getText();
+                            if(!ds_busca.replace(" ", "").equals("")){
+                                componente.setDescricao(ds_busca);
+                                dao_componente.consultaeletronicoDescricao(componente);
+                            }else{
+                                JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
+                    }
+                    break;
+                    
+                case 2:
+                    
+                    //Combobox buscar por: geral
+                    switch(jCBBuscarPor.getSelectedIndex()){
+                        case 0:
+                            //Consulta geral de componentes
+                            dao_componente.consultageralMecanicos(componente);
+                            break;
+                        case 1:
+                            //Consulta geral de componentes por código
+                            try {
+                                id_busca = Integer.parseInt(jTFFiltro.getText());
+                                componente.setId_componente(id_busca);
+                                dao_componente.consultamecanicoCodigo(componente);
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
+                        case 2:
+                            //Consulta geral de componentes pela descrição
+                            ds_busca = jTFFiltro.getText();
+                            if(!ds_busca.replace(" ", "").equals("")){
+                                componente.setDescricao(ds_busca);
+                                dao_componente.consultamecanicoDescricao(componente);
+                            }else{
+                                JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
+                    }
+                    break;
+                }
             }
             //Preenche na JTABLE os dados dos componentes cadastrados
             Jtable.PreencherJtableGenerico(jTBConsultaComponentes, new String[]{"id_componente", "tipo", "componente.descricao", "revisao", "id_material", "material.descricao", "componente.id_datasheet","datasheet.descricao","data_cadastro", "data_alter"}, componente.getRetorno());
@@ -1095,7 +1240,19 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTBuscarActionPerformed
 
     private void jTBConsultaComposicaoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaComposicaoMouseClicked
-        // TODO add your handling code here:
+
+        //recupera a linha clicada
+        int linha = jTBConsultaComposicao.getSelectedRow();
+        Integer id_comp = Integer.parseInt(jTBConsultaComposicao.getValueAt(linha, 0).toString());
+
+        //busca fornecedores do componente clicado
+        fornec_comp.setId_componente(id_comp);
+        dao_fornec_comp.consultaFornecedoresComponente(fornec_comp);
+
+        //Preenche na JTABLE os dados dos fornecedores dos componentes 
+        Jtable.PreencherJtableGenerico(jTBConsultaFornecedores, new String[]{"id_pessoa", "nome", "cpf_cnpj", "site"}, fornec_comp.getRetorno());
+        Jtable.ajustarColunasDaTabela(jTBConsultaFornecedores);
+        
     }//GEN-LAST:event_jTBConsultaComposicaoMouseClicked
 
     private void jBTVerDatasheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTVerDatasheetActionPerformed
@@ -1228,12 +1385,24 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTAddFornecedorActionPerformed
 
     private void jTBConsultaFornecedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaFornecedoresMouseClicked
-        // TODO add your handling code here:
+       
+        //recupera a linha clicada
+        int linha = jTBConsultaFornecedores.getSelectedRow();
+        Integer id_fornec = Integer.parseInt(jTBConsultaFornecedores.getValueAt(linha, 0).toString());
+
+        //busca contato dos fornecedor clicado
+        contato.setId_pessoa(id_fornec);
+        dao_contato.consultacodigo(contato);
+
+        //Preenche na JTABLE os dados dos fornecedores dos componentes 
+        Jtable.PreencherJtableGenerico(jTBContatoFornecedores, new String[]{"descricao", "email", "numero"}, contato.getRetorno());
+        Jtable.ajustarColunasDaTabela(jTBContatoFornecedores);
+        
     }//GEN-LAST:event_jTBConsultaFornecedoresMouseClicked
 
-    private void jTBCotatoFornecedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBCotatoFornecedoresMouseClicked
+    private void jTBContatoFornecedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBContatoFornecedoresMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTBCotatoFornecedoresMouseClicked
+    }//GEN-LAST:event_jTBContatoFornecedoresMouseClicked
 
     /**
      * @param args the command line arguments
@@ -1285,10 +1454,10 @@ public class InterfaceComponente extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JComboBox jCBBuscarPor;
-    private javax.swing.JComboBox jCBBuscarPor1;
     private javax.swing.JComboBox jCBDatasheet;
     private javax.swing.JComboBox jCBMaterial;
     private javax.swing.JComboBox jCBTipo;
+    private javax.swing.JComboBox jCBTipoConsulta;
     private javax.swing.JFormattedTextField jFTData;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -1319,7 +1488,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
     private javax.swing.JTable jTBConsultaComponentes;
     private javax.swing.JTable jTBConsultaComposicao;
     private javax.swing.JTable jTBConsultaFornecedores;
-    private javax.swing.JTable jTBCotatoFornecedores;
+    private javax.swing.JTable jTBContatoFornecedores;
     private javax.swing.JTable jTBFornecedores;
     private javax.swing.JTextField jTFDescrição;
     private javax.swing.JTextField jTFFiltro;
@@ -1369,7 +1538,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         composicao = new ComposicaoComponente();
         
         Date data_atual = new Date(System.currentTimeMillis());
-        
+        composicao.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
         composicao.setData_alter(data_atual);
         composicao.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
         composicao.setTabela(jTBComposicao);
