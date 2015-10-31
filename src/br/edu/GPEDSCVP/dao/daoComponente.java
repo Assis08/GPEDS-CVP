@@ -493,6 +493,32 @@ public class daoComponente {
             }
         }
     }
+    
+     //Método para retornar dados do componente
+    public void retornardadosComponente(Componente componente) {
+            
+        conecta_banco.executeSQL("select null, id_componente,tipo,componente.descricao,revisao,material.id_material,material.descricao,componente.id_datasheet,datasheet.descricao,"
+                            +   "componente.data_cadastro,componente.data_alter from componente" 
+                            +   " left join material on (componente.id_material = material.id_material)" 
+                            +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)" 
+                            +   " where componente.id_componente = "+componente.getId_componente()+" order by id_componente asc");
+
+        try {        
+ 
+            conecta_banco.resultset.first();
+            
+            componente.setId_componente(conecta_banco.resultset.getInt("id_componente"));
+            componente.setTipo(conecta_banco.resultset.getString("tipo"));
+            componente.setRevisao(conecta_banco.resultset.getString("revisao"));
+            componente.setDescricao(conecta_banco.resultset.getString("componente.descricao"));
+            componente.setDs_material(conecta_banco.resultset.getString("material.descricao"));
+            componente.setDs_datasheet(conecta_banco.resultset.getString("datasheet.descricao"));
+            componente.setData_cadastro(conecta_banco.resultset.getDate("data_cadastro"));
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao retornar dados do componente");
+        }
+     }
 }
 
 

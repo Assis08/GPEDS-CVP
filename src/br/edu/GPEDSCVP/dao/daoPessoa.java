@@ -8,16 +8,12 @@ package br.edu.GPEDSCVP.dao;
 import br.edu.GPEDSCVP.classe.Certificadora;
 import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.Pessoa;
-import br.edu.GPEDSCVP.classe.PessoaFisica;
-import br.edu.GPEDSCVP.classe.PessoaJuridica;
 import br.edu.GPEDSCVP.classe.Usuario;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 /**

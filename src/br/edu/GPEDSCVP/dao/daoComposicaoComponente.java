@@ -34,7 +34,7 @@ public class daoComposicaoComponente {
     
     //Consulta pelo codigo de componentes mecânicos
     public void consultaCodigoComponente(ComposicaoComponente composicao){
-        conecta_banco.executeSQL("select id_subcomponente, tipo, componente.descricao, material.id_material, material.descricao, qntd from composicao_componente" +
+        conecta_banco.executeSQL("select null, id_subcomponente, tipo, componente.descricao, material.id_material, material.descricao, qntd from composicao_componente" +
                                 " inner join componente on (componente.id_componente = composicao_componente.id_subcomponente)" +
                                 " left join material on (componente.id_material = material.id_material)" +
                                 " where composicao_componente.id_componente = "+composicao.getId_componente()+" order by id_subcomponente asc");

@@ -5003,47 +5003,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             }
         }
     }
-    /*
-    private void onCellEditor(JTable table, int column, int row, Object oldValue, Object newValue){
-        System.out.println("Coluna:" + column + "Valor novo: " + newValue + " Valor antigo: " + oldValue);
-        if (table == jTBContato) {
-            //Se o valor novo não for vazio 
-            if(!newValue.toString().replace(" ", "").equals("")){
-                if(column == 2 ){
-                    JOptionPane.showMessageDialog(null, "Coluna 2");
-                     
-                }else if (column == 3){
-                    JOptionPane.showMessageDialog(null, "Coluna 3");
-                    new InterfaceSelecioneCidade().setVisible(true);
-                }else if (column == 4){
-                    JOptionPane.showMessageDialog(null, "Coluna 4");
-                }else if (column == 5){
-                    JOptionPane.showMessageDialog(null, "Coluna 5");
-                }
-            }else
-            {
-                newValue = oldValue;
-            }
-            
-        }else if (table == jTBEndereco){
-            
-        }else if (table == jTBPermissoes){
-            
-        }
-    }
-
-    class TableCellEditorAction extends AbstractAction {
-        @Override
-        public void actionPerformed(ActionEvent e) {
-            TableCellListener tbListener = (TableCellListener) e.getSource();
-            
-            onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
-        }
-
-    }
-    */
-    
-
+  
   class EvenOddRenderer implements TableCellRenderer {
 
   public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();

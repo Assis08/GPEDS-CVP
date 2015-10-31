@@ -17,7 +17,9 @@ public class Componente {
     
     private int id_componente;
     private int id_material;
+    private String ds_material;
     private int id_datasheet;
+    private String ds_datasheet;
     private String descricao;
     private String tipo;
     private String revisao;
@@ -115,5 +117,21 @@ public class Componente {
 
     public void setRetorno(ResultSet retorno) {
         this.retorno = retorno;
+    }
+
+    public String getDs_material() {
+        return ds_material;
+    }
+
+    public void setDs_material(String ds_material) {
+        this.ds_material = ds_material;
+    }
+
+    public String getDs_datasheet() {
+        return ds_datasheet;
+    }
+
+    public void setDs_datasheet(String ds_datasheet) {
+        this.ds_datasheet = ds_datasheet;
     }
 }

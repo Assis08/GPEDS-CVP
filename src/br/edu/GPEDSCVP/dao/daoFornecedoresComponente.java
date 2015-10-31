@@ -34,7 +34,7 @@ public class daoFornecedoresComponente {
     
     //Consulta pelo codigo de componentes mecânicos
     public void consultaFornecedoresComponente(FornecedoresComponente fornecomp){
-        conecta_banco.executeSQL("select id_fornecedores_comp,id_componente,fornecedor_componente.id_pessoa, pessoa.nome, pessoa.cpf_cnpj, fornecedor.site from fornecedor_componente" 
+        conecta_banco.executeSQL("select null, id_fornecedores_comp,id_componente,fornecedor_componente.id_pessoa, pessoa.nome, pessoa.cpf_cnpj, fornecedor.site from fornecedor_componente" 
                                + " inner join fornecedor on (fornecedor.id_pessoa = fornecedor_componente.id_pessoa)" 
                                + " inner join pessoa_juridica on (fornecedor.id_pessoa = pessoa_juridica.id_pessoa)" 
                                + " inner join pessoa on (pessoa_juridica.id_pessoa = pessoa.id_pessoa)"
