@@ -65,6 +65,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
+        jMenuItem10 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMAlterarMoeda = new javax.swing.JMenu();
 
@@ -164,6 +165,14 @@ public class InterfacePrincipal extends javax.swing.JFrame {
             }
         });
         jMCadastros.add(jMenuItem9);
+
+        jMenuItem10.setText("Fornecimentos");
+        jMenuItem10.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem10ActionPerformed(evt);
+            }
+        });
+        jMCadastros.add(jMenuItem10);
 
         jMBMenuPrincipal.add(jMCadastros);
 
@@ -637,6 +646,45 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMCadastrosActionPerformed
 
+    private void jMenuItem10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem10ActionPerformed
+         try {
+            //atualiza dados do usuario logado
+            dao_acesso.retornaUsuarioLogado(acesso);
+            
+            //Inclui a opção todas telas como primeira opção
+            tela.setDescricao("Todas telas");
+            tela.setId_tela(1);
+            dao_tela.incluir(tela);
+            
+            //Inclui a tela de Materiais
+            tela.setDescricao("Fornecimentos");
+            tela.setId_tela(12);
+            dao_tela.incluir(tela);
+            
+            //Armazena dados de acesso da tela para verificar permissões
+            acesso.setId_tela(12);
+            acesso.setNome_tela("Fornecimentos");
+            
+            //se naõ for gerente
+            if(acesso.getIn_gerente() == 0){
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            } 
+          
+           //Verifica se o usuario possui permissao para acessar essa tela
+           if (validaacesso.verificaAcesso("acesso",acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas 
+                new InterfaceFornecimento().setVisible(true);
+           }else{
+               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
+           }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        jMCadastros.setSelected(false);
+    }//GEN-LAST:event_jMenuItem10ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -678,6 +726,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMCadastros;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

@@ -19,6 +19,7 @@ public class Moeda {
     private String unidade;
     private Date data_alter;
     private ResultSet retorno;
+    private int[] array_moeda;
 
     public Moeda() {
         id_moeda = 0;
@@ -65,5 +66,13 @@ public class Moeda {
 
     public void setData_alter(Date data_alter) {
         this.data_alter = data_alter;
+    }
+
+    public int getArray_moeda(int posicao) {
+        return array_moeda[posicao];
+    }
+
+    public void setArray_moeda(int[] array_moeda) {
+        this.array_moeda = array_moeda;
     }
 }

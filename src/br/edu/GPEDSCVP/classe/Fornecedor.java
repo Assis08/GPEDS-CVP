@@ -15,6 +15,7 @@ public class Fornecedor extends PessoaJuridica
 {
     private String site;
     private String ramo;
+    private int[] array_fornecedor;
 
     public Fornecedor()
     {
@@ -40,6 +41,14 @@ public class Fornecedor extends PessoaJuridica
     public void setRamo(String ramo)
     {
         this.ramo = ramo;
+    }
+
+    public int getArray_fornecedor(int posicao) {
+        return array_fornecedor[posicao];
+    }
+
+    public void setArray_fornecedor(int[] array_fornecedor) {
+        this.array_fornecedor = array_fornecedor;
     }
 }
 
