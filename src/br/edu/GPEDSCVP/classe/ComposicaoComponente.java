@@ -15,9 +15,11 @@ import javax.swing.JTable;
  */
 public class ComposicaoComponente {
     
+    private static int situacao;
     private int qntd;
     private int id_componente;
     private int id_subcomponente;
+    private int id_composicao;
     private Date data_cadastro;
     private Date data_alter;
     private static JTable tabela;
@@ -85,5 +87,21 @@ public class ComposicaoComponente {
 
     public void setId_subcomponente(int id_subcomponente) {
         this.id_subcomponente = id_subcomponente;
+    }
+
+    public int getId_composicao() {
+        return id_composicao;
+    }
+
+    public void setId_composicao(int id_composicao) {
+        this.id_composicao = id_composicao;
+    }
+
+    public int getSituacao() {
+        return situacao;
+    }
+
+    public void setSituacao(int situacao) {
+        this.situacao = situacao;
     }
 }

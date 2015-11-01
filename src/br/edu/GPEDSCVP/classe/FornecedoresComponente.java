@@ -17,6 +17,7 @@ public class FornecedoresComponente {
     
     private int id_fornecedor;
     private int id_componente;
+    private static int situacao;
     private Date data_cadastro;
     private Date data_alter;
     private static JTable tabela;
@@ -75,5 +76,13 @@ public class FornecedoresComponente {
 
     public void setRetorno(ResultSet retorno) {
         this.retorno = retorno;
+    }
+
+    public static int getSituacao() {
+        return situacao;
+    }
+
+    public static void setSituacao(int situacao) {
+        FornecedoresComponente.situacao = situacao;
     }
 }

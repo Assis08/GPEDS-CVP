@@ -31,11 +31,15 @@ import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.ManipulaJtable;
 import br.edu.GPEDSCVP.util.Mensagens;
 import br.edu.GPEDSCVP.util.Rotinas;
+import br.edu.GPEDSCVP.util.TableCellListener;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Desktop;
+import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -43,9 +47,13 @@ import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -87,6 +95,14 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
     public InterfaceComponente() {
         initComponents();
+        
+        //Cria renderer para as Jtable  
+        TableCellRenderer renderer = new EvenOddRenderer();
+        jTBComposicao.setDefaultRenderer(Object.class, renderer);
+        jTBFornecedores.setDefaultRenderer(Object.class, renderer);
+        
+        //implementa Listener para edição da jtable
+        new TableCellListener(jTBComposicao, new TableCellEditorAction());
         
         componente = new Componente();
         contato = new Contato();
@@ -369,14 +385,14 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Sel", "ID Componente", "Tipo", "Componente", "ID Material", "Material", "Qntd"
+                "Sel", "ID Composição", "ID Componente", "Tipo", "Componente", "ID Material", "Material", "Qntd", "exc"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false
+                true, false, false, false, false, false, false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -394,6 +410,11 @@ public class InterfaceComponente extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTBComposicao);
+        if (jTBComposicao.getColumnModel().getColumnCount() > 0) {
+            jTBComposicao.getColumnModel().getColumn(8).setMinWidth(0);
+            jTBComposicao.getColumnModel().getColumn(8).setPreferredWidth(0);
+            jTBComposicao.getColumnModel().getColumn(8).setMaxWidth(0);
+        }
 
         jLabel2.setText("Composição:");
 
@@ -445,14 +466,14 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
             },
             new String [] {
-                "sel", "ID Fornecedor", "Descrição", "CNPJ", "Site"
+                "sel", "ID Fornecedores", "ID Fornecedor", "Descrição", "CNPJ", "Site", "exc"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false
+                true, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -464,6 +485,11 @@ public class InterfaceComponente extends javax.swing.JFrame {
             }
         });
         jScrollPane4.setViewportView(jTBFornecedores);
+        if (jTBFornecedores.getColumnModel().getColumnCount() > 0) {
+            jTBFornecedores.getColumnModel().getColumn(6).setMinWidth(0);
+            jTBFornecedores.getColumnModel().getColumn(6).setPreferredWidth(0);
+            jTBFornecedores.getColumnModel().getColumn(6).setMaxWidth(0);
+        }
 
         jLabel10.setText("Fornecedores:");
 
@@ -953,11 +979,11 @@ public class InterfaceComponente extends javax.swing.JFrame {
             setcompComponente();
             
             //Preenche na JTABLE composicao para alteração
-            Jtable.PreencherJtableGenerico(jTBComposicao, new String[]{"null","id_subcomponente", "tipo", "componente.descricao", "material.id_material", "material.descricao", "qntd"}, composicao.getRetorno());
+            Jtable.PreencherJtableGenerico(jTBComposicao, new String[]{"null","id_composicao","id_subcomponente", "tipo", "componente.descricao", "material.id_material", "material.descricao", "qntd", "false"}, composicao.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBComposicao);
             
             //Preenche na JTABLE os dados dos fornecedores dos componentes 
-            Jtable.PreencherJtableGenerico(jTBFornecedores, new String[]{"null","id_pessoa", "nome", "cpf_cnpj", "site"}, fornec_comp.getRetorno());
+            Jtable.PreencherJtableGenerico(jTBFornecedores, new String[]{"null","id_fornecedores_comp","id_pessoa", "nome", "cpf_cnpj", "site", "false"}, fornec_comp.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBFornecedores);
             
             //retorna para tela de cadastro
@@ -971,7 +997,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBConsultaComponentesMouseClicked
 
     private void jTBComponenteStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBComponenteStateChanged
-       
+        
     }//GEN-LAST:event_jTBComponenteStateChanged
 
     private void jCBTipoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBTipoPopupMenuWillBecomeInvisible
@@ -1049,12 +1075,57 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-       
+         //se naõ for gerente
+        if (acesso.getIn_gerente() == 0) {
+            //retorna as permissoes de acesso do usuario  
+            dao_permissao.retornaDadosPermissao(acesso, permissao);
+        }
+
+        //Verifica se o usuario possui permissao para acessar essa tela
+        if (valida_acesso.verificaAcesso("alterar", acesso, permissao) == true) {
+            //Define a situação como alterar para habilitar os botoes utilizados apenas na inclusão
+            situacao = Rotinas.ALTERAR;
+            valida_botoes.ValidaEstado(jPBotoes, situacao);
+            valida_campos.habilitaCampos(jPComponente);
+        } else {
+            JOptionPane.showMessageDialog(null, "Você não possui permissões para alterar registros de componentes no sistema");
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        //se naõ for gerente
+        if (acesso.getIn_gerente() == 0) {
+            //retorna as permissoes de acesso do usuario  
+            dao_permissao.retornaDadosPermissao(acesso, permissao);
+        }
+        //Verifica se o usuario possui permissao para acessar essa tela
+        if (valida_acesso.verificaAcesso("excluir", acesso, permissao) == true) {
 
-       
+            //Seta o id da pessoa para exclusão
+            componente.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
+
+                if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
+                    //Inativa componente
+                    dao_componente.inativaComponente(componente);
+                    JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
+                    //Limpa os campos da tela pessoa
+                    valida_campos.LimparCampos(jPComponente);
+                    valida_campos.LimparJtable(jTBComposicao);
+                    valida_campos.LimparJtable(jTBFornecedores);
+                    valida_campos.LimparJtable(jTBConsultaComponentes);
+                    valida_campos.LimparJtable(jTBConsultaFornecedores);
+                    valida_campos.LimparJtable(jTBConsultaComposicao);
+                    valida_campos.LimparJtable(jTBContatoFornecedores);
+                    
+                    //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
+                    situacao = Rotinas.INICIAL;
+
+                    //habilita os botoes utilizados na inicialização da tela
+                    valida_botoes.ValidaEstado(jPBotoes, situacao);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir pessoas no sistema");
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton5MouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseExited
@@ -1082,6 +1153,10 @@ public class InterfaceComponente extends javax.swing.JFrame {
                         valida_campos.LimparCampos(jPComponente);
                         valida_campos.LimparJtable(jTBComposicao);
                         valida_campos.LimparJtable(jTBFornecedores);
+                        valida_campos.LimparJtable(jTBConsultaComponentes);
+                        valida_campos.LimparJtable(jTBConsultaFornecedores);
+                        valida_campos.LimparJtable(jTBConsultaComposicao);
+                        valida_campos.LimparJtable(jTBContatoFornecedores);
                         
                         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                         situacao = Rotinas.INICIAL;
@@ -1099,14 +1174,26 @@ public class InterfaceComponente extends javax.swing.JFrame {
             }
         }else if(situacao == Rotinas.ALTERAR) {
             //pega dados do material na tela
-            if (valida_campos.validacamposobrigatorios(jPMaterial, "MATERIAL") == 0) {
+            if (valida_campos.validacamposobrigatorios(jPComponente, "COMPONENTE") == 0) {
                 try {
-                    getMaterial();
-                    //altera material
-                    if(dao_material.alterar(material) == true){
+                    getComponente();
+                    //alterar componente
+                    if(dao_componente.alterar(componente, componente.getTipo()) == true){
+                       //altera composição
+                       getComposicao();
+                       getFornecedores();
+                       dao_composicao.alterarComposicao(composicao);
+                       dao_fornec_comp.alterarFornecedores(fornec_comp);
+                       
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
-                        valida_campos.LimparCampos(jPMaterial);
+                        valida_campos.LimparCampos(jPComponente);
+                        valida_campos.LimparJtable(jTBComposicao);
+                        valida_campos.LimparJtable(jTBFornecedores);
+                        valida_campos.LimparJtable(jTBConsultaComponentes);
+                        valida_campos.LimparJtable(jTBConsultaFornecedores);
+                        valida_campos.LimparJtable(jTBConsultaComposicao);
+                        valida_campos.LimparJtable(jTBContatoFornecedores);
 
                         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                         situacao = Rotinas.INICIAL;
@@ -1115,10 +1202,10 @@ public class InterfaceComponente extends javax.swing.JFrame {
                         valida_botoes.ValidaEstado(jPBotoes, situacao);
 
                         //desabilita campos
-                        valida_campos.desabilitaCampos(jPMaterial);
+                        valida_campos.desabilitaCampos(jPComponente);
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao alterar material");
+                    JOptionPane.showMessageDialog(null, "Falha ao alterar componente");
                 }
             }
         }
@@ -1127,6 +1214,8 @@ public class InterfaceComponente extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         //limpa campos 
         valida_campos.LimparCampos(jPComponente);
+        valida_campos.LimparJtable(jTBComposicao);
+        valida_campos.LimparJtable(jTBFornecedores);
 
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
         situacao = Rotinas.INICIAL;
@@ -1141,11 +1230,23 @@ public class InterfaceComponente extends javax.swing.JFrame {
     private void jBTAddComposicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddComposicaoActionPerformed
         new InterfaceComposicaoComponente().setVisible(true);
         componente.setTabela(jTBComposicao);
+        composicao.setSituacao(situacao);
         composicao.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
     }//GEN-LAST:event_jBTAddComposicaoActionPerformed
 
     private void jBTRemoveComposicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComposicaoActionPerformed
-      
+        if (valida_campos.VerificaJtable(jTBComposicao) == 1) {
+            int linha = jTBComposicao.getSelectedRow();
+            Integer exc = Integer.parseInt(jTBComposicao.getValueAt(linha, 8).toString());
+            //se não for um item removido
+            if (exc == 0) {
+                Jtable.removeItens(jTBComposicao, situacao);
+            }else{
+                JOptionPane.showMessageDialog(null, "Item já removido");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Não possui componentes para remover");
+        }
     }//GEN-LAST:event_jBTRemoveComposicaoActionPerformed
 
     private void jTFRevisaoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFRevisaoKeyTyped
@@ -1395,7 +1496,18 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBDatasheetPopupMenuWillBecomeVisible
 
     private void jBTRemoveFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveFornecedoresActionPerformed
-        // TODO add your handling code here:
+         if (valida_campos.VerificaJtable(jTBFornecedores) == 1) {
+            int linha = jTBFornecedores.getSelectedRow();
+            Integer exc = Integer.parseInt(jTBFornecedores.getValueAt(linha, 6).toString());
+            //se não for um item removido
+            if (exc == 0) {
+                Jtable.removeItens(jTBFornecedores, situacao);
+            }else{
+                JOptionPane.showMessageDialog(null, "Item já removido");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Não possui fornecedores para remover");
+        }
     }//GEN-LAST:event_jBTRemoveFornecedoresActionPerformed
 
     private void jBTAddFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddFornecedorActionPerformed
@@ -1426,7 +1538,8 @@ public class InterfaceComponente extends javax.swing.JFrame {
            //Verifica se o usuario possui permissao para acessar essa tela
            if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
                 //Traz para tela a tela de cadastro de pessoas 
-                fornecedor.setTabela(jTBFornecedores);
+                fornec_comp.setTabela(jTBFornecedores);
+                fornec_comp.setSituacao(situacao);
                 new InterfaceConsultaFornecedores().setVisible(true);
            }else{
                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
@@ -1562,6 +1675,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         
         int id_componente = Integer.parseInt(jTFIDComponente.getText());
         componente.setId_componente(id_componente);
+        componente.setDescricao(jTFDescrição.getText());
         if(jCBTipo.getSelectedItem().equals("Mecânico")){
             if(jCBMaterial.getSelectedIndex() > 0){
                 componente.setId_material(material.getArray_material(jCBMaterial.getSelectedIndex() - 1));
@@ -1570,7 +1684,6 @@ public class InterfaceComponente extends javax.swing.JFrame {
             }
             
         }
-        componente.setDescricao(jTFDescrição.getText());
         if(jCBTipo.getSelectedItem().equals("Eletrônico")){
             componente.setTipo("E");
         }else if (jCBTipo.getSelectedItem().equals("Mecânico")){
@@ -1640,5 +1753,97 @@ public class InterfaceComponente extends javax.swing.JFrame {
              jCBDatasheet.setSelectedItem("Selecione item");
          }
      }
+     
+    class EvenOddRenderer implements TableCellRenderer {
 
+    public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+ 
+    public Component getTableCellRendererComponent(JTable table, Object value,
+    boolean isSelected, boolean hasFocus, int row, int column) {
+    Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
+        table, value, isSelected, hasFocus, row, column);
+    ((JLabel) renderer).setOpaque(true);
+    Color foreground, background;
+    int totcolun = table.getColumnCount();
+   
+    Integer exc = 0;
+    Boolean sel = false;
+
+ 
+    exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
+    sel = (Boolean) table.getValueAt(row, 0);
+    
+    if(isSelected){
+        if(exc == 1){
+           background = Color.RED;
+           renderer.setBackground(background);
+        }
+        //garante que quando estiver selecinado é true e caso contrario e false (nunca sera nulo)
+        
+        if(sel != null){
+            if(sel == true){
+                table.setValueAt(true, row, 0);
+            }else{
+                table.setValueAt(false, row, 0);
+            }
+            
+        }       
+     }
+   
+     if(!isSelected){
+        if(exc == 1){
+            background = Color.RED;
+            renderer.setBackground(background);
+        }else{
+            background = Color.WHITE;
+            renderer.setBackground(background);
+        }
+     }
+    return renderer;
+  }
+}
+    
+    private void onCellEditor(JTable table, int column, int row, Object oldValue, Object newValue){
+        System.out.println("Coluna:" + column + "Valor novo: " + newValue + " Valor antigo: " + oldValue);
+        if (table == jTBComposicao) {
+            //Se o valor novo não for vazio 
+            if(!newValue.toString().replace(" ", "").equals("")){
+                
+                if(column == 7 ){
+                    try { 
+                        //verifica se o valor setado é um valor double
+                        Integer qntd = Integer.parseInt(table.getValueAt(row, column).toString());
+                        if(qntd > 0){
+                            //Seta valor com ponto em vez de virgula
+                            table.setValueAt(qntd, row, column);
+                        }else{
+                            JOptionPane.showMessageDialog(null, "A quantidade deve ser maior que zero!");
+                            table.setValueAt(oldValue, row, column);
+                        }
+                       
+                        
+                    } catch (Exception e) {
+                        //se não for double, emite a mensagem e retorna para o valor que estava
+                        JOptionPane.showMessageDialog(null, "Informe um valor numérico para quantidade!");  
+                        table.setValueAt(oldValue, row, column);
+                    }
+
+                }
+            }else
+            {
+                //seta na jtable o valor que estava antes de apagar
+                table.setValueAt(oldValue, row, column);
+            }
+  
+        }
+    }
+
+    class TableCellEditorAction extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            TableCellListener tbListener = (TableCellListener) e.getSource();
+            
+            onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
+        }
+    }
 }

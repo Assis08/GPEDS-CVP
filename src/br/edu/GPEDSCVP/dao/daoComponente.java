@@ -12,6 +12,7 @@ import br.edu.GPEDSCVP.classe.FornecedoresComponente;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.ExcessaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
+import br.edu.GPEDSCVP.util.Rotinas;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
@@ -51,27 +52,29 @@ public class daoComponente {
             if (componente.getId_datasheet() == 0){
                 int sequencia = (Integer) (ultima.ultimasequencia("COMPONENTE","ID_COMPONENTE"));
 
-                resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente , descricao, tipo, revisao, data_cadastro, data_alter) "
-                + "VALUES (?, ?, ?, ?, ?, ?) ",
+                resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente , descricao, tipo, revisao, data_cadastro, data_alter, in_ativo ) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
                 sequencia,
                 componente.getDescricao(),
                 componente.getTipo(),
                 componente.getRevisao(),
                 FormatarData.dateParaSQLDate(componente.getData_cadastro()),
-                FormatarData.dateParaTimeStamp(componente.getData_alter()));
+                FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                "A");
             }else{
                 //se possuir datasheet
                 int sequencia = (Integer) (ultima.ultimasequencia("COMPONENTE","ID_COMPONENTE"));
 
-                resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente, id_datasheet, descricao, tipo, revisao, data_cadastro, data_alter) "
-                + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
+                resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente, id_datasheet, descricao, tipo, revisao, data_cadastro, data_alter, in_ativo) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ",
                 sequencia,
                 componente.getId_datasheet(),
                 componente.getDescricao(),
                 componente.getTipo(),
                 componente.getRevisao(),
                 FormatarData.dateParaSQLDate(componente.getData_cadastro()),
-                FormatarData.dateParaTimeStamp(componente.getData_alter()));
+                FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                "A");
             }
         //se for mecânico  
         }else{
@@ -82,25 +85,27 @@ public class daoComponente {
                 // se não possuir material
                 if(componente.getId_material() == 0){
                     
-                    resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente , descricao, tipo, revisao, data_cadastro, data_alter) "
-                    + "VALUES (?, ?, ?, ?, ?, ?) ",
+                    resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente , descricao, tipo, revisao, data_cadastro, data_alter, in_ativo) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
                     sequencia,
                     componente.getDescricao(),
                     componente.getTipo(),
                     componente.getRevisao(),
                     FormatarData.dateParaSQLDate(componente.getData_cadastro()),
-                    FormatarData.dateParaTimeStamp(componente.getData_alter()));
+                    FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                    "A");
                 }else{
                     //se possuir material
-                    resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente , descricao, tipo, revisao, id_material, data_cadastro, data_alter) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
+                    resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente , descricao, tipo, revisao, id_material, data_cadastro, data_alter, in_ativo) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ",
                     sequencia,
                     componente.getDescricao(),
                     componente.getTipo(),
                     componente.getRevisao(),
                     componente.getId_material(),
                     FormatarData.dateParaSQLDate(componente.getData_cadastro()),
-                    FormatarData.dateParaTimeStamp(componente.getData_alter()));
+                    FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                    "A");
                 }
 
             }else{
@@ -110,20 +115,21 @@ public class daoComponente {
                 if(componente.getId_material() == 0){
                     //se não possuir material
                     
-                    resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente, id_datasheet, descricao, tipo, revisao, data_cadastro, data_alter) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
+                    resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente, id_datasheet, descricao, tipo, revisao, data_cadastro, data_alter, in_ativo) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ",
                     sequencia,
                     componente.getId_datasheet(),
                     componente.getDescricao(),
                     componente.getTipo(),
                     componente.getRevisao(),
                     FormatarData.dateParaSQLDate(componente.getData_cadastro()),
-                    FormatarData.dateParaTimeStamp(componente.getData_alter()));
+                    FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                    "A");
                 }else{
                     //se possuir material 
                     
-                    resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente, id_datasheet, descricao, tipo, revisao, id_material, data_cadastro, data_alter) "
-                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ",
+                    resultado = conecta_banco.executeSQL("INSERT INTO componente (id_componente, id_datasheet, descricao, tipo, revisao, id_material, data_cadastro, data_alter, in_ativo) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ",
                     sequencia,
                     componente.getId_datasheet(),
                     componente.getDescricao(),
@@ -131,7 +137,115 @@ public class daoComponente {
                     componente.getRevisao(),
                     componente.getId_material(),
                     FormatarData.dateParaSQLDate(componente.getData_cadastro()),
-                    FormatarData.dateParaTimeStamp(componente.getData_alter()));
+                    FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                    "A");
+                }
+            }
+        }
+        
+        if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+            return false;
+        }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+            return false;
+        }else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO){
+            return false;
+        }
+        return true;    
+    }
+
+    //Método de incluir componente no banco
+    public boolean alterar(Componente componente, String tipo)throws SQLException
+    {
+        //Alterar componente
+        ultima = new UltimaSequencia();
+        int resultado;
+        //se for eletrônico
+        if (tipo.equals("E")){
+            //se não possuir datasheet
+            if (componente.getId_datasheet() == 0){
+                resultado = conecta_banco.executeSQL("UPDATE componente SET id_datasheet = ?, descricao = ?, tipo = ?, revisao = ?, id_material = ?, data_cadastro = ?, data_alter = ? "
+                + "WHERE id_componente = ? ",
+                null,
+                componente.getDescricao(),
+                componente.getTipo(),
+                componente.getRevisao(),
+                null,
+                FormatarData.dateParaSQLDate(componente.getData_cadastro()),
+                FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                componente.getId_componente());
+            }else{
+                //se possuir datasheet
+                resultado = conecta_banco.executeSQL("UPDATE componente SET id_datasheet = ?, descricao = ?, tipo = ?, revisao = ?, id_material = ?, data_cadastro = ?, data_alter = ? "
+                + "WHERE id_componente = ? ",
+                componente.getId_datasheet(),
+                componente.getDescricao(),
+                componente.getTipo(),
+                componente.getRevisao(),
+                null,
+                FormatarData.dateParaSQLDate(componente.getData_cadastro()),
+                FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                componente.getId_componente());
+            }
+        //se for mecânico  
+        }else {
+            //se não possuir datasheet
+            if (componente.getId_datasheet() == 0){
+                
+                // se não possuir material
+                if(componente.getId_material() == 0){
+                    resultado = conecta_banco.executeSQL("UPDATE componente SET id_datasheet = ?, descricao = ?, tipo = ?, revisao = ?, id_material = ?, data_cadastro = ?, data_alter = ? "
+                    + "WHERE id_componente = ? ",
+                    null,
+                    componente.getDescricao(),
+                    componente.getTipo(),
+                    componente.getRevisao(),
+                    null,
+                    FormatarData.dateParaSQLDate(componente.getData_cadastro()),
+                    FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                    componente.getId_componente());
+                }else{
+                    //se possuir material
+                    resultado = conecta_banco.executeSQL("UPDATE componente SET id_datasheet = ?, descricao = ?, tipo = ?, revisao = ?, id_material = ?, data_cadastro = ?, data_alter = ? "
+                    + "WHERE id_componente = ? ",
+                    null,
+                    componente.getDescricao(),
+                    componente.getTipo(),
+                    componente.getRevisao(),
+                    componente.getId_material(),
+                    FormatarData.dateParaSQLDate(componente.getData_cadastro()),
+                    FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                    componente.getId_componente());
+                }
+
+            }else{
+                //se possuir datasheet
+
+                if(componente.getId_material() == 0){
+                    //se não possuir material
+                    
+                    resultado = conecta_banco.executeSQL("UPDATE componente SET id_datasheet = ?, descricao = ?, tipo = ?, revisao = ?, id_material = ?, data_cadastro = ?, data_alter = ? "
+                    + "WHERE id_componente = ? ",
+                    componente.getId_datasheet(),
+                    componente.getDescricao(),
+                    componente.getTipo(),
+                    componente.getRevisao(),
+                    null,
+                    FormatarData.dateParaSQLDate(componente.getData_cadastro()),
+                    FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                    componente.getId_componente());
+                }else{
+                    //se possuir material 
+                    
+                    resultado = conecta_banco.executeSQL("UPDATE componente SET id_datasheet = ?, descricao = ?, tipo = ?, revisao = ?, id_material = ?, data_cadastro = ?, data_alter = ? "
+                    + "WHERE id_componente = ? ",
+                    componente.getId_datasheet(),
+                    componente.getDescricao(),
+                    componente.getTipo(),
+                    componente.getRevisao(),
+                    componente.getId_material(),
+                    FormatarData.dateParaSQLDate(componente.getData_cadastro()),
+                    FormatarData.dateParaTimeStamp(componente.getData_alter()),
+                    componente.getId_componente());
                 }
             }
         }
@@ -148,6 +262,7 @@ public class daoComponente {
     
     public void gravarComposicao (ComposicaoComponente composicao){
         Integer id_subcomponente;
+        Integer id_composicao;
         String tipo;
         String descricao;
         Integer qntd;
@@ -156,16 +271,17 @@ public class daoComponente {
         int totlinha = tabela.getRowCount();
         for (int i = 0; i < totlinha; i++){
             
-            id_subcomponente = Integer.parseInt(tabela.getValueAt(i, 1).toString());
-            tipo = tabela.getValueAt(i, 2).toString();
-            descricao = tabela.getValueAt(i, 3).toString();
-            qntd = Integer.parseInt(tabela.getValueAt(i, 6).toString());
+            id_composicao = Integer.parseInt(tabela.getValueAt(i, 1).toString());
+            id_subcomponente = Integer.parseInt(tabela.getValueAt(i, 2).toString());
+            tipo = tabela.getValueAt(i, 3).toString();
+            descricao = tabela.getValueAt(i, 4).toString();
+            qntd = Integer.parseInt(tabela.getValueAt(i, 7).toString());
             
                     
-            int sequencia = (Integer) (ultima.ultimasequencia("COMPOSICAO_COMPONENTE","ID_SUBCOMPONENTE"));
+            //int sequencia = (Integer) (ultima.ultimasequencia("COMPOSICAO_COMPONENTE","ID_SUBCOMPONENTE"));
             conecta_banco.executeSQL("INSERT INTO composicao_componente (id_composicao,id_subcomponente, id_componente, qntd, estado,data_cadastro,data_alter) "
             + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
-            sequencia,
+            id_composicao,
             id_subcomponente,
             composicao.getId_componente(),
             qntd,
@@ -185,16 +301,17 @@ public class daoComponente {
         for (int i = 0; i < totlinha; i++){
             
             id_componente = fornecedor.getId_componente();
-            id_funcionario = Integer.parseInt(tabela.getValueAt(i, 1).toString());
+            id_funcionario = Integer.parseInt(tabela.getValueAt(i, 2).toString());
          
             int sequencia = (Integer) (ultima.ultimasequencia("FORNECEDOR_COMPONENTE","ID_FORNECEDORES_COMP"));
-            conecta_banco.executeSQL("INSERT INTO fornecedor_componente (id_fornecedores_comp, id_pessoa, id_componente,data_alter,data_cadastro) "
-            + "VALUES (?, ?, ?, ?, ?) ",
+            conecta_banco.executeSQL("INSERT INTO fornecedor_componente (id_fornecedores_comp, id_pessoa, id_componente,data_alter,data_cadastro,in_ativo) "
+            + "VALUES (?, ?, ?, ?, ?, ?) ",
             sequencia,
             id_funcionario,
             id_componente,
             FormatarData.dateParaTimeStamp(fornecedor.getData_alter()),
-            FormatarData.dateParaSQLDate(fornecedor.getData_cadastro()));
+            FormatarData.dateParaSQLDate(fornecedor.getData_cadastro()),
+            "A");
         }
      }
     
@@ -203,7 +320,7 @@ public class daoComponente {
         conecta_banco.executeSQL("select id_subcomponente, tipo, componente.descricao, material.id_material, material.descricao, qntd from composicao_componente" +
                                 " inner join componente on (componente.id_componente = composicao_componente.id_subcomponente)" +
                                 " left join material on (componente.id_material = material.id_material)" +
-                                " where composicao_componente.id_componente = "+composicao.getId_componente()+" order by id_subcomponente asc");
+                                " where composicao_componente.id_componente = "+composicao.getId_componente()+" and componente.in_ativo = 'A'  order by id_subcomponente asc");
         composicao.setRetorno(conecta_banco.resultset);
     }
     
@@ -212,8 +329,8 @@ public class daoComponente {
         conecta_banco.executeSQL("select null, id_componente,tipo,componente.descricao,revisao,material.id_material,material.descricao,componente.id_datasheet,datasheet.descricao,"
                             +   "componente.data_cadastro,componente.data_alter from componente" 
                             +   " left join material on (componente.id_material = material.id_material)" 
-                            +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)" 
-                            +   " order by id_componente asc");
+                            +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)"
+                            +   "where componente.in_ativo = 'A' order by id_componente asc");
 
         componente.setRetorno(conecta_banco.resultset);
 
@@ -225,7 +342,7 @@ public class daoComponente {
                             +   "componente.data_cadastro,componente.data_alter from componente" 
                             +   " left join material on (componente.id_material = material.id_material)" 
                             +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)" 
-                            +   " where tipo = 'E'"
+                            +   " where tipo = 'E' and componente.in_ativo = 'A'"
                             +   " order by id_componente asc");
 
         componente.setRetorno(conecta_banco.resultset);
@@ -239,7 +356,7 @@ public class daoComponente {
                             +   "componente.data_cadastro,componente.data_alter from componente" 
                             +   " left join material on (componente.id_material = material.id_material)" 
                             +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)" 
-                            +   " where tipo = 'M'"
+                            +   " where tipo = 'M' and componente.in_ativo = 'A'"
                             +   " order by id_componente asc");
 
         componente.setRetorno(conecta_banco.resultset);
@@ -253,7 +370,7 @@ public class daoComponente {
                             +   " left join material on (componente.id_material = material.id_material)" 
                             +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)" 
                             +   " where componente.id_componente = "+componente.getId_componente()
-                            +   " order by id_componente asc");
+                            +   " and componente.in_ativo = 'A' order by id_componente asc");
 
         componente.setRetorno(conecta_banco.resultset);
 
@@ -266,7 +383,7 @@ public class daoComponente {
                             +   " left join material on (componente.id_material = material.id_material)" 
                             +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)" 
                             +   " where tipo = 'E' and componente.id_componente = "+componente.getId_componente()
-                            +   " order by id_componente asc");
+                            +   " and componente.in_ativo = 'A' order by id_componente asc");
 
         componente.setRetorno(conecta_banco.resultset);
 
@@ -279,7 +396,7 @@ public class daoComponente {
                             +   " left join material on (componente.id_material = material.id_material)" 
                             +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)" 
                             +   " where tipo = 'M' and componente.id_componente = "+componente.getId_componente()
-                            +   " order by id_componente asc");
+                            +   " componente.in_ativo = 'A' order by id_componente asc");
 
         componente.setRetorno(conecta_banco.resultset);
 
@@ -292,7 +409,7 @@ public class daoComponente {
                             +   " left join material on (componente.id_material = material.id_material)" 
                             +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)" 
                             +   " where componente.descricao like '"+componente.getDescricao()+"%'"
-                            +   " order by id_componente asc");
+                            +   " and componente.in_ativo = 'A' order by id_componente asc");
 
         componente.setRetorno(conecta_banco.resultset);
 
@@ -305,7 +422,7 @@ public class daoComponente {
                             +   " left join material on (componente.id_material = material.id_material)" 
                             +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)" 
                             +   " where tipo = 'E' and componente.descricao like '"+componente.getDescricao()+"%'"
-                            +   " order by id_componente asc");
+                            +   " and componente.in_ativo = 'A' order by id_componente asc");
 
         componente.setRetorno(conecta_banco.resultset);
 
@@ -318,7 +435,7 @@ public class daoComponente {
                             +   " left join material on (componente.id_material = material.id_material)" 
                             +   " left join datasheet on (componente.id_datasheet = datasheet.id_datasheet)" 
                             +   " where tipo = 'M' and componente.descricao like '"+componente.getDescricao()+"%'"
-                            +   " order by id_componente asc");
+                            +   " componente.in_ativo = 'A' order by id_componente asc");
 
         componente.setRetorno(conecta_banco.resultset);
 
@@ -340,12 +457,15 @@ public class daoComponente {
     }
     
     //Método de incluir a composição de componentes para um determinado componente
-    public void addComposicao( Componente componente , JTable composicao) throws SQLException{
+    public void addComposicao( Componente componente , JTable composicao, int situacao) throws SQLException{
         
         DefaultTableModel TabelaComposicao = (DefaultTableModel)componente.getTabela().getModel();
         DefaultTableModel TabelaComponente = (DefaultTableModel) composicao.getModel();
+        ultima = new UltimaSequencia();
+        
         Boolean sel = false;
         Integer id_componente;
+        int id_composicao;
         String tipo;
         String descricao;
         Integer id_material = null;
@@ -365,7 +485,7 @@ public class daoComponente {
                 if(sel == true){
                     TabelaComponente.setValueAt(false, i, 0);
 
-                    id_componente = Integer.parseInt(TabelaComponente.getValueAt(i, 1).toString()); 
+                    id_componente = Integer.parseInt(TabelaComponente.getValueAt(i,1).toString()); 
                     tipo = TabelaComponente.getValueAt(i, 2).toString();
                     descricao = TabelaComponente.getValueAt(i, 3).toString();
                     //Se for componente mecânico
@@ -387,40 +507,57 @@ public class daoComponente {
 
                     if(totlinha_componente == 0){
                         //add mais uma linha
-                        TabelaComposicao.setNumRows(1);  
+                        TabelaComposicao.setNumRows(1); 
+                        //gera ultimo id composicao baseado no banco
+                        id_composicao = ultima.ultimasequencia("COMPOSICAO_COMPONENTE","ID_COMPOSICAO");
+                        
                         //seta valores na jtable
                         TabelaComposicao.setValueAt(false, 0, 0);
-                        TabelaComposicao.setValueAt(id_componente, 0, 1);
-                        TabelaComposicao.setValueAt(tipo, 0, 2);
-                        TabelaComposicao.setValueAt(descricao, 0, 3);
+                        TabelaComposicao.setValueAt(id_composicao, 0, 1);
+                        TabelaComposicao.setValueAt(id_componente, 0, 2);
+                        TabelaComposicao.setValueAt(tipo, 0, 3);
+                        TabelaComposicao.setValueAt(descricao, 0, 4);
                         if(tipo.equals("M")){
                             if(id_material > 0){
-                                TabelaComposicao.setValueAt(id_material, 0, 4);
-                                TabelaComposicao.setValueAt(material, 0, 5);
+                                TabelaComposicao.setValueAt(id_material, 0, 5);
+                                TabelaComposicao.setValueAt(material, 0, 6);
                             }
                            
                         }
-                        TabelaComposicao.setValueAt(qntd, 0, 6);
+                        TabelaComposicao.setValueAt(qntd, 0, 7);
+                        TabelaComposicao.setValueAt(0, 0, 8);
                         
                     }else{
                         
                         for (int i_comp = 0; i_comp < totlinha_componente; i_comp++){
                             //Chegou na ultima linha
                             if( i_comp == totlinha_componente-1){
+                                //se estiver em modo de alteração
+                                if(situacao == Rotinas.ALTERAR){
+                                   
+                                    //gera ultimo id composicao baseado no banco
+                                    id_composicao = ultima.ultimasequencia("COMPOSICAO_COMPONENTE","ID_COMPOSICAO");
+                                }else{
+                                    //gera o ultimo id baseado no ultimo registro da jtable
+                                    id_composicao = (Integer.parseInt(TabelaComposicao.getValueAt(totlinha_componente-1, 1).toString())+1);
+                                }
+                                
                                 //adiciona uma linha a mais
                                 TabelaComposicao.setNumRows(totlinha_componente+1);  
                                  //seta valores na jtable
                                 TabelaComposicao.setValueAt(false, 0, 0);
-                                TabelaComposicao.setValueAt(id_componente, totlinha_componente, 1);
-                                TabelaComposicao.setValueAt(tipo, totlinha_componente, 2);
-                                TabelaComposicao.setValueAt(descricao, totlinha_componente, 3);
+                                TabelaComposicao.setValueAt(id_composicao, totlinha_componente, 1);
+                                TabelaComposicao.setValueAt(id_componente, totlinha_componente, 2);
+                                TabelaComposicao.setValueAt(tipo, totlinha_componente, 3);
+                                TabelaComposicao.setValueAt(descricao, totlinha_componente, 4);
                                 if(tipo.equals("M")){
                                     if(id_material > 0){
-                                        TabelaComposicao.setValueAt(id_material, totlinha_componente, 4);
-                                        TabelaComposicao.setValueAt(material, totlinha_componente, 5);
+                                        TabelaComposicao.setValueAt(id_material, totlinha_componente, 5);
+                                        TabelaComposicao.setValueAt(material, totlinha_componente, 6);
                                     }
                                 }
-                                TabelaComposicao.setValueAt(qntd, totlinha_componente, 6); 
+                                TabelaComposicao.setValueAt(qntd, totlinha_componente, 7);
+                                TabelaComposicao.setValueAt(0, totlinha_componente, 8);
                             }
                         }  
                     }
@@ -430,11 +567,14 @@ public class daoComponente {
     }
     
     //Método de incluir fornecedores para um componente
-    public void addFornecedores( Fornecedor fornecedor , JTable fornecedor_comp) throws SQLException{
+    public void addFornecedores( FornecedoresComponente fornecedor , JTable fornecedor_comp, int situacao) throws SQLException{
         
         DefaultTableModel TabelaFornecedores = (DefaultTableModel)fornecedor_comp.getModel();
         DefaultTableModel TabelaFornecedoresComp = (DefaultTableModel) fornecedor.getTabela().getModel();
+        ultima = new UltimaSequencia();
+        
         Boolean sel = false;
+        int id_fornec_comp;
         Integer id_fornecedor;
         String descricao;
         String cnpj;
@@ -455,7 +595,7 @@ public class daoComponente {
 
                 if(sel == true){
                     TabelaFornecedores.setValueAt(false, i, 0);
-
+                    id_fornec_comp = ultima.ultimasequencia("FORNECEDOR_COMPONENTE","ID_FORNECEDORES_COMP"); 
                     id_fornecedor = Integer.parseInt(TabelaFornecedores.getValueAt(i, 1).toString()); 
                     descricao = TabelaFornecedores.getValueAt(i, 2).toString();
                     cnpj = TabelaFornecedores.getValueAt(i, 3).toString();
@@ -468,24 +608,38 @@ public class daoComponente {
                         TabelaFornecedoresComp.setNumRows(1);  
                         //seta valores na jtable
                         TabelaFornecedoresComp.setValueAt(false, 0, 0);
-                        TabelaFornecedoresComp.setValueAt(id_fornecedor, 0, 1);
-                        TabelaFornecedoresComp.setValueAt(descricao, 0, 2);
-                        TabelaFornecedoresComp.setValueAt(cnpj, 0, 3);
-                        TabelaFornecedoresComp.setValueAt(site, 0, 4);
+                        TabelaFornecedoresComp.setValueAt(id_fornec_comp, 0,1);
+                        TabelaFornecedoresComp.setValueAt(id_fornecedor, 0, 2);
+                        TabelaFornecedoresComp.setValueAt(descricao, 0, 3);
+                        TabelaFornecedoresComp.setValueAt(cnpj, 0, 4);
+                        TabelaFornecedoresComp.setValueAt(site, 0, 5);
+                        TabelaFornecedoresComp.setValueAt(0, 0, 6);
                         
                     }else{
                         
                         for (int i_comp = 0; i_comp < totlinha_fornec_comp; i_comp++){
                             //Chegou na ultima linha
                             if( i_comp == totlinha_fornec_comp-1){
+                                
+                                //se estiver em modo de alteração
+                                if(situacao == Rotinas.ALTERAR){
+                                    //gera ultimo id composicao baseado no banco
+                                    id_fornec_comp = ultima.ultimasequencia("FORNECEDOR_COMPONENTE","ID_FORNECEDORES_COMP"); 
+                                }else{
+                                    //gera o ultimo id baseado no ultimo registro da jtable
+                                    id_fornec_comp = (Integer.parseInt(TabelaFornecedoresComp.getValueAt(totlinha_fornec_comp-1, 1).toString())+1);
+                                }
+                                
                                 //adiciona uma linha a mais
                                 TabelaFornecedoresComp.setNumRows(totlinha_fornec_comp+1);  
                                  //seta valores na jtable
                                 TabelaFornecedoresComp.setValueAt(false, totlinha_fornec_comp, 0);
-                                TabelaFornecedoresComp.setValueAt(id_fornecedor, totlinha_fornec_comp, 1);
-                                TabelaFornecedoresComp.setValueAt(descricao, totlinha_fornec_comp, 2);
-                                TabelaFornecedoresComp.setValueAt(cnpj, totlinha_fornec_comp, 3);
-                                TabelaFornecedoresComp.setValueAt(site, totlinha_fornec_comp, 4);
+                                TabelaFornecedoresComp.setValueAt(id_fornec_comp, totlinha_fornec_comp, 1);
+                                TabelaFornecedoresComp.setValueAt(id_fornecedor, totlinha_fornec_comp, 2);
+                                TabelaFornecedoresComp.setValueAt(descricao, totlinha_fornec_comp, 3);
+                                TabelaFornecedoresComp.setValueAt(cnpj, totlinha_fornec_comp, 4);
+                                TabelaFornecedoresComp.setValueAt(site, totlinha_fornec_comp, 5);
+                                TabelaFornecedoresComp.setValueAt(0, totlinha_fornec_comp, 6);
                             }
                         }  
                     }
@@ -519,6 +673,18 @@ public class daoComponente {
             JOptionPane.showMessageDialog(null, "Falha ao retornar dados do componente");
         }
      }
+    //Método para inativar componente
+    public void inativaComponente(Componente componente){
+        //Inativa componente    
+        conecta_banco.atualizarSQL("UPDATE COMPONENTE SET IN_ATIVO = 'I'"
+                               + " WHERE ID_COMPONENTE = " + componente.getId_componente());
+        //Inativa composição do componente
+        conecta_banco.atualizarSQL("UPDATE COMPOSICAO_COMPONENTE SET ESTADO = 'I'"
+                               + " WHERE ID_COMPONENTE = " + componente.getId_componente());
+        //inativa fornecedores do componente
+        conecta_banco.atualizarSQL("UPDATE FORNECEDOR_COMPONENTE SET IN_ATIVO = 'I'"
+                               + " WHERE ID_COMPONENTE = " + componente.getId_componente());
+    }  
 }
 
 

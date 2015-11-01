@@ -96,6 +96,7 @@ public class ConexaoBanco {
                 int index = i + 1;
                 ps.setObject(index, parametros[i]);
             }
+            System.out.println(sqlConsulta);
             ps.execute();
             ps.close();
          } catch (SQLException sqlex) {

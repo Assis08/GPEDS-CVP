@@ -62,9 +62,7 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
     ValidaCampos valida_campos;
     ManipulaJtable Jtable;
     FormatarData data;
-    int situacao = Rotinas.PADRAO;
 
-    
     public InterfaceComposicaoComponente() {
         initComponents();
         
@@ -538,7 +536,7 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
     private void jBTConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTConcluirActionPerformed
 
         try {
-            dao_componente.addComposicao(componente,jTBConsultaComponentes);
+            dao_componente.addComposicao(componente,jTBConsultaComponentes,composicao.getSituacao());
             Jtable.ajustarColunasDaTabela(componente.getTabela());
             this.dispose();
         } catch (SQLException ex) {
@@ -651,14 +649,4 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, col);
         }
     }
-    /*
-    public void mouseClicked(java.awt.event.MouseEvent evt) {
-        int row = jTBConsultaComponentes.rowAtPoint(evt.getPoint());
-        int col = jTBConsultaComponentes.columnAtPoint(evt.getPoint());
-        if (row >= 0 && col >= 0) {
-            JOptionPane.showMessageDialog(null, row);
-            JOptionPane.showMessageDialog(null, col);
-        }
-    }
-    */
 }

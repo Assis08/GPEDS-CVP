@@ -488,7 +488,7 @@ public class daoPessoa {
     //Consulta geral de fornecedores
     public boolean consultageral(Fornecedor pessoa){
          conecta_banco.executeSQL("select null, pessoa.id_pessoa,pessoa.tipo,usuario.login,pessoa.nome,pessoa_juridica.razao_social,fornecedor.site,pessoa.cpf_cnpj,"
-            + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter from pessoa "
+            + "pessoa_fisica.rg, pessoa_fisica.sexo,pessoa_fisica.dt_nasc,pessoa.data_alter, false from pessoa "
             + "left join pessoa_fisica on (pessoa_fisica.id_pessoa = pessoa.id_pessoa)"
             + "left join usuario on (pessoa_fisica.id_pessoa = usuario.id_usuario )"
             + "inner join pessoa_juridica on (pessoa_juridica.id_pessoa = pessoa.id_pessoa )"

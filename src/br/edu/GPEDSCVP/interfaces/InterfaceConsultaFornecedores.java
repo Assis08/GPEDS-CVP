@@ -10,6 +10,7 @@ import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
 import br.edu.GPEDSCVP.classe.Datasheet;
 import br.edu.GPEDSCVP.classe.Fornecedor;
+import br.edu.GPEDSCVP.classe.FornecedoresComponente;
 import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.dao.daoAcesso;
@@ -39,6 +40,7 @@ public class InterfaceConsultaFornecedores extends javax.swing.JFrame {
 
     Componente componente;
     ComposicaoComponente composicao;
+    FornecedoresComponente fornec_comp;
     Fornecedor fornecedor;
     Tela tela;
     Datasheet datasheet;
@@ -66,6 +68,7 @@ public class InterfaceConsultaFornecedores extends javax.swing.JFrame {
         
         componente = new Componente();
         fornecedor = new Fornecedor();
+        fornec_comp = new FornecedoresComponente();
         composicao = new ComposicaoComponente();
         tela = new Tela();
         datasheet = new Datasheet();
@@ -272,7 +275,7 @@ public class InterfaceConsultaFornecedores extends javax.swing.JFrame {
         if (sel != null){
             if(sel == true){
                 //evita duplicação de fornecedores
-                if(Jtable.evitarDuplicacao(fornecedor.getTabela(), descricao) == false){
+                if(Jtable.evitarDuplicacao(fornec_comp.getTabela(), descricao) == false){
                     jTBConsultaFornecedores.setValueAt(true, linha, 0);
                 }else{
                     JOptionPane.showMessageDialog(null, "Este fornecedor já foi adicionado!");
@@ -342,8 +345,8 @@ public class InterfaceConsultaFornecedores extends javax.swing.JFrame {
     private void jBTConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTConcluirActionPerformed
 
         try {
-            dao_componente.addFornecedores(fornecedor,jTBConsultaFornecedores);
-            Jtable.ajustarColunasDaTabela(fornecedor.getTabela());
+            dao_componente.addFornecedores(fornec_comp,jTBConsultaFornecedores, fornec_comp.getSituacao());
+            Jtable.ajustarColunasDaTabela(fornec_comp.getTabela());
             this.dispose();
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao adicionar fornecedores");
