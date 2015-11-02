@@ -184,6 +184,20 @@ public class daoMoeda {
         } catch (SQLException ex) {
            JOptionPane.showMessageDialog(null, "Falha ao retornar dados da moeda");
         }
-     } 
+     }
     
+    public double converteparaReais (double valor, int id_moeda){
+        conecta_banco.executeSQL("select valor, data_atualizacao, id_moeda from atualizacao_moeda"
+                               + " where data_atualizacao = (select max(data_atualizacao) from atualizacao_moeda where id_moeda = "+id_moeda+")");
+       
+        try {        
+            conecta_banco.resultset.first();
+            double valor_moeda = 0;
+            valor_moeda = conecta_banco.resultset.getDouble("valor");
+            return valor_moeda * valor;
+        } catch (SQLException ex) {
+           JOptionPane.showMessageDialog(null, "Falha ao converter moeda");
+        }
+        return 0;
+    }
 }

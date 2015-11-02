@@ -14,6 +14,7 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,7 +30,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
+import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
+import javax.swing.text.NumberFormatter;
 import javax.swing.text.TableView;
 import javax.swing.text.TableView.TableRow;
 
@@ -256,6 +259,28 @@ public class ManipulaJtable {
     
         col.setCellEditor(new DefaultCellEditor(jftmascara));      
 
+    }
+
+    //Método para formatar um field para receber valores monetários
+    public static void setarMascaraMonetaria(JTable tabela, JFormattedTextField field, int numColuna) {
+   
+       try {
+           
+            DecimalFormat dFormat = new DecimalFormat("#,###,###.00") ;
+            NumberFormatter formatter = new NumberFormatter(dFormat) ;
+            formatter.setFormat(dFormat) ;
+            formatter.setAllowsInvalid(false) ; 
+           
+            field.setFormatterFactory ( new DefaultFormatterFactory ( formatter ) ) ;
+           
+            TableColumn col = tabela.getColumnModel().getColumn(numColuna);  
+    
+            col.setCellEditor(new DefaultCellEditor(field));    
+
+      }
+      catch (Exception error_mask) {
+          JOptionPane.showMessageDialog(null,"Erro: "+error_mask);
+      }
     }
    
 }

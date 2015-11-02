@@ -10,6 +10,7 @@ import java.awt.Component;
 import java.awt.Container;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -23,7 +24,9 @@ import javax.swing.JRadioButton;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.DefaultFormatterFactory;
 import javax.swing.text.MaskFormatter;
+import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -241,6 +244,25 @@ public class ValidaCampos {
           JOptionPane.showMessageDialog(null,"Erro: "+error_mask);
       }
        return null;
+    }
+    
+    
+     //Método para formatar um field para receber valores monetários
+    public static void formataMonetario(JFormattedTextField field) {
+   
+       try {
+           
+            DecimalFormat dFormat = new DecimalFormat("#,###,###.00") ;
+            NumberFormatter formatter = new NumberFormatter(dFormat) ;
+            formatter.setFormat(dFormat) ;
+            formatter.setAllowsInvalid(false) ; 
+           
+           field.setFormatterFactory ( new DefaultFormatterFactory ( formatter ) ) ;
+
+      }
+      catch (Exception error_mask) {
+          JOptionPane.showMessageDialog(null,"Erro: "+error_mask);
+      }
     }
     
      //Método para criar e retornar uma mascara(JTextField) por parâmetro 

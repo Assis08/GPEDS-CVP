@@ -7,24 +7,15 @@ package br.edu.GPEDSCVP.interfaces;
 
 import br.edu.GPEDSCVP.classe.Acesso;
 import br.edu.GPEDSCVP.classe.Componente;
+import br.edu.GPEDSCVP.classe.ComponenteFornecimento;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
-import br.edu.GPEDSCVP.classe.Contato;
-import br.edu.GPEDSCVP.classe.Datasheet;
 import br.edu.GPEDSCVP.classe.Fornecedor;
-import br.edu.GPEDSCVP.classe.FornecedoresComponente;
 import br.edu.GPEDSCVP.classe.Material;
 import br.edu.GPEDSCVP.classe.Moeda;
 import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.dao.daoAcesso;
-import br.edu.GPEDSCVP.dao.daoCidade;
 import br.edu.GPEDSCVP.dao.daoComponente;
-import br.edu.GPEDSCVP.dao.daoComposicaoComponente;
-import br.edu.GPEDSCVP.dao.daoContato;
-import br.edu.GPEDSCVP.dao.daoDatasheet;
-import br.edu.GPEDSCVP.dao.daoEstado;
-import br.edu.GPEDSCVP.dao.daoFornecedoresComponente;
-import br.edu.GPEDSCVP.dao.daoMaterial;
 import br.edu.GPEDSCVP.dao.daoMoeda;
 import br.edu.GPEDSCVP.dao.daoPermissao;
 import br.edu.GPEDSCVP.dao.daoPessoa;
@@ -39,8 +30,6 @@ import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 
@@ -51,6 +40,7 @@ import javax.swing.JTable;
 public class InterfaceFornecimento extends javax.swing.JFrame {
 
     Componente componente;
+    ComponenteFornecimento comp_fornec;
     Fornecedor fornecedor;
     Moeda moeda;
     daoMoeda dao_moeda;
@@ -75,10 +65,12 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     int[] array_fornecedores;
     int situacao = Rotinas.PADRAO;
     
+    
     public InterfaceFornecimento() {
         initComponents();
         
         componente = new Componente();
+        comp_fornec = new ComponenteFornecimento();
         fornecedor = new Fornecedor();
         composicao = new ComposicaoComponente();
         material = new Material();
@@ -103,8 +95,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar registro");
         }
-        
-         //desabilita campos da tela de fornecimento
+        //desabilita campos da tela de fornecimento
         valida_campos.desabilitaCampos(jPFornecimento);
         
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
@@ -170,19 +161,23 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         jLabel10 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jCBMoedaFrete = new javax.swing.JComboBox();
-        jTFValorFrete = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel13 = new javax.swing.JLabel();
         jCBMoedaImpostos = new javax.swing.JComboBox();
-        jTFValorImpostos = new javax.swing.JTextField();
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jBTAddparaProjeto = new javax.swing.JButton();
         jLabel18 = new javax.swing.JLabel();
         jBTRemoveComponenteProjeto = new javax.swing.JButton();
+        jFTValorFrete = new javax.swing.JFormattedTextField();
+        jFTValorImpostos = new javax.swing.JFormattedTextField();
+        jTFFreteReais = new javax.swing.JTextField();
+        jLabel19 = new javax.swing.JLabel();
+        jTFImpostosReais = new javax.swing.JTextField();
+        jLabel20 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTBConsultaComponentes = new javax.swing.JTable();
@@ -320,14 +315,14 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Sel", "ID Fornecidos", "ID Componente", "Descrição", "Valor Unitário", "ID Moeda", "Moeda", "Qtde", "Total", "exc"
+                "Sel", "ID Fornecidos", "ID Componente", "Componente", "Valor Unitário", "ID Moeda", "Moeda", "Qtde", "Total", "exc"
             }
         ) {
             Class[] types = new Class [] {
                 java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, false
+                true, false, false, false, true, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -345,11 +340,6 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTBComponentes);
-        if (jTBComponentes.getColumnModel().getColumnCount() > 0) {
-            jTBComponentes.getColumnModel().getColumn(9).setMinWidth(0);
-            jTBComponentes.getColumnModel().getColumn(9).setPreferredWidth(0);
-            jTBComponentes.getColumnModel().getColumn(9).setMaxWidth(0);
-        }
 
         jLabel2.setText("Componentes:");
 
@@ -444,6 +434,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
+        jFTValorFrete.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jFTValorFreteFocusLost(evt);
+            }
+        });
+
+        jLabel19.setText("R$:");
+
+        jLabel20.setText("R$:");
+
         javax.swing.GroupLayout jPFornecimentoLayout = new javax.swing.GroupLayout(jPFornecimento);
         jPFornecimento.setLayout(jPFornecimentoLayout);
         jPFornecimentoLayout.setHorizontalGroup(
@@ -461,63 +461,64 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                                 .addComponent(jTFDescrição, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPFornecimentoLayout.createSequentialGroup()
-                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(jPFornecimentoLayout.createSequentialGroup()
-                                        .addGap(0, 0, Short.MAX_VALUE)
-                                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel6)
-                                            .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
-                                                    .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jLabel13)
-                                                        .addComponent(jCBMoedaImpostos, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                    .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                        .addComponent(jTFValorImpostos, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                        .addComponent(jLabel17)))
-                                                .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                                    .addGroup(jPFornecimentoLayout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel7)))
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(26, 26, 26))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
-                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jLabel2)
-                                .addComponent(jLabel3)
-                                .addGroup(jPFornecimentoLayout.createSequentialGroup()
-                                    .addComponent(jCBFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jBTNovoFornecedor))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPFornecimentoLayout.createSequentialGroup()
-                                    .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jCBMoedaFrete, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jLabel8))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jLabel16)
-                                        .addComponent(jTFValorFrete, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jLabel5))
+                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
+                                .addComponent(jCBFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jBTNovoFornecedor)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPFornecimentoLayout.createSequentialGroup()
-                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane4)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPFornecimentoLayout.createSequentialGroup()
-                                    .addComponent(jLabel10)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jLabel18))
-                                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPFornecimentoLayout.createSequentialGroup()
-                                    .addGap(0, 0, Short.MAX_VALUE)
-                                    .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 759, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jPBotoes, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPFornecimentoLayout.createSequentialGroup()
+                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jLabel5)
+                                    .addGroup(jPFornecimentoLayout.createSequentialGroup()
+                                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jCBMoedaFrete, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel8))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jFTValorFrete, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel16))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel19)
+                                            .addComponent(jTFFreteReais, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jSeparator1))
+                                .addGap(33, 33, 33)
+                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(jSeparator2)
+                                    .addGroup(jPFornecimentoLayout.createSequentialGroup()
+                                        .addComponent(jLabel6)
+                                        .addGap(74, 74, 74))
+                                    .addGroup(jPFornecimentoLayout.createSequentialGroup()
+                                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel13)
+                                            .addComponent(jCBMoedaImpostos, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jFTValorImpostos, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel17))
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel20)
+                                            .addComponent(jTFImpostosReais, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)))))
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPFornecimentoLayout.createSequentialGroup()
+                                .addComponent(jLabel10)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel18))
+                            .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jBTRemoveComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -555,13 +556,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 2, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel8)
-                            .addComponent(jLabel16))
+                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel8)
+                                .addComponent(jLabel16))
+                            .addComponent(jLabel19, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCBMoedaFrete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTFValorFrete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jFTValorFrete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTFFreteReais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPFornecimentoLayout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -569,11 +573,13 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel13)
-                            .addComponent(jLabel17))
+                            .addComponent(jLabel17)
+                            .addComponent(jLabel20))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCBMoedaImpostos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTFValorImpostos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jFTValorImpostos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTFImpostosReais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -592,7 +598,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         .addComponent(jBTRemoveComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jBTAddparaProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBTRemoveComponenteProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -681,7 +687,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jBTVerDatasheet))
                             .addComponent(jLabel29))
-                        .addGap(0, 60, Short.MAX_VALUE)))
+                        .addGap(0, 64, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -703,7 +709,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(407, Short.MAX_VALUE))
+                .addContainerGap(406, Short.MAX_VALUE))
         );
 
         jTBComponente.addTab("Consulta", jPanel1);
@@ -721,7 +727,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(879, 698));
+        setSize(new java.awt.Dimension(883, 697));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -761,14 +767,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 array_fornecedores = combo.PreencherCombo(jCBFornecedor, "nome", fornecedor.getRetorno(), "id_pessoa");
                 //seta no array da classe de fornecedores a lista de fornecedores listadas na combo
                 fornecedor.setArray_fornecedor(array_fornecedores);
-                
+
                 dao_moeda.consultaGeral(moeda);
                 //Preenche dados nas ComboBox de moeda
                 array_moedas = combo.PreencherCombo(jCBMoedaFrete, "unidade", moeda.getRetorno(), "id_moeda");
                 array_moedas = combo.PreencherCombo(jCBMoedaImpostos, "unidade", moeda.getRetorno(), "id_moeda");
                 //seta no array da classe de moeda a lista de moedas listadas na combo
                 moeda.setArray_moeda(array_moedas);
-                
+
+                valida_campos.formataMonetario(jFTValorFrete);
+                valida_campos.formataMonetario(jFTValorImpostos);
 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de fornecimentos");
@@ -818,9 +826,6 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 valida_campos.LimparJtable(jTBComponentes);
                 valida_campos.LimparJtable(jTBComponentesProjetos);
                 valida_campos.LimparJtable(jTBConsultaComponentes);
-                valida_campos.LimparJtable(jTBConsultaFornecedores);
-                valida_campos.LimparJtable(jTBConsultaComposicao);
-                valida_campos.LimparJtable(jTBContatoFornecedores);
 
                 //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
                 situacao = Rotinas.INICIAL;
@@ -840,10 +845,10 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         //Se for inclusão
         if (situacao == Rotinas.INCLUIR) {
-            if (valida_campos.validacamposobrigatorios(jPFornecimento, "COMPONENTE") == 0) {
+            if (valida_campos.validacamposobrigatorios(jPFornecimento, "FORNECIMENTO") == 0) {
                 try {
-                    //pega dados do componente na tela
-                    getComponente();
+                    //pega dados do fornecimento na tela
+                    getFornecimento();
                     //inclui componente
                     if(dao_componente.incluir(componente,jCBTipo.getSelectedItem().toString()) == true){
 
@@ -945,37 +950,37 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBFornecedorPopupMenuWillBecomeVisible
 
     private void jBTNovoFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoFornecedorActionPerformed
-       try {
+        try {
             //atualiza dados do usuario logado
             dao_acesso.retornaUsuarioLogado(acesso);
             //Inclui a opção todas telas como primeira opção
             tela.setDescricao("Todas telas");
             tela.setId_tela(1);
             dao_tela.incluir(tela);
-            
+
             //Inclui a a tela de Pessoas
             tela.setDescricao("Pessoas");
             tela.setId_tela(2);
             dao_tela.incluir(tela);
-            
+
             //Armazena dados de acesso da tela para verificar permissões
             acesso.setId_tela(2);
             acesso.setNome_tela("Pessoas");
-            
+
             //se naõ for gerente
             if(acesso.getIn_gerente() == 0){
-                //retorna as permissoes de acesso do usuario  
+                //retorna as permissoes de acesso do usuario
                 dao_permissao.retornaDadosPermissao(acesso, permissao);
-            } 
-          
-           //Verifica se o usuario possui permissao para acessar essa tela
-           if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
-                //Traz para tela a tela de cadastro de pessoas 
+            }
+
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas
                 new InterfacePessoa().setVisible(true);
-           }else{
-               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
-           }
-            
+            }else{
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela");
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -986,10 +991,9 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBComponentesMouseClicked
 
     private void jBTAddComponenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddComponenteActionPerformed
-        new InterfaceComposicaoComponente().setVisible(true);
-        componente.setTabela(jTBComponentes);
-        composicao.setSituacao(situacao);
-        composicao.setId_componente(Integer.parseInt(jTFIDFornecimento.getText()));
+        comp_fornec.setTabela(jTBComponentes);
+        comp_fornec.setSituacao(situacao);
+        new InterfaceFornecimentoComponente().setVisible(true);
     }//GEN-LAST:event_jBTAddComponenteActionPerformed
 
     private void jBTRemoveComponenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComponenteActionPerformed
@@ -1006,6 +1010,26 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Não possui componentes para remover");
         }
     }//GEN-LAST:event_jBTRemoveComponenteActionPerformed
+
+    private void jCBMoedaFretePopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaFretePopupMenuWillBecomeVisible
+        dao_moeda.consultaGeral(moeda);
+        //Preenche dados nas ComboBox de moeda
+        array_moedas = combo.PreencherCombo(jCBMoedaFrete, "unidade", moeda.getRetorno(), "id_moeda");
+        //seta no array da classe de moeda a lista de moedas listadas na combo
+        moeda.setArray_moeda(array_moedas);
+    }//GEN-LAST:event_jCBMoedaFretePopupMenuWillBecomeVisible
+
+    private void jCBMoedaImpostosPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaImpostosPopupMenuWillBecomeVisible
+        dao_moeda.consultaGeral(moeda);
+        //Preenche dados nas ComboBox de moeda
+        array_moedas = combo.PreencherCombo(jCBMoedaImpostos, "unidade", moeda.getRetorno(), "id_moeda");
+        //seta no array da classe de moeda a lista de moedas listadas na combo
+        moeda.setArray_moeda(array_moedas);
+    }//GEN-LAST:event_jCBMoedaImpostosPopupMenuWillBecomeVisible
+
+    private void jBTRemoveComponenteProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComponenteProjetoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBTRemoveComponenteProjetoActionPerformed
 
     private void jTBConsultaComponentesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaComponentesMouseClicked
         //Verifica se houve 1 clique do mouse
@@ -1265,25 +1289,13 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
     }//GEN-LAST:event_jTBComponenteStateChanged
 
-    private void jBTRemoveComponenteProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComponenteProjetoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBTRemoveComponenteProjetoActionPerformed
-
-    private void jCBMoedaFretePopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaFretePopupMenuWillBecomeVisible
-        dao_moeda.consultaGeral(moeda);
-        //Preenche dados nas ComboBox de moeda
-        array_moedas = combo.PreencherCombo(jCBMoedaFrete, "unidade", moeda.getRetorno(), "id_moeda");
-        //seta no array da classe de moeda a lista de moedas listadas na combo
-        moeda.setArray_moeda(array_moedas);
-    }//GEN-LAST:event_jCBMoedaFretePopupMenuWillBecomeVisible
-
-    private void jCBMoedaImpostosPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaImpostosPopupMenuWillBecomeVisible
-        dao_moeda.consultaGeral(moeda);
-        //Preenche dados nas ComboBox de moeda
-        array_moedas = combo.PreencherCombo(jCBMoedaImpostos, "unidade", moeda.getRetorno(), "id_moeda");
-        //seta no array da classe de moeda a lista de moedas listadas na combo
-        moeda.setArray_moeda(array_moedas);
-    }//GEN-LAST:event_jCBMoedaImpostosPopupMenuWillBecomeVisible
+    private void jFTValorFreteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTValorFreteFocusLost
+        double valor_inserido;
+        double valor_convertido;
+        valor_inserido = Double.parseDouble(jFTValorFrete.getText().replace(",", "."));
+        valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1));
+        jTFFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+    }//GEN-LAST:event_jFTValorFreteFocusLost
 
     /**
      * @param args the command line arguments
@@ -1296,7 +1308,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -1310,6 +1322,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(InterfaceFornecimento.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
@@ -1339,6 +1352,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JComboBox jCBMoedaImpostos;
     private javax.swing.JComboBox jCBTipoConsulta;
     private javax.swing.JFormattedTextField jFTData;
+    private javax.swing.JFormattedTextField jFTValorFrete;
+    private javax.swing.JFormattedTextField jFTValorImpostos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;
@@ -1347,7 +1362,9 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel18;
+    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -1369,8 +1386,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JTable jTBConsultaComponentes;
     private javax.swing.JTextField jTFDescrição;
     private javax.swing.JTextField jTFFiltro;
+    private javax.swing.JTextField jTFFreteReais;
     private javax.swing.JTextField jTFIDFornecimento;
-    private javax.swing.JTextField jTFValorFrete;
-    private javax.swing.JTextField jTFValorImpostos;
+    private javax.swing.JTextField jTFImpostosReais;
     // End of variables declaration//GEN-END:variables
 }
