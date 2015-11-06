@@ -194,7 +194,7 @@ public class daoMoeda {
             conecta_banco.resultset.first();
             double valor_moeda = 0;
             valor_moeda = conecta_banco.resultset.getDouble("valor");
-            return valor_moeda * valor;
+            return (valor_moeda * valor);
         } catch (SQLException ex) {
            JOptionPane.showMessageDialog(null, "Falha ao converter moeda");
         }

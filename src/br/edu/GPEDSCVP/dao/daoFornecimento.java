@@ -6,7 +6,10 @@
 package br.edu.GPEDSCVP.dao;
 
 import br.edu.GPEDSCVP.classe.ComponenteFornecimento;
+import br.edu.GPEDSCVP.classe.Fornecimento;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
+import br.edu.GPEDSCVP.util.ExcessaoBanco;
+import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.Rotinas;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.SQLException;
@@ -33,6 +36,38 @@ public class daoFornecimento {
         {
             JOptionPane.showMessageDialog(null, "Falha na fonte de dados");
         }
+    }
+    
+    
+     //Método de incluir componente no banco
+    public boolean incluir(Fornecimento fornecimento) throws SQLException{
+        //Insert de fornecimento
+        ultima = new UltimaSequencia();
+        int resultado;
+
+        int sequencia = (Integer) (ultima.ultimasequencia("FORNECIMENTO","ID_FORNECIMENTO"));
+
+        resultado = conecta_banco.executeSQL("INSERT INTO fornecimento (id_fornecimento , id_pessoa, descricao, data_fornecimento, id_moeda_frete, vl_frete, id_moeda_imp,"
+                + "vl_impostos,data_alter ) "
+        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ",
+        sequencia,
+        fornecimento.getId_pessoa(),
+        fornecimento.getDescricao(),
+        FormatarData.dateParaSQLDate(fornecimento.getData_cadastro()),
+        fornecimento.getId_moeda_frete(),
+        fornecimento.getValor_frete(),
+        fornecimento.getId_moeda_imp(),
+        fornecimento.getValor_impostos(),
+        FormatarData.dateParaTimeStamp(fornecimento.getData_alter()));
+
+        if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+            return false;
+        }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+            return false;
+        }else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO){
+            return false;
+        }
+        return true;    
     }
     
     //Método de incluir fornecedores para um componente

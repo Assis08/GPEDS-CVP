@@ -252,7 +252,7 @@ public class ValidaCampos {
    
        try {
            
-            DecimalFormat dFormat = new DecimalFormat("#,###,###.00") ;
+            DecimalFormat dFormat = new DecimalFormat("#,###,##0.00") ;
             NumberFormatter formatter = new NumberFormatter(dFormat) ;
             formatter.setFormat(dFormat) ;
             formatter.setAllowsInvalid(false) ; 

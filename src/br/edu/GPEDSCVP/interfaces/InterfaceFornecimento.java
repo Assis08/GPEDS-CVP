@@ -10,12 +10,14 @@ import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComponenteFornecimento;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
 import br.edu.GPEDSCVP.classe.Fornecedor;
+import br.edu.GPEDSCVP.classe.Fornecimento;
 import br.edu.GPEDSCVP.classe.Material;
 import br.edu.GPEDSCVP.classe.Moeda;
 import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.dao.daoAcesso;
 import br.edu.GPEDSCVP.dao.daoComponente;
+import br.edu.GPEDSCVP.dao.daoFornecimento;
 import br.edu.GPEDSCVP.dao.daoMoeda;
 import br.edu.GPEDSCVP.dao.daoPermissao;
 import br.edu.GPEDSCVP.dao.daoPessoa;
@@ -29,6 +31,7 @@ import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
+import java.sql.Date;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -40,10 +43,12 @@ import javax.swing.JTable;
 public class InterfaceFornecimento extends javax.swing.JFrame {
 
     Componente componente;
+    Fornecimento fornecimento;
     ComponenteFornecimento comp_fornec;
     Fornecedor fornecedor;
     Moeda moeda;
     daoMoeda dao_moeda;
+    daoFornecimento dao_fornecimento;
     ComposicaoComponente composicao;
     Material material;
     Tela tela;
@@ -70,6 +75,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         initComponents();
         
         componente = new Componente();
+        fornecimento = new Fornecimento();
+        dao_fornecimento = new daoFornecimento();
         comp_fornec = new ComponenteFornecimento();
         fornecedor = new Fornecedor();
         composicao = new ComposicaoComponente();
@@ -101,6 +108,12 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBComponentes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBComponentesProjetos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
+        //seta mascaras nos campos monetários
+        valida_campos.formataMonetario(jFTValorFrete);
+        valida_campos.formataMonetario(jFTFreteReais);
+        valida_campos.formataMonetario(jFTValorImpostos);
+        valida_campos.formataMonetario(jFTImpostosReais);
 
         dao_fornecedor.consultageral(fornecedor);
         //Preenche dados nas ComboBox de fornecedor
@@ -170,14 +183,13 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         jLabel16 = new javax.swing.JLabel();
         jLabel17 = new javax.swing.JLabel();
         jBTAddparaProjeto = new javax.swing.JButton();
-        jLabel18 = new javax.swing.JLabel();
         jBTRemoveComponenteProjeto = new javax.swing.JButton();
         jFTValorFrete = new javax.swing.JFormattedTextField();
         jFTValorImpostos = new javax.swing.JFormattedTextField();
-        jTFFreteReais = new javax.swing.JTextField();
         jLabel19 = new javax.swing.JLabel();
-        jTFImpostosReais = new javax.swing.JTextField();
         jLabel20 = new javax.swing.JLabel();
+        jFTFreteReais = new javax.swing.JFormattedTextField();
+        jFTImpostosReais = new javax.swing.JFormattedTextField();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTBConsultaComponentes = new javax.swing.JTable();
@@ -278,12 +290,12 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         );
 
         jTFIDFornecimento.setEditable(false);
-        jTFIDFornecimento.setName("id_componente"); // NOI18N
+        jTFIDFornecimento.setName("id_fornecimento"); // NOI18N
 
         jLabel1.setText("ID Fornecimento:");
 
-        jCBFornecedor.setToolTipText("Material");
-        jCBFornecedor.setName("id_material"); // NOI18N
+        jCBFornecedor.setToolTipText("Fornecedor");
+        jCBFornecedor.setName("id_pessoa"); // NOI18N
         jCBFornecedor.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -347,7 +359,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jFTData.setEditable(false);
         jFTData.setToolTipText("Data");
-        jFTData.setName("data_cadastro"); // NOI18N
+        jFTData.setName("data_fornecimento"); // NOI18N
 
         jBTAddComponente.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
         jBTAddComponente.setName("descricao"); // NOI18N
@@ -393,10 +405,13 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jLabel8.setText("Moeda:");
 
+        jCBMoedaFrete.setToolTipText("Moeda Frete");
+        jCBMoedaFrete.setName("id_moeda_frete"); // NOI18N
         jCBMoedaFrete.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jCBMoedaFretePopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 jCBMoedaFretePopupMenuWillBecomeVisible(evt);
@@ -409,10 +424,13 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jLabel13.setText("Moeda:");
 
+        jCBMoedaImpostos.setToolTipText("Moeda Impostos");
+        jCBMoedaImpostos.setName("id_moeda_imp"); // NOI18N
         jCBMoedaImpostos.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
             public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jCBMoedaImpostosPopupMenuWillBecomeInvisible(evt);
             }
             public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
                 jCBMoedaImpostosPopupMenuWillBecomeVisible(evt);
@@ -424,8 +442,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         jLabel17.setText("Valor:");
 
         jBTAddparaProjeto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/edu/GPEDSCVP/icones/arrow_down.png"))); // NOI18N
-
-        jLabel18.setText("Adicionar para projeto:");
+        jBTAddparaProjeto.setText("Add Projeto");
 
         jBTRemoveComponenteProjeto.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
         jBTRemoveComponenteProjeto.addActionListener(new java.awt.event.ActionListener() {
@@ -434,15 +451,46 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
+        jFTValorFrete.setToolTipText("Frete Valor");
+        jFTValorFrete.setName("vl_frete"); // NOI18N
+        jFTValorFrete.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jFTValorFreteCaretUpdate(evt);
+            }
+        });
+        jFTValorFrete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFTValorFreteActionPerformed(evt);
+            }
+        });
         jFTValorFrete.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jFTValorFreteFocusLost(evt);
             }
         });
 
+        jFTValorImpostos.setToolTipText("Impostos Valor");
+        jFTValorImpostos.setName("vl_impostos"); // NOI18N
+        jFTValorImpostos.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jFTValorImpostosCaretUpdate(evt);
+            }
+        });
+        jFTValorImpostos.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jFTValorImpostosFocusLost(evt);
+            }
+        });
+
         jLabel19.setText("R$:");
 
         jLabel20.setText("R$:");
+
+        jFTFreteReais.setEditable(false);
+        jFTFreteReais.setName("sem_nome"); // NOI18N
+
+        jFTImpostosReais.setEditable(false);
+        jFTImpostosReais.setName("sem_nome"); // NOI18N
 
         javax.swing.GroupLayout jPFornecimentoLayout = new javax.swing.GroupLayout(jPFornecimento);
         jPFornecimento.setLayout(jPFornecimentoLayout);
@@ -451,36 +499,10 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             .addGroup(jPFornecimentoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
-                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTFIDFornecimento, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(30, 30, 30)
-                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPFornecimentoLayout.createSequentialGroup()
-                                .addComponent(jTFDescrição, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPFornecimentoLayout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(26, 26, 26))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
-                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
-                                .addComponent(jCBFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jBTNovoFornecedor)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPFornecimentoLayout.createSequentialGroup()
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPFornecimentoLayout.createSequentialGroup()
                                 .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel5)
                                     .addGroup(jPFornecimentoLayout.createSequentialGroup()
                                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jCBMoedaFrete, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -489,17 +511,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jFTValorFrete, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel16))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel19)
-                                            .addComponent(jTFFreteReais, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jSeparator1))
-                                .addGap(33, 33, 33)
-                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                            .addComponent(jFTFreteReais)))
+                                    .addComponent(jLabel5)
+                                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 369, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jSeparator2)
-                                    .addGroup(jPFornecimentoLayout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(74, 74, 74))
+                                    .addComponent(jLabel6)
                                     .addGroup(jPFornecimentoLayout.createSequentialGroup()
                                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jLabel13)
@@ -508,41 +529,68 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addComponent(jFTValorImpostos, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jLabel17))
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel20)
-                                            .addComponent(jTFImpostosReais, javax.swing.GroupLayout.DEFAULT_SIZE, 91, Short.MAX_VALUE)))))
+                                            .addGroup(jPFornecimentoLayout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                                .addComponent(jLabel20)
+                                                .addGap(68, 68, 68))
+                                            .addGroup(jPFornecimentoLayout.createSequentialGroup()
+                                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                                .addComponent(jFTImpostosReais, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                                .addGap(0, 0, Short.MAX_VALUE))))))
                             .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPFornecimentoLayout.createSequentialGroup()
                                 .addComponent(jLabel10)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel18))
-                            .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jBTAddparaProjeto))
+                            .addGroup(jPFornecimentoLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jBTRemoveComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBTAddComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBTRemoveComponenteProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBTAddparaProjeto))
-                        .addGap(34, 34, 34))))
+                            .addComponent(jBTAddComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(102, 102, 102))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
+                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
+                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jTFIDFornecimento, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(30, 30, 30)
+                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTFDescrição, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPFornecimentoLayout.createSequentialGroup()
+                                        .addComponent(jLabel4)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(jLabel7)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
+                                .addComponent(jCBFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jBTNovoFornecedor)))
+                        .addGap(73, 73, 73))))
         );
         jPFornecimentoLayout.setVerticalGroup(
             jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPFornecimentoLayout.createSequentialGroup()
-                .addGap(14, 14, 14)
+                .addGap(11, 11, 11)
                 .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel7)
                         .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPFornecimentoLayout.createSequentialGroup()
-                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel4))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTFIDFornecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTFDescrição, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel4)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTFIDFornecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTFDescrição, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(12, 12, 12)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -565,7 +613,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCBMoedaFrete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jFTValorFrete, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTFFreteReais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jFTFreteReais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPFornecimentoLayout.createSequentialGroup()
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -579,7 +627,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCBMoedaImpostos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jFTValorImpostos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTFImpostosReais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jFTImpostosReais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(18, 18, 18)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -587,17 +635,13 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                     .addGroup(jPFornecimentoLayout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPFornecimentoLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jLabel18))
-                            .addComponent(jLabel10)))
+                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel10)
+                            .addComponent(jBTAddparaProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPFornecimentoLayout.createSequentialGroup()
                         .addComponent(jBTAddComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9)
-                        .addComponent(jBTRemoveComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBTAddparaProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBTRemoveComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -687,7 +731,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jBTVerDatasheet))
                             .addComponent(jLabel29))
-                        .addGap(0, 64, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -709,7 +753,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(406, Short.MAX_VALUE))
+                .addContainerGap(420, Short.MAX_VALUE))
         );
 
         jTBComponente.addTab("Consulta", jPanel1);
@@ -718,7 +762,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jTBComponente)
+            .addComponent(jTBComponente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 829, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -727,7 +771,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        setSize(new java.awt.Dimension(883, 697));
+        setSize(new java.awt.Dimension(845, 697));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -736,6 +780,9 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         //habilita campos da tela
         valida_campos.habilitaCampos(jPFornecimento);
+        //desabilita alguns campos necessários
+        jFTValorFrete.setEnabled(false);
+        jFTValorImpostos.setEnabled(false);
         //se não for gerente
         if (acesso.getIn_gerente() == 0) {
             //retorna as permissoes de acesso do usuario
@@ -774,9 +821,6 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 array_moedas = combo.PreencherCombo(jCBMoedaImpostos, "unidade", moeda.getRetorno(), "id_moeda");
                 //seta no array da classe de moeda a lista de moedas listadas na combo
                 moeda.setArray_moeda(array_moedas);
-
-                valida_campos.formataMonetario(jFTValorFrete);
-                valida_campos.formataMonetario(jFTValorImpostos);
 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de fornecimentos");
@@ -850,8 +894,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                     //pega dados do fornecimento na tela
                     getFornecimento();
                     //inclui componente
-                    if(dao_componente.incluir(componente,jCBTipo.getSelectedItem().toString()) == true){
-
+                    if(dao_fornecimento.incluir(fornecimento) == true){
+/*
                         getComposicao();
                         getFornecedores();
                         dao_componente.gravarComposicao(composicao);
@@ -876,6 +920,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
                         //desabilita campos
                         valida_campos.desabilitaCampos(jPFornecimento);
+                        */
                     }
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Falha ao incluir componente");
@@ -1012,19 +1057,23 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTRemoveComponenteActionPerformed
 
     private void jCBMoedaFretePopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaFretePopupMenuWillBecomeVisible
+/*
         dao_moeda.consultaGeral(moeda);
         //Preenche dados nas ComboBox de moeda
         array_moedas = combo.PreencherCombo(jCBMoedaFrete, "unidade", moeda.getRetorno(), "id_moeda");
         //seta no array da classe de moeda a lista de moedas listadas na combo
         moeda.setArray_moeda(array_moedas);
+        */
     }//GEN-LAST:event_jCBMoedaFretePopupMenuWillBecomeVisible
 
     private void jCBMoedaImpostosPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaImpostosPopupMenuWillBecomeVisible
+        /*
         dao_moeda.consultaGeral(moeda);
         //Preenche dados nas ComboBox de moeda
         array_moedas = combo.PreencherCombo(jCBMoedaImpostos, "unidade", moeda.getRetorno(), "id_moeda");
         //seta no array da classe de moeda a lista de moedas listadas na combo
         moeda.setArray_moeda(array_moedas);
+        */
     }//GEN-LAST:event_jCBMoedaImpostosPopupMenuWillBecomeVisible
 
     private void jBTRemoveComponenteProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComponenteProjetoActionPerformed
@@ -1290,12 +1339,84 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBComponenteStateChanged
 
     private void jFTValorFreteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTValorFreteFocusLost
-        double valor_inserido;
-        double valor_convertido;
-        valor_inserido = Double.parseDouble(jFTValorFrete.getText().replace(",", "."));
-        valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1));
-        jTFFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+        
     }//GEN-LAST:event_jFTValorFreteFocusLost
+
+    private void jFTValorImpostosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTValorImpostosFocusLost
+       
+    }//GEN-LAST:event_jFTValorImpostosFocusLost
+
+    private void jFTValorFreteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFTValorFreteActionPerformed
+       
+    }//GEN-LAST:event_jFTValorFreteActionPerformed
+
+    private void jFTValorFreteCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jFTValorFreteCaretUpdate
+    
+        if(jFTValorFrete.isEnabled())
+        {
+            if(!jFTValorFrete.getText().equals("")){
+                double valor_inserido;
+                double valor_convertido;
+                valor_inserido = Double.parseDouble(jFTValorFrete.getText().replace(",", "."));
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1));
+                jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+            }
+        }
+    }//GEN-LAST:event_jFTValorFreteCaretUpdate
+
+    private void jFTValorImpostosCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jFTValorImpostosCaretUpdate
+        //Verifica se foi selecionado uma moeda
+        if(jFTValorImpostos.isEnabled()){
+            //se o campo do valor não for vazio
+            if(!jFTValorImpostos.getText().equals("")){
+                double valor_inserido;
+                double valor_convertido;
+                valor_inserido = Double.parseDouble(jFTValorImpostos.getText().replace(",", "."));
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1));
+                jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+            }
+        }
+    }//GEN-LAST:event_jFTValorImpostosCaretUpdate
+
+    private void jCBMoedaImpostosPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaImpostosPopupMenuWillBecomeInvisible
+         
+        //Verifica se foi selecionado uma moeda
+        if(jCBMoedaImpostos.getSelectedIndex() > 0){
+            jFTValorImpostos.setEnabled(true);
+            //se o campo do valor não for vazio
+            if(!jFTValorImpostos.getText().equals("")){
+                double valor_inserido;
+                double valor_convertido;
+                valor_inserido = Double.parseDouble(jFTValorImpostos.getText().replace(",", "."));
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1));
+                jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+            }
+        }else{
+            jFTValorImpostos.setEnabled(false);
+            jFTValorImpostos.setValue(null);
+            jFTImpostosReais.setValue(null);
+        }
+        
+    }//GEN-LAST:event_jCBMoedaImpostosPopupMenuWillBecomeInvisible
+
+    private void jCBMoedaFretePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaFretePopupMenuWillBecomeInvisible
+         //se estiver selecionado uma moeda
+        if(jCBMoedaFrete.getSelectedIndex() > 0){
+            jFTValorFrete.setEnabled(true);
+            //se o campo do valor não for vazio
+            if(!jFTValorFrete.getText().equals("")){
+                double valor_inserido;
+                double valor_convertido;
+                valor_inserido = Double.parseDouble(jFTValorFrete.getText().replace(",", "."));
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1));
+                jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+            }
+        }else{
+            jFTValorFrete.setEnabled(false);
+            jFTValorFrete.setValue(null);
+            jFTFreteReais.setValue(null);
+        }
+    }//GEN-LAST:event_jCBMoedaFretePopupMenuWillBecomeInvisible
 
     /**
      * @param args the command line arguments
@@ -1352,6 +1473,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JComboBox jCBMoedaImpostos;
     private javax.swing.JComboBox jCBTipoConsulta;
     private javax.swing.JFormattedTextField jFTData;
+    private javax.swing.JFormattedTextField jFTFreteReais;
+    private javax.swing.JFormattedTextField jFTImpostosReais;
     private javax.swing.JFormattedTextField jFTValorFrete;
     private javax.swing.JFormattedTextField jFTValorImpostos;
     private javax.swing.JLabel jLabel1;
@@ -1361,7 +1484,6 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel20;
@@ -1386,8 +1508,30 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JTable jTBConsultaComponentes;
     private javax.swing.JTextField jTFDescrição;
     private javax.swing.JTextField jTFFiltro;
-    private javax.swing.JTextField jTFFreteReais;
     private javax.swing.JTextField jTFIDFornecimento;
-    private javax.swing.JTextField jTFImpostosReais;
     // End of variables declaration//GEN-END:variables
+
+    public Fornecimento getFornecimento(){
+        
+        fornecimento = new Fornecimento();
+        
+        Date data_atual = new Date(System.currentTimeMillis());
+        
+        int id_fornecimento = Integer.parseInt(jTFIDFornecimento.getText());
+        Double valor_frete = Double.parseDouble(jFTValorFrete.getText().replace(",", "."));
+        Double valor_imposto = Double.parseDouble(jFTValorImpostos.getText().replace(",", "."));
+        
+        fornecimento.setId_fornecimento(id_fornecimento);
+        fornecimento.setDescricao(jTFDescrição.getText());
+        fornecimento.setId_pessoa(fornecedor.getArray_fornecedor(jCBFornecedor.getSelectedIndex() - 1));
+        fornecimento.setId_moeda_frete(moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1));
+        fornecimento.setValor_frete(valor_frete);
+        fornecimento.setId_moeda_imp(moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1));
+        fornecimento.setValor_impostos(valor_imposto);
+        fornecimento.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
+        fornecimento.setData_alter(data_atual);
+
+        return fornecimento;
+    }
+
 }
