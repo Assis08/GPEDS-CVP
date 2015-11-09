@@ -137,7 +137,6 @@ public class InterfaceComponente extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar registro");
         }
         
-        
         //desabilita campos da tela de componente
         valida_campos.desabilitaCampos(jPComponente);
         

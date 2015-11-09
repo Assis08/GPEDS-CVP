@@ -15,6 +15,7 @@ import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Tela;
 import br.edu.GPEDSCVP.dao.daoAcesso;
 import br.edu.GPEDSCVP.dao.daoComponente;
+import br.edu.GPEDSCVP.dao.daoComponentesFornecimento;
 import br.edu.GPEDSCVP.dao.daoDatasheet;
 import br.edu.GPEDSCVP.dao.daoFornecimento;
 import br.edu.GPEDSCVP.dao.daoMoeda;
@@ -53,6 +54,7 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
     Datasheet datasheet;
     daoDatasheet dao_datasheet;
     daoFornecimento dao_fornecimento;
+    daoComponentesFornecimento dao_comp_fornec;
     daoTela dao_tela;
     ComboBox combo;
     daoComponente dao_componente;
@@ -78,6 +80,7 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
         moeda = new Moeda();
         dao_moeda = new daoMoeda();
         dao_fornecimento = new daoFornecimento();
+        dao_comp_fornec = new daoComponentesFornecimento();
         composicao = new ComposicaoComponente();
         tela = new Tela();
         datasheet = new Datasheet();
@@ -602,15 +605,14 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
     private void jBTConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTConcluirActionPerformed
         
         int linha = jTBConsultaComponentes.getSelectedRow();
-        String descricao = jTBConsultaComponentes.getValueAt(linha, 2).toString();
         
-        if(Jtable.evitarDuplicacao(comp_fornec.getTabela(), descricao) == false){
-            if(linha >= 0){
+        if(linha >= 0){
+            String descricao = jTBConsultaComponentes.getValueAt(linha, 2).toString();
+            if(Jtable.evitarDuplicacao(comp_fornec.getTabela(), descricao) == false){
                 if (valida_campos.validacamposobrigatorios(jPInfoCompFornec, "COMPONENTES_FORNECIMENTO") == 0) { 
-
                     try {
                         getComponente();
-                        dao_fornecimento.addComponenteFornecimento(comp_fornec,jTBConsultaComponentes,comp_fornec.getSituacao());
+                        dao_comp_fornec.addComponenteFornecimento(comp_fornec,jTBConsultaComponentes,comp_fornec.getSituacao());
                         //Seta mascara na coluna de valores monetários da jtable
                         Jtable.setarMascaraMonetaria(comp_fornec.getTabela(), jFTMascaraMonetaria,4);
                         Jtable.ajustarColunasDaTabela(comp_fornec.getTabela());
@@ -623,17 +625,17 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
                         array_moedas = combo.PreencherCombo(jCBMoedaValorUnit, "unidade", moeda.getRetorno(), "id_moeda");
                         //seta no array da classe de moeda a lista de moedas listadas na combo
                         moeda.setArray_moeda(array_moedas);
-
-                        } catch (SQLException ex) {
-                            JOptionPane.showMessageDialog(null, "Falha ao adicionar componente");
-                        }
-               
-                }
+                        // fecha tela
+                        this.dispose();
+                    } catch (SQLException ex) {
+                        JOptionPane.showMessageDialog(null, "Falha ao adicionar componente");
+                    }
+                } 
             }else{
-                JOptionPane.showMessageDialog(null, "Nenhum componente foi selecionado!");
+                JOptionPane.showMessageDialog(null, "Este componente já foi adicionado!");
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Este componente já foi adicionado!");
+            JOptionPane.showMessageDialog(null, "Nenhum componente foi selecionado!");
         }
     }//GEN-LAST:event_jBTConcluirActionPerformed
 

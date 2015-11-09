@@ -17,26 +17,24 @@ public class ComponenteFornecimento {
     
     private static int situacao;
     private int id_comp_fornec;
-    private int id_componente;
-    private String descricao;
+    private static int id_componente;
+    private static String descricao;
     private int id_fornecimento;
     private int id_moeda;
     private String moeda;
-    private int qntd_componente;
+    private static int qntd_componente;
     private double imposto_unit;
     private double valor_unit;
     private Date data_alter;
-    private static JTable tabela;
     private ResultSet retorno;
+    private static JTable tabela;
 
     public ComponenteFornecimento() {
-        id_comp_fornec = 0;
-        descricao = "";
+   
         moeda = "";
-        id_componente = 0;
+        id_comp_fornec = 0;
         id_fornecimento = 0;
         id_moeda = 0;
-        qntd_componente = 0;
         imposto_unit = 0;
         valor_unit = 0;
         data_alter = null;
@@ -58,12 +56,12 @@ public class ComponenteFornecimento {
         this.id_comp_fornec = id_comp_fornec;
     }
 
-    public int getId_componente() {
+    public static int getId_componente() {
         return id_componente;
     }
 
-    public void setId_componente(int id_componente) {
-        this.id_componente = id_componente;
+    public static void setId_componente(int id_componente) {
+        ComponenteFornecimento.id_componente = id_componente;
     }
 
     public int getId_fornecimento() {
@@ -113,15 +111,6 @@ public class ComponenteFornecimento {
     public void setData_alter(Date data_alter) {
         this.data_alter = data_alter;
     }
-
-    public static JTable getTabela() {
-        return tabela;
-    }
-
-    public static void setTabela(JTable tabela) {
-        ComponenteFornecimento.tabela = tabela;
-    }
-
     public ResultSet getRetorno() {
         return retorno;
     }
@@ -144,5 +133,13 @@ public class ComponenteFornecimento {
 
     public void setMoeda(String moeda) {
         this.moeda = moeda;
+    }
+
+    public static JTable getTabela() {
+        return tabela;
+    }
+
+    public static void setTabela(JTable tabela) {
+        ComponenteFornecimento.tabela = tabela;
     }
 }

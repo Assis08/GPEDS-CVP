@@ -172,7 +172,7 @@ public class ValidaCampos {
             }else if (component instanceof JFormattedTextField) {
                 JFormattedTextField field = (JFormattedTextField) component;
                 field.setText("");
-                field.setValue("");
+                field.setValue(null);
             }
         }
     }
@@ -257,7 +257,7 @@ public class ValidaCampos {
             formatter.setFormat(dFormat) ;
             formatter.setAllowsInvalid(false) ; 
            
-           field.setFormatterFactory ( new DefaultFormatterFactory ( formatter ) ) ;
+           field.setFormatterFactory ( new DefaultFormatterFactory ( formatter )) ;
 
       }
       catch (Exception error_mask) {
@@ -268,10 +268,10 @@ public class ValidaCampos {
      //Método para criar e retornar uma mascara(JTextField) por parâmetro 
     public static MaskFormatter limitaCaracteres (String mascara) {
    
-       try {
-            MaskFormatter mascara_string = new MaskFormatter(mascara);   
-            //tf_CPF = new javax.swing.JFormattedTextField(mascara_cpf);
-            return mascara_string;
+      try {
+        MaskFormatter mascara_string = new MaskFormatter(mascara);   
+        //tf_CPF = new javax.swing.JFormattedTextField(mascara_cpf);
+        return mascara_string;
       }
       catch (Exception error_mask) {
           JOptionPane.showMessageDialog(null,"Erro: "+error_mask);

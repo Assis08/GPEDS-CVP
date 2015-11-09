@@ -8,6 +8,7 @@ package br.edu.GPEDSCVP.interfaces;
 import br.edu.GPEDSCVP.classe.Acesso;
 import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComponenteFornecimento;
+import br.edu.GPEDSCVP.classe.ComponenteVersaoProjeto;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
 import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.Fornecimento;
@@ -15,8 +16,11 @@ import br.edu.GPEDSCVP.classe.Material;
 import br.edu.GPEDSCVP.classe.Moeda;
 import br.edu.GPEDSCVP.classe.Permissao;
 import br.edu.GPEDSCVP.classe.Tela;
+import br.edu.GPEDSCVP.classe.VersaoProjeto;
 import br.edu.GPEDSCVP.dao.daoAcesso;
 import br.edu.GPEDSCVP.dao.daoComponente;
+import br.edu.GPEDSCVP.dao.daoComponenteVersaoProjeto;
+import br.edu.GPEDSCVP.dao.daoComponentesFornecimento;
 import br.edu.GPEDSCVP.dao.daoFornecimento;
 import br.edu.GPEDSCVP.dao.daoMoeda;
 import br.edu.GPEDSCVP.dao.daoPermissao;
@@ -27,14 +31,22 @@ import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.ManipulaJtable;
 import br.edu.GPEDSCVP.util.Mensagens;
 import br.edu.GPEDSCVP.util.Rotinas;
+import br.edu.GPEDSCVP.util.TableCellListener;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.sql.SQLException;
+import javax.swing.AbstractAction;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -43,12 +55,16 @@ import javax.swing.JTable;
 public class InterfaceFornecimento extends javax.swing.JFrame {
 
     Componente componente;
+    VersaoProjeto versao;
     Fornecimento fornecimento;
     ComponenteFornecimento comp_fornec;
+    ComponenteVersaoProjeto comp_vers_proj;
     Fornecedor fornecedor;
     Moeda moeda;
     daoMoeda dao_moeda;
     daoFornecimento dao_fornecimento;
+    daoComponentesFornecimento dao_comp_fornec;
+    daoComponenteVersaoProjeto dao_comp_vers;
     ComposicaoComponente composicao;
     Material material;
     Tela tela;
@@ -74,10 +90,19 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     public InterfaceFornecimento() {
         initComponents();
         
+        //Cria renderer para as Jtable  
+        TableCellRenderer renderer = new EvenOddRenderer();
+        jTBComponentes.setDefaultRenderer(Object.class, renderer);
+        jTBComponentesProjetos.setDefaultRenderer(Object.class, renderer);
+        
         componente = new Componente();
         fornecimento = new Fornecimento();
+        versao = new VersaoProjeto();
         dao_fornecimento = new daoFornecimento();
+        dao_comp_fornec = new daoComponentesFornecimento();
+        dao_comp_vers = new daoComponenteVersaoProjeto();
         comp_fornec = new ComponenteFornecimento();
+        comp_vers_proj = new ComponenteVersaoProjeto();
         fornecedor = new Fornecedor();
         composicao = new ComposicaoComponente();
         material = new Material();
@@ -147,6 +172,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jCheckBox1 = new javax.swing.JCheckBox();
         jTBComponente = new javax.swing.JTabbedPane();
         jPFornecimento = new javax.swing.JPanel();
         jPBotoes = new javax.swing.JPanel();
@@ -192,15 +218,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         jFTImpostosReais = new javax.swing.JFormattedTextField();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTBConsultaComponentes = new javax.swing.JTable();
+        jTBConsultaFornecimentos = new javax.swing.JTable();
         jCBBuscarPor = new javax.swing.JComboBox();
         jLabel14 = new javax.swing.JLabel();
         jTFFiltro = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
         jBTBuscar = new javax.swing.JButton();
-        jBTVerDatasheet = new javax.swing.JButton();
         jCBTipoConsulta = new javax.swing.JComboBox();
         jLabel15 = new javax.swing.JLabel();
+
+        jCheckBox1.setText("jCheckBox1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Fornecimentos");
@@ -327,14 +354,14 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Sel", "ID Fornecidos", "ID Componente", "Componente", "Valor Unitário", "ID Moeda", "Moeda", "Qtde", "Total", "exc"
+                "Sel", "ID Fornecidos", "ID Componente", "Componente", "Valor Unitário", "ID Moeda", "Moeda", "Qtde Fornecida", "Restante", "Total", "exc"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, true, false, false, false, false, false
+                true, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -352,6 +379,11 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTBComponentes);
+        if (jTBComponentes.getColumnModel().getColumnCount() > 0) {
+            jTBComponentes.getColumnModel().getColumn(10).setMinWidth(0);
+            jTBComponentes.getColumnModel().getColumn(10).setPreferredWidth(0);
+            jTBComponentes.getColumnModel().getColumn(10).setMaxWidth(0);
+        }
 
         jLabel2.setText("Componentes:");
 
@@ -381,14 +413,14 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
             },
             new String [] {
-                "sel", "ID Componentes", "Projeto", "Versão", "ID Componente", "Componente", "Qntde"
+                "sel", "ID Componentes", "ID Projeto", "ID Versão", "Projeto", "Versão", "ID Componente", "Componente", "Qntde", "exc"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false
+                true, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -400,6 +432,11 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
         jScrollPane4.setViewportView(jTBComponentesProjetos);
+        if (jTBComponentesProjetos.getColumnModel().getColumnCount() > 0) {
+            jTBComponentesProjetos.getColumnModel().getColumn(9).setMinWidth(0);
+            jTBComponentesProjetos.getColumnModel().getColumn(9).setPreferredWidth(0);
+            jTBComponentesProjetos.getColumnModel().getColumn(9).setMaxWidth(0);
+        }
 
         jLabel10.setText("Componentes para Projetos:");
 
@@ -443,6 +480,11 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jBTAddparaProjeto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/edu/GPEDSCVP/icones/arrow_down.png"))); // NOI18N
         jBTAddparaProjeto.setText("Add Projeto");
+        jBTAddparaProjeto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTAddparaProjetoActionPerformed(evt);
+            }
+        });
 
         jBTRemoveComponenteProjeto.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
         jBTRemoveComponenteProjeto.addActionListener(new java.awt.event.ActionListener() {
@@ -547,11 +589,11 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jBTRemoveComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBTRemoveComponenteProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBTAddComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jBTAddComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBTRemoveComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(102, 102, 102))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -568,12 +610,15 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                                         .addComponent(jLabel7)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
-                                .addComponent(jCBFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jBTNovoFornecedor)))
+                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
+                                        .addComponent(jCBFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jBTNovoFornecedor)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
                         .addGap(73, 73, 73))))
         );
         jPFornecimentoLayout.setVerticalGroup(
@@ -633,15 +678,14 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPFornecimentoLayout.createSequentialGroup()
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel10)
-                            .addComponent(jBTAddparaProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPFornecimentoLayout.createSequentialGroup()
                         .addComponent(jBTAddComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBTRemoveComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jBTRemoveComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(jBTAddparaProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -653,29 +697,29 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jTBComponente.addTab("Cadastro", jPFornecimento);
 
-        jTBConsultaComponentes.setModel(new javax.swing.table.DefaultTableModel(
+        jTBConsultaFornecimentos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "ID Componente", "Tipo", "Descricao", "Rev", "ID Material", "Material", "ID Datasheet", "Datasheet", "Data cadastro", "Última alteração"
+                "ID Fornecimento", "Descrição", "ID Fornecedor", "Fornecedor", "ID Moeda Frete", "Moeda", "Valor Frete", "ID Moeda Imposto", "Moeda", "Valor Impostos", "Data Fornecimento", "Última alteração"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jTBConsultaComponentes.setName("Componentes"); // NOI18N
-        jTBConsultaComponentes.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTBConsultaFornecimentos.setName("Componentes"); // NOI18N
+        jTBConsultaFornecimentos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTBConsultaComponentesMouseClicked(evt);
+                jTBConsultaFornecimentosMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTBConsultaComponentes);
+        jScrollPane1.setViewportView(jTBConsultaFornecimentos);
 
         jCBBuscarPor.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Geral", "Código", "Descrição" }));
 
@@ -691,15 +735,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
-        jBTVerDatasheet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/edu/GPEDSCVP/icones/eye.png"))); // NOI18N
-        jBTVerDatasheet.setText("Ver datasheet");
-        jBTVerDatasheet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBTVerDatasheetActionPerformed(evt);
-            }
-        });
-
-        jCBTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Geral", "Eletrônico", "Mecânico" }));
+        jCBTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Geral", "Componente", "Projeto" }));
 
         jLabel15.setText("Tipo:");
 
@@ -727,11 +763,9 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jTFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBTBuscar)
-                                .addGap(18, 18, 18)
-                                .addComponent(jBTVerDatasheet))
+                                .addComponent(jBTBuscar))
                             .addComponent(jLabel29))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 165, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -748,12 +782,11 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                             .addComponent(jCBBuscarPor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBTBuscar)
-                            .addComponent(jCBTipoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBTVerDatasheet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jCBTipoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(420, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(366, Short.MAX_VALUE))
         );
 
         jTBComponente.addTab("Consulta", jPanel1);
@@ -869,7 +902,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 valida_campos.LimparCampos(jPFornecimento);
                 valida_campos.LimparJtable(jTBComponentes);
                 valida_campos.LimparJtable(jTBComponentesProjetos);
-                valida_campos.LimparJtable(jTBConsultaComponentes);
+                valida_campos.LimparJtable(jTBConsultaFornecimentos);
 
                 //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
                 situacao = Rotinas.INICIAL;
@@ -890,42 +923,47 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         //Se for inclusão
         if (situacao == Rotinas.INCLUIR) {
             if (valida_campos.validacamposobrigatorios(jPFornecimento, "FORNECIMENTO") == 0) {
-                try {
-                    //pega dados do fornecimento na tela
-                    getFornecimento();
-                    //inclui componente
-                    if(dao_fornecimento.incluir(fornecimento) == true){
-/*
-                        getComposicao();
-                        getFornecedores();
-                        dao_componente.gravarComposicao(composicao);
-                        dao_componente.gravarFornecedores(fornec_comp);
+                if(valida_campos.VerificaJtable(jTBComponentes) == 1){ 
+                    if(dao_comp_fornec.verificaCompFornec(comp_fornec) == true){
+                        try {
+                            //pega dados do fornecimento na tela
+                            getFornecimento();
+                            //inclui componente
+                            if(dao_fornecimento.incluir(fornecimento) == true){
+                                getCompFornec();
+                                getCompVersProj();
+                                dao_comp_fornec.gravarCompFornec(comp_fornec);
+                                dao_comp_vers.gravarCompVersProj(comp_vers_proj);
+                                //se ocorreu tudo bem na inclusão
+                                JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                                //limpa campos
+                                valida_campos.LimparCampos(jPFornecimento);
+                                valida_campos.LimparJtable(jTBComponentes);
+                                valida_campos.LimparJtable(jTBComponentesProjetos);
+                                valida_campos.LimparJtable(jTBConsultaFornecimentos);
+                                jFTFreteReais.setValue(null);
+                                jFTValorFrete.setValue(null);
+                                jFTValorImpostos.setValue(null);
+                                jFTImpostosReais.setValue(null);
 
-                        //se ocorreu tudo bem na inclusão
-                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
-                        //limpa campos
-                        valida_campos.LimparCampos(jPFornecimento);
-                        valida_campos.LimparJtable(jTBComponentes);
-                        valida_campos.LimparJtable(jTBComponentesProjetos);
-                        valida_campos.LimparJtable(jTBConsultaComponentes);
-                        valida_campos.LimparJtable(jTBConsultaFornecedores);
-                        valida_campos.LimparJtable(jTBConsultaComposicao);
-                        valida_campos.LimparJtable(jTBContatoFornecedores);
+                                //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                                situacao = Rotinas.INICIAL;
 
-                        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
-                        situacao = Rotinas.INICIAL;
+                                //habilita os botoes utilizados na inclusão e desabilita os restantes
+                                valida_botoes.ValidaEstado(jPBotoes, situacao);
 
-                        //habilita os botoes utilizados na inclusão e desabilita os restantes
-                        valida_botoes.ValidaEstado(jPBotoes, situacao);
-
-                        //desabilita campos
-                        valida_campos.desabilitaCampos(jPFornecimento);
-                        */
-                    }
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao incluir componente");
+                                //desabilita campos
+                                valida_campos.desabilitaCampos(jPFornecimento);
+                            }
+                        } catch (SQLException ex) {
+                            JOptionPane.showMessageDialog(null, "Falha ao incluir fornecimento");
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Todos componentes fornecidos devem ser adicionados para projeto(s)!");
+                    } 
+                }else{
+                    JOptionPane.showMessageDialog(null,"Informar quais componentes foram fornecidos!");
                 }
-
             }
         }else if(situacao == Rotinas.ALTERAR) {
             //pega dados do material na tela
@@ -945,7 +983,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         valida_campos.LimparCampos(jPFornecimento);
                         valida_campos.LimparJtable(jTBComponentes);
                         valida_campos.LimparJtable(jTBComponentesProjetos);
-                        valida_campos.LimparJtable(jTBConsultaComponentes);
+                        valida_campos.LimparJtable(jTBConsultaFornecimentos);
                         valida_campos.LimparJtable(jTBConsultaFornecedores);
                         valida_campos.LimparJtable(jTBConsultaComposicao);
                         valida_campos.LimparJtable(jTBContatoFornecedores);
@@ -971,6 +1009,10 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         valida_campos.LimparCampos(jPFornecimento);
         valida_campos.LimparJtable(jTBComponentes);
         valida_campos.LimparJtable(jTBComponentesProjetos);
+        jFTFreteReais.setValue(null);
+        jFTValorFrete.setValue(null);
+        jFTValorImpostos.setValue(null);
+        jFTImpostosReais.setValue(null);
 
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
         situacao = Rotinas.INICIAL;
@@ -1044,10 +1086,10 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private void jBTRemoveComponenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComponenteActionPerformed
         if (valida_campos.VerificaJtable(jTBComponentes) == 1) {
             int linha = jTBComponentes.getSelectedRow();
-            Integer exc = Integer.parseInt(jTBComponentes.getValueAt(linha, 8).toString());
+            Integer exc = Integer.parseInt(jTBComponentes.getValueAt(linha, 10).toString());
             //se não for um item removido
             if (exc == 0) {
-                Jtable.removeItens(jTBComponentes, situacao);
+                dao_comp_fornec.removeAtualizaItens(jTBComponentes,jTBComponentesProjetos, situacao);
             }else{
                 JOptionPane.showMessageDialog(null, "Item já removido");
             }
@@ -1057,35 +1099,34 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTRemoveComponenteActionPerformed
 
     private void jCBMoedaFretePopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaFretePopupMenuWillBecomeVisible
-/*
-        dao_moeda.consultaGeral(moeda);
-        //Preenche dados nas ComboBox de moeda
-        array_moedas = combo.PreencherCombo(jCBMoedaFrete, "unidade", moeda.getRetorno(), "id_moeda");
-        //seta no array da classe de moeda a lista de moedas listadas na combo
-        moeda.setArray_moeda(array_moedas);
-        */
+
     }//GEN-LAST:event_jCBMoedaFretePopupMenuWillBecomeVisible
 
     private void jCBMoedaImpostosPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaImpostosPopupMenuWillBecomeVisible
-        /*
-        dao_moeda.consultaGeral(moeda);
-        //Preenche dados nas ComboBox de moeda
-        array_moedas = combo.PreencherCombo(jCBMoedaImpostos, "unidade", moeda.getRetorno(), "id_moeda");
-        //seta no array da classe de moeda a lista de moedas listadas na combo
-        moeda.setArray_moeda(array_moedas);
-        */
+
     }//GEN-LAST:event_jCBMoedaImpostosPopupMenuWillBecomeVisible
 
     private void jBTRemoveComponenteProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComponenteProjetoActionPerformed
-        // TODO add your handling code here:
+        if (valida_campos.VerificaJtable(jTBComponentesProjetos) == 1) {
+            int linha = jTBComponentesProjetos.getSelectedRow();
+            Integer exc = Integer.parseInt(jTBComponentesProjetos.getValueAt(linha, 9).toString());
+            //se não for um item removido
+            if (exc == 0) {
+                dao_comp_vers.removeAtualizaItens(jTBComponentesProjetos,jTBComponentes, situacao);
+            }else{
+                JOptionPane.showMessageDialog(null, "Item já removido");
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, "Não possui componentes para remover");
+        }
     }//GEN-LAST:event_jBTRemoveComponenteProjetoActionPerformed
 
-    private void jTBConsultaComponentesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaComponentesMouseClicked
+    private void jTBConsultaFornecimentosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaFornecimentosMouseClicked
         //Verifica se houve 1 clique do mouse
 
         //recupera a linha clicada
-        int linha = jTBConsultaComponentes.getSelectedRow();
-        Integer id_comp = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 0).toString());
+        int linha = jTBConsultaFornecimentos.getSelectedRow();
+        Integer id_comp = Integer.parseInt(jTBConsultaFornecimentos.getValueAt(linha, 0).toString());
 
         //busca composição do componente clicado
         composicao.setId_componente(id_comp);
@@ -1155,7 +1196,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             //habilita os botoes utilizados na alteraçao e exclusão e desabilita os restantes
             valida_botoes.ValidaEstado(jPBotoes, situacao);
         }
-    }//GEN-LAST:event_jTBConsultaComponentesMouseClicked
+    }//GEN-LAST:event_jTBConsultaFornecimentosMouseClicked
 
     private void jBTBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTBuscarActionPerformed
 
@@ -1178,21 +1219,21 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
 
                 // recupera linha selecionada
-                int linha = jTBConsultaComponentes.getSelectedRow();
+                int linha = jTBConsultaFornecimentos.getSelectedRow();
                 int id_busca = 0;
                 String ds_busca = "";
 
                 //Tira aspas simples da string para evitar código sql
                 valida_campos.IgnoraSQL(jTFFiltro);
 
-                switch (jCBTipoConsulta.getSelectedIndex()) {
+                switch (jCBBuscarPor.getSelectedIndex()) {
                     //Tipo : Consulta Geral
                     case 0:
                     //Combobox buscar por: geral
-                    switch(jCBBuscarPor.getSelectedIndex()){
+                    switch(jCBTipoConsulta.getSelectedIndex()){
                         case 0:
                         //Consulta geral de componentes
-                        dao_componente.consultageral(componente);
+                        dao_fornecimento.consultageral(fornecimento);
                         break;
                         case 1:
                         //Consulta geral de componentes por código
@@ -1287,52 +1328,13 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 }
             }
             //Preenche na JTABLE os dados dos componentes cadastrados
-            Jtable.PreencherJtableGenerico(jTBConsultaComponentes, new String[]{"id_componente", "tipo", "componente.descricao", "revisao", "id_material", "material.descricao", "componente.id_datasheet","datasheet.descricao","data_cadastro", "data_alter"}, componente.getRetorno());
-            Jtable.ajustarColunasDaTabela(jTBConsultaComponentes);
+            Jtable.PreencherJtableGenerico(jTBConsultaFornecimentos, new String[]{"fornecimento.id_fornecimento","fornecimento.descricao","fornecedor.id_pessoa","pessoa.nome",
+            "id_moeda_frete","moeda_frete.unidade","vl_frete","id_moeda_imp","moeda_imposto.unidade","vl_impostos","data_fornecimento","fornecimento.data_alter"}, fornecimento.getRetorno());
+            Jtable.ajustarColunasDaTabela(jTBConsultaFornecimentos);
         } else {
             JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar componentes no sistema");
         }
     }//GEN-LAST:event_jBTBuscarActionPerformed
-
-    private void jBTVerDatasheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTVerDatasheetActionPerformed
-        byte[] arquivo_banco;
-        File f = null;
-        String nome_arquivo;
-        int id = 0;
-
-        try {
-            //recupera a linha clicada
-            int linha = jTBConsultaComponentes.getSelectedRow();
-            //se foi selecionado alguma linha
-            if(linha >= 0){
-                id = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 6).toString());
-                try {
-
-                    datasheet.setId_datasheet(id);
-                    arquivo_banco = dao_datasheet.retornaArquivo(datasheet);
-                    //cria arquivo pdf temporário
-                    nome_arquivo = datasheet.getDescricao().replace(".pdf", "");
-                    f = File.createTempFile(nome_arquivo, ".pdf");
-                    FileOutputStream fos = new FileOutputStream(f);
-                    //escreve bytes no arquivo
-                    fos.write( arquivo_banco );
-                    //abre arquivo
-                    Desktop.getDesktop().open(f);
-                    fos.close();
-                    //deleta arquivo quando fechar a aplicação
-                    f.deleteOnExit();
-                } catch (Exception e) {
-
-                    JOptionPane.showMessageDialog(null, "Arquivo já está aberto");
-                }
-            }else{
-                JOptionPane.showMessageDialog(null, "Nenhuma linha foi selecionada!");
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Este componente não possui datasheet!");
-        }
-    }//GEN-LAST:event_jBTVerDatasheetActionPerformed
 
     private void jTBComponenteStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBComponenteStateChanged
 
@@ -1355,9 +1357,12 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         if(jFTValorFrete.isEnabled())
         {
             if(!jFTValorFrete.getText().equals("")){
-                double valor_inserido;
-                double valor_convertido;
-                valor_inserido = Double.parseDouble(jFTValorFrete.getText().replace(",", "."));
+                Double valor_inserido;
+                Double valor_convertido;
+                String valor;
+                valor = jFTValorFrete.getText();
+                valor = valor.replace(".", "").replace(",", ".");
+                valor_inserido = Double.parseDouble(valor);
                 valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1));
                 jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
             }
@@ -1369,9 +1374,13 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         if(jFTValorImpostos.isEnabled()){
             //se o campo do valor não for vazio
             if(!jFTValorImpostos.getText().equals("")){
-                double valor_inserido;
-                double valor_convertido;
-                valor_inserido = Double.parseDouble(jFTValorImpostos.getText().replace(",", "."));
+                Double valor_inserido;
+                Double valor_convertido;
+                String valor;
+                valor = jFTValorImpostos.getText();
+                valor = valor.replace(".", "").replace(",", ".");
+                valor_inserido = Double.parseDouble(valor);
+       
                 valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1));
                 jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
             }
@@ -1418,6 +1427,26 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCBMoedaFretePopupMenuWillBecomeInvisible
 
+    private void jBTAddparaProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddparaProjetoActionPerformed
+        int linha = jTBComponentes.getSelectedRow();     
+        if(linha >= 0){
+            String componente = jTBComponentes.getValueAt(linha, 3).toString();
+            int qntd_comp = Integer.parseInt(jTBComponentes.getValueAt(linha, 8).toString());
+            int id_componente = Integer.parseInt(jTBComponentes.getValueAt(linha, 2).toString());
+            int id_comp_fornec = Integer.parseInt(jTBComponentes.getValueAt(linha, 1).toString());
+            comp_fornec.setId_componente(id_componente);
+            comp_fornec.setDescricao(componente);
+            comp_fornec.setQntd_componente(qntd_comp);
+            comp_fornec.setSituacao(situacao);
+            comp_vers_proj.setId_comp_fornec(id_comp_fornec);
+            comp_vers_proj.setTabela(jTBComponentesProjetos);
+            new InterfaceSelecionaProjeto().setVisible(true);
+        }else{
+            JOptionPane.showMessageDialog(null, "Selecione um componente!");
+        }
+        
+    }//GEN-LAST:event_jBTAddparaProjetoActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1461,7 +1490,6 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JButton jBTNovoFornecedor;
     private javax.swing.JButton jBTRemoveComponente;
     private javax.swing.JButton jBTRemoveComponenteProjeto;
-    private javax.swing.JButton jBTVerDatasheet;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -1472,6 +1500,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JComboBox jCBMoedaFrete;
     private javax.swing.JComboBox jCBMoedaImpostos;
     private javax.swing.JComboBox jCBTipoConsulta;
+    private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JFormattedTextField jFTData;
     private javax.swing.JFormattedTextField jFTFreteReais;
     private javax.swing.JFormattedTextField jFTImpostosReais;
@@ -1505,7 +1534,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JTabbedPane jTBComponente;
     private javax.swing.JTable jTBComponentes;
     private javax.swing.JTable jTBComponentesProjetos;
-    private javax.swing.JTable jTBConsultaComponentes;
+    private javax.swing.JTable jTBConsultaFornecimentos;
     private javax.swing.JTextField jTFDescrição;
     private javax.swing.JTextField jTFFiltro;
     private javax.swing.JTextField jTFIDFornecimento;
@@ -1533,5 +1562,83 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         return fornecimento;
     }
+    
+     public ComponenteFornecimento getCompFornec(){
+        
+        comp_fornec = new ComponenteFornecimento();
+        
+        Date data_atual = new Date(System.currentTimeMillis());
+        
+        int id_fornecimento = Integer.parseInt(jTFIDFornecimento.getText());
 
+        comp_fornec.setId_fornecimento(id_fornecimento);
+        comp_fornec.setData_alter(data_atual);
+        comp_fornec.setTabela(jTBComponentes);
+
+        return comp_fornec;
+    }
+     
+    public ComponenteVersaoProjeto getCompVersProj(){
+
+       comp_vers_proj = new ComponenteVersaoProjeto();
+
+       Date data_atual = new Date(System.currentTimeMillis());
+
+       int id_fornecimento = Integer.parseInt(jTFIDFornecimento.getText());
+
+       comp_vers_proj.setId_fornecimento(id_fornecimento);
+       comp_vers_proj.setData_alter(data_atual);
+       comp_vers_proj.setTabela(jTBComponentesProjetos);
+
+       return comp_vers_proj;
+   }
+    
+    class EvenOddRenderer implements TableCellRenderer {
+
+    public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+ 
+    public Component getTableCellRendererComponent(JTable table, Object value,
+    boolean isSelected, boolean hasFocus, int row, int column) {
+    Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
+        table, value, isSelected, hasFocus, row, column);
+    ((JLabel) renderer).setOpaque(true);
+    Color foreground, background;
+    int totcolun = table.getColumnCount();
+   
+    Integer exc = 0;
+    Boolean sel = false;
+
+ 
+    exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
+    sel = (Boolean) table.getValueAt(row, 0);
+    
+    if(isSelected){
+        if(exc == 1){
+           background = Color.RED;
+           renderer.setBackground(background);
+        }
+        //garante que quando estiver selecinado é true e caso contrario e false (nunca sera nulo)
+        
+        if(sel != null){
+            if(sel == true){
+                table.setValueAt(true, row, 0);
+            }else{
+                table.setValueAt(false, row, 0);
+            }
+            
+        }       
+     }
+   
+     if(!isSelected){
+        if(exc == 1){
+            background = Color.RED;
+            renderer.setBackground(background);
+        }else{
+            background = Color.WHITE;
+            renderer.setBackground(background);
+        }
+     }
+    return renderer;
+  }
+}
 }

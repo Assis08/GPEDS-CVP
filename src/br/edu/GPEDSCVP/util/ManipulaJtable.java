@@ -123,7 +123,8 @@ public class ManipulaJtable {
                 JOptionPane.YES_NO_OPTION);
         if (opcao == JOptionPane.YES_OPTION) {
         //Percorre linhas da jtable
-        for(int i =0; i < totlinha; i++){
+        for(int i = totlinha-1; i >= 0; i--){
+
             sel = (Boolean) tabela.getValueAt(i, 0);
             //Se a linha estiver selecionada
             if(sel != null){

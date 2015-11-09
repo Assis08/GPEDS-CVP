@@ -21,6 +21,7 @@ public class Projeto {
     private Date data_alter;
     private JTable tabela;
     private ResultSet retorno;
+    private int[] array_projetos;
 
     public Projeto() {
         id_projeto = 0;
@@ -75,5 +76,13 @@ public class Projeto {
 
     public void setRetorno(ResultSet retorno) {
         this.retorno = retorno;
+    }
+
+    public int getArray_projetos(int posicao) {
+        return array_projetos[posicao];
+    }
+
+    public void setArray_projetos(int[] array_projetos) {
+        this.array_projetos = array_projetos;
     }
 }
