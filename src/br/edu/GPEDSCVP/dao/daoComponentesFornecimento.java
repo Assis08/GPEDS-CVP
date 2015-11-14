@@ -10,7 +10,10 @@ import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.Rotinas;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +26,8 @@ public class daoComponentesFornecimento {
     
     ConexaoBanco conecta_banco;
     UltimaSequencia ultima;
+    daoMoeda dao_moeda = new daoMoeda();
+    FormatarData data = new FormatarData();
     
     public daoComponentesFornecimento()
     {
@@ -43,9 +48,12 @@ public class daoComponentesFornecimento {
         DefaultTableModel TabelaComponentesFornecidos = (DefaultTableModel) componente.getTabela().getModel();
         ultima = new UltimaSequencia();
         
+        DecimalFormat dFormat = new DecimalFormat("#,###,##0.00") ;
         Boolean sel = false;
-        String valor_unit;
-        String total;
+        Double valor_unit;
+        Object valor_unit_comp;
+        Double total;
+        Object valor_total_comp;
         Integer id_fornecidos;
       
         int totlinha_comp_fornec = TabelaComponentesFornecidos.getRowCount();
@@ -56,22 +64,22 @@ public class daoComponentesFornecimento {
             TabelaComponentesFornecidos.setNumRows(1);  
             id_fornecidos = ultima.ultimasequencia("COMPONENTES_FORNECIMENTO","ID_COMP_FORNEC"); 
             //formata valores monetários 
-            valor_unit = String.valueOf(componente.getValor_unit());
-            valor_unit = valor_unit.replace(".", ",");
-            
-            total = String.valueOf(componente.getValor_unit() * componente.getQntd_componente());
-            total = total.replace(".", ",");
+            valor_unit = componente.getValor_unit();
+            valor_unit_comp = dFormat.format(valor_unit);
+            //calcula total
+            total = componente.getValor_unit() * componente.getQntd_componente();
+            valor_total_comp = dFormat.format(total);
             //seta valores na jtable
             TabelaComponentesFornecidos.setValueAt(false, 0, 0);
             TabelaComponentesFornecidos.setValueAt(id_fornecidos, 0,1);
             TabelaComponentesFornecidos.setValueAt(componente.getId_componente(), 0, 2);
             TabelaComponentesFornecidos.setValueAt(componente.getDescricao(), 0, 3);
-            TabelaComponentesFornecidos.setValueAt(valor_unit, 0, 4);
+            TabelaComponentesFornecidos.setValueAt(valor_unit_comp, 0, 4);
             TabelaComponentesFornecidos.setValueAt(componente.getId_moeda(), 0, 5);
             TabelaComponentesFornecidos.setValueAt(componente.getMoeda(), 0, 6);
             TabelaComponentesFornecidos.setValueAt(componente.getQntd_componente(), 0, 7);
             TabelaComponentesFornecidos.setValueAt(componente.getQntd_componente(), 0, 8);
-            TabelaComponentesFornecidos.setValueAt(total, 0, 9);
+            TabelaComponentesFornecidos.setValueAt(valor_total_comp, 0, 9);
             TabelaComponentesFornecidos.setValueAt(0, 0, 10);
                         
         }else{
@@ -90,12 +98,12 @@ public class daoComponentesFornecimento {
                     }
                     
                     //formata valores monetários 
-                    valor_unit = String.valueOf(componente.getValor_unit());
-                    valor_unit = valor_unit.replace(".", ",");
-
-                    total = String.valueOf(componente.getValor_unit() * componente.getQntd_componente());
-                    total = total.replace(".", ",");
-
+                    valor_unit = componente.getValor_unit();
+                    valor_unit_comp = dFormat.format(valor_unit);
+                    //calcula total
+                    total = componente.getValor_unit() * componente.getQntd_componente();
+                    valor_total_comp = dFormat.format(total);
+            
                     //adiciona uma linha a mais
                     TabelaComponentesFornecidos.setNumRows(totlinha_comp_fornec+1);  
                      //seta valores na jtable
@@ -103,12 +111,12 @@ public class daoComponentesFornecimento {
                     TabelaComponentesFornecidos.setValueAt(id_fornecidos, totlinha_comp_fornec,1);
                     TabelaComponentesFornecidos.setValueAt(componente.getId_componente(), totlinha_comp_fornec, 2);
                     TabelaComponentesFornecidos.setValueAt(componente.getDescricao(), totlinha_comp_fornec, 3);
-                    TabelaComponentesFornecidos.setValueAt(valor_unit, totlinha_comp_fornec, 4);
+                    TabelaComponentesFornecidos.setValueAt(valor_unit_comp, totlinha_comp_fornec, 4);
                     TabelaComponentesFornecidos.setValueAt(componente.getId_moeda(), totlinha_comp_fornec, 5);
                     TabelaComponentesFornecidos.setValueAt(componente.getMoeda(), totlinha_comp_fornec, 6);
                     TabelaComponentesFornecidos.setValueAt(componente.getQntd_componente(), totlinha_comp_fornec, 7);
                     TabelaComponentesFornecidos.setValueAt(componente.getQntd_componente(), totlinha_comp_fornec, 8);
-                    TabelaComponentesFornecidos.setValueAt(total, totlinha_comp_fornec, 9);
+                    TabelaComponentesFornecidos.setValueAt(valor_total_comp, totlinha_comp_fornec, 9);
                     TabelaComponentesFornecidos.setValueAt(0, totlinha_comp_fornec, 10);
                 }
             }  
@@ -214,4 +222,119 @@ public class daoComponentesFornecimento {
             JOptionPane.showMessageDialog(null, "Nehuma linha selecionada!");
         }
     }
+    
+    //Consulta pelo codigo de componentes mecânicos
+    public void consultaCompFornec(ComponenteFornecimento componente){
+        conecta_banco.executeSQL("select componentes_fornecimento.id_comp_fornec,componentes_fornecimento.id_fornecimento,componentes_fornecimento.id_componente,"
+                                + "componente.descricao, componente.tipo," 
+                                +" componentes_fornecimento.id_moeda, moeda.descricao,componentes_fornecimento.valor_unit,null,qntd_componente,"
+                                +" null,componentes_fornecimento.data_alter from componentes_fornecimento"
+                                +" inner join componente on (componente.id_componente = componentes_fornecimento.id_componente)" 
+                                +" inner join moeda on (moeda.id_moeda = componentes_fornecimento.id_moeda)"
+                                +" where id_fornecimento = "+componente.getId_fornecimento()+" group by (componentes_fornecimento.id_comp_fornec)");
+        
+                                componente.setRetorno(conecta_banco.resultset);
+    }
+    
+     public void calculaImpostoUnit (ComponenteFornecimento componentes, JTable tabela_fornec){
+        
+        DecimalFormat dFormat = new DecimalFormat("#,###,##0.00") ;
+        Double valor_frete;
+        Double valor_imposto;
+        Integer id_moeda_frete;
+        Integer id_moeda_imp;
+        Double total_reais = 0.0;
+        Object imposto_unit;
+        String data_fornec;
+        
+
+        DefaultTableModel tabela_componentes = (DefaultTableModel) componentes.getTabela().getModel();
+        DefaultTableModel tabela_fornecimento = (DefaultTableModel) tabela_fornec.getModel();
+        
+        int totlinha_fornec = tabela_fornecimento.getRowCount();
+        int totlinha_comp = tabela_componentes.getRowCount();
+        
+        int linha = tabela_fornec.getSelectedRow();
+
+        valor_frete = Double.parseDouble(tabela_fornecimento.getValueAt(linha, 6).toString().replace(".", "").replace(",", "."));
+        id_moeda_frete = Integer.parseInt(tabela_fornecimento.getValueAt(linha, 4).toString());
+        valor_imposto = Double.parseDouble(tabela_fornecimento.getValueAt(linha, 9).toString().replace(".", "").replace(",", "."));
+        id_moeda_imp = Integer.parseInt(tabela_fornecimento.getValueAt(linha, 7).toString());
+        data_fornec = tabela_fornecimento.getValueAt(linha, 10).toString().toString();
+       
+        total_reais = total_reais + dao_moeda.converteparaReais(valor_frete, id_moeda_frete,data.stringParaTimeStamp(data_fornec));
+        total_reais = total_reais + dao_moeda.converteparaReais(valor_imposto, id_moeda_imp,data.stringParaTimeStamp(data_fornec));
+
+        imposto_unit =  dFormat.format(total_reais / totlinha_comp);
+        
+        for (int i = 0; i < totlinha_comp; i++){
+            tabela_componentes.setValueAt(imposto_unit, i, 7);
+        } 
+     }
+     
+     public void calculaTotalCompFornec (ComponenteFornecimento componentes, JTable tabela_fornec){
+        
+        DecimalFormat dFormat = new DecimalFormat("#,###,##0.00") ;
+        Integer id_moeda_valor_unit = 0;
+        Double valor_unitario = 0.0;
+        Double imposto_unitario = 0.0;
+        Integer qntd = 0;
+        Double total = 0.0;
+        Object total_comp_fornec;
+        String data_fornec;
+        
+
+        DefaultTableModel tabela_componentes = (DefaultTableModel) componentes.getTabela().getModel();
+        DefaultTableModel tabela_fornecimento = (DefaultTableModel) tabela_fornec.getModel();
+        
+        int linha = tabela_fornec.getSelectedRow();
+
+        data_fornec = tabela_fornecimento.getValueAt(linha, 10).toString().toString();
+        
+        int totlinha_comp = tabela_componentes.getRowCount();
+
+        for (int i = 0; i < totlinha_comp; i++){
+            
+            id_moeda_valor_unit = Integer.parseInt(tabela_componentes.getValueAt(i, 4).toString());
+            
+            valor_unitario = Double.parseDouble(tabela_componentes.getValueAt(i, 6).toString().replace(".", "").replace(",", "."));
+            imposto_unitario = Double.parseDouble(tabela_componentes.getValueAt(i, 7).toString().replace(".", "").replace(",", "."));
+            qntd = Integer.parseInt(tabela_componentes.getValueAt(i, 8).toString());
+           
+            // converte para reais
+            total = total + dao_moeda.converteparaReais(valor_unitario, id_moeda_valor_unit,data.stringParaTimeStamp(data_fornec));
+            // multiplica pela quantidade fornecida
+            total = total * qntd;
+            //acrescenta mais o imposto unitário
+            total = total + imposto_unitario;
+
+            total_comp_fornec =  dFormat.format(total);
+            
+            tabela_componentes.setValueAt(total_comp_fornec, i, 9);
+            
+            //reseta valores
+            total = 0.0;
+            total_comp_fornec = 0;
+        } 
+     }
+     
+      public Object calculaTotalFornec (ComponenteFornecimento componentes){
+        
+        DecimalFormat dFormat = new DecimalFormat("#,###,##0.00") ;
+        Double total = 0.0;
+        Object total_fonec;
+
+        DefaultTableModel tabela_componentes = (DefaultTableModel) componentes.getTabela().getModel();
+        
+        int totlinha_comp = tabela_componentes.getRowCount();
+
+        for (int i = 0; i < totlinha_comp; i++){
+           
+            total = total + Double.parseDouble(tabela_componentes.getValueAt(i, 9).toString().replace(".", "").replace(",", "."));
+        }
+        total_fonec = dFormat.format(total);
+        total = 0.0;
+        return total_fonec;
+        
+     }
 }

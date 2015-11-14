@@ -60,6 +60,7 @@ public class ManipulaJtable {
 
     public void PreencherJtableGenerico(JTable tabela, String campos[], ResultSet resultSet) {
         FormatarData data = new FormatarData();
+        DecimalFormat dFormat = new DecimalFormat("#,###,##0.00") ;
         DefaultTableModel modelo = (DefaultTableModel) tabela.getModel();
         modelo.setNumRows(0);
         //tabela.addPropertyChangeListener();
@@ -70,7 +71,9 @@ public class ManipulaJtable {
                 Object[] row = new Object[len];
                 for (int i = 0; i < len; i++) {
                     //Verifica o tipo do dado para formatar e preencher na Jtable
-                    if (resultSet.getObject(campos[i]) instanceof Timestamp) {
+                    if(resultSet.getObject(campos[i]) instanceof  Double){
+                        row[i] = dFormat.format(resultSet.getObject(campos[i]));
+                    }else if (resultSet.getObject(campos[i]) instanceof Timestamp) {
                         row[i] = data.organizaData(resultSet.getObject(campos[i]));
                     } else if (resultSet.getObject(campos[i]) instanceof java.sql.Date) {
                         row[i] = data.organizaData(resultSet.getObject(campos[i]));

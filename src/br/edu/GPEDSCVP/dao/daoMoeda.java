@@ -11,8 +11,10 @@ import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.ExcessaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.sql.Timestamp;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -186,18 +188,27 @@ public class daoMoeda {
         }
      }
     
-    public double converteparaReais (double valor, int id_moeda){
-        conecta_banco.executeSQL("select valor, data_atualizacao, id_moeda from atualizacao_moeda"
-                               + " where data_atualizacao = (select max(data_atualizacao) from atualizacao_moeda where id_moeda = "+id_moeda+")");
+    public double converteparaReais (double valor, int id_moeda, Timestamp data){
+        //converte de acordo com a data informada
        
-        try {        
-            conecta_banco.resultset.first();
-            double valor_moeda = 0;
-            valor_moeda = conecta_banco.resultset.getDouble("valor");
-            return (valor_moeda * valor);
-        } catch (SQLException ex) {
-           JOptionPane.showMessageDialog(null, "Falha ao converter moeda");
-        }
+             if(data != null){
+                conecta_banco.executeSQL("select valor, data_atualizacao, id_moeda from atualizacao_moeda"
+                               + " where data_atualizacao = (select max(data_atualizacao) from atualizacao_moeda where id_moeda = "+id_moeda+""
+                               + " and data_atualizacao <= '"+data+"')");
+            //converte de acordo com a ultima atualização da moeda    
+            }else{
+                 conecta_banco.executeSQL("select valor, data_atualizacao, id_moeda from atualizacao_moeda"
+                                   + " where data_atualizacao = (select max(data_atualizacao) from atualizacao_moeda where id_moeda = "+id_moeda+")");
+            }
+
+            try {        
+                conecta_banco.resultset.first();
+                double valor_moeda = 0;
+                valor_moeda = conecta_banco.resultset.getDouble("valor");
+                return (valor_moeda * valor);
+            } catch (SQLException ex) {
+               JOptionPane.showMessageDialog(null, "Falha ao converter moeda");
+            }
         return 0;
     }
 }

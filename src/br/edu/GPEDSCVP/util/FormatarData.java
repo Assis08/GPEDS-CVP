@@ -9,6 +9,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 
 /**
  * Classe útil para conversão de tipos
@@ -59,6 +60,7 @@ public class FormatarData {
             return null;
         }
     }
+    
 
     /**
      * Converte para String um Date no formato "dd/MM/yyyy"
@@ -134,6 +136,23 @@ public class FormatarData {
             return null;
         }
     }
+    /**
+     * Converte uma String no formato dd/MM/yyyy hh:mm:ss.SSS para um TimeStamp
+     * @param data
+     * @return 
+     */
+    public static Timestamp stringParaTimeStamp(String data){
+        try{
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yy hh:mm:ss");
+            Date parsedDate = dateFormat.parse(data);
+            Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+            return timestamp;
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Falha ao converter data");
+        }
+        return null;
+    }
+
     
    
      /** retorna a data atual 
@@ -183,7 +202,7 @@ public class FormatarData {
     //Organiza uma data que não esta na sequencia adequada para ser vista pelo usuário (datas que retornam do banco)
     public String organizaData(Object data){
         
-        SimpleDateFormat formatTimeStamp = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+        SimpleDateFormat formatTimeStamp = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         SimpleDateFormat formatDate = new SimpleDateFormat("dd/MM/yyyy");
         
         if (data instanceof Timestamp) {

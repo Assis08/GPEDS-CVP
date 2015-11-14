@@ -126,6 +126,4 @@ public class Fornecimento {
     public void setRetorno(ResultSet retorno) {
         this.retorno = retorno;
     }
-    
-    
 }

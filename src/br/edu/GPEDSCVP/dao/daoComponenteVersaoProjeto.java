@@ -59,14 +59,15 @@ public class daoComponenteVersaoProjeto {
             //seta valores na jtable
             TabelaCompVersProj.setValueAt(false, 0, 0);
             TabelaCompVersProj.setValueAt(id_componentes, 0,1);
-            TabelaCompVersProj.setValueAt(componente_projeto.getId_projeto(), 0, 2);
-            TabelaCompVersProj.setValueAt(componente_projeto.getCod_vers_projeto(), 0, 3);
-            TabelaCompVersProj.setValueAt(componente_projeto.getProjeto(), 0, 4);
-            TabelaCompVersProj.setValueAt(componente_projeto.getVersao(), 0, 5);
-            TabelaCompVersProj.setValueAt(componente_projeto.getId_componente(), 0, 6);
-            TabelaCompVersProj.setValueAt(componente_projeto.getComponente(), 0, 7);
-            TabelaCompVersProj.setValueAt(componente_projeto.getQntd_para_projeto(), 0, 8);
-            TabelaCompVersProj.setValueAt(0, 0, 9);
+            TabelaCompVersProj.setValueAt(componente_projeto.getId_comp_fornec(),0,2);
+            TabelaCompVersProj.setValueAt(componente_projeto.getId_projeto(), 0, 3);
+            TabelaCompVersProj.setValueAt(componente_projeto.getCod_vers_projeto(), 0, 4);
+            TabelaCompVersProj.setValueAt(componente_projeto.getProjeto(), 0, 5);
+            TabelaCompVersProj.setValueAt(componente_projeto.getVersao(), 0, 6);
+            TabelaCompVersProj.setValueAt(componente_projeto.getId_componente(), 0, 7);
+            TabelaCompVersProj.setValueAt(componente_projeto.getComponente(), 0, 8);
+            TabelaCompVersProj.setValueAt(componente_projeto.getQntd_para_projeto(), 0, 9);
+            TabelaCompVersProj.setValueAt(0, 0, 10);
          
             //processo para dar baixa na quantidade fornecida
             for (int i_comp_fornec = 0; i_comp_fornec < totlinha_comp_fornec; i_comp_fornec++){
@@ -84,10 +85,10 @@ public class daoComponenteVersaoProjeto {
             for (int i_comp = 0; i_comp < totlinha_comp_proj; i_comp++){
                 
                 //se o componente ja existir entao sobreescreve apenas a quantidade 
-                if(Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 6).toString()) == componente_projeto.getId_componente()&&
-                   Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 3).toString()) == componente_projeto.getCod_vers_projeto()) {
-                   Integer qntd_atual = Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 8).toString());
-                   TabelaCompVersProj.setValueAt(qntd_atual+componente_projeto.getQntd_para_projeto(), i_comp, 8);
+                if(Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 7).toString()) == componente_projeto.getId_componente()&&
+                   Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 4).toString()) == componente_projeto.getCod_vers_projeto()) {
+                   Integer qntd_atual = Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 9).toString());
+                   TabelaCompVersProj.setValueAt(qntd_atual+componente_projeto.getQntd_para_projeto(), i_comp, 9);
                    
                    //processo para dar baixa na quantidade fornecida
                     for (int i_comp_fornec = 0; i_comp_fornec < totlinha_comp_fornec; i_comp_fornec++){
@@ -119,14 +120,15 @@ public class daoComponenteVersaoProjeto {
                         //seta valores na jtable
                         TabelaCompVersProj.setValueAt(false, totlinha_comp_proj, 0);
                         TabelaCompVersProj.setValueAt(id_componentes, totlinha_comp_proj,1);
-                        TabelaCompVersProj.setValueAt(componente_projeto.getId_projeto(), totlinha_comp_proj, 2);
-                        TabelaCompVersProj.setValueAt(componente_projeto.getCod_vers_projeto(), totlinha_comp_proj, 3);
-                        TabelaCompVersProj.setValueAt(componente_projeto.getProjeto(), totlinha_comp_proj, 4);
-                        TabelaCompVersProj.setValueAt(componente_projeto.getVersao(), totlinha_comp_proj, 5);
-                        TabelaCompVersProj.setValueAt(componente_projeto.getId_componente(), totlinha_comp_proj, 6);
-                        TabelaCompVersProj.setValueAt(componente_projeto.getComponente(), totlinha_comp_proj, 7);
-                        TabelaCompVersProj.setValueAt(componente_projeto.getQntd_para_projeto(), totlinha_comp_proj, 8);
-                        TabelaCompVersProj.setValueAt(0, totlinha_comp_proj, 9);
+                        TabelaCompVersProj.setValueAt(componente_projeto.getId_comp_fornec(),totlinha_comp_proj,2);
+                        TabelaCompVersProj.setValueAt(componente_projeto.getId_projeto(), totlinha_comp_proj, 3);
+                        TabelaCompVersProj.setValueAt(componente_projeto.getCod_vers_projeto(), totlinha_comp_proj, 4);
+                        TabelaCompVersProj.setValueAt(componente_projeto.getProjeto(), totlinha_comp_proj, 5);
+                        TabelaCompVersProj.setValueAt(componente_projeto.getVersao(), totlinha_comp_proj, 6);
+                        TabelaCompVersProj.setValueAt(componente_projeto.getId_componente(), totlinha_comp_proj, 7);
+                        TabelaCompVersProj.setValueAt(componente_projeto.getComponente(), totlinha_comp_proj, 8);
+                        TabelaCompVersProj.setValueAt(componente_projeto.getQntd_para_projeto(), totlinha_comp_proj, 9);
+                        TabelaCompVersProj.setValueAt(0, totlinha_comp_proj, 10);
 
                         //processo para dar baixa na quantidade fornecida
                         for (int i_comp_fornec = 0; i_comp_fornec < totlinha_comp_fornec; i_comp_fornec++){
@@ -147,6 +149,7 @@ public class daoComponenteVersaoProjeto {
     public void gravarCompVersProj (ComponenteVersaoProjeto componentes){
 
        Integer id_comp_vers;
+       Integer id_comp_fornec;
        Integer id_projeto;
        Integer cod_vers_projeto;
        Integer id_componente;
@@ -157,11 +160,12 @@ public class daoComponenteVersaoProjeto {
        for (int i = 0; i < totlinha; i++){
 
            id_comp_vers = Integer.parseInt(tabela.getValueAt(i, 1).toString());
-           id_projeto = Integer.parseInt(tabela.getValueAt(i, 2).toString());
-           cod_vers_projeto = Integer.parseInt(tabela.getValueAt(i, 3).toString());
-           id_componente = Integer.parseInt(tabela.getValueAt(i, 6).toString());
-           qntd_para_projeto = Integer.parseInt(tabela.getValueAt(i, 8).toString());
-           
+           id_comp_fornec = Integer.parseInt(tabela.getValueAt(i, 2).toString());
+           id_projeto = Integer.parseInt(tabela.getValueAt(i, 3).toString());
+           cod_vers_projeto = Integer.parseInt(tabela.getValueAt(i, 4).toString());
+           id_componente = Integer.parseInt(tabela.getValueAt(i, 7).toString());
+           qntd_para_projeto = Integer.parseInt(tabela.getValueAt(i, 9).toString());
+
            //int sequencia = (Integer) (ultima.ultimasequencia("COMPOSICAO_COMPONENTE","ID_SUBCOMPONENTE"));
            conecta_banco.executeSQL("INSERT INTO componentes_versao_projeto (id_comp_versao,id_projeto, cod_vers_projeto, id_fornecimento, id_componente,"
                    + "id_comp_fornec,qntd_para_projeto, qntd_no_projeto, situacao, data_alter) "
@@ -171,11 +175,14 @@ public class daoComponenteVersaoProjeto {
            cod_vers_projeto,
            componentes.getId_fornecimento(),
            id_componente,
-           componentes.getId_comp_fornec(),
+           id_comp_fornec,
            qntd_para_projeto,
            0,
            "A",
            FormatarData.dateParaTimeStamp(componentes.getData_alter()));
+           
+          
+           
        }
     }
     
@@ -206,8 +213,8 @@ public class daoComponenteVersaoProjeto {
             //Se a linha estiver selecionada
             if(sel != null){
                 if(sel == true){
-                    id_componente = Integer.parseInt(tabela.getValueAt(i, 6).toString());
-                    qntd_add = Integer.parseInt(tabela.getValueAt(i, 8).toString());
+                    id_componente = Integer.parseInt(tabela.getValueAt(i, 7).toString());
+                    qntd_add = Integer.parseInt(tabela.getValueAt(i, 9).toString());
                     //ativa flag que achou uma linha selecionada
                     achou = true;
                     if(situacao == Rotinas.ALTERAR){

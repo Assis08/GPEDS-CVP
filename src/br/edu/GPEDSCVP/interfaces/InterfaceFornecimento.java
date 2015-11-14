@@ -133,6 +133,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBComponentes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBComponentesProjetos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBConsultaFornecimentos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         
         //seta mascaras nos campos monetários
         valida_campos.formataMonetario(jFTValorFrete);
@@ -226,6 +227,11 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         jBTBuscar = new javax.swing.JButton();
         jCBTipoConsulta = new javax.swing.JComboBox();
         jLabel15 = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTBConsultaCompFornec = new javax.swing.JTable();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        jTFTotalFornecimento = new javax.swing.JTextField();
 
         jCheckBox1.setText("jCheckBox1");
 
@@ -413,14 +419,14 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
             },
             new String [] {
-                "sel", "ID Componentes", "ID Projeto", "ID Versão", "Projeto", "Versão", "ID Componente", "Componente", "Qntde", "exc"
+                "sel", "ID Componentes", "ID Fornecidos", "ID Projeto", "ID Versão", "Projeto", "Versão", "ID Componente", "Componente", "Qntde", "exc"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, false
+                true, false, false, false, false, false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -433,9 +439,9 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         });
         jScrollPane4.setViewportView(jTBComponentesProjetos);
         if (jTBComponentesProjetos.getColumnModel().getColumnCount() > 0) {
-            jTBComponentesProjetos.getColumnModel().getColumn(9).setMinWidth(0);
-            jTBComponentesProjetos.getColumnModel().getColumn(9).setPreferredWidth(0);
-            jTBComponentesProjetos.getColumnModel().getColumn(9).setMaxWidth(0);
+            jTBComponentesProjetos.getColumnModel().getColumn(10).setMinWidth(0);
+            jTBComponentesProjetos.getColumnModel().getColumn(10).setPreferredWidth(0);
+            jTBComponentesProjetos.getColumnModel().getColumn(10).setMaxWidth(0);
         }
 
         jLabel10.setText("Componentes para Projetos:");
@@ -718,6 +724,9 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBConsultaFornecimentosMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jTBConsultaFornecimentosMouseEntered(evt);
+            }
         });
         jScrollPane1.setViewportView(jTBConsultaFornecimentos);
 
@@ -735,9 +744,37 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
-        jCBTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Geral", "Componente", "Projeto" }));
+        jCBTipoConsulta.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Fornecimento", "Componente", "Projeto" }));
 
         jLabel15.setText("Tipo:");
+
+        jTBConsultaCompFornec.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID Componentes", "ID Componente", "Descrição", "Tipo", "ID Moeda", "Moeda", "Valor Unit", "Imposto Unit (R$)", "Qntde", "Total R$", "Última alteração"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTBConsultaCompFornec.setName("Componentes"); // NOI18N
+        jTBConsultaCompFornec.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTBConsultaCompFornecMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(jTBConsultaCompFornec);
+
+        jLabel9.setText("Componentes:");
+
+        jLabel11.setText("Total R$ :");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -747,25 +784,34 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addComponent(jCBBuscarPor, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(jLabel15))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCBTipoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(7, 7, 7)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jBTBuscar))
-                            .addComponent(jLabel29))
-                        .addGap(0, 165, Short.MAX_VALUE)))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel14)
+                                    .addComponent(jCBBuscarPor, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(4, 4, 4)
+                                        .addComponent(jLabel15))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jCBTipoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(7, 7, 7)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addComponent(jTFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, 305, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jBTBuscar))
+                                    .addComponent(jLabel29)))
+                            .addComponent(jLabel9))
+                        .addGap(0, 165, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel11)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFTotalFornecimento, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -785,8 +831,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                             .addComponent(jCBTipoConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel15))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(366, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(jTFTotalFornecimento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jTBComponente.addTab("Consulta", jPanel1);
@@ -1109,7 +1163,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private void jBTRemoveComponenteProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComponenteProjetoActionPerformed
         if (valida_campos.VerificaJtable(jTBComponentesProjetos) == 1) {
             int linha = jTBComponentesProjetos.getSelectedRow();
-            Integer exc = Integer.parseInt(jTBComponentesProjetos.getValueAt(linha, 9).toString());
+            Integer exc = Integer.parseInt(jTBComponentesProjetos.getValueAt(linha, 10).toString());
             //se não for um item removido
             if (exc == 0) {
                 dao_comp_vers.removeAtualizaItens(jTBComponentesProjetos,jTBComponentes, situacao);
@@ -1126,24 +1180,28 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         //recupera a linha clicada
         int linha = jTBConsultaFornecimentos.getSelectedRow();
-        Integer id_comp = Integer.parseInt(jTBConsultaFornecimentos.getValueAt(linha, 0).toString());
+        Integer id_fornec = Integer.parseInt(jTBConsultaFornecimentos.getValueAt(linha, 0).toString());
 
-        //busca composição do componente clicado
-        composicao.setId_componente(id_comp);
-        dao_composicao.consultaCodigoComponente(composicao);
-
-        //busca fornecedores do componente clicado
-        fornec_comp.setId_componente(id_comp);
-        dao_fornec_comp.consultaFornecedoresComponente(fornec_comp);
+        //busca componentes do fornecimento clicado
+        comp_fornec.setId_fornecimento(id_fornec);
+        comp_fornec.setTabela(jTBConsultaCompFornec);
+        dao_comp_fornec.consultaCompFornec(comp_fornec);
 
         if (evt.getClickCount() == 1) {
 
             //Preenche na JTABLE os dados dos componentes cadastrados
-            Jtable.PreencherJtableGenerico(jTBConsultaComposicao, new String[]{"id_subcomponente", "tipo", "componente.descricao", "material.id_material", "material.descricao", "qntd"}, composicao.getRetorno());
-            Jtable.ajustarColunasDaTabela(jTBConsultaComposicao);
-            //Preenche na JTABLE os dados dos fornecedores dos componentes
-            Jtable.PreencherJtableGenerico(jTBConsultaFornecedores, new String[]{"id_pessoa", "nome", "cpf_cnpj", "site"}, fornec_comp.getRetorno());
-            Jtable.ajustarColunasDaTabela(jTBConsultaFornecedores);
+            Jtable.PreencherJtableGenerico(jTBConsultaCompFornec, new String[]{"componentes_fornecimento.id_comp_fornec", "componentes_fornecimento.id_componente", 
+                "componente.descricao", "componente.tipo", "componentes_fornecimento.id_moeda","moeda.descricao","componentes_fornecimento.valor_unit","null","qntd_componente","null","componentes_fornecimento.data_alter"}, comp_fornec.getRetorno());
+            Jtable.ajustarColunasDaTabela(jTBConsultaCompFornec);
+            
+            //calcula imposto unitário de cada componente listado no fornecimento
+            dao_comp_fornec.calculaImpostoUnit(comp_fornec, jTBConsultaFornecimentos);
+            
+            //calcula o valor total do componente no fornecimento
+            dao_comp_fornec.calculaTotalCompFornec(comp_fornec, jTBConsultaFornecimentos);
+            
+            //Seta na field de total, o calculo do total do fornecimento selecionado
+            jTFTotalFornecimento.setText(dao_comp_fornec.calculaTotalFornec(comp_fornec).toString());
 
             //Verifica se houve 2 cliques do mouse
         }else  if (evt.getClickCount() == 2){
@@ -1222,102 +1280,102 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 int linha = jTBConsultaFornecimentos.getSelectedRow();
                 int id_busca = 0;
                 String ds_busca = "";
+                
+                //Limpa jtable para nova consulta 
+                valida_campos.LimparJtable(jTBConsultaFornecimentos);
+                valida_campos.LimparJtable(jTBConsultaCompFornec);
 
                 //Tira aspas simples da string para evitar código sql
                 valida_campos.IgnoraSQL(jTFFiltro);
 
                 switch (jCBBuscarPor.getSelectedIndex()) {
-                    //Tipo : Consulta Geral
+                    //Buscar por : Consulta Geral
                     case 0:
-                    //Combobox buscar por: geral
+                    //tipo : Fornecimentos
                     switch(jCBTipoConsulta.getSelectedIndex()){
                         case 0:
-                        //Consulta geral de componentes
-                        dao_fornecimento.consultageral(fornecimento);
-                        break;
+                            //Consulta geral de fornecimentos
+                            dao_fornecimento.consultageral(fornecimento);
+                            break;
                         case 1:
-                        //Consulta geral de componentes por código
-                        try {
-                            id_busca = Integer.parseInt(jTFFiltro.getText());
-                            componente.setId_componente(id_busca);
-                            dao_componente.consultageralCodigo(componente);
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
-                            jTFFiltro.grabFocus();
-                        }
-                        break;
+                            //Consulta geral de fornecimentos
+                            dao_fornecimento.consultageral(fornecimento);
+                            break;
                         case 2:
-                        //Consulta geral de componentes pela descrição
-                        ds_busca = jTFFiltro.getText();
-                        if(!ds_busca.replace(" ", "").equals("")){
-                            componente.setDescricao(ds_busca);
-                            dao_componente.consultageralDescricao(componente);
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
-                            jTFFiltro.grabFocus();
-                        }
+                            //Consulta geral de fornecimentos
+                            dao_fornecimento.consultageral(fornecimento);
                         break;
                     }
                     break;
-                    //Tipo: Eletrônico
+                    //Buscar por : Código
                     case 1:
 
-                    //Combobox buscar por: geral
-                    switch(jCBBuscarPor.getSelectedIndex()){
+                    //Combobox tipo: fornecimento
+                    switch(jCBTipoConsulta.getSelectedIndex()){
                         case 0:
-                        //Consulta geral de componentes
-                        dao_componente.consultageralEletronicos(componente);
-                        break;
+                            //Consulta pelo código do fornecimento
+                            try {
+                                id_busca = Integer.parseInt(jTFFiltro.getText());
+                                fornecimento.setId_fornecimento(id_busca);
+                                dao_fornecimento.consultaCodigoFornec(fornecimento);
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
                         case 1:
-                        //Consulta geral de componentes por código
-                        try {
-                            id_busca = Integer.parseInt(jTFFiltro.getText());
-                            componente.setId_componente(id_busca);
-                            dao_componente.consultaeletronicoCodigo(componente);
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
-                            jTFFiltro.grabFocus();
-                        }
-                        break;
+                            //Consulta de fornecimentos pelo codigo do componente
+                            try {
+                                id_busca = Integer.parseInt(jTFFiltro.getText());
+                                dao_fornecimento.consultaCodigoCompFornec(fornecimento,id_busca);
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
                         case 2:
-                        //Consulta geral de componentes pela descrição
-                        ds_busca = jTFFiltro.getText();
-                        if(!ds_busca.replace(" ", "").equals("")){
-                            componente.setDescricao(ds_busca);
-                            dao_componente.consultaeletronicoDescricao(componente);
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
-                            jTFFiltro.grabFocus();
-                        }
+                             //Consulta de fornecimentos pelo codigo do projeto
+                            try {
+                                id_busca = Integer.parseInt(jTFFiltro.getText());
+                                dao_fornecimento.consultaCodigoProjFornec(fornecimento,id_busca);
+                            } catch (Exception e) {
+                                JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
+                                jTFFiltro.grabFocus();
+                            }
                         break;
                     }
                     break;
 
                     case 2:
 
-                    //Combobox buscar por: geral
-                    switch(jCBBuscarPor.getSelectedIndex()){
+                    //Combobox tipo: fornecimento
+                    switch(jCBTipoConsulta.getSelectedIndex()){
                         case 0:
-                        //Consulta geral de componentes
-                        dao_componente.consultageralMecanicos(componente);
-                        break;
+                            //Consulta fornecimentos em geral pela descrição
+                            ds_busca = jTFFiltro.getText();
+                            if(!ds_busca.replace(" ", "").equals("")){
+                                fornecimento.setDescricao(ds_busca);
+                                dao_fornecimento.consultaDescFornec(fornecimento);
+                            }else{
+                                JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
                         case 1:
-                        //Consulta geral de componentes por código
-                        try {
-                            id_busca = Integer.parseInt(jTFFiltro.getText());
-                            componente.setId_componente(id_busca);
-                            dao_componente.consultamecanicoCodigo(componente);
-                        } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
-                            jTFFiltro.grabFocus();
-                        }
+                        //Consulta fornecimentos em geral pela descrição do componente
+                            ds_busca = jTFFiltro.getText();
+                            if(!ds_busca.replace(" ", "").equals("")){
+                                dao_fornecimento.consultaDescCompFornec(fornecimento,ds_busca);
+                            }else{
+                                JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                jTFFiltro.grabFocus();
+                            }
                         break;
                         case 2:
                         //Consulta geral de componentes pela descrição
                         ds_busca = jTFFiltro.getText();
                         if(!ds_busca.replace(" ", "").equals("")){
-                            componente.setDescricao(ds_busca);
-                            dao_componente.consultamecanicoDescricao(componente);
+                            dao_fornecimento.consultaDescProjFornec(fornecimento,ds_busca);
                         }else{
                             JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
                             jTFFiltro.grabFocus();
@@ -1329,7 +1387,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
             //Preenche na JTABLE os dados dos componentes cadastrados
             Jtable.PreencherJtableGenerico(jTBConsultaFornecimentos, new String[]{"fornecimento.id_fornecimento","fornecimento.descricao","fornecedor.id_pessoa","pessoa.nome",
-            "id_moeda_frete","moeda_frete.unidade","vl_frete","id_moeda_imp","moeda_imposto.unidade","vl_impostos","data_fornecimento","fornecimento.data_alter"}, fornecimento.getRetorno());
+            "id_moeda_frete","moeda_frete.unidade","vl_frete","id_moeda_imp","moeda_imposto.unidade","vl_impostos","fornecimento.data_cadastro","fornecimento.data_alter"}, fornecimento.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBConsultaFornecimentos);
         } else {
             JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar componentes no sistema");
@@ -1363,7 +1421,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 valor = jFTValorFrete.getText();
                 valor = valor.replace(".", "").replace(",", ".");
                 valor_inserido = Double.parseDouble(valor);
-                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1));
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1),null);
                 jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
             }
         }
@@ -1381,7 +1439,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 valor = valor.replace(".", "").replace(",", ".");
                 valor_inserido = Double.parseDouble(valor);
        
-                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1));
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1),null);
                 jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
             }
         }
@@ -1397,7 +1455,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 double valor_inserido;
                 double valor_convertido;
                 valor_inserido = Double.parseDouble(jFTValorImpostos.getText().replace(",", "."));
-                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1));
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1),null);
                 jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
             }
         }else{
@@ -1417,7 +1475,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 double valor_inserido;
                 double valor_convertido;
                 valor_inserido = Double.parseDouble(jFTValorFrete.getText().replace(",", "."));
-                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1));
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1),null);
                 jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
             }
         }else{
@@ -1446,6 +1504,14 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         }
         
     }//GEN-LAST:event_jBTAddparaProjetoActionPerformed
+
+    private void jTBConsultaCompFornecMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaCompFornecMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTBConsultaCompFornecMouseClicked
+
+    private void jTBConsultaFornecimentosMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaFornecimentosMouseEntered
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTBConsultaFornecimentosMouseEntered
 
     /**
      * @param args the command line arguments
@@ -1508,6 +1574,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField jFTValorImpostos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
@@ -1523,21 +1590,25 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPBotoes;
     private javax.swing.JPanel jPFornecimento;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTabbedPane jTBComponente;
     private javax.swing.JTable jTBComponentes;
     private javax.swing.JTable jTBComponentesProjetos;
+    private javax.swing.JTable jTBConsultaCompFornec;
     private javax.swing.JTable jTBConsultaFornecimentos;
     private javax.swing.JTextField jTFDescrição;
     private javax.swing.JTextField jTFFiltro;
     private javax.swing.JTextField jTFIDFornecimento;
+    private javax.swing.JTextField jTFTotalFornecimento;
     // End of variables declaration//GEN-END:variables
 
     public Fornecimento getFornecimento(){
@@ -1554,10 +1625,12 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         fornecimento.setDescricao(jTFDescrição.getText());
         fornecimento.setId_pessoa(fornecedor.getArray_fornecedor(jCBFornecedor.getSelectedIndex() - 1));
         fornecimento.setId_moeda_frete(moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1));
+        System.out.println("id_moeda_frete" + fornecimento.getId_moeda_frete());
         fornecimento.setValor_frete(valor_frete);
         fornecimento.setId_moeda_imp(moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1));
+        System.out.println("id_moeda_imposto" + fornecimento.getId_moeda_frete());
         fornecimento.setValor_impostos(valor_imposto);
-        fornecimento.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
+        fornecimento.setData_cadastro(data_atual);
         fornecimento.setData_alter(data_atual);
 
         return fornecimento;
