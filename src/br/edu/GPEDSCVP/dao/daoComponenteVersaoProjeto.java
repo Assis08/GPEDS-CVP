@@ -224,6 +224,15 @@ public class daoComponenteVersaoProjeto {
                         //habilita e desabilita para atualizar o jtable (caso contrario pinta de vermelho só quando clica na linha)
                         jtable.setEnabled(false);
                         jtable.setEnabled(true);
+                        
+                        for(int i_atualiza =0; i_atualiza < totlinha_atualiza; i_atualiza++){
+                            if(id_componente == Integer.parseInt(tabela_atualiza.getValueAt(i_atualiza, 2).toString())){
+                                qntd_atual = Integer.parseInt(tabela_atualiza.getValueAt(i_atualiza, 8).toString());
+                                tabela_atualiza.setValueAt(qntd_atual + qntd_add, i_atualiza, 8);
+                                break;
+                            }
+                        }
+      
                     }else{
                         for(int i_atualiza =0; i_atualiza < totlinha_atualiza; i_atualiza++){
                             if(id_componente == tabela_atualiza.getValueAt(i_atualiza, 2)){
@@ -241,5 +250,19 @@ public class daoComponenteVersaoProjeto {
             JOptionPane.showMessageDialog(null, "Nehuma linha selecionada!");
         }
         }
+    }
+    
+    //Consulta pelo codigo do fornecimento os componentes fornecidos para os projetos
+    public void consultaCompFornecVersProj(ComponenteVersaoProjeto componente){
+        conecta_banco.executeSQL("select null, id_comp_versao,componentes_versao_projeto.id_comp_fornec,componentes_versao_projeto.id_fornecimento, componentes_versao_projeto.id_projeto,componentes_versao_projeto.cod_vers_projeto,"
+                               + " projeto.descricao,versao_projeto.versao,componentes_versao_projeto.id_componente,componente.descricao,qntd_para_projeto, false from componentes_versao_projeto"
+                               + " inner join versao_projeto on (versao_projeto.cod_vers_projeto = componentes_versao_projeto.cod_vers_projeto)" 
+                               + " inner join projeto on (projeto.id_projeto = versao_projeto.id_projeto)"
+                               + " inner join componentes_fornecimento on (componentes_fornecimento.id_comp_fornec = componentes_versao_projeto.id_comp_fornec)"
+                               + " inner join componente on (componente.id_componente = componentes_fornecimento.id_componente)"
+                               + " where componentes_versao_projeto.id_fornecimento = "+componente.getId_fornecimento()
+                               + " order by id_comp_versao asc");
+        
+                                componente.setRetorno(conecta_banco.resultset);
     }
 }

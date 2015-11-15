@@ -17,8 +17,11 @@ public class Fornecimento {
     
     private int id_fornecimento;
     private int id_moeda_imp;
+    private String ds_moeda_imp;
     private int id_moeda_frete;
+    private String ds_moeda_frete;
     private int id_pessoa;
+    private String ds_pessoa;
     private String descricao;
     private Date data_cadastro;
     private double valor_frete;
@@ -126,4 +129,29 @@ public class Fornecimento {
     public void setRetorno(ResultSet retorno) {
         this.retorno = retorno;
     }
+
+    public String getDs_moeda_imp() {
+        return ds_moeda_imp;
+    }
+
+    public void setDs_moeda_imp(String ds_moeda_imp) {
+        this.ds_moeda_imp = ds_moeda_imp;
+    }
+
+    public String getDs_moeda_frete() {
+        return ds_moeda_frete;
+    }
+
+    public void setDs_moeda_frete(String ds_moeda_frete) {
+        this.ds_moeda_frete = ds_moeda_frete;
+    }
+
+    public String getDs_pessoa() {
+        return ds_pessoa;
+    }
+
+    public void setDs_pessoa(String ds_pessoa) {
+        this.ds_pessoa = ds_pessoa;
+    }
+    
 }

@@ -82,11 +82,9 @@ public class daoMoeda {
         int result;
         
         try {
-            //exclui todas atualizações de valores da moeda
-            String sql = "DELETE FROM ATUALIZACAO_MOEDA WHERE ID_MOEDA = "+moeda.getId_moeda();
-            conecta_banco.atualizarSQL(sql);
+         
             //excluir de moeda
-            sql = "DELETE FROM MOEDA WHERE ID_MOEDA = "+moeda.getId_moeda();
+            String sql = "DELETE FROM MOEDA WHERE ID_MOEDA = "+moeda.getId_moeda();
 
             result = conecta_banco.atualizarSQL(sql);
             

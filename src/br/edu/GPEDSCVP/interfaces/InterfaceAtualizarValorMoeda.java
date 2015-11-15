@@ -68,7 +68,7 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
         new TableCellListener(jTBAtualizarMoedas, new TableCellEditorAction());
         
         //Seta mascara na coluna de valor da jtable
-        Jtable.setarMascara(jTBAtualizarMoedas, jFTMascara, "#.##",3);
+        Jtable.setarMascara(jTBAtualizarMoedas, jFTMascara,3);
         
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBAtualizarMoedas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -86,9 +86,11 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jFTMascara = new javax.swing.JFormattedTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTBAtualizarMoedas = new javax.swing.JTable();
-        jFTMascara = new javax.swing.JFormattedTextField();
+
+        jFTMascara.setText("jFormattedTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Atualização do valor das moedas");
@@ -123,26 +125,18 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
             jTBAtualizarMoedas.getColumnModel().getColumn(5).setMaxWidth(0);
         }
 
-        jFTMascara.setText("jFormattedTextField1");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 377, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jFTMascara, javax.swing.GroupLayout.PREFERRED_SIZE, 1, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jFTMascara, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
-        setSize(new java.awt.Dimension(390, 242));
+        setSize(new java.awt.Dimension(381, 242));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -226,41 +220,48 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
                 if(column == 3 ){
                     try { 
                         //verifica se o valor setado é um valor double
-
-
-                        Double valor = Double.parseDouble(table.getValueAt(row, column).toString());
+                        Double valor = 0.00;    
+                        valor = Double.parseDouble(table.getValueAt(row, column).toString().replace(",", "."));
+                        if(valor > 0){
+                            
+                            table.setValueAt(1, row, 5);
+                            //Seta valor com ponto em vez de virgula
+                            table.setValueAt(valor, row, column);
+                        
                        
-                        table.setValueAt(1, row, 5);
-                        //Seta valor com ponto em vez de virgula
-                        table.setValueAt(valor, row, column);
-                        //Se não for gerente
-                        if (acesso.getIn_gerente() == 0) {
-                            //retorna as permissoes de acesso do usuario  
-                            dao_permissao.retornaDadosPermissao(acesso, permissao);
-                        }
-
-                        //Verifica se o usuario possui permissao para alterar dados dessa tela
-                        if (valida_acesso.verificaAcesso("alterar", acesso, permissao) == true) {
-                            getAtualizacao();
-                            try {
-                                dao_moeda.incluirAtualizacao(atualizacao_moeda);
-                               // JOptionPane.showMessageDialog(null, "Atualizado com Sucesso!");
-
-                                //faz uma consulta geral de moedas no banco
-                                dao_moeda.consultaGeralAtualizacao(atualizacao_moeda);
-                                //preenche dados na jtable
-                                Jtable.PreencherJtableGenerico(jTBAtualizarMoedas, new String[]{"id_moeda", "descricao","unidade","valor", "data_atualizacao","false"}, atualizacao_moeda.getRetorno());
-                                //ajusta largura das colunas
-                                Jtable.ajustarColunasDaTabela(jTBAtualizarMoedas);
-
-                            } catch (SQLException ex) {
-                                JOptionPane.showMessageDialog(null, "Falha ao alterar valores das moedas");
+                            //Se não for gerente
+                            if (acesso.getIn_gerente() == 0) {
+                                //retorna as permissoes de acesso do usuario  
+                                dao_permissao.retornaDadosPermissao(acesso, permissao);
                             }
 
+                            //Verifica se o usuario possui permissao para alterar dados dessa tela
+                            if (valida_acesso.verificaAcesso("alterar", acesso, permissao) == true) {
+                                getAtualizacao();
+                                try {
+                                    dao_moeda.incluirAtualizacao(atualizacao_moeda);
+                                   // JOptionPane.showMessageDialog(null, "Atualizado com Sucesso!");
+
+                                    //faz uma consulta geral de moedas no banco
+                                    dao_moeda.consultaGeralAtualizacao(atualizacao_moeda);
+                                    //preenche dados na jtable
+                                    Jtable.PreencherJtableGenerico(jTBAtualizarMoedas, new String[]{"id_moeda", "descricao","unidade","valor", "data_atualizacao","false"}, atualizacao_moeda.getRetorno());
+                                    //ajusta largura das colunas
+                                    Jtable.ajustarColunasDaTabela(jTBAtualizarMoedas);
+
+                                } catch (SQLException ex) {
+                                    JOptionPane.showMessageDialog(null, "Falha ao alterar valores das moedas");
+                                }
+
+                            }else{
+                                JOptionPane.showMessageDialog(null, "Você não possui permissões para alterar valores das moedas no sistema");
+                                table.setValueAt(oldValue, row, column);
+                            } 
+                        
                         }else{
-                            JOptionPane.showMessageDialog(null, "Você não possui permissões para alterar valores das moedas no sistema");
+                            JOptionPane.showMessageDialog(null, "O valor da moeda deve ser maior que zero!");
                             table.setValueAt(oldValue, row, column);
-                        } 
+                        }
                         
                     } catch (Exception e) {
                         //se não for double, emite a mensagem e retorna para o valor que estava

@@ -101,6 +101,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         jTBComposicao.setDefaultRenderer(Object.class, renderer);
         jTBFornecedores.setDefaultRenderer(Object.class, renderer);
         
+        
         //implementa Listener para edição da jtable
         new TableCellListener(jTBComposicao, new TableCellEditorAction());
         
@@ -1755,52 +1756,52 @@ public class InterfaceComponente extends javax.swing.JFrame {
      
     class EvenOddRenderer implements TableCellRenderer {
 
-    public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
- 
-    public Component getTableCellRendererComponent(JTable table, Object value,
-    boolean isSelected, boolean hasFocus, int row, int column) {
-    Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
-        table, value, isSelected, hasFocus, row, column);
-    ((JLabel) renderer).setOpaque(true);
-    Color foreground, background;
-    int totcolun = table.getColumnCount();
-   
-    Integer exc = 0;
-    Boolean sel = false;
+        public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
 
- 
-    exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
-    sel = (Boolean) table.getValueAt(row, 0);
-    
-    if(isSelected){
-        if(exc == 1){
-           background = Color.RED;
-           renderer.setBackground(background);
-        }
-        //garante que quando estiver selecinado é true e caso contrario e false (nunca sera nulo)
-        
-        if(sel != null){
-            if(sel == true){
-                table.setValueAt(true, row, 0);
-            }else{
-                table.setValueAt(false, row, 0);
+        public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
+        Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
+            table, value, isSelected, hasFocus, row, column);
+        ((JLabel) renderer).setOpaque(true);
+        Color foreground, background;
+        int totcolun = table.getColumnCount();
+
+        Integer exc = 0;
+        Boolean sel = false;
+
+
+        exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
+        sel = (Boolean) table.getValueAt(row, 0);
+
+        if(isSelected){
+            if(exc == 1){
+               background = Color.RED;
+               renderer.setBackground(background);
             }
-            
-        }       
-     }
-   
-     if(!isSelected){
-        if(exc == 1){
-            background = Color.RED;
-            renderer.setBackground(background);
-        }else{
-            background = Color.WHITE;
-            renderer.setBackground(background);
-        }
-     }
-    return renderer;
-  }
-}
+            //garante que quando estiver selecinado é true e caso contrario e false (nunca sera nulo)
+
+            if(sel != null){
+                if(sel == true){
+                    table.setValueAt(true, row, 0);
+                }else{
+                    table.setValueAt(false, row, 0);
+                }
+
+            }       
+         }
+
+         if(!isSelected){
+            if(exc == 1){
+                background = Color.RED;
+                renderer.setBackground(background);
+            }else{
+                background = Color.WHITE;
+                renderer.setBackground(background);
+            }
+         }
+        return renderer;
+      }
+    }
     
     private void onCellEditor(JTable table, int column, int row, Object oldValue, Object newValue){
         System.out.println("Coluna:" + column + "Valor novo: " + newValue + " Valor antigo: " + oldValue);

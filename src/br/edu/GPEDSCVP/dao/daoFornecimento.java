@@ -193,4 +193,35 @@ public class daoFornecimento {
         fornecimento.setRetorno(conecta_banco.resultset);
 
     }
+    
+      //Método para retornar dados do componente
+    public void retornardadosFornecimento(Fornecimento fornecimento) {
+            
+         conecta_banco.executeSQL("select fornecimento.id_fornecimento,fornecimento.descricao,fornecedor.id_pessoa,pessoa.nome,id_moeda_frete,moeda_frete.unidade,"
+                               + " vl_frete,id_moeda_imp,moeda_imposto.unidade,vl_impostos,fornecimento.data_cadastro,fornecimento.data_alter from fornecimento"
+                               + " inner join fornecedor on (fornecedor.id_pessoa = fornecimento.id_pessoa)"
+                               + " inner join pessoa_juridica on (pessoa_juridica.id_pessoa = fornecedor.id_pessoa)"
+                               + " inner join pessoa on (pessoa.id_pessoa = pessoa_juridica.id_pessoa)"
+                               + " inner join moeda moeda_frete on (fornecimento.id_moeda_frete = moeda_frete.id_moeda)"
+                               + " inner join moeda moeda_imposto on (fornecimento.id_moeda_imp = moeda_imposto.id_moeda) where fornecimento.id_fornecimento = "+fornecimento.getId_fornecimento());
+
+        try {        
+ 
+            conecta_banco.resultset.first();
+            
+            fornecimento.setId_fornecimento(conecta_banco.resultset.getInt("id_fornecimento"));
+            fornecimento.setDescricao(conecta_banco.resultset.getString("descricao"));
+            fornecimento.setDs_pessoa(conecta_banco.resultset.getString("pessoa.nome"));
+            fornecimento.setId_moeda_frete(conecta_banco.resultset.getInt("fornecimento.id_moeda_frete"));
+            fornecimento.setDs_moeda_frete(conecta_banco.resultset.getString("moeda_frete.unidade"));
+            fornecimento.setValor_frete(conecta_banco.resultset.getDouble("vl_frete"));
+            fornecimento.setId_moeda_imp(conecta_banco.resultset.getInt("fornecimento.id_moeda_imp"));
+            fornecimento.setDs_moeda_imp(conecta_banco.resultset.getString("moeda_imposto.unidade"));
+            fornecimento.setValor_impostos(conecta_banco.resultset.getDouble("vl_impostos"));
+            fornecimento.setData_cadastro(conecta_banco.resultset.getDate("fornecimento.data_cadastro"));
+            
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao retornar dados do fornecimento");
+        }
+     }
 }

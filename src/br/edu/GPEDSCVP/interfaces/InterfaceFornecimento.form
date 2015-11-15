@@ -7,6 +7,11 @@
         <Property name="text" type="java.lang.String" value="jCheckBox1"/>
       </Properties>
     </Component>
+    <Component class="javax.swing.JFormattedTextField" name="jFTMascaMonetaria">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="jFormattedTextField1"/>
+      </Properties>
+    </Component>
   </NonVisualComponents>
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="2"/>
@@ -34,22 +39,22 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jTBComponente" alignment="1" min="-2" pref="829" max="-2" attributes="0"/>
+          <Component id="jTBFornecimento" alignment="1" min="-2" pref="829" max="-2" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="jTBComponente" max="32767" attributes="0"/>
+              <Component id="jTBFornecimento" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Container class="javax.swing.JTabbedPane" name="jTBComponente">
+    <Container class="javax.swing.JTabbedPane" name="jTBFornecimento">
       <Events>
-        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jTBComponenteStateChanged"/>
+        <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jTBFornecimentoStateChanged"/>
       </Events>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
@@ -164,16 +169,17 @@
                                       <Group type="103" groupAlignment="1" attributes="0">
                                           <Component id="jLabel2" alignment="0" min="-2" max="-2" attributes="0"/>
                                           <Component id="jLabel3" alignment="0" min="-2" max="-2" attributes="0"/>
-                                          <Group type="102" alignment="0" attributes="0">
-                                              <Component id="jCBFornecedor" min="-2" pref="207" max="-2" attributes="0"/>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                              <Component id="jBTNovoFornecedor" min="-2" max="-2" attributes="0"/>
-                                          </Group>
                                       </Group>
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
                               <EmptySpace min="-2" pref="73" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="jCBFornecedor" min="-2" pref="207" max="-2" attributes="0"/>
+                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                              <Component id="jBTNovoFornecedor" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="111" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                   </Group>
@@ -436,10 +442,10 @@
                         <Column editable="false" title="ID Fornecidos" type="java.lang.Object"/>
                         <Column editable="false" title="ID Componente" type="java.lang.Object"/>
                         <Column editable="false" title="Componente" type="java.lang.Object"/>
-                        <Column editable="false" title="Valor Unit&#xe1;rio" type="java.lang.Object"/>
+                        <Column editable="true" title="Valor Unit&#xe1;rio" type="java.lang.Object"/>
                         <Column editable="false" title="ID Moeda" type="java.lang.Object"/>
                         <Column editable="false" title="Moeda" type="java.lang.Object"/>
-                        <Column editable="false" title="Qtde Fornecida" type="java.lang.Object"/>
+                        <Column editable="true" title="Qtde Fornecida" type="java.lang.Object"/>
                         <Column editable="false" title="Restante" type="java.lang.Object"/>
                         <Column editable="false" title="Total" type="java.lang.Object"/>
                         <Column editable="false" title="exc" type="java.lang.Object"/>
@@ -573,7 +579,7 @@
                         <Column editable="false" title="Vers&#xe3;o" type="java.lang.Object"/>
                         <Column editable="false" title="ID Componente" type="java.lang.Object"/>
                         <Column editable="false" title="Componente" type="java.lang.Object"/>
-                        <Column editable="false" title="Qntde" type="java.lang.Object"/>
+                        <Column editable="true" title="Qntde" type="java.lang.Object"/>
                         <Column editable="false" title="exc" type="java.lang.Object"/>
                       </Table>
                     </Property>

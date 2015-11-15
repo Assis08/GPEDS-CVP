@@ -203,13 +203,23 @@ public class daoComponentesFornecimento {
                             //seta o valor 1 na coluna excluido da jtable
                             jtable.setValueAt(1, i, totcolun-1);
                             jtable.setValueAt(false, i, 0);
+                           
+                            for(int i_atualiza = totlinha_atualiza-1; i_atualiza >= 0; i_atualiza--){
+                                if(Integer.parseInt(tabela_atualiza.getValueAt(i_atualiza, 7).toString()) == id_componente){
+                                    tabela_atualiza.setValueAt(1, i_atualiza, 10); 
+                                }
+                            }
+                            
                             //habilita e desabilita para atualizar o jtable (caso contrario pinta de vermelho só quando clica na linha)
                             jtable.setEnabled(false);
+                            jtable_atualiza.setEnabled(false);
                             jtable.setEnabled(true);
+                            jtable_atualiza.setEnabled(true);
+                            
                         }else{
                             tabela.removeRow(i);
                             for(int i_atualiza = totlinha_atualiza-1; i_atualiza >= 0; i_atualiza--){
-                                if(tabela_atualiza.getValueAt(i_atualiza, 6) == id_componente){
+                                if(tabela_atualiza.getValueAt(i_atualiza, 7) == id_componente){
                                     tabela_atualiza.removeRow(i_atualiza); 
                                 }
                             }
@@ -225,10 +235,10 @@ public class daoComponentesFornecimento {
     
     //Consulta pelo codigo de componentes mecânicos
     public void consultaCompFornec(ComponenteFornecimento componente){
-        conecta_banco.executeSQL("select componentes_fornecimento.id_comp_fornec,componentes_fornecimento.id_fornecimento,componentes_fornecimento.id_componente,"
+        conecta_banco.executeSQL("select null, componentes_fornecimento.id_comp_fornec,componentes_fornecimento.id_fornecimento,componentes_fornecimento.id_componente,"
                                 + "componente.descricao, componente.tipo," 
                                 +" componentes_fornecimento.id_moeda, moeda.descricao,componentes_fornecimento.valor_unit,null,qntd_componente,"
-                                +" null,componentes_fornecimento.data_alter from componentes_fornecimento"
+                                +" 0 qntd_restante,componentes_fornecimento.valor_unit * qntd_componente total,componentes_fornecimento.data_alter,false from componentes_fornecimento"
                                 +" inner join componente on (componente.id_componente = componentes_fornecimento.id_componente)" 
                                 +" inner join moeda on (moeda.id_moeda = componentes_fornecimento.id_moeda)"
                                 +" where id_fornecimento = "+componente.getId_fornecimento()+" group by (componentes_fornecimento.id_comp_fornec)");

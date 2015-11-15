@@ -41,7 +41,7 @@ import javax.swing.text.TableView.TableRow;
  * @author Willys
  */
 public class ManipulaJtable {
-  
+
     public ManipulaJtable() {
     }
 
@@ -153,10 +153,6 @@ public class ManipulaJtable {
         }
         }
     }
-    
-    
-   
- 
 
     //Método para ajustar colunas da JTABLE de acordo com o tamanho do dado
 
@@ -250,12 +246,13 @@ public class ManipulaJtable {
         }
     }
     //Método para serar mascara em uma determinada coluna da jtable
-    public void setarMascara(JTable tabela, JFormattedTextField jftmascara, String mascara, int numColuna){
+    public void setarMascara(JTable tabela, JFormattedTextField jftmascara, int numColuna){
        
-        try {  
-            MaskFormatter formato_mascara = new MaskFormatter(mascara);
-             jftmascara = new JFormattedTextField(formato_mascara);  
-        } catch (ParseException ex) {
+        ValidaCampos valida_campos;
+        try {
+            valida_campos = new ValidaCampos();
+            valida_campos.formataMonetario(jftmascara);
+        } catch (SQLException ex) {
             Logger.getLogger(ManipulaJtable.class.getName()).log(Level.SEVERE, null, ex);
         }
         
