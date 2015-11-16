@@ -212,19 +212,22 @@ public class ManipulaJtable {
       
         int tot_row = Tabela.getRowCount();
         int tot_col = Tabela.getColumnCount();
+        Integer exc;
         
         for(int i_row = 0; i_row < tot_row; i_row++){
             for(int i_colun = 1; i_colun< tot_col; i_colun++){
                 //se for um valor diferente de null
                 if(Tabela.getValueAt(i_row, i_colun)!= null){
                     if(Tabela.getValueAt(i_row, i_colun).toString().equals(valor)){
-                    //valor duplicado
-                    return true;
+                        exc = Integer.parseInt(tabela.getValueAt(i_row, tabela.getColumnCount()-1).toString());
+                        if(exc == 0){
+                            //valor duplicado
+                            return true;
+                        }else{
+                            return false;
+                        }
                     }    
                 }
-               
-                
-                
             }
         }
         return false;

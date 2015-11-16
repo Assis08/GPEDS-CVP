@@ -143,25 +143,25 @@ public class daoComponentesFornecimento {
             qntd = Integer.parseInt(tabela.getValueAt(i, 7).toString());
             valor_unit = Double.parseDouble(tabela.getValueAt(i, 4).toString().replace(",", "."));
                     
-            //int sequencia = (Integer) (ultima.ultimasequencia("COMPOSICAO_COMPONENTE","ID_SUBCOMPONENTE"));
-            conecta_banco.executeSQL("INSERT INTO componentes_fornecimento (id_comp_fornec,id_componente, id_fornecimento, id_moeda, qntd_componente,valor_unit,data_alter) "
-            + "VALUES (?, ?, ?, ?, ?, ?, ?) ",
+            conecta_banco.executeSQL("INSERT INTO componentes_fornecimento (id_comp_fornec,id_componente, id_fornecimento, id_moeda, qntd_componente, valor_unit, data_alter, in_ativo) "
+            + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ",
             id_comp_fornec,
             id_componente,
             id_fornecimento,
             id_moeda,
             qntd,
             valor_unit,
-            FormatarData.dateParaTimeStamp(componentes.getData_alter()));
+            FormatarData.dateParaTimeStamp(componentes.getData_alter()),
+            "A");
         }
      }
-     
-     public boolean verificaCompFornec (ComponenteFornecimento componentes){
+     //Verifica se todos componentes fornecidos foram destinados a uma projeto
+     public boolean verificaCompFornec (JTable componentes){
         
         Integer qntd;
         Double valor_unit;
 
-        DefaultTableModel tabela = (DefaultTableModel) componentes.getTabela().getModel();
+        DefaultTableModel tabela = (DefaultTableModel) componentes.getModel();
         int totlinha = tabela.getRowCount();
         for (int i = 0; i < totlinha; i++){
             qntd = Integer.parseInt(tabela.getValueAt(i, 8).toString());
@@ -237,11 +237,11 @@ public class daoComponentesFornecimento {
     public void consultaCompFornec(ComponenteFornecimento componente){
         conecta_banco.executeSQL("select null, componentes_fornecimento.id_comp_fornec,componentes_fornecimento.id_fornecimento,componentes_fornecimento.id_componente,"
                                 + "componente.descricao, componente.tipo," 
-                                +" componentes_fornecimento.id_moeda, moeda.descricao,componentes_fornecimento.valor_unit,null,qntd_componente,"
-                                +" 0 qntd_restante,componentes_fornecimento.valor_unit * qntd_componente total,componentes_fornecimento.data_alter,false from componentes_fornecimento"
+                                +" componentes_fornecimento.id_moeda, moeda.unidade,componentes_fornecimento.valor_unit,null,qntd_componente,"
+                                +" 0 qntd_restante,componentes_fornecimento.valor_unit * qntd_componente total,componentes_fornecimento.data_alter,componentes_fornecimento.in_ativo,false from componentes_fornecimento"
                                 +" inner join componente on (componente.id_componente = componentes_fornecimento.id_componente)" 
                                 +" inner join moeda on (moeda.id_moeda = componentes_fornecimento.id_moeda)"
-                                +" where id_fornecimento = "+componente.getId_fornecimento()+" group by (componentes_fornecimento.id_comp_fornec)");
+                                +" where id_fornecimento = "+componente.getId_fornecimento()+" and componentes_fornecimento.in_ativo = 'A' group by (componentes_fornecimento.id_comp_fornec)");
         
                                 componente.setRetorno(conecta_banco.resultset);
     }
@@ -347,4 +347,67 @@ public class daoComponentesFornecimento {
         return total_fonec;
         
      }
+      
+     public void alterarCompFornec (ComponenteFornecimento compFornec){
+        
+        Integer id_fornecidos;
+        Integer id_componente;
+        Double valor_unit;
+        Integer id_moeda;
+        Integer qntd_fornec;
+        
+        
+        DefaultTableModel tabela = (DefaultTableModel) compFornec.getTabela().getModel();
+        
+        int totlinha = tabela.getRowCount();
+        
+        for (int i = 0; i < totlinha; i++){
+            id_fornecidos = Integer.parseInt(tabela.getValueAt(i, 1).toString());
+            id_componente = Integer.parseInt(tabela.getValueAt(i, 2).toString());
+            valor_unit = Double.parseDouble(tabela.getValueAt(i, 4).toString().replace(",", "."));
+            id_moeda = Integer.parseInt(tabela.getValueAt(i, 5).toString());
+            qntd_fornec = Integer.parseInt(tabela.getValueAt(i, 7).toString());
+            Integer exc = Integer.parseInt(tabela.getValueAt(i, 10).toString());
+
+            //Verifica se já existe o fornecimento deste componente cadastrado
+            String sql = "select * from componentes_fornecimento where id_comp_fornec = "+ id_fornecidos;
+            try {
+                conecta_banco.executeSQL(sql);
+                conecta_banco.resultset.first();
+                //se já existe o fornecimento deste componentes
+                if(id_fornecidos == conecta_banco.resultset.getInt("id_comp_fornec")){
+                    //apenas altera 
+                    conecta_banco.executeSQL("UPDATE componentes_fornecimento SET id_componente = ?, id_moeda = ?, qntd_componente = ?, valor_unit = ?, data_alter = ? "
+                    + "WHERE id_comp_fornec = ? ",
+                    id_componente,
+                    id_moeda,
+                    qntd_fornec,
+                    valor_unit,
+                    FormatarData.dateParaTimeStamp(compFornec.getData_alter()),
+                    id_fornecidos); 
+                }
+
+            } catch (Exception e) {
+                //Chegou aqui porque o fornecimento do componente não existe, então inclui
+               
+                conecta_banco.executeSQL("INSERT INTO componentes_fornecimento (id_comp_fornec,id_componente, id_fornecimento, id_moeda, qntd_componente, valor_unit, data_alter, in_ativo) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?) ",
+                id_fornecidos,
+                id_componente,
+                compFornec.getId_fornecimento(),
+                id_moeda,
+                qntd_fornec,
+                valor_unit,
+                FormatarData.dateParaTimeStamp(compFornec.getData_alter()),
+                "A");
+            }
+            
+            //Se for um registro excluido da Jtable
+            if(exc == 1){
+                //Inativa o fornecimento do componente
+                conecta_banco.atualizarSQL("UPDATE COMPONENTES_FORNECIMENTO SET IN_ATIVO = 'I'"
+                                         + " WHERE ID_COMP_FORNEC = " + id_fornecidos);
+            }
+        }
+    } 
 }

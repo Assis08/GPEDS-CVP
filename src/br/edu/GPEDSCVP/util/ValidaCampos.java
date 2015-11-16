@@ -288,8 +288,23 @@ public class ValidaCampos {
     
     //Método para verificar se a Jtable possui registros
     public int VerificaJtable(JTable tabela){
+        int i;
+        boolean possui_regitro = false;
+        Integer exc;
          if (tabela.getRowCount()>0){
-             return 1;        
+             System.out.println("total colunas " +tabela.getColumnCount());
+             for(i = 0; i < tabela.getRowCount(); i++){
+                 exc = Integer.parseInt(tabela.getValueAt(i, tabela.getColumnCount()-1).toString());
+                 if(exc == 0){
+                     possui_regitro = true;
+                 }
+             }
+             if(possui_regitro){
+                 return 1;      
+             }else{
+                 return 0;  
+             }
+  
          }else
              return 0;
     }

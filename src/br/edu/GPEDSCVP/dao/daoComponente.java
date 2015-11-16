@@ -153,7 +153,7 @@ public class daoComponente {
         return true;    
     }
 
-    //Método de incluir componente no banco
+    //Método de alterar componente no banco
     public boolean alterar(Componente componente, String tipo)throws SQLException
     {
         //Alterar componente

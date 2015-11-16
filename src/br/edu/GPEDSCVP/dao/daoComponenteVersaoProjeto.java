@@ -46,6 +46,7 @@ public class daoComponenteVersaoProjeto {
         
         Integer qntd_fornecida;
         Integer id_componentes;
+        Integer exc;
       
         int totlinha_comp_proj = TabelaCompVersProj.getRowCount();
         int totlinha_comp_fornec = TabelaCompFornec.getRowCount();
@@ -84,15 +85,19 @@ public class daoComponenteVersaoProjeto {
            // totlinha_comp_fornec = componente.getTabela().getRowCount();
             for (int i_comp = 0; i_comp < totlinha_comp_proj; i_comp++){
                 
-                //se o componente ja existir entao sobreescreve apenas a quantidade 
+                exc = Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 10).toString());
+                
+                //se o componente ja existir e não estiver excluido entao sobreescreve apenas a quantidade 
                 if(Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 7).toString()) == componente_projeto.getId_componente()&&
-                   Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 4).toString()) == componente_projeto.getCod_vers_projeto()) {
+                   Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 4).toString()) == componente_projeto.getCod_vers_projeto() &&
+                   exc == 0) {
                    Integer qntd_atual = Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 9).toString());
                    TabelaCompVersProj.setValueAt(qntd_atual+componente_projeto.getQntd_para_projeto(), i_comp, 9);
                    
                    //processo para dar baixa na quantidade fornecida
                     for (int i_comp_fornec = 0; i_comp_fornec < totlinha_comp_fornec; i_comp_fornec++){
                         if(TabelaCompFornec.getValueAt(i_comp_fornec, 2) != null){
+                           
                             if(Integer.parseInt(TabelaCompFornec.getValueAt(i_comp_fornec, 2).toString()) == componente_projeto.getId_componente()){
                                 qntd_fornecida = Integer.parseInt(TabelaCompFornec.getValueAt(i_comp_fornec, 8).toString());
                                 //da baixa em componente fornecidos referente ao valor fornecido para projeto
@@ -102,7 +107,7 @@ public class daoComponenteVersaoProjeto {
                     }
                    break;
                 }else{
-                    
+                    //Se não existir o componente ou estiver marcado como excluido
                     //Chegou na ultima linha
                     if( i_comp == totlinha_comp_proj-1){
 
@@ -132,8 +137,12 @@ public class daoComponenteVersaoProjeto {
 
                         //processo para dar baixa na quantidade fornecida
                         for (int i_comp_fornec = 0; i_comp_fornec < totlinha_comp_fornec; i_comp_fornec++){
+                            
+                            exc = Integer.parseInt(TabelaCompFornec.getValueAt(i_comp_fornec, 10).toString());
+                            
                             if(TabelaCompFornec.getValueAt(i_comp_fornec, 2) != null){
-                                if(Integer.parseInt(TabelaCompFornec.getValueAt(i_comp_fornec, 2).toString()) == componente_projeto.getId_componente()){
+                                if(Integer.parseInt(TabelaCompFornec.getValueAt(i_comp_fornec, 2).toString()) == componente_projeto.getId_componente() &&
+                                   exc == 0){
                                     qntd_fornecida = Integer.parseInt(TabelaCompFornec.getValueAt(i_comp_fornec, 8).toString());
                                     //da baixa em componente fornecidos referente ao valor fornecido para projeto
                                     TabelaCompFornec.setValueAt(qntd_fornecida - componente_projeto.getQntd_para_projeto(), i_comp_fornec, 8);
@@ -166,10 +175,9 @@ public class daoComponenteVersaoProjeto {
            id_componente = Integer.parseInt(tabela.getValueAt(i, 7).toString());
            qntd_para_projeto = Integer.parseInt(tabela.getValueAt(i, 9).toString());
 
-           //int sequencia = (Integer) (ultima.ultimasequencia("COMPOSICAO_COMPONENTE","ID_SUBCOMPONENTE"));
            conecta_banco.executeSQL("INSERT INTO componentes_versao_projeto (id_comp_versao,id_projeto, cod_vers_projeto, id_fornecimento, id_componente,"
-                   + "id_comp_fornec,qntd_para_projeto, qntd_no_projeto, situacao, data_alter) "
-           + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ",
+                   + "id_comp_fornec,qntd_para_projeto, qntd_no_projeto, situacao, data_alter, in_ativo) "
+           + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ",
            id_comp_vers,
            id_projeto,
            cod_vers_projeto,
@@ -178,11 +186,9 @@ public class daoComponenteVersaoProjeto {
            id_comp_fornec,
            qntd_para_projeto,
            0,
-           "A",
-           FormatarData.dateParaTimeStamp(componentes.getData_alter()));
-           
-          
-           
+           "NC",
+           FormatarData.dateParaTimeStamp(componentes.getData_alter()),
+           "A");
        }
     }
     
@@ -255,14 +261,85 @@ public class daoComponenteVersaoProjeto {
     //Consulta pelo codigo do fornecimento os componentes fornecidos para os projetos
     public void consultaCompFornecVersProj(ComponenteVersaoProjeto componente){
         conecta_banco.executeSQL("select null, id_comp_versao,componentes_versao_projeto.id_comp_fornec,componentes_versao_projeto.id_fornecimento, componentes_versao_projeto.id_projeto,componentes_versao_projeto.cod_vers_projeto,"
-                               + " projeto.descricao,versao_projeto.versao,componentes_versao_projeto.id_componente,componente.descricao,qntd_para_projeto, false from componentes_versao_projeto"
+                               + " projeto.descricao,versao_projeto.versao,componentes_versao_projeto.id_componente,componente.descricao,qntd_para_projeto,componentes_versao_projeto.in_ativo, false from componentes_versao_projeto"
                                + " inner join versao_projeto on (versao_projeto.cod_vers_projeto = componentes_versao_projeto.cod_vers_projeto)" 
                                + " inner join projeto on (projeto.id_projeto = versao_projeto.id_projeto)"
                                + " inner join componentes_fornecimento on (componentes_fornecimento.id_comp_fornec = componentes_versao_projeto.id_comp_fornec)"
                                + " inner join componente on (componente.id_componente = componentes_fornecimento.id_componente)"
-                               + " where componentes_versao_projeto.id_fornecimento = "+componente.getId_fornecimento()
+                               + " where componentes_versao_projeto.id_fornecimento = "+componente.getId_fornecimento()+" and componentes_versao_projeto.in_ativo = 'A' "
                                + " order by id_comp_versao asc");
         
                                 componente.setRetorno(conecta_banco.resultset);
     }
+    
+    public void alterarCompVersProj (ComponenteVersaoProjeto compVersProj){
+        
+        Integer id_comp_vers_proj;
+        Integer id_fornecidos;
+        Integer id_projeto;
+        Integer id_versao;
+        Integer id_componente;
+        Integer qntd_para_projeto;
+      
+        DefaultTableModel tabela = (DefaultTableModel) compVersProj.getTabela().getModel();
+        
+        int totlinha = tabela.getRowCount();
+        
+        for (int i = 0; i < totlinha; i++){
+            
+            id_comp_vers_proj = Integer.parseInt(tabela.getValueAt(i, 1).toString());
+            id_fornecidos = Integer.parseInt(tabela.getValueAt(i, 2).toString());
+            id_projeto = Integer.parseInt(tabela.getValueAt(i, 3).toString());
+            id_versao = Integer.parseInt(tabela.getValueAt(i, 4).toString());
+            id_componente = Integer.parseInt(tabela.getValueAt(i, 7).toString());
+            qntd_para_projeto = Integer.parseInt(tabela.getValueAt(i, 9).toString());
+            Integer exc = Integer.parseInt(tabela.getValueAt(i, 10).toString());
+
+            //Verifica se já existe o fornecimento deste componente cadastrado para um projeto
+            String sql = "select * from componentes_versao_projeto where id_comp_versao = "+ id_comp_vers_proj;
+            try {
+                conecta_banco.executeSQL(sql);
+                conecta_banco.resultset.first();
+                //se já existe um projeto com este fornecimento
+                if(id_comp_vers_proj == conecta_banco.resultset.getInt("id_comp_versao")){
+                    //apenas altera 
+                    conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET id_projeto = ?, cod_vers_projeto = ?, id_componente = ?, id_comp_fornec = ?, qntd_para_projeto = ?, data_alter = ?"
+                    + "WHERE id_comp_versao = ? ",
+                    id_projeto,
+                    id_versao,
+                    id_componente,
+                    id_fornecidos,
+                    qntd_para_projeto,
+                    FormatarData.dateParaTimeStamp(compVersProj.getData_alter()),
+                    id_comp_vers_proj);
+                }
+
+            } catch (Exception e) {
+                
+                    //Chegou aqui porque o fornecimento do componente não existe, então inclui
+               
+                    conecta_banco.executeSQL("INSERT INTO componentes_versao_projeto (id_comp_versao,id_projeto, cod_vers_projeto, id_fornecimento, id_componente,"
+                    + "id_comp_fornec,qntd_para_projeto, qntd_no_projeto, situacao, data_alter, in_ativo) "
+                    + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ",
+                    id_comp_vers_proj,
+                    id_projeto,
+                    id_versao,
+                    compVersProj.getId_fornecimento(),
+                    id_componente,
+                    id_fornecidos,
+                    qntd_para_projeto,
+                    0,
+                    "NC",
+                    FormatarData.dateParaTimeStamp(compVersProj.getData_alter()),
+                    "A");
+                 }
+            
+            //Se for um registro excluido da Jtable
+            if(exc == 1){
+                //Inativa o componentes fornecidos para projetos
+                conecta_banco.atualizarSQL("UPDATE COMPONENTES_VERSAO_PROJETO SET IN_ATIVO = 'I'"
+                                         + " WHERE ID_COMP_VERSAO = " + id_comp_vers_proj);
+            }
+        }
+    } 
 }

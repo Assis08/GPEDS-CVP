@@ -51,8 +51,8 @@ public class daoFornecimento {
         System.out.println("id_moeda_imposto" + fornecimento.getId_moeda_imp());
         
         resultado = conecta_banco.executeSQL("INSERT INTO fornecimento (id_fornecimento , id_pessoa, descricao, data_cadastro, id_moeda_frete, vl_frete, id_moeda_imp,"
-                + "vl_impostos,data_alter ) "
-        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ",
+                + "vl_impostos,data_alter,in_ativo) "
+        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) ",
         sequencia,
         fornecimento.getId_pessoa(),
         fornecimento.getDescricao(),
@@ -61,7 +61,8 @@ public class daoFornecimento {
         fornecimento.getValor_frete(),
         fornecimento.getId_moeda_imp(),
         fornecimento.getValor_impostos(),
-        FormatarData.dateParaTimeStamp(fornecimento.getData_alter()));
+        FormatarData.dateParaTimeStamp(fornecimento.getData_alter()),
+        "A");
 
         if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
             return false;
@@ -81,7 +82,9 @@ public class daoFornecimento {
                                + " inner join pessoa_juridica on (pessoa_juridica.id_pessoa = fornecedor.id_pessoa)"
                                + " inner join pessoa on (pessoa.id_pessoa = pessoa_juridica.id_pessoa)"
                                + " inner join moeda moeda_frete on (fornecimento.id_moeda_frete = moeda_frete.id_moeda)"
-                               + " inner join moeda moeda_imposto on (fornecimento.id_moeda_imp = moeda_imposto.id_moeda) order by fornecimento.data_cadastro desc");
+                               + " inner join moeda moeda_imposto on (fornecimento.id_moeda_imp = moeda_imposto.id_moeda)" 
+                               + " where fornecimento.in_ativo = 'A'"
+                               + " order by fornecimento.data_cadastro desc");
 
         fornecimento.setRetorno(conecta_banco.resultset);
 
@@ -96,6 +99,7 @@ public class daoFornecimento {
                                + " inner join pessoa on (pessoa.id_pessoa = pessoa_juridica.id_pessoa)"
                                + " inner join moeda moeda_frete on (fornecimento.id_moeda_frete = moeda_frete.id_moeda)"
                                + " inner join moeda moeda_imposto on (fornecimento.id_moeda_imp = moeda_imposto.id_moeda) where id_fornecimento = "+fornecimento.getId_fornecimento()
+                               + " and fornecimento.in_ativo = 'A'"
                                + " group by (fornecimento.id_fornecimento)" 
                                + " order by fornecimento.data_cadastro desc");
 
@@ -114,6 +118,7 @@ public class daoFornecimento {
                                + " inner join moeda moeda_imposto on (fornecimento.id_moeda_imp = moeda_imposto.id_moeda)"
                                + " inner join componentes_fornecimento on (componentes_fornecimento.id_fornecimento = fornecimento.id_fornecimento)"
                                + " where componentes_fornecimento.id_componente = "+id_componente
+                               + " and fornecimento.in_ativo = 'A'"
                                + " group by (fornecimento.id_fornecimento)"
                                + " order by fornecimento.data_cadastro desc");
 
@@ -133,6 +138,7 @@ public class daoFornecimento {
                                + " inner join componentes_fornecimento on (componentes_fornecimento.id_fornecimento = fornecimento.id_fornecimento)"
                                + " inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)"
                                + " where componentes_versao_projeto.id_projeto = "+id_projeto
+                               + " and fornecimento.in_ativo = 'A'"
                                + " group by (fornecimento.id_fornecimento)"
                                + " order by fornecimento.data_cadastro desc");
 
@@ -148,7 +154,8 @@ public class daoFornecimento {
                                + " inner join pessoa_juridica on (pessoa_juridica.id_pessoa = fornecedor.id_pessoa)"
                                + " inner join pessoa on (pessoa.id_pessoa = pessoa_juridica.id_pessoa)"
                                + " inner join moeda moeda_frete on (fornecimento.id_moeda_frete = moeda_frete.id_moeda)"
-                               + " inner join moeda moeda_imposto on (fornecimento.id_moeda_imp = moeda_imposto.id_moeda) where fornecimento.descricao like '"+fornecimento.getDescricao()+"%'"                                                                                                              
+                               + " inner join moeda moeda_imposto on (fornecimento.id_moeda_imp = moeda_imposto.id_moeda) where fornecimento.descricao like '"+fornecimento.getDescricao()+"%'"
+                               + " and fornecimento.in_ativo = 'A'"
                                + " group by (fornecimento.id_fornecimento)"
                                + " order by fornecimento.data_cadastro desc");
 
@@ -167,6 +174,7 @@ public class daoFornecimento {
                                + " inner join componentes_fornecimento on (componentes_fornecimento.id_fornecimento = fornecimento.id_fornecimento)"
                                + " inner join componente on (componente.id_componente = componentes_fornecimento.id_componente)"
                                + " where componente.descricao like '"+ds_componente+"%'"
+                               + " and fornecimento.in_ativo = 'A'"
                                + " group by (fornecimento.id_fornecimento)"
                                + " order by fornecimento.data_cadastro desc");
 
@@ -187,6 +195,7 @@ public class daoFornecimento {
                                + " inner join versao_projeto on (componentes_versao_projeto.cod_vers_projeto = versao_projeto.cod_vers_projeto)"
                                + " inner join projeto on (versao_projeto.id_projeto = projeto.id_projeto)"
                                + " where projeto.descricao like '"+ds_projeto+"%'"
+                               + " and fornecimento.in_ativo = 'A'"
                                + " group by (fornecimento.id_fornecimento)"
                                + " order by fornecimento.data_cadastro desc");
 
@@ -224,4 +233,42 @@ public class daoFornecimento {
             JOptionPane.showMessageDialog(null, "Falha ao retornar dados do fornecimento");
         }
      }
+    
+    //Método de alterar fornecimento no banco
+    public boolean alterar(Fornecimento fornecimento) throws SQLException {
+       
+        int resultado;
+       
+        resultado = conecta_banco.executeSQL("UPDATE fornecimento SET id_pessoa = ?, descricao = ?, id_moeda_frete = ?, vl_frete = ?, id_moeda_imp = ?, vl_impostos = ?, data_alter = ? "
+        + "WHERE id_fornecimento = ? ",
+        fornecimento.getId_pessoa(),
+        fornecimento.getDescricao(),
+        fornecimento.getId_moeda_frete(),
+        fornecimento.getValor_frete(),
+        fornecimento.getId_moeda_imp(),
+        fornecimento.getValor_impostos(),
+        FormatarData.dateParaTimeStamp(fornecimento.getData_alter()),
+        fornecimento.getId_fornecimento());
+
+        if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+            return false;
+        }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+            return false;
+        }else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO){
+            return false;
+        }
+        return true;    
+    }
+    
+    public void inativaFornecimento(Fornecimento fornecimento){
+            
+        conecta_banco.atualizarSQL("UPDATE FORNECIMENTO SET IN_ATIVO = 'I'"
+                               + " WHERE ID_FORNECIMENTO = " + fornecimento.getId_fornecimento());
+        
+        conecta_banco.atualizarSQL("UPDATE COMPONENTES_FORNECIMENTO SET IN_ATIVO = 'I'"
+                               + " WHERE ID_FORNECIMENTO = " + fornecimento.getId_fornecimento());
+        
+        conecta_banco.atualizarSQL("UPDATE COMPONENTES_VERSAO_PROJETO SET IN_ATIVO = 'I'"
+                               + " WHERE ID_FORNECIMENTO = " + fornecimento.getId_fornecimento());
+    }  
 }
