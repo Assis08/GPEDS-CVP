@@ -17,13 +17,16 @@ public class VersaoProjeto {
     
     private int cod_vers_projeto;
     private int id_projeto;
-    private int versao;
+    private Double versao;
     private int oculto;
     private String comercializado;
     private int lote;
     private String certificacao;
     private Date data_cadastro;
     private Date data_alter;
+    private static Double prim_opcao_versao;
+    private static Double segun_opcao_versao;
+    private static Double versao_selecionada;
     private JTable tabela;
     private ResultSet retorno;
     private int[] array_versoes;
@@ -31,7 +34,7 @@ public class VersaoProjeto {
     public VersaoProjeto() {
         cod_vers_projeto = 0;
         id_projeto = 0;
-        versao = 0;
+        versao = 0.0;
         oculto = 0;
         comercializado = "";
         lote = 0;
@@ -56,11 +59,11 @@ public class VersaoProjeto {
         this.id_projeto = id_projeto;
     }
 
-    public int getVersao() {
+    public Double getVersao() {
         return versao;
     }
 
-    public void setVersao(int versao) {
+    public void setVersao(Double versao) {
         this.versao = versao;
     }
 
@@ -134,5 +137,29 @@ public class VersaoProjeto {
 
     public void setArray_versoes(int[] array_versoes) {
         this.array_versoes = array_versoes;
+    }
+
+    public static Double getPrim_opcao_versao() {
+        return prim_opcao_versao;
+    }
+
+    public static void setPrim_opcao_versao(Double prim_opcao_versao) {
+        VersaoProjeto.prim_opcao_versao = prim_opcao_versao;
+    }
+
+    public static Double getSegun_opcao_versao() {
+        return segun_opcao_versao;
+    }
+
+    public static void setSegun_opcao_versao(Double segun_opcao_versao) {
+        VersaoProjeto.segun_opcao_versao = segun_opcao_versao;
+    }
+
+    public static Double getVersao_selecionada() {
+        return versao_selecionada;
+    }
+
+    public static void setVersao_selecionada(Double versao_selecionada) {
+        VersaoProjeto.versao_selecionada = versao_selecionada;
     }
 }

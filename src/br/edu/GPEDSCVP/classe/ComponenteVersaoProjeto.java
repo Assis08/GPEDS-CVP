@@ -16,13 +16,17 @@ import javax.swing.JTable;
 public class ComponenteVersaoProjeto {
     
     private int id_comp_versao;
-    private int id_projeto;
+    private static int id_projeto;
     private String projeto;
     private int cod_vers_projeto;
-    private double versao;
+    private static double versao;
     private int id_fornecimento;
     private int id_componente;
     private String componente;
+    private double valor_unit;
+    private int id_moeda;
+    private String unidade;
+    private static String tipo;
     private static int id_comp_fornec;
     private int qntd_para_projeto;
     private int qntd_no_projeto;
@@ -33,7 +37,6 @@ public class ComponenteVersaoProjeto {
 
     public ComponenteVersaoProjeto() {
         id_comp_versao = 0;
-        id_projeto = 0;
         projeto = "";
         cod_vers_projeto = 0;
         id_fornecimento = 0;
@@ -163,6 +166,38 @@ public class ComponenteVersaoProjeto {
 
     public void setVersao(double versao) {
         this.versao = versao;
+    }
+
+    public static String getTipo() {
+        return tipo;
+    }
+
+    public static void setTipo(String tipo) {
+        ComponenteVersaoProjeto.tipo = tipo;
+    }
+
+    public int getId_moeda() {
+        return id_moeda;
+    }
+
+    public void setId_moeda(int id_moeda) {
+        this.id_moeda = id_moeda;
+    }
+
+    public String getUnidade() {
+        return unidade;
+    }
+
+    public void setUnidade(String unidade) {
+        this.unidade = unidade;
+    }
+
+    public double getValor_unit() {
+        return valor_unit;
+    }
+
+    public void setValor_unit(double valor_unit) {
+        this.valor_unit = valor_unit;
     }
     
 }

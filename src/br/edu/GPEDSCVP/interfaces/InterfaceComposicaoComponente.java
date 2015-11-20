@@ -79,15 +79,7 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
             //faça algo com selected  
         }  
         } ); 
-        
-        /*
-        jTBConsultaComponentes.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                mouseClickedCellJtable(evt);
-            }
-        });
-        */
+     
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBConsultaComponentes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         

@@ -33,11 +33,16 @@ import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.ManipulaJtable;
 import br.edu.GPEDSCVP.util.Mensagens;
 import br.edu.GPEDSCVP.util.Rotinas;
+import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
+import java.awt.Color;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
 
 /**
  *
@@ -117,13 +122,33 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar registro");
         }
         
+        //desabilita campos da tela de projeto
+        valida_campos.desabilitaCampos(jPVersaoProjeto);
+        
+        //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
+        jTBComponentesEletronicos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBComponentesMecanicos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
+        situacao = Rotinas.INICIAL;
+
+        //habilita os botoes utilizados na inicialização da tela
+        valida_botoes.ValidaEstado(jPBotoes, situacao);
+        
+        //atualiza dados do usuario logado
+        dao_acesso.retornaUsuarioLogado(acesso);
+        
         // carrega dados nas combobox
         dao_projeto.consultaGeral(projeto);
         //Preenche dados nas ComboBox de projetos
         array_projetos = combo.PreencherCombo(jCBProjeto, "descricao", projeto.getRetorno(), "id_projeto");
         //seta no array da classe de projetos a lista de projetos listadas na combo
         projeto.setArray_projetos(array_projetos);
-
+        
+        jCBComercializado.addItem("Selecione");
+        jCBComercializado.addItem("Sim");
+        jCBComercializado.addItem("Não");
+        
+        limpa_dados_versao();
     }
 
     /**
@@ -142,34 +167,36 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jButton5 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jTFIDVersao = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jCBComercializado = new javax.swing.JComboBox();
-        jLabel3 = new javax.swing.JLabel();
-        jCBProjeto = new javax.swing.JComboBox();
-        jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTBComponentesEletronicos = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jFTData = new javax.swing.JFormattedTextField();
         jBTAddComposicao = new javax.swing.JButton();
         jBTRemoveComposicao = new javax.swing.JButton();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTBFornecedores = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         jBTRemoveFornecedores = new javax.swing.JButton();
         jBTAddFornecedor = new javax.swing.JButton();
-        jCBVersao = new javax.swing.JComboBox();
-        jLabel13 = new javax.swing.JLabel();
-        jTFLote = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
         jFTTotalEletronico = new javax.swing.JFormattedTextField();
         jLabel4 = new javax.swing.JLabel();
         jFTTotalMecanico = new javax.swing.JFormattedTextField();
         jLabel8 = new javax.swing.JLabel();
         jFTTotalMecanico1 = new javax.swing.JFormattedTextField();
         jLabel9 = new javax.swing.JLabel();
+        jPDadosVersao = new javax.swing.JPanel();
+        jTFLote = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jCBComercializado = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        jCBVersao = new javax.swing.JComboBox();
+        jLabel13 = new javax.swing.JLabel();
+        jCBProjeto = new javax.swing.JComboBox();
+        jLabel5 = new javax.swing.JLabel();
+        jFTData = new javax.swing.JFormattedTextField();
+        jLabel7 = new javax.swing.JLabel();
+        jTFIDVersao = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        jBTNovoEstado = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTBComponentesMecanicos = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Versões de Projetos");
@@ -225,15 +252,13 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jPBotoesLayout.setHorizontalGroup(
             jPBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPBotoesLayout.createSequentialGroup()
-                .addContainerGap(38, Short.MAX_VALUE)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31)
+                .addGap(18, 18, 18)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
+                .addGap(18, 18, 18)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23))
+                .addGap(18, 18, 18)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPBotoesLayout.setVerticalGroup(
             jPBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -247,55 +272,19 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jTFIDVersao.setEditable(false);
-        jTFIDVersao.setName("id_componente"); // NOI18N
-
-        jLabel1.setText("ID Versão:");
-
-        jCBComercializado.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Selecione", "Sim", "Não" }));
-        jCBComercializado.setToolTipText("Material");
-        jCBComercializado.setName("id_material"); // NOI18N
-        jCBComercializado.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                jCBComercializadoPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                jCBComercializadoPopupMenuWillBecomeVisible(evt);
-            }
-        });
-
-        jLabel3.setText("Comercializado:");
-
-        jCBProjeto.setToolTipText("Tipo");
-        jCBProjeto.setName("tipo"); // NOI18N
-        jCBProjeto.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
-            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
-            }
-            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
-                jCBProjetoPopupMenuWillBecomeInvisible(evt);
-            }
-            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
-                jCBProjetoPopupMenuWillBecomeVisible(evt);
-            }
-        });
-
-        jLabel5.setText("Projeto:");
-
         jTBComponentesEletronicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Sel", "ID Composição", "ID Componente", "Tipo", "Componente", "ID Material", "Material", "Qntd", "exc"
+                "Sel", "ID Componentes Versão", "ID Componente", "Componente", "ID Moeda", "Moeda", "Valor Unit", "Quantidade", "Total", "exc"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, true, true
+                true, false, false, false, false, false, false, false, false, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -313,14 +302,11 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTBComponentesEletronicos);
-
-        jLabel2.setText("Componentes Eletrônicos:");
-
-        jLabel7.setText("Data:");
-
-        jFTData.setEditable(false);
-        jFTData.setToolTipText("Data");
-        jFTData.setName("data_cadastro"); // NOI18N
+        if (jTBComponentesEletronicos.getColumnModel().getColumnCount() > 0) {
+            jTBComponentesEletronicos.getColumnModel().getColumn(9).setMinWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(9).setPreferredWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(9).setMaxWidth(0);
+        }
 
         jBTAddComposicao.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
         jBTAddComposicao.setName("descricao"); // NOI18N
@@ -336,31 +322,6 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 jBTRemoveComposicaoActionPerformed(evt);
             }
         });
-
-        jTBFornecedores.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "sel", "ID Fornecedores", "ID Fornecedor", "Descrição", "CNPJ", "Site", "exc"
-            }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
-            };
-            boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, true
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jScrollPane4.setViewportView(jTBFornecedores);
 
         jLabel10.setText("Componentes Mecânicos:");
 
@@ -379,6 +340,39 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             }
         });
 
+        jFTTotalEletronico.setEditable(false);
+
+        jLabel4.setText("Total R$:");
+
+        jFTTotalMecanico.setEditable(false);
+
+        jLabel8.setText("Total R$:");
+
+        jLabel9.setText("Total Componentes R$:");
+
+        jTFLote.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTFLoteKeyTyped(evt);
+            }
+        });
+
+        jLabel6.setText("Lote:");
+
+        jCBComercializado.setToolTipText("Material");
+        jCBComercializado.setName("id_material"); // NOI18N
+        jCBComercializado.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jCBComercializadoPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                jCBComercializadoPopupMenuWillBecomeVisible(evt);
+            }
+        });
+
+        jLabel3.setText("Comercializado:");
+
         jCBVersao.setToolTipText("Tipo");
         jCBVersao.setName("tipo"); // NOI18N
         jCBVersao.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
@@ -394,13 +388,149 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
         jLabel13.setText("Versão");
 
-        jLabel6.setText("Lote:");
+        jCBProjeto.setToolTipText("Tipo");
+        jCBProjeto.setName("tipo"); // NOI18N
+        jCBProjeto.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jCBProjetoPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                jCBProjetoPopupMenuWillBecomeVisible(evt);
+            }
+        });
 
-        jLabel4.setText("Total R$:");
+        jLabel5.setText("Projeto:");
 
-        jLabel8.setText("Total R$:");
+        jFTData.setEditable(false);
+        jFTData.setToolTipText("Data");
+        jFTData.setName("data_cadastro"); // NOI18N
 
-        jLabel9.setText("Total Componentes R$:");
+        jLabel7.setText("Data:");
+
+        jTFIDVersao.setEditable(false);
+        jTFIDVersao.setName("id_componente"); // NOI18N
+
+        jLabel1.setText("ID Versão:");
+
+        jBTNovoEstado.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\add.png")); // NOI18N
+        jBTNovoEstado.setText("Novo");
+        jBTNovoEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTNovoEstadoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPDadosVersaoLayout = new javax.swing.GroupLayout(jPDadosVersao);
+        jPDadosVersao.setLayout(jPDadosVersaoLayout);
+        jPDadosVersaoLayout.setHorizontalGroup(
+            jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPDadosVersaoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jTFIDVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
+                .addGap(18, 18, 18)
+                .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBTNovoEstado))
+                    .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel13)
+                    .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(54, 54, 54)
+                .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jCBComercializado, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addComponent(jTFLote, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
+        jPDadosVersaoLayout.setVerticalGroup(
+            jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                                .addComponent(jLabel5)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                                .addComponent(jBTNovoEstado)
+                                .addGap(6, 6, 6)))
+                        .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFIDVersao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addComponent(jLabel13)
+                        .addGap(26, 26, 26))
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCBComercializado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel7))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTFLote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jLabel2.setText("Componentes Eletrônicos:");
+
+        jTBComponentesMecanicos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Sel", "ID Componentes Versão", "ID Componente", "Componente", "ID Moeda", "Moeda", "Valor Unit", "Quantidade", "Total", "exc"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                true, false, false, false, false, false, false, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTBComponentesMecanicos.setName("Composição"); // NOI18N
+        jTBComponentesMecanicos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTBComponentesMecanicosMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(jTBComponentesMecanicos);
+        if (jTBComponentesMecanicos.getColumnModel().getColumnCount() > 0) {
+            jTBComponentesMecanicos.getColumnModel().getColumn(9).setMinWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(9).setPreferredWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(9).setMaxWidth(0);
+        }
 
         javax.swing.GroupLayout jPVersaoProjetoLayout = new javax.swing.GroupLayout(jPVersaoProjeto);
         jPVersaoProjeto.setLayout(jPVersaoProjetoLayout);
@@ -409,135 +539,71 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPVersaoProjetoLayout.createSequentialGroup()
-                        .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTFIDVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5)
-                            .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                                .addComponent(jLabel13)
-                                .addGap(96, 96, 96))
-                            .addComponent(jCBVersao, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jCBComercializado, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                                .addComponent(jLabel6)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                                .addComponent(jTFLote, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(112, 112, 112)
-                        .addComponent(jLabel7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40))
                     .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
+                        .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(64, 64, 64)
+                        .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jFTTotalMecanico1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel9)))
+                    .addComponent(jLabel2)
+                    .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jPDadosVersao, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPVersaoProjetoLayout.createSequentialGroup()
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 711, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jBTAddComposicao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jBTRemoveComposicao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jFTTotalEletronico, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel4))))
+                    .addComponent(jLabel10)
+                    .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 711, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel10)
+                            .addComponent(jFTTotalMecanico, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                                .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 766, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jBTAddComposicao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jBTRemoveComposicao, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jFTTotalEletronico, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4)))
-                            .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                                .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                                        .addComponent(jPBotoes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jFTTotalMecanico1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel9, javax.swing.GroupLayout.Alignment.TRAILING)))
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 766, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jBTAddFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jBTRemoveFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jFTTotalMecanico, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                                        .addGap(6, 6, 6)
-                                        .addComponent(jLabel8)))))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel8))
+                            .addComponent(jBTRemoveFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBTAddFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPVersaoProjetoLayout.setVerticalGroup(
             jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPVersaoProjetoLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7))
-                    .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPVersaoProjetoLayout.createSequentialGroup()
-                            .addComponent(jLabel1)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jTFIDVersao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPVersaoProjetoLayout.createSequentialGroup()
-                            .addComponent(jLabel5)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPVersaoProjetoLayout.createSequentialGroup()
-                            .addComponent(jLabel13)
-                            .addGap(26, 26, 26))
-                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPVersaoProjetoLayout.createSequentialGroup()
-                            .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jLabel3)
-                                .addComponent(jLabel6))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jCBComercializado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jTFLote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addGap(18, 18, 18)
+                .addComponent(jPDadosVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 19, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addComponent(jBTAddComposicao, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBTRemoveComposicao, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(77, 77, 77)
                         .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFTTotalEletronico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPVersaoProjetoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
+                        .addComponent(jFTTotalEletronico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel10)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                        .addComponent(jBTRemoveFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBTAddFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(85, 85, 85)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBTRemoveFornecedores, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(77, 77, 77)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jFTTotalMecanico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 187, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(8, 8, 8)
                 .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPVersaoProjetoLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
+                        .addGap(19, 19, 19)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jFTTotalMecanico1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -550,16 +616,14 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jTBComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 882, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jTBComponente, javax.swing.GroupLayout.PREFERRED_SIZE, 825, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jTBComponente, javax.swing.GroupLayout.Alignment.TRAILING)
         );
 
-        setSize(new java.awt.Dimension(898, 653));
+        setSize(new java.awt.Dimension(841, 653));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -582,7 +646,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 //Limpa os campos da tela pessoa
                 valida_campos.LimparCampos(jPVersaoProjeto);
                 valida_campos.LimparJtable(jTBComponentesEletronicos);
-                valida_campos.LimparJtable(jTBFornecedores);
+                valida_campos.LimparJtable(jTBComponentesMecanicos);
                 valida_campos.LimparJtable(jTBConsultaComponentes);
                 valida_campos.LimparJtable(jTBConsultaFornecedores);
                 valida_campos.LimparJtable(jTBConsultaComposicao);
@@ -623,7 +687,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                         //limpa campos
                         valida_campos.LimparCampos(jPVersaoProjeto);
                         valida_campos.LimparJtable(jTBComponentesEletronicos);
-                        valida_campos.LimparJtable(jTBFornecedores);
+                        valida_campos.LimparJtable(jTBComponentesMecanicos);
                         valida_campos.LimparJtable(jTBConsultaComponentes);
                         valida_campos.LimparJtable(jTBConsultaFornecedores);
                         valida_campos.LimparJtable(jTBConsultaComposicao);
@@ -660,7 +724,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                         //limpa campos
                         valida_campos.LimparCampos(jPVersaoProjeto);
                         valida_campos.LimparJtable(jTBComponentesEletronicos);
-                        valida_campos.LimparJtable(jTBFornecedores);
+                        valida_campos.LimparJtable(jTBComponentesMecanicos);
                         valida_campos.LimparJtable(jTBConsultaComponentes);
                         valida_campos.LimparJtable(jTBConsultaFornecedores);
                         valida_campos.LimparJtable(jTBConsultaComposicao);
@@ -685,8 +749,6 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         UltimaSequencia ultima;
 
-        //habilita campos da tela
-        valida_campos.habilitaCampos(jPVersaoProjeto);
         //se não for gerente
         if (acesso.getIn_gerente() == 0) {
             //retorna as permissoes de acesso do usuario
@@ -696,39 +758,51 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         //Verifica se o usuario possui permissao para incluir registros nessa tela
         if (valida_acesso.verificaAcesso("inserir", acesso, permissao) == true) {
 
-            //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
-            situacao = Rotinas.INCLUIR;
-
-            //habilita os botoes utilizados na inclusão e desabilita os restantes
-            valida_botoes.ValidaEstado(jPBotoes, situacao);
-
             try {
-                //Gera id sequencial
-                ultima = new UltimaSequencia();
-                int sequencia = (Integer) (ultima.ultimasequencia("COMPONENTE", "ID_COMPONENTE"));
-                //seta id no campo camponente
-                jTFIDVersao.setText(Integer.toString(sequencia));
 
-                //Seta a data atual no campo data
-                jFTData.setEnabled(true);
-                jFTData.setText(data.DataAtual());
+                if(jCBProjeto.getSelectedIndex() > 0){
 
-                //Carrega conteudo das combobox
-                jCBProjeto.addItem("Selecione tipo");
-                jCBProjeto.addItem("Eletrônico");
-                jCBProjeto.addItem("Mecânico");
+                    Integer id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
+                    projeto.setId_projeto(id_projeto);
+                    versao.setPrim_opcao_versao(dao_versao.criaCodigoVersao(versao, "PRIMEIRA_CASA"));
+                    versao.setSegun_opcao_versao(dao_versao.criaCodigoVersao(versao, "SEGUNDA_CASA"));
+                      
+                    InterfaceSelecionaVersao dialog = new InterfaceSelecionaVersao(this,true); //= new InterfaceSelecionaVersao();   
+                    dialog.setModal(true);  
+                    dialog.setVisible(true); 
+                    dialog = null; 
 
-                dao_material.consultaGeral(material);
-                //Preenche dados nas ComboBox de material
-                array_material = combo.PreencherCombo(jCBComercializado, "descricao", material.getRetorno(), "id_material");
-                //seta no array da classe de material a lista de materiais listadas na combo
-                material.setArray_material(array_material);
+                    if(VersaoProjeto.getVersao_selecionada() != null){
+                        
+                        //Gera id sequencial
+                        ultima = new UltimaSequencia();
+                        int sequencia = (Integer) (ultima.ultimasequencia("VERSAO_PROJETO", "COD_VERS_PROJETO"));
+                        //seta id da nova versão no campo ID
+                        jTFIDVersao.setText(Integer.toString(sequencia));
 
-                dao_datasheet.consultaGeral(datasheet);
-                //Preenche dados nas ComboBox de datasheet
-                array_datasheet = combo.PreencherCombo(jCBDatasheet, "descricao", datasheet.getRetorno(), "id_datasheet");
-                //seta no array da classe de material a lista de materiais listadas na combo
-                datasheet.setArray_datasheet(array_datasheet);
+                        //Seta a data atual no campo data
+                        jFTData.setEnabled(true);
+                        jFTData.setText(data.DataAtual());
+                        
+                        jCBVersao.removeAllItems();
+                        jCBVersao.addItem(String.valueOf(versao.getVersao_selecionada()));  
+                        versao.setVersao_selecionada(null);
+                        
+                        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                        situacao = Rotinas.INCLUIR;
+                        
+                        //habilita campos da tela
+                        valida_campos.habilitaCampos(jPVersaoProjeto);
+
+                        //habilita os botoes utilizados na inclusão e desabilita os restantes
+                        valida_botoes.ValidaEstado(jPBotoes, situacao);
+                    }
+
+                }else{
+                    JOptionPane.showMessageDialog(null, "Selecione um Projeto!");
+                }
+                       
+               
 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de componente");
@@ -739,7 +813,13 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jCBComercializadoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBComercializadoPopupMenuWillBecomeInvisible
-
+        if(jCBComercializado.getSelectedItem().equals("Sim")){
+            jTFLote.setText("");
+            jTFLote.setEnabled(true);
+        }else{
+            jTFLote.setText("");
+            jTFLote.setEnabled(false);
+        }
     }//GEN-LAST:event_jCBComercializadoPopupMenuWillBecomeInvisible
 
     private void jCBComercializadoPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBComercializadoPopupMenuWillBecomeVisible
@@ -747,13 +827,24 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBComercializadoPopupMenuWillBecomeVisible
 
     private void jCBProjetoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBProjetoPopupMenuWillBecomeInvisible
-       if(jCBProjeto.getSelectedIndex() > 0){
+       
+        if(jCBProjeto.getSelectedIndex() > 0){
+          
             versao.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
             //consulta versões para preencher na combobox de versões
             dao_versao.consultaCodigo(versao);
             array_versoes = combo.PreencherCombo(jCBVersao, "versao", versao.getRetorno(), "cod_vers_projeto");
             //seta no array da classe de versoes a lista de versoes listadas na combo
             versao.setArray_versoes(array_versoes);
+            
+            jTFIDVersao.setText("");
+
+            
+           
+       }else{
+            limpa_dados_versao();
+            jCBVersao.removeAllItems();
+            valida_campos.desabilitaCampos(jPVersaoProjeto);
        }
     }//GEN-LAST:event_jCBProjetoPopupMenuWillBecomeInvisible
 
@@ -771,10 +862,11 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBComponentesEletronicosMouseClicked
 
     private void jBTAddComposicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddComposicaoActionPerformed
-        new InterfaceComposicaoComponente().setVisible(true);
-        componente.setTabela(jTBComponentesEletronicos);
-        composicao.setSituacao(situacao);
-        composicao.setId_componente(Integer.parseInt(jTFIDVersao.getText()));
+        comp_vers_proj.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
+        comp_vers_proj.setVersao(Double.parseDouble(jCBVersao.getSelectedItem().toString()));
+        comp_vers_proj.setTipo("E");
+        comp_vers_proj.setTabela(jTBComponentesEletronicos);
+        new InterfaceAddComponentesVersao().setVisible(true);
     }//GEN-LAST:event_jBTAddComposicaoActionPerformed
 
     private void jBTRemoveComposicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComposicaoActionPerformed
@@ -793,12 +885,12 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTRemoveComposicaoActionPerformed
 
     private void jBTRemoveFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveFornecedoresActionPerformed
-        if (valida_campos.VerificaJtable(jTBFornecedores) == 1) {
-            int linha = jTBFornecedores.getSelectedRow();
-            Integer exc = Integer.parseInt(jTBFornecedores.getValueAt(linha, 6).toString());
+        if (valida_campos.VerificaJtable(jTBComponentesMecanicos) == 1) {
+            int linha = jTBComponentesMecanicos.getSelectedRow();
+            Integer exc = Integer.parseInt(jTBComponentesMecanicos.getValueAt(linha, 6).toString());
             //se não for um item removido
             if (exc == 0) {
-                Jtable.removeItens(jTBFornecedores, situacao);
+                Jtable.removeItens(jTBComponentesMecanicos, situacao);
             }else{
                 JOptionPane.showMessageDialog(null, "Item já removido");
             }
@@ -808,47 +900,36 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTRemoveFornecedoresActionPerformed
 
     private void jBTAddFornecedorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddFornecedorActionPerformed
-        try {
-            //atualiza dados do usuario logado
-            dao_acesso.retornaUsuarioLogado(acesso);
-
-            //Inclui a opção todas telas como primeira opção
-            tela.setDescricao("Todas telas");
-            tela.setId_tela(1);
-            dao_tela.incluir(tela);
-
-            //Inclui a tela de Pessoas
-            tela.setDescricao("Pessoas");
-            tela.setId_tela(2);
-            dao_tela.incluir(tela);
-
-            //Armazena dados de acesso da tela para verificar permissões
-            acesso.setId_tela(2);
-            acesso.setNome_tela("Pessoas");
-
-            //se naõ for gerente
-            if(acesso.getIn_gerente() == 0){
-                //retorna as permissoes de acesso do usuario
-                dao_permissao.retornaDadosPermissao(acesso, permissao);
-            }
-
-            //Verifica se o usuario possui permissao para acessar essa tela
-            if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
-                //Traz para tela a tela de cadastro de pessoas
-                fornec_comp.setTabela(jTBFornecedores);
-                fornec_comp.setSituacao(situacao);
-                new InterfaceConsultaFornecedores().setVisible(true);
-            }else{
-                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela");
-            }
-
-        } catch (SQLException ex) {
-            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        comp_vers_proj.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
+        comp_vers_proj.setVersao(Double.parseDouble(jCBVersao.getSelectedItem().toString()));
+        comp_vers_proj.setTipo("M");
+        comp_vers_proj.setTabela(jTBComponentesMecanicos);
+        new InterfaceAddComponentesVersao().setVisible(true);
     }//GEN-LAST:event_jBTAddFornecedorActionPerformed
 
     private void jCBVersaoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBVersaoPopupMenuWillBecomeInvisible
-        // TODO add your handling code here:
+        Double versao_projeto;
+        Integer id_projeto;
+        //se estiver selecionado uma versão
+        if(jCBVersao.getSelectedIndex() > 0){
+            //retorna os dados da versão selecionada
+            id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
+            versao_projeto = Double.parseDouble(jCBVersao.getSelectedItem().toString());
+            versao.setId_projeto(id_projeto);
+            versao.setVersao(versao_projeto);
+            dao_versao.retornardados(versao);
+            
+            //seta dados da versão na tela
+            setcompVersaoProjeto();
+            
+            //habilita jtables da tela
+            valida_campos.habilitaCampos(jPVersaoProjeto);
+            jCBComercializado.setEnabled(true);
+        }else{
+            limpa_dados_versao();
+            //desabilita jtables da tela
+            valida_campos.desabilitaCampos(jPVersaoProjeto);
+        }
     }//GEN-LAST:event_jCBVersaoPopupMenuWillBecomeInvisible
 
     private void jCBVersaoPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBVersaoPopupMenuWillBecomeVisible
@@ -861,14 +942,10 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         //limpa campos
-        valida_campos.LimparCampos(jPFornecimento);
-        valida_campos.LimparJtable(jTBComponentes);
-        valida_campos.LimparJtable(jTBComponentesProjetos);
-        jFTFreteReais.setValue(null);
-        jFTValorFrete.setValue(null);
-        jFTValorImpostos.setValue(null);
-        jFTImpostosReais.setValue(null);
-
+        valida_campos.LimparCampos(jPDadosVersao);
+        valida_campos.LimparJtable(jTBComponentesEletronicos);
+        valida_campos.LimparJtable(jTBComponentesEletronicos);
+       
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
         situacao = Rotinas.INICIAL;
 
@@ -876,8 +953,64 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         valida_botoes.ValidaEstado(jPBotoes, situacao);
 
         //desabilita campos
-        valida_campos.desabilitaCampos(jPFornecimento);
+        valida_campos.desabilitaCampos(jPVersaoProjeto);
+        
+        // carrega dados nas combobox
+        dao_projeto.consultaGeral(projeto);
+        //Preenche dados nas ComboBox de projetos
+        array_projetos = combo.PreencherCombo(jCBProjeto, "descricao", projeto.getRetorno(), "id_projeto");
+        //seta no array da classe de projetos a lista de projetos listadas na combo
+        projeto.setArray_projetos(array_projetos);
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jBTNovoEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoEstadoActionPerformed
+        try {
+            //atualiza dados do usuario logado
+            dao_acesso.retornaUsuarioLogado(acesso);
+
+            //Inclui a opção todas telas como primeira opção
+            tela.setDescricao("Todas telas");
+            tela.setId_tela(1);
+            dao_tela.incluir(tela);
+
+            //Inclui a tela de Moedas
+            tela.setDescricao("Projetos");
+            tela.setId_tela(8);
+            dao_tela.incluir(tela);
+
+            //Armazena dados de acesso da tela para verificar permissões
+            acesso.setId_tela(8);
+            acesso.setNome_tela("Projetos");
+
+            //se naõ for gerente
+            if(acesso.getIn_gerente() == 0){
+                //retorna as permissoes de acesso do usuario
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            }
+
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas
+                new InterfaceProjeto().setVisible(true);
+            }else{
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela");
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_jBTNovoEstadoActionPerformed
+
+    private void jTFLoteKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFLoteKeyTyped
+        String caracteres="0987654321";
+        if(!caracteres.contains(evt.getKeyChar()+"")){
+            evt.consume();
+        }
+    }//GEN-LAST:event_jTFLoteKeyTyped
+
+    private void jTBComponentesMecanicosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBComponentesMecanicosMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTBComponentesMecanicosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -917,6 +1050,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBTAddComposicao;
     private javax.swing.JButton jBTAddFornecedor;
+    private javax.swing.JButton jBTNovoEstado;
     private javax.swing.JButton jBTRemoveComposicao;
     private javax.swing.JButton jBTRemoveFornecedores;
     private javax.swing.JButton jButton1;
@@ -942,13 +1076,39 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPBotoes;
+    private javax.swing.JPanel jPDadosVersao;
     private javax.swing.JPanel jPVersaoProjeto;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JTabbedPane jTBComponente;
     private javax.swing.JTable jTBComponentesEletronicos;
-    private javax.swing.JTable jTBFornecedores;
+    private javax.swing.JTable jTBComponentesMecanicos;
     private javax.swing.JTextField jTFIDVersao;
     private javax.swing.JTextField jTFLote;
     // End of variables declaration//GEN-END:variables
+
+ public void setcompVersaoProjeto(){
+    jTFIDVersao.setText(String.valueOf(versao.getCod_vers_projeto()));
+    if(versao.getComercializado().equals("S")){
+        jCBComercializado.setSelectedItem("Sim");
+        jTFLote.setText(String.valueOf(versao.getLote()));
+    }else if (versao.getComercializado().equals("N")){
+        jCBComercializado.setSelectedItem("Não"); 
+        jTFLote.setEnabled(false);
+    }else{
+        jCBComercializado.setSelectedIndex(0); 
+        jTFLote.setEnabled(false);
+    }
+    
+    jFTData.setText(data.organizaData(versao.getData_cadastro()));
+    }
+ 
+ public void limpa_dados_versao(){
+    jTFIDVersao.setText("");
+    jFTData.setText("");
+    jTFLote.setText("");
+    jCBComercializado.setSelectedIndex(0);
+    jCBComercializado.setEnabled(false);
+    jTFLote.setEnabled(false);
+ }
 }

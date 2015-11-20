@@ -1676,6 +1676,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         fornecimento.setValor_frete(valor_frete);
         fornecimento.setId_moeda_imp(moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1));
         fornecimento.setValor_impostos(valor_imposto);
+        fornecimento.setData_cadastro(data_atual);
         fornecimento.setData_alter(data_atual);
 
         return fornecimento;
