@@ -14,6 +14,7 @@ import br.edu.GPEDSCVP.util.Rotinas;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaCampos;
 import java.sql.SQLException;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +28,8 @@ public class daoComponenteVersaoProjeto {
     ConexaoBanco conecta_banco;
     UltimaSequencia ultima;
     Conversoes conversoes = new Conversoes();
+    daoMoeda dao_moeda = new daoMoeda();
+    FormatarData data = new FormatarData();
     
     public daoComponenteVersaoProjeto()
     {
@@ -412,12 +415,40 @@ public class daoComponenteVersaoProjeto {
                                comp_vers_proj.setRetorno(conecta_banco.resultset);
     }
     
+    //Consulta de todos componentes fornecidos para uma determinada versão do projeto e que estão sendo utilizadas no projeto
+    public void consultaCompVersaoProjeto(ComponenteVersaoProjeto comp_vers_proj){
+         conecta_banco.executeSQL("select null, componentes_versao_projeto.id_comp_versao,componentes_versao_projeto.id_projeto,projeto.descricao," 
+                               +" componentes_versao_projeto.cod_vers_projeto,versao_projeto.versao,componentes_versao_projeto.id_fornecimento," 
+                               +" fornecimento.descricao,componentes_versao_projeto.id_componente,componente.descricao, componente.tipo,"
+                               +" componentes_versao_projeto.id_comp_fornec, qntd_para_projeto,qntd_no_projeto,situacao,fornecimento.data_cadastro,"
+                               +" componentes_versao_projeto.data_alter,componentes_versao_projeto.in_ativo,componentes_fornecimento.id_moeda,moeda.unidade,"
+                               +" componentes_fornecimento.valor_unit,componentes_fornecimento.valor_unit * qntd_no_projeto as total,false from componentes_versao_projeto" 
+                               +" inner join componentes_fornecimento on (componentes_fornecimento.id_comp_fornec = componentes_versao_projeto.id_comp_fornec)" 
+                               +" inner join moeda on (moeda.id_moeda = componentes_fornecimento.id_moeda)" 
+                               +" inner join componente on (componente.id_componente = componentes_fornecimento.id_componente)"
+                               +" inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)" 
+                               +" inner join versao_projeto on (versao_projeto.cod_vers_projeto = componentes_versao_projeto.cod_vers_projeto)"
+                               +" inner join projeto on (projeto.id_projeto = versao_projeto.id_projeto)" 
+                               +" where componentes_versao_projeto.id_projeto = "+comp_vers_proj.getId_projeto()+" and versao_projeto.versao = "+comp_vers_proj.getVersao()+""
+                               +" and componente.tipo = '"+comp_vers_proj.getTipo()+"' and componentes_versao_projeto.in_ativo = 'A' and situacao = 'C'");         
+                              
+                               comp_vers_proj.setRetorno(conecta_banco.resultset);
+    }
+    
     //Método de incluir componentes para uma versão do projeto
     public void addCompParaProjeto(ComponenteVersaoProjeto comp_vers_proj,JTable componente, int situacao) throws SQLException{
         
         DefaultTableModel TabelaCompVersProj = (DefaultTableModel) comp_vers_proj.getTabela().getModel();
         DefaultTableModel TabelaCompFornec = (DefaultTableModel) componente.getModel();
-        Double total;
+        JFormattedTextField JftTotalEletronico = comp_vers_proj.getField_total_eletronicos();
+        JFormattedTextField JftTotalMecanico = comp_vers_proj.getField_total_mecanicos();
+        JFormattedTextField JftTotalComp = comp_vers_proj.getField_total_comp(); 
+        
+        Double total = 0.0;
+        Double total_eletronicos = 0.0;
+        Double total_mecanicos = 0.0;
+        Double total_comp = 0.0;
+       
         int totlinha_comp_proj = TabelaCompVersProj.getRowCount();
         int totlinha_comp_fornec = TabelaCompFornec.getRowCount();
        
@@ -428,7 +459,7 @@ public class daoComponenteVersaoProjeto {
             total = comp_vers_proj.getQntd_no_projeto() * comp_vers_proj.getValor_unit();
             //seta valores na jtable
             TabelaCompVersProj.setValueAt(false, 0, 0);
-            TabelaCompVersProj.setValueAt(comp_vers_proj.getId_comp_fornec(), 0,1);
+            TabelaCompVersProj.setValueAt(comp_vers_proj.getId_comp_versao(), 0,1);
             TabelaCompVersProj.setValueAt(comp_vers_proj.getId_componente(),0,2);
             TabelaCompVersProj.setValueAt(comp_vers_proj.getComponente(), 0, 3);
             TabelaCompVersProj.setValueAt(comp_vers_proj.getId_moeda(), 0, 4);
@@ -437,19 +468,21 @@ public class daoComponenteVersaoProjeto {
             TabelaCompVersProj.setValueAt(comp_vers_proj.getQntd_no_projeto(), 0, 7);
             TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total), 0, 8);
             TabelaCompVersProj.setValueAt(0, 0, 9);
-        
+
         }else{
          
             for (int i_comp = 0; i_comp < totlinha_comp_proj; i_comp++){
                 
-                Integer exc = Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 8).toString());
+                Integer exc = Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 9).toString());
                 total = comp_vers_proj.getQntd_no_projeto() * comp_vers_proj.getValor_unit();
                 //se o componente ja existir e não estiver excluido entao sobreescreve apenas a quantidade 
-                if((Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 1).toString()) == comp_vers_proj.getId_componente()) && exc == 0) {
-                   
+                if((Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 2).toString()) == comp_vers_proj.getId_componente()) && exc == 0) {
+                    // adiciona a nova quantidade para o componente e racalcula o total
                     Integer qntd_atual = Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 7).toString());
                     TabelaCompVersProj.setValueAt(qntd_atual+comp_vers_proj.getQntd_no_projeto(), i_comp, 7);
-        
+                    total = (qntd_atual + comp_vers_proj.getQntd_no_projeto()) * comp_vers_proj.getValor_unit();
+                    TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total), i_comp, 8);
+                    break;
                 }else{
                     //Se não existir o componente ou estiver marcado como excluido
                     //Chegou na ultima linha
@@ -466,11 +499,57 @@ public class daoComponenteVersaoProjeto {
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getUnidade(), totlinha_comp_proj, 5);
                         TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(comp_vers_proj.getValor_unit()), totlinha_comp_proj, 6);
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getQntd_no_projeto(), totlinha_comp_proj, 7);
-                        TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total), 0, 8);
+                        TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total), totlinha_comp_proj, 8);
                         TabelaCompVersProj.setValueAt(0, totlinha_comp_proj, 9);
                     }
                 }
             }  
         } 
+        //seta os valores totais nas jtfield de componentes eletronicos e mecanicos
+        if(!JftTotalComp.getText().equals("")){
+            total_comp = Double.parseDouble(JftTotalComp.getText().replace(".", "").replace(",", "."));
+        }else{
+            total_comp = 0.0;
+        }
+        if(comp_vers_proj.getTabela().getName().equals("jTBComponentesEletronicos")){
+            total_eletronicos = calcula_total_componentes(comp_vers_proj.getTabela());
+            JftTotalEletronico.setText(conversoes.doubleParaObjectDecimalFormat(total_eletronicos).toString());
+        }else  if(comp_vers_proj.getTabela().getName().equals("jTBComponentesMecanicos")) {
+            total_mecanicos = calcula_total_componentes(comp_vers_proj.getTabela());
+            JftTotalMecanico.setText(conversoes.doubleParaObjectDecimalFormat(total_mecanicos).toString());
+        }else{
+            JftTotalMecanico.setText("0.00");
+            JftTotalEletronico.setText("0.00");
+            JftTotalComp.setText("0.00");
+        }
+        
+        //pega os totais de cada tipo de componentes (Eletronicos e Mecanicos) calcula, e seta no total de componentes
+        if(!JftTotalEletronico.getText().equals("")){
+            total_eletronicos = Double.parseDouble(JftTotalEletronico.getText().replace(".", "").replace(",", "."));
+        }else{
+            total_eletronicos = 0.0;
+        }
+        
+        if(!JftTotalMecanico.getText().equals("")){
+            total_mecanicos = Double.parseDouble(JftTotalMecanico.getText().replace(".", "").replace(",", "."));
+        }else{
+            total_mecanicos = 0.0;
+        }
+        JftTotalComp.setText(conversoes.doubleParaObjectDecimalFormat(total_eletronicos + total_mecanicos).toString());
+    }
+    
+    //metodo para calcular o total de componentes na jtable
+    public double calcula_total_componentes(JTable Tabela_comp){
+        int totlinha_comp = Tabela_comp.getRowCount();
+        Double total_comp = 0.0;
+        Double total = 0.0;
+        Integer id_moeda;
+        for (int i_comp = 0; i_comp < totlinha_comp; i_comp++){
+            id_moeda = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 4).toString());
+            total_comp = Double.parseDouble(Tabela_comp.getValueAt(i_comp, 8).toString().replace(".", "").replace(",", "."));
+            total_comp = dao_moeda.converteparaReais(total_comp, id_moeda,null);
+            total = total + total_comp;
+        }
+       return total;
     }
 }

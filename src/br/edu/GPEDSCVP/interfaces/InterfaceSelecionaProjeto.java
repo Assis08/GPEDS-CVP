@@ -5,12 +5,15 @@
  */
 package br.edu.GPEDSCVP.interfaces;
 
+import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComponenteFornecimento;
 import br.edu.GPEDSCVP.classe.ComponenteVersaoProjeto;
 import br.edu.GPEDSCVP.classe.Fornecimento;
 import br.edu.GPEDSCVP.classe.Projeto;
 import br.edu.GPEDSCVP.classe.VersaoProjeto;
+import br.edu.GPEDSCVP.dao.daoComponente;
 import br.edu.GPEDSCVP.dao.daoComponenteVersaoProjeto;
+import br.edu.GPEDSCVP.dao.daoFornecimento;
 import br.edu.GPEDSCVP.dao.daoProjeto;
 import br.edu.GPEDSCVP.dao.daoVersaoProjeto;
 import br.edu.GPEDSCVP.util.ComboBox;
@@ -29,6 +32,9 @@ import javax.swing.JOptionPane;
 public class InterfaceSelecionaProjeto extends javax.swing.JFrame {
 
     Projeto projeto;
+    Componente componente;
+    daoComponente dao_componente;
+    daoFornecimento dao_fornecimento;
     ComponenteFornecimento comp_fornec;
     ComponenteVersaoProjeto comp_vers_proj;
     daoComponenteVersaoProjeto dao_comp_vers;
@@ -46,6 +52,9 @@ public class InterfaceSelecionaProjeto extends javax.swing.JFrame {
         initComponents();
         
         projeto = new Projeto();
+        componente = new Componente();
+        dao_componente = new daoComponente();
+        dao_fornecimento = new daoFornecimento();
         comp_fornec = new ComponenteFornecimento();
         comp_vers_proj = new ComponenteVersaoProjeto();
         dao_projeto = new daoProjeto();
@@ -215,9 +224,30 @@ public class InterfaceSelecionaProjeto extends javax.swing.JFrame {
             try {
                 if(comp_fornec.getQntd_componente() >= Integer.parseInt(jTFQuantidade.getText())){
                     getCompVersProj();
-                    dao_comp_vers.addComponenteVersao(comp_vers_proj, comp_fornec.getTabela(), comp_fornec.getSituacao());
-                    Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
-                    this.dispose();
+                    
+                    //verifica se o componente selecionado possui composição
+                    componente.setId_componente(comp_vers_proj.getId_componente());
+                    componente.setDescricao(comp_vers_proj.getComponente());
+                    versao.setCod_vers_projeto(comp_vers_proj.getCod_vers_projeto());
+                    //componene possui composição ?
+                    if(dao_componente.verificaExisteComposicao(componente) == true){
+                        //Toda composição do componente tem um registro de fornecimento para a versão do proejto em questão?
+                        if(dao_fornecimento.verificaExisteFornecimentoComposicao(componente, versao) == true){  
+                            //sim, então add o componente para a versão
+                            dao_comp_vers.addComponenteVersao(comp_vers_proj, comp_fornec.getTabela(), comp_fornec.getSituacao());
+                            Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
+                            this.dispose();
+                        }else{
+                            //não, então fecha a tela e da a mensagem  de erro
+                            this.dispose();
+                        }
+                    }else{
+                        //não, o componente não possui composição, então add direto sem verificação
+                        dao_comp_vers.addComponenteVersao(comp_vers_proj, comp_fornec.getTabela(), comp_fornec.getSituacao());
+                        Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
+                        this.dispose(); 
+                    }
+
                 }else{
                     JOptionPane.showMessageDialog(null, "Quantidade informada está acima da quantidade restante / "+comp_fornec.getQntd_componente());
                     jTFQuantidade.grabFocus();

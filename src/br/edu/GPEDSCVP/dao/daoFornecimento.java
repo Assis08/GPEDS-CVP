@@ -5,14 +5,19 @@
  */
 package br.edu.GPEDSCVP.dao;
 
+import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComponenteFornecimento;
 import br.edu.GPEDSCVP.classe.Fornecimento;
+import br.edu.GPEDSCVP.classe.VersaoProjeto;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.ExcessaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.Rotinas;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -270,5 +275,47 @@ public class daoFornecimento {
         
         conecta_banco.atualizarSQL("UPDATE COMPONENTES_VERSAO_PROJETO SET IN_ATIVO = 'I'"
                                + " WHERE ID_FORNECIMENTO = " + fornecimento.getId_fornecimento());
-    }  
+    }
+    
+   // verifica a existencia de fornecimento para a composição do componente
+    public boolean verificaExisteFornecimentoComposicao(Componente componente, VersaoProjeto versao){
+        Integer id_componente_composicao;
+        String ds_componente_composicao;
+        Integer id_componente_fornecido;
+        boolean possui_fornecimento;
+        boolean retorno = true;
+        ResultSet result_composicao;
+        ResultSet result_fornec_composicao;
+        //faz a consulta de composição do componente
+        conecta_banco.executeSQL("select id_subcomponente, composicao_componente.id_componente, componente.descricao from composicao_componente" 
+                                +" inner join componente on (componente.id_componente = composicao_componente.id_subcomponente)" 
+                                +" where composicao_componente.id_componente ="+componente.getId_componente());
+        result_composicao = conecta_banco.resultset;
+        try {
+            while ( result_composicao.next()) {
+                id_componente_composicao = result_composicao.getInt("id_subcomponente");
+                ds_componente_composicao = result_composicao.getString("descricao");
+                possui_fornecimento = false;
+               
+                conecta_banco.executeSQL("select * from componentes_versao_projeto where id_componente = "+id_componente_composicao+" and componentes_versao_projeto.cod_vers_projeto ="+versao.getCod_vers_projeto()); 
+                
+                result_fornec_composicao = conecta_banco.resultset;
+                while ( result_fornec_composicao.next()) {
+                    id_componente_fornecido = result_fornec_composicao.getInt("id_componente");
+                    if(id_componente_fornecido == id_componente_composicao){
+                        possui_fornecimento = true;
+                    }
+                }
+                if(possui_fornecimento == false){
+                    retorno = false;
+                    JOptionPane.showMessageDialog(null, "Não existe fornecimento registrado do componente id: "+id_componente_composicao+" "+ds_componente_composicao+" para esta versão do projeto.\n"
+                    +"Este componente faz parte da composição do componente id:"+componente.getId_componente()+" "+componente.getDescricao()+".\n"
+                    +"Deve ser registrado um fornecimento desse componente para esta versão do projeto!");
+                }
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(daoFornecimento.class.getName()).log(Level.SEVERE, null, ex);
+        }
+       return retorno;
+    }
 }

@@ -437,39 +437,48 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
         int totlinha_comp_proj = tabela.getRowCount();
         Integer id_comp;
         Integer qntd_add;
+        boolean encontrou = false;
         
         try {
             Integer qntd = Integer.parseInt(jTFQntd.getText());
             if(qntd > 0){
                 getCompVersProj();
                 //verfica se a quantidade ja adicionada para o projeto + a quantidade informada excede a quantidade para o projeto
-                    if(totlinha_comp_proj > 0){
-                         for (int i_comp = 0; i_comp < totlinha_comp_proj; i_comp++){
+                if(totlinha_comp_proj > 0){
+                    for (int i_comp = 0; i_comp < totlinha_comp_proj; i_comp++){
                         id_comp = Integer.parseInt(tabela.getValueAt(i_comp, 2).toString());
-                        qntd_add = Integer.parseInt(tabela.getValueAt(i_comp, 7).toString());
                         if(id_comp == comp_vers_proj.getId_componente()){
+                            
+                            encontrou = true;
+                            qntd_add = Integer.parseInt(tabela.getValueAt(i_comp, 7).toString());
+                           
                             if(qntd_add + qntd > comp_vers_proj.getQntd_para_projeto()){
                                 JOptionPane.showMessageDialog(null, "Quantidade excede a quantidade restante para este projeto");
+                                break;
                             }else{
                                 dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
                                 Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
                                 this.dispose();
+                                break;
                             }
                         }
                     }
-                }else{
-                        if(qntd <= comp_vers_proj.getQntd_para_projeto()){
-                            dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
-                            Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
-                            this.dispose();
-                        }else{
-                             JOptionPane.showMessageDialog(null, "Quantidade excede a quantidade restante para este projeto");
-                        } 
+                    
+                    if(encontrou == false){
+                        dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
+                        Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
+                        this.dispose();
+                        
                     }
-               
-
-               
-          
+                }else{
+                    if(qntd <= comp_vers_proj.getQntd_para_projeto()){
+                        dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
+                        Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
+                        this.dispose();
+                    }else{
+                         JOptionPane.showMessageDialog(null, "Quantidade excede a quantidade restante para este projeto");
+                    } 
+                }
             }else{
                 JOptionPane.showMessageDialog(null, "Quantidade deve ser maior que 0!");
             }
@@ -550,7 +559,7 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
         int linha = jTBConsultaComponentes.getSelectedRow();
         Date data_atual = new Date(System.currentTimeMillis());
         
-        Integer id_com_fornec = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 0).toString());
+        Integer id_comp_vers = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 0).toString());
         Integer id_componente = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 7).toString());
         String ds_componente = jTBConsultaComponentes.getValueAt(linha, 8).toString();
         Integer id_moeda = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 12).toString());
@@ -559,7 +568,7 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
         Integer qntd_para_projeto = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 10).toString());
         Integer qntd_no_projeto = Integer.parseInt(jTFQntd.getText());
         
-        comp_vers_proj.setId_comp_fornec(id_com_fornec);
+        comp_vers_proj.setId_comp_versao(id_comp_vers);
         comp_vers_proj.setId_componente(id_componente);
         comp_vers_proj.setComponente(ds_componente);
         comp_vers_proj.setId_moeda(id_moeda);

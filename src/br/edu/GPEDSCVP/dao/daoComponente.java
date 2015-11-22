@@ -9,6 +9,7 @@ import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
 import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.FornecedoresComponente;
+import br.edu.GPEDSCVP.classe.VersaoProjeto;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.ExcessaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
@@ -684,7 +685,21 @@ public class daoComponente {
         //inativa fornecedores do componente
         conecta_banco.atualizarSQL("UPDATE FORNECEDOR_COMPONENTE SET IN_ATIVO = 'I'"
                                + " WHERE ID_COMPONENTE = " + componente.getId_componente());
-    }  
+    }
+    // verifica a existencia de composição do componente em questão, retorna true se existe composicao e false se não existe
+    public boolean verificaExisteComposicao(Componente componente){
+        Integer id_componente_composicao = 0;
+        //faz a consulta de composição do componente
+        conecta_banco.executeSQL("select * from composicao_componente where composicao_componente.id_componente = "+componente.getId_componente());
+        try {        
+           conecta_banco.resultset.first();
+           id_componente_composicao = conecta_banco.resultset.getInt("id_componente");
+           return true;
+        } catch (SQLException ex) {
+           return false;
+           
+        }
+    }
 }
 
 

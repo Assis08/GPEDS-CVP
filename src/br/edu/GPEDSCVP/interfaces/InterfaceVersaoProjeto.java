@@ -178,7 +178,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jFTTotalMecanico = new javax.swing.JFormattedTextField();
         jLabel8 = new javax.swing.JLabel();
-        jFTTotalMecanico1 = new javax.swing.JFormattedTextField();
+        jFTTotalComponentes = new javax.swing.JFormattedTextField();
         jLabel9 = new javax.swing.JLabel();
         jPDadosVersao = new javax.swing.JPanel();
         jTFLote = new javax.swing.JTextField();
@@ -295,7 +295,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTBComponentesEletronicos.setName("Composição"); // NOI18N
+        jTBComponentesEletronicos.setName("jTBComponentesEletronicos"); // NOI18N
         jTBComponentesEletronicos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBComponentesEletronicosMouseClicked(evt);
@@ -519,7 +519,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTBComponentesMecanicos.setName("Composição"); // NOI18N
+        jTBComponentesMecanicos.setName("jTBComponentesMecanicos"); // NOI18N
         jTBComponentesMecanicos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBComponentesMecanicosMouseClicked(evt);
@@ -543,7 +543,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                         .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(64, 64, 64)
                         .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jFTTotalMecanico1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jFTTotalComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel9)))
                     .addComponent(jLabel2)
                     .addGroup(jPVersaoProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
@@ -606,7 +606,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                         .addGap(19, 19, 19)
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFTTotalMecanico1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jFTTotalComponentes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -866,6 +866,9 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         comp_vers_proj.setVersao(Double.parseDouble(jCBVersao.getSelectedItem().toString()));
         comp_vers_proj.setTipo("E");
         comp_vers_proj.setTabela(jTBComponentesEletronicos);
+        comp_vers_proj.setField_total_eletronicos(jFTTotalEletronico);
+        comp_vers_proj.setField_total_mecanicos(jFTTotalMecanico);
+        comp_vers_proj.setField_total_comp(jFTTotalComponentes);
         new InterfaceAddComponentesVersao().setVisible(true);
     }//GEN-LAST:event_jBTAddComposicaoActionPerformed
 
@@ -904,6 +907,9 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         comp_vers_proj.setVersao(Double.parseDouble(jCBVersao.getSelectedItem().toString()));
         comp_vers_proj.setTipo("M");
         comp_vers_proj.setTabela(jTBComponentesMecanicos);
+        comp_vers_proj.setField_total_eletronicos(jFTTotalEletronico);
+        comp_vers_proj.setField_total_mecanicos(jFTTotalMecanico);
+        comp_vers_proj.setField_total_comp(jFTTotalComponentes);
         new InterfaceAddComponentesVersao().setVisible(true);
     }//GEN-LAST:event_jBTAddFornecedorActionPerformed
 
@@ -925,6 +931,18 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             //habilita jtables da tela
             valida_campos.habilitaCampos(jPVersaoProjeto);
             jCBComercializado.setEnabled(true);
+            
+            //Lista componentes eletrônicos da versão
+            comp_vers_proj.setId_projeto(id_projeto);
+            comp_vers_proj.setVersao(versao_projeto);
+            comp_vers_proj.setTipo("E");
+            dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
+            
+            //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
+            Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false"}, comp_vers_proj.getRetorno());
+            
+            //ajusta largura das colunas
+            Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
         }else{
             limpa_dados_versao();
             //desabilita jtables da tela
@@ -961,6 +979,10 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         array_projetos = combo.PreencherCombo(jCBProjeto, "descricao", projeto.getRetorno(), "id_projeto");
         //seta no array da classe de projetos a lista de projetos listadas na combo
         projeto.setArray_projetos(array_projetos);
+        
+        jCBComercializado.addItem("Selecione");
+        jCBComercializado.addItem("Sim");
+        jCBComercializado.addItem("Não");
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jBTNovoEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoEstadoActionPerformed
@@ -1061,9 +1083,9 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     private javax.swing.JComboBox jCBProjeto;
     private javax.swing.JComboBox jCBVersao;
     private javax.swing.JFormattedTextField jFTData;
+    private javax.swing.JFormattedTextField jFTTotalComponentes;
     private javax.swing.JFormattedTextField jFTTotalEletronico;
     private javax.swing.JFormattedTextField jFTTotalMecanico;
-    private javax.swing.JFormattedTextField jFTTotalMecanico1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel13;

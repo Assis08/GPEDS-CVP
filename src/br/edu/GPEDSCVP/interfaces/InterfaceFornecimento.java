@@ -1724,7 +1724,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
          jFTImpostosReais.setText(String.valueOf(dao_moeda.converteparaReais(fornecimento.getValor_impostos(), fornecimento.getId_moeda_imp(), null)).replace(".", ","));
          jFTData.setText(String.valueOf(data.organizaData(fornecimento.getData_cadastro())));
      }
-    
+
     class EvenOddRenderer implements TableCellRenderer {
 
         public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
@@ -1757,7 +1757,6 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                     }else{
                         table.setValueAt(false, row, 0);
                     }
-
                 }       
              }
              if(!isSelected){

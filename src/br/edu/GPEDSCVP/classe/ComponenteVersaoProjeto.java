@@ -7,7 +7,9 @@ package br.edu.GPEDSCVP.classe;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import javax.swing.JFormattedTextField;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 
 /**
  *
@@ -33,6 +35,9 @@ public class ComponenteVersaoProjeto {
     private String situacao;
     private Date data_alter;
     private static JTable tabela;
+    private static JFormattedTextField field_total_eletronicos;
+    private static JFormattedTextField field_total_mecanicos;
+    private static JFormattedTextField field_total_comp;
     private ResultSet retorno;
 
     public ComponenteVersaoProjeto() {
@@ -199,5 +204,28 @@ public class ComponenteVersaoProjeto {
     public void setValor_unit(double valor_unit) {
         this.valor_unit = valor_unit;
     }
-    
+
+    public static JFormattedTextField getField_total_eletronicos() {
+        return field_total_eletronicos;
+    }
+
+    public static void setField_total_eletronicos(JFormattedTextField field_total_eletronicos) {
+        ComponenteVersaoProjeto.field_total_eletronicos = field_total_eletronicos;
+    }
+
+    public static JFormattedTextField getField_total_mecanicos() {
+        return field_total_mecanicos;
+    }
+
+    public static void setField_total_mecanicos(JFormattedTextField field_total_mecanicos) {
+        ComponenteVersaoProjeto.field_total_mecanicos = field_total_mecanicos;
+    } 
+
+    public static JFormattedTextField getField_total_comp() {
+        return field_total_comp;
+    }
+
+    public static void setField_total_comp(JFormattedTextField field_total_comp) {
+        ComponenteVersaoProjeto.field_total_comp = field_total_comp;
+    }
 }

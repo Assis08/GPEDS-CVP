@@ -63,7 +63,7 @@
                               <Component id="jPBotoes" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="64" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="1" attributes="0">
-                                  <Component id="jFTTotalMecanico1" min="-2" pref="112" max="-2" attributes="0"/>
+                                  <Component id="jFTTotalComponentes" min="-2" pref="112" max="-2" attributes="0"/>
                                   <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -141,7 +141,7 @@
                               <EmptySpace min="-2" pref="19" max="-2" attributes="0"/>
                               <Component id="jLabel9" min="-2" max="-2" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jFTTotalMecanico1" min="-2" max="-2" attributes="0"/>
+                              <Component id="jFTTotalComponentes" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -308,7 +308,7 @@
                         </Column>
                       </TableColumnModel>
                     </Property>
-                    <Property name="name" type="java.lang.String" value="Composi&#xe7;&#xe3;o" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="jTBComponentesEletronicos" noResource="true"/>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>
@@ -386,7 +386,7 @@
                 <Property name="text" type="java.lang.String" value="Total R$:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JFormattedTextField" name="jFTTotalMecanico1">
+            <Component class="javax.swing.JFormattedTextField" name="jFTTotalComponentes">
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel9">
               <Properties>
@@ -671,7 +671,7 @@
                         </Column>
                       </TableColumnModel>
                     </Property>
-                    <Property name="name" type="java.lang.String" value="Composi&#xe7;&#xe3;o" noResource="true"/>
+                    <Property name="name" type="java.lang.String" value="jTBComponentesMecanicos" noResource="true"/>
                     <Property name="tableHeader" type="javax.swing.table.JTableHeader" editor="org.netbeans.modules.form.editors2.JTableHeaderEditor">
                       <TableHeader reorderingAllowed="true" resizingAllowed="true"/>
                     </Property>

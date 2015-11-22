@@ -612,6 +612,7 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
                 if (valida_campos.validacamposobrigatorios(jPInfoCompFornec, "COMPONENTES_FORNECIMENTO") == 0) { 
                     try {
                         getComponente();
+      
                         dao_comp_fornec.addComponenteFornecimento(comp_fornec,jTBConsultaComponentes,comp_fornec.getSituacao());
                         //Seta mascara na coluna de valores monetários da jtable
                         Jtable.setarMascaraMonetaria(comp_fornec.getTabela(), jFTMascaraMonetaria,4);
