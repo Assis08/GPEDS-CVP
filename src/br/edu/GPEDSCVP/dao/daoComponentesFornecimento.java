@@ -87,14 +87,25 @@ public class daoComponentesFornecimento {
             for (int i_comp = 0; i_comp < totlinha_comp_fornec; i_comp++){
                 //Chegou na ultima linha
                 if( i_comp == totlinha_comp_fornec-1){
+                    
+                     //adiciona uma linha a mais
+                    TabelaComponentesFornecidos.setNumRows(totlinha_comp_fornec+1);  
 
                     //se estiver em modo de alteração
                     if(situacao == Rotinas.ALTERAR){
                         //gera ultimo id baseado no banco
                         id_fornecidos = ultima.ultimasequencia("COMPONENTES_FORNECIMENTO","ID_COMP_FORNEC"); 
+                        
+                        if(id_fornecidos > Integer.parseInt(TabelaComponentesFornecidos.getValueAt(totlinha_comp_fornec-1, 1).toString())){
+                            TabelaComponentesFornecidos.setValueAt(id_fornecidos, totlinha_comp_fornec,1);
+                        }else{
+                             id_fornecidos = Integer.parseInt(TabelaComponentesFornecidos.getValueAt(totlinha_comp_fornec-1, 1).toString());
+                             TabelaComponentesFornecidos.setValueAt(id_fornecidos+1, totlinha_comp_fornec,1);
+                        }
                     }else{
                         //gera o ultimo id baseado no ultimo registro da jtable
                         id_fornecidos = (Integer.parseInt(TabelaComponentesFornecidos.getValueAt(totlinha_comp_fornec-1, 1).toString())+1);
+                        TabelaComponentesFornecidos.setValueAt(id_fornecidos, totlinha_comp_fornec,1);
                     }
                     
                     //formata valores monetários 
@@ -104,11 +115,8 @@ public class daoComponentesFornecimento {
                     total = componente.getValor_unit() * componente.getQntd_componente();
                     valor_total_comp = dFormat.format(total);
             
-                    //adiciona uma linha a mais
-                    TabelaComponentesFornecidos.setNumRows(totlinha_comp_fornec+1);  
                      //seta valores na jtable
                     TabelaComponentesFornecidos.setValueAt(false, totlinha_comp_fornec, 0);
-                    TabelaComponentesFornecidos.setValueAt(id_fornecidos, totlinha_comp_fornec,1);
                     TabelaComponentesFornecidos.setValueAt(componente.getId_componente(), totlinha_comp_fornec, 2);
                     TabelaComponentesFornecidos.setValueAt(componente.getDescricao(), totlinha_comp_fornec, 3);
                     TabelaComponentesFornecidos.setValueAt(valor_unit_comp, totlinha_comp_fornec, 4);

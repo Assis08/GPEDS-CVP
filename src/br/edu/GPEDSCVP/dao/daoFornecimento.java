@@ -7,6 +7,7 @@ package br.edu.GPEDSCVP.dao;
 
 import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComponenteFornecimento;
+import br.edu.GPEDSCVP.classe.ComponenteVersaoProjeto;
 import br.edu.GPEDSCVP.classe.Fornecimento;
 import br.edu.GPEDSCVP.classe.VersaoProjeto;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
@@ -232,7 +233,7 @@ public class daoFornecimento {
             fornecimento.setId_moeda_imp(conecta_banco.resultset.getInt("fornecimento.id_moeda_imp"));
             fornecimento.setDs_moeda_imp(conecta_banco.resultset.getString("moeda_imposto.unidade"));
             fornecimento.setValor_impostos(conecta_banco.resultset.getDouble("vl_impostos"));
-            fornecimento.setData_cadastro(conecta_banco.resultset.getDate("fornecimento.data_cadastro"));
+            fornecimento.setData_cadastro(conecta_banco.resultset.getTimestamp("fornecimento.data_cadastro"));
             
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao retornar dados do fornecimento");
@@ -244,7 +245,7 @@ public class daoFornecimento {
        
         int resultado;
        
-        resultado = conecta_banco.executeSQL("UPDATE fornecimento SET id_pessoa = ?, descricao = ?, id_moeda_frete = ?, vl_frete = ?, id_moeda_imp = ?, vl_impostos = ?, data_alter = ? "
+        resultado = conecta_banco.executeSQL("UPDATE fornecimento SET id_pessoa = ?, descricao = ?, id_moeda_frete = ?, vl_frete = ?, id_moeda_imp = ?, vl_impostos = ?, data_alter = ?, data_cadastro = ? "
         + "WHERE id_fornecimento = ? ",
         fornecimento.getId_pessoa(),
         fornecimento.getDescricao(),
@@ -253,6 +254,7 @@ public class daoFornecimento {
         fornecimento.getId_moeda_imp(),
         fornecimento.getValor_impostos(),
         FormatarData.dateParaTimeStamp(fornecimento.getData_alter()),
+        FormatarData.dateParaTimeStamp(fornecimento.getData_cadastro()),
         fornecimento.getId_fornecimento());
 
         if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
@@ -278,16 +280,20 @@ public class daoFornecimento {
     }
     
    // verifica a existencia de fornecimento para a composição do componente
-    public boolean verificaExisteFornecimentoComposicao(Componente componente, VersaoProjeto versao){
+    public boolean verificaExisteFornecimentoComposicao(ComponenteVersaoProjeto componente, VersaoProjeto versao){
+        
         Integer id_componente_composicao;
         String ds_componente_composicao;
         Integer id_componente_fornecido;
+        Integer qntd_fornec_comp = 0;
+        Integer qntd_necessaria_comp = 0;
         boolean possui_fornecimento;
+        boolean possui_quantidade;
         boolean retorno = true;
         ResultSet result_composicao;
         ResultSet result_fornec_composicao;
         //faz a consulta de composição do componente
-        conecta_banco.executeSQL("select id_subcomponente, composicao_componente.id_componente, componente.descricao from composicao_componente" 
+        conecta_banco.executeSQL("select id_subcomponente, composicao_componente.id_componente, componente.descricao,qntd from composicao_componente" 
                                 +" inner join componente on (componente.id_componente = composicao_componente.id_subcomponente)" 
                                 +" where composicao_componente.id_componente ="+componente.getId_componente());
         result_composicao = conecta_banco.resultset;
@@ -295,22 +301,43 @@ public class daoFornecimento {
             while ( result_composicao.next()) {
                 id_componente_composicao = result_composicao.getInt("id_subcomponente");
                 ds_componente_composicao = result_composicao.getString("descricao");
+                qntd_necessaria_comp = result_composicao.getInt("qntd");
+                
                 possui_fornecimento = false;
+                possui_quantidade = false;
                
-                conecta_banco.executeSQL("select * from componentes_versao_projeto where id_componente = "+id_componente_composicao+" and componentes_versao_projeto.cod_vers_projeto ="+versao.getCod_vers_projeto()); 
+                conecta_banco.executeSQL("select componentes_versao_projeto.id_componente,componentes_versao_projeto.cod_vers_projeto,"
+                                        +" sum(componentes_versao_projeto.qntd_para_projeto - componentes_versao_projeto.qntd_no_projeto) as total from componentes_versao_projeto"
+                                        +" where componentes_versao_projeto.id_componente = "+id_componente_composicao+" and componentes_versao_projeto.cod_vers_projeto ="+versao.getCod_vers_projeto()); 
                 
                 result_fornec_composicao = conecta_banco.resultset;
                 while ( result_fornec_composicao.next()) {
                     id_componente_fornecido = result_fornec_composicao.getInt("id_componente");
+                    //calcula a quantidade restante  para ser usada em projetos
+                    qntd_fornec_comp = result_fornec_composicao.getInt("total");
+                 
                     if(id_componente_fornecido == id_componente_composicao){
-                        possui_fornecimento = true;
+                        //verifica se possui fornecido a quantidade necessária para a composição
+                        if(qntd_fornec_comp >= qntd_necessaria_comp*componente.getQntd_para_projeto()){
+                            possui_quantidade = true;
+                            possui_fornecimento = true;
+                        }else{
+                            possui_quantidade = false;
+                            possui_fornecimento = true;   
+                        }
+                        
                     }
                 }
                 if(possui_fornecimento == false){
                     retorno = false;
                     JOptionPane.showMessageDialog(null, "Não existe fornecimento registrado do componente id: "+id_componente_composicao+" "+ds_componente_composicao+" para esta versão do projeto.\n"
-                    +"Este componente faz parte da composição do componente id:"+componente.getId_componente()+" "+componente.getDescricao()+".\n"
+                    +"Este componente faz parte da composição do componente id:"+componente.getId_componente()+" "+componente.getComponente()+".\n"
                     +"Deve ser registrado um fornecimento desse componente para esta versão do projeto!");
+                }else if(possui_quantidade == false){
+                    retorno = false;
+                    JOptionPane.showMessageDialog(null, "O Componente id: "+id_componente_composicao+" "+ds_componente_composicao+" não possui a quantidade necessária ("+qntd_necessaria_comp*componente.getQntd_para_projeto()+") fornecida para este projeto.\n"
+                    +"Este componente faz parte da composição do componente id: "+componente.getId_componente()+" "+componente.getComponente()+".\n"
+                    +"Deve ser registrado uma quantidade maior no fornecimento deste componente, a quantidade atual fornecida é ("+qntd_fornec_comp+")");
                 }
             }
         } catch (SQLException ex) {

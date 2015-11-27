@@ -29,6 +29,7 @@ public class daoComponenteVersaoProjeto {
     UltimaSequencia ultima;
     Conversoes conversoes = new Conversoes();
     daoMoeda dao_moeda = new daoMoeda();
+    daoComponente dao_componente = new daoComponente();
     FormatarData data = new FormatarData();
     
     public daoComponenteVersaoProjeto()
@@ -117,21 +118,29 @@ public class daoComponenteVersaoProjeto {
                     //Se não existir o componente ou estiver marcado como excluido
                     //Chegou na ultima linha
                     if( i_comp == totlinha_comp_proj-1){
-
+                        //adiciona uma linha a mais
+                        TabelaCompVersProj.setNumRows(totlinha_comp_proj+1);  
+                        
                         //se estiver em modo de alteração
                         if(situacao == Rotinas.ALTERAR){
                             //gera ultimo id baseado no banco
-                            id_componentes = ultima.ultimasequencia("COMPONENTES_VERSAO_PROJETO","ID_COMP_VERSAO"); 
+                            id_componentes = ultima.ultimasequencia("COMPONENTES_VERSAO_PROJETO","ID_COMP_VERSAO");
+                            
+                            if(id_componentes > Integer.parseInt( TabelaCompVersProj.getValueAt(totlinha_comp_proj-1, 1).toString())){
+                                 TabelaCompVersProj.setValueAt(id_componentes, totlinha_comp_proj,1);
+                            }else{
+                                //gera id baseado no ultimo registro da Jtable
+                                id_componentes = Integer.parseInt( TabelaCompVersProj.getValueAt(totlinha_comp_proj-1, 1).toString());
+                                TabelaCompVersProj.setValueAt(id_componentes+1, totlinha_comp_proj,1);
+                            }
                         }else{
                             //gera o ultimo id baseado no ultimo registro da jtable
                             id_componentes = (Integer.parseInt(TabelaCompVersProj.getValueAt(totlinha_comp_proj-1, 1).toString())+1);
+                            TabelaCompVersProj.setValueAt(id_componentes, totlinha_comp_proj,1);
                         }
 
-                        //adiciona uma linha a mais
-                        TabelaCompVersProj.setNumRows(totlinha_comp_proj+1);  
                         //seta valores na jtable
                         TabelaCompVersProj.setValueAt(false, totlinha_comp_proj, 0);
-                        TabelaCompVersProj.setValueAt(id_componentes, totlinha_comp_proj,1);
                         TabelaCompVersProj.setValueAt(componente_projeto.getId_comp_fornec(),totlinha_comp_proj,2);
                         TabelaCompVersProj.setValueAt(componente_projeto.getId_projeto(), totlinha_comp_proj, 3);
                         TabelaCompVersProj.setValueAt(componente_projeto.getCod_vers_projeto(), totlinha_comp_proj, 4);
@@ -448,15 +457,17 @@ public class daoComponenteVersaoProjeto {
         Double total_eletronicos = 0.0;
         Double total_mecanicos = 0.0;
         Double total_comp = 0.0;
+        Double total_composicao = 0.0;
        
         int totlinha_comp_proj = TabelaCompVersProj.getRowCount();
         int totlinha_comp_fornec = TabelaCompFornec.getRowCount();
+        total_composicao = dao_componente.calculaComposicaoComponente(comp_vers_proj);
        
         //se não possuir linhas
         if(totlinha_comp_proj == 0){
             //add a primeira linha
             TabelaCompVersProj.setNumRows(1);  
-            total = comp_vers_proj.getQntd_no_projeto() * comp_vers_proj.getValor_unit();
+            
             //seta valores na jtable
             TabelaCompVersProj.setValueAt(false, 0, 0);
             TabelaCompVersProj.setValueAt(comp_vers_proj.getId_comp_versao(), 0,1);
@@ -464,7 +475,17 @@ public class daoComponenteVersaoProjeto {
             TabelaCompVersProj.setValueAt(comp_vers_proj.getComponente(), 0, 3);
             TabelaCompVersProj.setValueAt(comp_vers_proj.getId_moeda(), 0, 4);
             TabelaCompVersProj.setValueAt(comp_vers_proj.getUnidade(), 0, 5);
-            TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(comp_vers_proj.getValor_unit()), 0, 6);
+            if(comp_vers_proj.getValor_unit() > 0){
+                total = comp_vers_proj.getQntd_no_projeto() * comp_vers_proj.getValor_unit();
+                TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(comp_vers_proj.getValor_unit()), 0, 6);
+            }else{
+               
+                 TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total_composicao), 0, 6);
+                 //calcula o total do componente utilizado no projeto
+                 total = comp_vers_proj.getQntd_no_projeto() * total_composicao;
+            }
+            //Converte o total do componente para reais
+            total = dao_moeda.converteparaReais(total, comp_vers_proj.getId_moeda(), comp_vers_proj.getData_fornec());
             TabelaCompVersProj.setValueAt(comp_vers_proj.getQntd_no_projeto(), 0, 7);
             TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total), 0, 8);
             TabelaCompVersProj.setValueAt(0, 0, 9);
@@ -480,7 +501,14 @@ public class daoComponenteVersaoProjeto {
                     // adiciona a nova quantidade para o componente e racalcula o total
                     Integer qntd_atual = Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 7).toString());
                     TabelaCompVersProj.setValueAt(qntd_atual+comp_vers_proj.getQntd_no_projeto(), i_comp, 7);
-                    total = (qntd_atual + comp_vers_proj.getQntd_no_projeto()) * comp_vers_proj.getValor_unit();
+                    
+                    if(comp_vers_proj.getValor_unit() > 0){
+                        total = (qntd_atual + comp_vers_proj.getQntd_no_projeto()) * comp_vers_proj.getValor_unit();
+                    }else{
+                        total = (qntd_atual + comp_vers_proj.getQntd_no_projeto()) * total_composicao; 
+                    }
+                    
+                    total = dao_moeda.converteparaReais(total, comp_vers_proj.getId_moeda(), comp_vers_proj.getData_fornec());
                     TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total), i_comp, 8);
                     break;
                 }else{
@@ -497,7 +525,15 @@ public class daoComponenteVersaoProjeto {
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getComponente(), totlinha_comp_proj, 3);
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getId_moeda(), totlinha_comp_proj, 4);
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getUnidade(), totlinha_comp_proj, 5);
-                        TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(comp_vers_proj.getValor_unit()), totlinha_comp_proj, 6);
+                        if(comp_vers_proj.getValor_unit() > 0){
+                            total = comp_vers_proj.getQntd_no_projeto() * comp_vers_proj.getValor_unit();
+                            TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(comp_vers_proj.getValor_unit()), totlinha_comp_proj, 6);
+                        }else{
+               
+                            TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total_composicao), totlinha_comp_proj, 6);
+                            total = comp_vers_proj.getQntd_no_projeto() * total_composicao;
+                        }
+                        total = dao_moeda.converteparaReais(total, comp_vers_proj.getId_moeda(), comp_vers_proj.getData_fornec());
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getQntd_no_projeto(), totlinha_comp_proj, 7);
                         TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total), totlinha_comp_proj, 8);
                         TabelaCompVersProj.setValueAt(0, totlinha_comp_proj, 9);
@@ -547,7 +583,7 @@ public class daoComponenteVersaoProjeto {
         for (int i_comp = 0; i_comp < totlinha_comp; i_comp++){
             id_moeda = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 4).toString());
             total_comp = Double.parseDouble(Tabela_comp.getValueAt(i_comp, 8).toString().replace(".", "").replace(",", "."));
-            total_comp = dao_moeda.converteparaReais(total_comp, id_moeda,null);
+           // total_comp = dao_moeda.converteparaReais(total_comp, id_moeda,null);
             total = total + total_comp;
         }
        return total;

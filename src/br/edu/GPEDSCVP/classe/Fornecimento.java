@@ -7,6 +7,7 @@ package br.edu.GPEDSCVP.classe;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import javax.swing.JTable;
 
 /**
@@ -23,7 +24,7 @@ public class Fornecimento {
     private int id_pessoa;
     private String ds_pessoa;
     private String descricao;
-    private Date data_cadastro;
+    private Timestamp data_cadastro;
     private double valor_frete;
     private double valor_impostos;
     private Date data_alter;
@@ -82,11 +83,11 @@ public class Fornecimento {
         this.descricao = descricao;
     }
 
-    public Date getData_cadastro() {
+    public Timestamp getData_cadastro() {
         return data_cadastro;
     }
 
-    public void setData_cadastro(Date data_cadastro) {
+    public void setData_cadastro(Timestamp data_cadastro) {
         this.data_cadastro = data_cadastro;
     }
 

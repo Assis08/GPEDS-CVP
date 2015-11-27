@@ -6,16 +6,22 @@
 package br.edu.GPEDSCVP.dao;
 
 import br.edu.GPEDSCVP.classe.Componente;
+import br.edu.GPEDSCVP.classe.ComponenteVersaoProjeto;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
 import br.edu.GPEDSCVP.classe.Fornecedor;
 import br.edu.GPEDSCVP.classe.FornecedoresComponente;
 import br.edu.GPEDSCVP.classe.VersaoProjeto;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
+import br.edu.GPEDSCVP.util.Conversoes;
 import br.edu.GPEDSCVP.util.ExcessaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.Rotinas;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -28,6 +34,8 @@ public class daoComponente {
     
     ConexaoBanco conecta_banco;
     UltimaSequencia ultima;
+    daoMoeda dao_moeda = new daoMoeda();
+    Conversoes conversoes = new Conversoes();
     
     public daoComponente()
     {
@@ -533,21 +541,31 @@ public class daoComponente {
                         for (int i_comp = 0; i_comp < totlinha_componente; i_comp++){
                             //Chegou na ultima linha
                             if( i_comp == totlinha_componente-1){
+                                //adiciona uma linha a mais
+                                TabelaComposicao.setNumRows(totlinha_componente+1);  
+                                
                                 //se estiver em modo de alteração
                                 if(situacao == Rotinas.ALTERAR){
-                                   
                                     //gera ultimo id composicao baseado no banco
                                     id_composicao = ultima.ultimasequencia("COMPOSICAO_COMPONENTE","ID_COMPOSICAO");
+                                    
+                                    if(id_composicao > Integer.parseInt(TabelaComposicao.getValueAt(totlinha_componente-1, 1).toString())){
+                                         TabelaComposicao.setValueAt(id_composicao, totlinha_componente, 1);
+                                    }else
+                                    {
+                                        //gera o ultimo id baseado no ultimo registro da jtable
+                                        id_composicao = Integer.parseInt(TabelaComposicao.getValueAt(totlinha_componente-1, 1).toString());
+                                        TabelaComposicao.setValueAt(id_composicao+1, totlinha_componente, 1);
+                                    }
                                 }else{
                                     //gera o ultimo id baseado no ultimo registro da jtable
                                     id_composicao = (Integer.parseInt(TabelaComposicao.getValueAt(totlinha_componente-1, 1).toString())+1);
+                                    TabelaComposicao.setValueAt(id_composicao, totlinha_componente, 1);
                                 }
                                 
-                                //adiciona uma linha a mais
-                                TabelaComposicao.setNumRows(totlinha_componente+1);  
                                  //seta valores na jtable
                                 TabelaComposicao.setValueAt(false, 0, 0);
-                                TabelaComposicao.setValueAt(id_composicao, totlinha_componente, 1);
+                              //  TabelaComposicao.setValueAt(id_composicao, totlinha_componente, 1);
                                 TabelaComposicao.setValueAt(id_componente, totlinha_componente, 2);
                                 TabelaComposicao.setValueAt(tipo, totlinha_componente, 3);
                                 TabelaComposicao.setValueAt(descricao, totlinha_componente, 4);
@@ -622,20 +640,27 @@ public class daoComponente {
                             //Chegou na ultima linha
                             if( i_comp == totlinha_fornec_comp-1){
                                 
+                                //adiciona uma linha a mais
+                                TabelaFornecedoresComp.setNumRows(totlinha_fornec_comp+1);  
+                                
                                 //se estiver em modo de alteração
                                 if(situacao == Rotinas.ALTERAR){
                                     //gera ultimo id composicao baseado no banco
                                     id_fornec_comp = ultima.ultimasequencia("FORNECEDOR_COMPONENTE","ID_FORNECEDORES_COMP"); 
+                                    if(id_fornec_comp > Integer.parseInt(TabelaFornecedoresComp.getValueAt(totlinha_fornec_comp-1, 1).toString())){
+                                         TabelaFornecedoresComp.setValueAt(id_fornec_comp, totlinha_fornec_comp, 1);
+                                    }else{
+                                        id_fornec_comp = Integer.parseInt(TabelaFornecedoresComp.getValueAt(totlinha_fornec_comp-1, 1).toString());
+                                        TabelaFornecedoresComp.setValueAt(id_fornec_comp+1, totlinha_fornec_comp, 1);
+                                    }
                                 }else{
                                     //gera o ultimo id baseado no ultimo registro da jtable
                                     id_fornec_comp = (Integer.parseInt(TabelaFornecedoresComp.getValueAt(totlinha_fornec_comp-1, 1).toString())+1);
+                                    TabelaFornecedoresComp.setValueAt(id_fornec_comp, totlinha_fornec_comp, 1);
                                 }
-                                
-                                //adiciona uma linha a mais
-                                TabelaFornecedoresComp.setNumRows(totlinha_fornec_comp+1);  
+
                                  //seta valores na jtable
                                 TabelaFornecedoresComp.setValueAt(false, totlinha_fornec_comp, 0);
-                                TabelaFornecedoresComp.setValueAt(id_fornec_comp, totlinha_fornec_comp, 1);
                                 TabelaFornecedoresComp.setValueAt(id_fornecedor, totlinha_fornec_comp, 2);
                                 TabelaFornecedoresComp.setValueAt(descricao, totlinha_fornec_comp, 3);
                                 TabelaFornecedoresComp.setValueAt(cnpj, totlinha_fornec_comp, 4);
@@ -699,6 +724,76 @@ public class daoComponente {
            return false;
            
         }
+    }
+    
+    //Método para calcular o custo do componente que possui composição
+    public Double calculaComposicaoComponente(ComponenteVersaoProjeto componente){
+        Integer id_componente_composicao;
+        Integer id_moeda;
+        Integer qntd_componente_composicao;
+        Timestamp data_fornec;
+        Double valor_unit = 0.0;
+        Double total_composicao = 0.0;
+        ResultSet result_composicao = null;
+        ResultSet result_valor_comp = null;
+        //faz a consulta de composição do componente
+        conecta_banco.executeSQL("select * from composicao_componente where id_componente = "+componente.getId_componente());
+        result_composicao = conecta_banco.resultset;
+        try {
+            while ( result_composicao.next()) {
+                
+                id_componente_composicao = result_composicao.getInt("id_subcomponente");
+                qntd_componente_composicao = result_composicao.getInt("qntd");
+                componente.setId_componente(id_componente_composicao);
+                
+             
+                //sql para consulta do custo unitário do componente(composição) baseado no ultimo fornecimento feito do mesmo para a versão do projeto
+                
+                conecta_banco.executeSQL("select componentes_fornecimento.id_comp_fornec, componentes_fornecimento.id_componente,componentes_fornecimento.id_fornecimento," 
+                                        +" componentes_fornecimento.id_moeda,componentes_fornecimento.qntd_componente,componentes_fornecimento.valor_unit,componentes_fornecimento.in_ativo," 
+                                        +" componentes_versao_projeto.id_projeto,componentes_versao_projeto.cod_vers_projeto, fornecimento.data_cadastro from componentes_fornecimento" 
+                                        +" inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)" 
+                                        +" inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)"
+                                        +" where componentes_fornecimento.id_componente = "+componente.getId_componente()+" and componentes_versao_projeto.cod_vers_projeto = "+componente.getCod_vers_projeto()+" "
+                                        +" and componentes_fornecimento.in_ativo = 'A'" 
+                                        +" and fornecimento.data_cadastro >= (select max(fornecimento.data_cadastro) from componentes_fornecimento"
+                                        +" inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)" 
+                                        +" inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)" 
+                                        +" where componentes_fornecimento.id_componente = "+componente.getId_componente()+" and componentes_versao_projeto.cod_vers_projeto = "+componente.getCod_vers_projeto()+" "
+                                        +" and componentes_fornecimento.in_ativo = 'A')");
+                
+                                        result_valor_comp = conecta_banco.resultset;
+                
+                try {   
+                    //armazena valores para o calculo
+                    result_valor_comp.first();
+                    valor_unit = result_valor_comp.getDouble("valor_unit");
+                    id_moeda = result_valor_comp.getInt("id_moeda");
+                    data_fornec = result_valor_comp.getTimestamp("data_cadastro");
+                    
+                    /*
+                    JOptionPane.showMessageDialog(null, "ID Componente = "+id_componente_composicao);
+                    JOptionPane.showMessageDialog(null, "Valor unitário = "+valor_unit);
+                    JOptionPane.showMessageDialog(null, "ID Moeda = "+id_moeda);
+                    JOptionPane.showMessageDialog(null, "Data = "+data_fornec);
+                    JOptionPane.showMessageDialog(null, "Qntd = "+qntd_componente_composicao);
+                    */
+                    
+                    //converte valor_unitario para reais
+                    valor_unit = dao_moeda.converteparaReais(valor_unit, id_moeda, data_fornec);
+                    //calcula o total
+                    total_composicao = total_composicao + (valor_unit*qntd_componente_composicao);
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Falha ao calcular valor unitário da composição do componente.");
+                }
+                
+                calculaComposicaoComponente(componente);
+            }
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, "Falha ao calcular valor unitário da composição do componente.");
+        }
+        
+        return total_composicao;
     }
 }
 

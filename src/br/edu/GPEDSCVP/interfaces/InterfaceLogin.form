@@ -44,11 +44,11 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <EmptySpace max="32767" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="jPImagem" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPImagem" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
                           <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                           <Component id="jTFLogin" pref="240" max="32767" attributes="0"/>
@@ -56,7 +56,8 @@
                           <Component id="jPFSenha" alignment="0" max="32767" attributes="0"/>
                       </Group>
                   </Group>
-                  <Group type="102" alignment="1" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <EmptySpace min="31" pref="138" max="32767" attributes="0"/>
                       <Component id="jBTLogar" min="-2" pref="113" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="jBTCancelar" min="-2" max="-2" attributes="0"/>
@@ -75,19 +76,19 @@
                       <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jTFLogin" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
                       <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPFSenha" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <Component id="jPImagem" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                   <Component id="jBTCancelar" max="32767" attributes="0"/>
                   <Component id="jBTLogar" min="-2" pref="49" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace type="separate" pref="31" max="32767" attributes="0"/>
+              <EmptySpace type="separate" pref="22" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -108,7 +109,7 @@
     <Component class="javax.swing.JButton" name="jBTLogar">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\32x32\check-user-icon (Custom).png"/>
+          <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_Site_5745_Knob_Valid_Green.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Logar"/>
       </Properties>
@@ -119,7 +120,7 @@
     <Component class="javax.swing.JButton" name="jBTCancelar">
       <Properties>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\32x32\cancel-icon (Custom).png"/>
+          <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_Site_5750_Knob_Cancel.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Cancelar"/>
       </Properties>
@@ -133,9 +134,9 @@
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
-                  <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
-                  <Component id="jLBImagem" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace pref="26" max="32767" attributes="0"/>
+                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -143,17 +144,17 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLBImagem" min="-2" pref="72" max="-2" attributes="0"/>
-                  <EmptySpace pref="15" max="32767" attributes="0"/>
+                  <Component id="jLabel3" pref="104" max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="jLBImagem">
+        <Component class="javax.swing.JLabel" name="jLabel3">
           <Properties>
             <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-              <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\52x52\Administrator-icon2 (Custom).png"/>
+              <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\user.png"/>
             </Property>
           </Properties>
         </Component>

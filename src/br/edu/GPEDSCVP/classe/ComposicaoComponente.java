@@ -17,7 +17,7 @@ public class ComposicaoComponente {
     
     private static int situacao;
     private int qntd;
-    private int id_componente;
+    private static int id_componente;
     private int id_subcomponente;
     private int id_composicao;
     private Date data_cadastro;
@@ -28,7 +28,6 @@ public class ComposicaoComponente {
 
     public ComposicaoComponente() {
         qntd = 0;
-        id_componente = 0;
         data_cadastro = null;
         data_alter = null;
     }
@@ -49,12 +48,12 @@ public class ComposicaoComponente {
         ComposicaoComponente.tabela = tabela;
     }
 
-    public int getId_componente() {
+    public static int getId_componente() {
         return id_componente;
     }
 
-    public void setId_componente(int id_componente) {
-        this.id_componente = id_componente;
+    public static void setId_componente(int id_componente) {
+        ComposicaoComponente.id_componente = id_componente;
     }
 
     public Date getData_cadastro() {

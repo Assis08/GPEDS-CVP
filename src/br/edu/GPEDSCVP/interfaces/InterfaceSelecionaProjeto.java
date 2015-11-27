@@ -142,7 +142,7 @@ public class InterfaceSelecionaProjeto extends javax.swing.JFrame {
             }
         });
 
-        jBTConcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/edu/GPEDSCVP/icones/accept.png"))); // NOI18N
+        jBTConcluir.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\accept.png")); // NOI18N
         jBTConcluir.setText("Concluir");
         jBTConcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -229,12 +229,14 @@ public class InterfaceSelecionaProjeto extends javax.swing.JFrame {
                     componente.setId_componente(comp_vers_proj.getId_componente());
                     componente.setDescricao(comp_vers_proj.getComponente());
                     versao.setCod_vers_projeto(comp_vers_proj.getCod_vers_projeto());
+                    
                     //componene possui composição ?
                     if(dao_componente.verificaExisteComposicao(componente) == true){
                         //Toda composição do componente tem um registro de fornecimento para a versão do proejto em questão?
-                        if(dao_fornecimento.verificaExisteFornecimentoComposicao(componente, versao) == true){  
+                        if(dao_fornecimento.verificaExisteFornecimentoComposicao(comp_vers_proj, versao) == true){  
                             //sim, então add o componente para a versão
                             dao_comp_vers.addComponenteVersao(comp_vers_proj, comp_fornec.getTabela(), comp_fornec.getSituacao());
+                        //    dao_componente.calculaComposicaoComponente(componente);
                             Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
                             this.dispose();
                         }else{

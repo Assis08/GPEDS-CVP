@@ -7,7 +7,7 @@
     <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
-    <SyntheticProperty name="formSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,75,0,0,2,30"/>
+    <SyntheticProperty name="formSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,50,0,0,2,48"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="0"/>
     <SyntheticProperty name="generateSize" type="boolean" value="true"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
@@ -27,18 +27,12 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jTBMoeda" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
+          <Component id="jTBMoeda" alignment="0" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jTBMoeda" min="-2" pref="293" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-          </Group>
+          <Component id="jTBMoeda" alignment="0" pref="267" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
   </Layout>
@@ -87,10 +81,7 @@
                       </Group>
                       <EmptySpace min="244" max="32767" attributes="0"/>
                   </Group>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jPBotoes" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
-                  </Group>
+                  <Component id="jPBotoes" alignment="0" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">
@@ -115,9 +106,8 @@
                               <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="87" max="32767" attributes="0"/>
+                      <EmptySpace pref="75" max="32767" attributes="0"/>
                       <Component id="jPBotoes" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -158,18 +148,18 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace max="32767" attributes="0"/>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace pref="22" max="32767" attributes="0"/>
                           <Component id="jBTNovo" min="-2" pref="95" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jBTAlterar" min="-2" pref="95" max="-2" attributes="0"/>
+                          <Component id="jBTAlterar" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jBTExcluir" min="-2" pref="95" max="-2" attributes="0"/>
+                          <Component id="jBTExcluir" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jBTGravar" min="-2" pref="93" max="-2" attributes="0"/>
+                          <Component id="jBTGravar" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jBTCancelar" min="-2" pref="95" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jBTCancelar" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -177,12 +167,12 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jBTGravar" min="-2" pref="36" max="-2" attributes="0"/>
-                              <Component id="jBTExcluir" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jBTAlterar" alignment="1" max="32767" attributes="0"/>
-                              <Component id="jBTNovo" max="32767" attributes="0"/>
-                              <Component id="jBTCancelar" alignment="0" max="32767" attributes="0"/>
+                          <Group type="103" groupAlignment="3" attributes="0">
+                              <Component id="jBTNovo" alignment="3" max="32767" attributes="0"/>
+                              <Component id="jBTAlterar" alignment="3" max="32767" attributes="0"/>
+                              <Component id="jBTExcluir" alignment="3" max="32767" attributes="0"/>
+                              <Component id="jBTGravar" alignment="3" max="32767" attributes="0"/>
+                              <Component id="jBTCancelar" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -193,7 +183,7 @@
                 <Component class="javax.swing.JButton" name="jBTNovo">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\menores\add.png"/>
+                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Create.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Novo"/>
                   </Properties>
@@ -204,7 +194,7 @@
                 <Component class="javax.swing.JButton" name="jBTAlterar">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\menores\page_white_edit.png"/>
+                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Modify.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Alterar"/>
                   </Properties>
@@ -215,7 +205,7 @@
                 <Component class="javax.swing.JButton" name="jBTExcluir">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\menores\delete.png"/>
+                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\No-entry.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Excluir"/>
                   </Properties>
@@ -226,7 +216,7 @@
                 <Component class="javax.swing.JButton" name="jBTGravar">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\menores\disk_black.png"/>
+                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Save.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Gravar"/>
                     <Property name="name" type="java.lang.String" value="descricao" noResource="true"/>
@@ -239,7 +229,7 @@
                 <Component class="javax.swing.JButton" name="jBTCancelar">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\menores\decline.png"/>
+                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Close.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Cancelar"/>
                   </Properties>
@@ -277,7 +267,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="497" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="519" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                   </Group>
               </Group>

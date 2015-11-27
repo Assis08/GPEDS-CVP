@@ -7,6 +7,8 @@ package br.edu.GPEDSCVP.classe;
 
 import java.sql.Date;
 import java.sql.ResultSet;
+import java.sql.SQLData;
+import java.sql.Timestamp;
 import javax.swing.JFormattedTextField;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -34,6 +36,7 @@ public class ComponenteVersaoProjeto {
     private int qntd_no_projeto;
     private String situacao;
     private Date data_alter;
+    private Timestamp data_fornec;
     private static JTable tabela;
     private static JFormattedTextField field_total_eletronicos;
     private static JFormattedTextField field_total_mecanicos;
@@ -227,5 +230,13 @@ public class ComponenteVersaoProjeto {
 
     public static void setField_total_comp(JFormattedTextField field_total_comp) {
         ComponenteVersaoProjeto.field_total_comp = field_total_comp;
+    }
+
+    public Timestamp getData_fornec() {
+        return data_fornec;
+    }
+
+    public void setData_fornec(Timestamp data_fornec) {
+        this.data_fornec = data_fornec;
     }
 }

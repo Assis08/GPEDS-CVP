@@ -201,7 +201,8 @@ public class ValidaCampos {
                                     if (field.getName().equals(atributo)){
                                         if (field.getText().equals("") || (field.getText().equals("  /  /    ")) || (field.getText().equals("  .   .   /    -  ")) ||
                                         (field.getText().equals("   .   .   -  ")) ||(field.getText().equals("  .   .   - ")) ||(field.getText().equals("(  )    -    ")) || 
-                                        (field.getText().equals("     -   ")) || (field.getText().equals("(  )         "))|| (field.getText().equals("   "))|| (field.getText().equals("  ")))  {
+                                        (field.getText().equals("     -   ")) || (field.getText().equals("(  )         "))|| (field.getText().equals("   "))|| (field.getText().equals("  ")) ||
+                                        field.getText().equals("  /  /       :  :  "))  {
                                         JOptionPane.showMessageDialog(null, "campo: "+ field.getToolTipText()+ " é obrigatorio");
                                         
                                         field.grabFocus(); 
@@ -379,6 +380,7 @@ public class ValidaCampos {
         sdf.setLenient(false);
         try {
             Date data_formatada = sdf.parse(data);
+            
             int idade = formata_data.calculaIdade(data, "dd/MM/yyyy");
             if((idade>13) && (idade < 80)){
                 //Data válida
@@ -387,6 +389,23 @@ public class ValidaCampos {
                 JOptionPane.showMessageDialog(null, "Data fora do limite, favor verificar a data");
                 return false;
             }
+
+        } catch(ParseException e){
+            // data inválida
+            JOptionPane.showMessageDialog(null, "Data inválida, favor verificar a data");
+            return false;
+          }
+   }
+    
+     //Verifica se data e hora é válida
+    public static boolean ValidaDataHora(String data) {
+        FormatarData formata_data = new FormatarData(); 
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        sdf.setLenient(false);
+        try {
+            Date data_formatada = sdf.parse(data);
+            return true;
         } catch(ParseException e){
             // data inválida
             JOptionPane.showMessageDialog(null, "Data inválida, favor verificar a data");

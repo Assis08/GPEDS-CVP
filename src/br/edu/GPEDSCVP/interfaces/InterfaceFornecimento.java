@@ -50,6 +50,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.text.DefaultFormatterFactory;
 
 /**
  *
@@ -151,6 +152,9 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         valida_campos.formataMonetario(jFTValorImpostos);
         valida_campos.formataMonetario(jFTImpostosReais);
         valida_campos.formataMonetario(jFTMascaMonetaria);
+        
+        //seta mascara no campo de data
+        jFTData.setFormatterFactory(new DefaultFormatterFactory(valida_campos.formata("##/##/#### ##:##:##")));
 
         //Seta mascara na coluna de valor da jtable
         Jtable.setarMascara(jTBComponentes, jFTMascaMonetaria,4);
@@ -262,7 +266,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
-        jButton1.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
         jButton1.setText("Novo");
         jButton1.setToolTipText("Cidade");
         jButton1.setName("ID_CIDADE"); // NOI18N
@@ -272,7 +276,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\32x32\\document-pencil-icon (Custom).png")); // NOI18N
+        jButton2.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\Botoes_5122_pencil_48.png")); // NOI18N
         jButton2.setText("Alterar");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -280,7 +284,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
+        jButton3.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
         jButton3.setText("Excluir");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -288,7 +292,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
-        jButton5.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Hardware-Floppy-icon (Custom).png")); // NOI18N
+        jButton5.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\Hardware-Floppy-icon (Custom).png")); // NOI18N
         jButton5.setText("Gravar");
         jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseExited(java.awt.event.MouseEvent evt) {
@@ -301,7 +305,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5750_Knob_Cancel.png")); // NOI18N
+        jButton4.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\Botoes_Site_5750_Knob_Cancel.png")); // NOI18N
         jButton4.setText("Cancelar");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -359,7 +363,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jLabel3.setText("Fornecedor:");
 
-        jBTNovoFornecedor.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\add.png")); // NOI18N
+        jBTNovoFornecedor.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\add.png")); // NOI18N
         jBTNovoFornecedor.setText("Novo");
         jBTNovoFornecedor.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -410,13 +414,22 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jLabel2.setText("Componentes:");
 
-        jLabel7.setText("Data:");
+        jLabel7.setText("Data/Hora:");
 
-        jFTData.setEditable(false);
         jFTData.setToolTipText("Data");
-        jFTData.setName("data_fornecimento"); // NOI18N
+        jFTData.setName("data_cadastro"); // NOI18N
+        jFTData.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jFTDataFocusLost(evt);
+            }
+        });
+        jFTData.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jFTDataKeyTyped(evt);
+            }
+        });
 
-        jBTAddComponente.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
+        jBTAddComponente.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
         jBTAddComponente.setName("descricao"); // NOI18N
         jBTAddComponente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -424,7 +437,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
-        jBTRemoveComponente.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
+        jBTRemoveComponente.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
         jBTRemoveComponente.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBTRemoveComponenteActionPerformed(evt);
@@ -501,7 +514,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jLabel17.setText("Valor:");
 
-        jBTAddparaProjeto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/edu/GPEDSCVP/icones/arrow_down.png"))); // NOI18N
+        jBTAddparaProjeto.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\arrow_down.png")); // NOI18N
         jBTAddparaProjeto.setText("Add Projeto");
         jBTAddparaProjeto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -509,7 +522,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             }
         });
 
-        jBTRemoveComponenteProjeto.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
+        jBTRemoveComponenteProjeto.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\Botoes_Site_5751_Knob_Remove_Red.png")); // NOI18N
         jBTRemoveComponenteProjeto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBTRemoveComponenteProjetoActionPerformed(evt);
@@ -620,25 +633,23 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         .addGap(102, 102, 102))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
                         .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
-                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jTFIDFornecimento, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(30, 30, 30)
-                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTFDescrição, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPFornecimentoLayout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
-                                .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(73, 73, 73))
+                            .addComponent(jTFIDFornecimento, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(30, 30, 30)
+                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTFDescrição, javax.swing.GroupLayout.PREFERRED_SIZE, 388, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPFornecimentoLayout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(81, 81, 81))))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
+                        .addGroup(jPFornecimentoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPFornecimentoLayout.createSequentialGroup()
                         .addComponent(jCBFornecedor, javax.swing.GroupLayout.PREFERRED_SIZE, 207, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -754,7 +765,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jLabel29.setText("Filtro de busca:");
 
-        jBTBuscar.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\magnifier.png")); // NOI18N
+        jBTBuscar.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\magnifier.png")); // NOI18N
         jBTBuscar.setText("Buscar");
         jBTBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -872,7 +883,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTBFornecimento)
+                .addComponent(jTBFornecimento, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -912,7 +923,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
                 //Seta a data atual no campo data
                 jFTData.setEnabled(true);
-                jFTData.setText(data.DataAtual());
+                jFTData.setText(data.DataHoraAtual());
 
                 dao_fornecedor.consultageral(fornecedor);
                 //Preenche dados nas ComboBox de fornecedor
@@ -1560,6 +1571,34 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jTBConsultaFornecimentosMouseEntered
 
+    private void jFTDataKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFTDataKeyTyped
+        String caracteres="0987654321";
+        if(!caracteres.contains(evt.getKeyChar()+"")){
+            evt.consume();
+        }
+    }//GEN-LAST:event_jFTDataKeyTyped
+
+    private void jFTDataFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTDataFocusLost
+         String data_fornec;
+
+        //pega a data do campo 
+        data_fornec = jFTData.getText();
+        //retira mascara do campo para pegar o valor adicionado
+        data_fornec = data_fornec.replace("/", "");
+        data_fornec = data_fornec.replace(":", "");
+        data_fornec = data_fornec.replace(" ", "");
+
+        //Garante que sempre que apagar um conteudo do campo com mascara o mesmo se tornara vazio
+        if (data_fornec.equals("")) {
+            jFTData.setValue("");
+        } else {
+            if (valida_campos.ValidaDataHora(jFTData.getText()) == false) {
+                jFTData.grabFocus();
+            }
+        }
+        
+    }//GEN-LAST:event_jFTDataFocusLost
+
     /**
      * @param args the command line arguments
      */
@@ -1676,7 +1715,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         fornecimento.setValor_frete(valor_frete);
         fornecimento.setId_moeda_imp(moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1));
         fornecimento.setValor_impostos(valor_imposto);
-        fornecimento.setData_cadastro(data_atual);
+        fornecimento.setData_cadastro(data.stringParaTimeStamp(jFTData.getText()));
         fornecimento.setData_alter(data_atual);
 
         return fornecimento;

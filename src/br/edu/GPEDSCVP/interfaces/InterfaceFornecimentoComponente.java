@@ -203,7 +203,7 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
 
         jLabel29.setText("Filtro de busca:");
 
-        jBTBuscar.setIcon(new javax.swing.ImageIcon("D:\\MEUS ARQUIVOS\\arquivos faculdade\\6PERIODO\\TCCII\\ICONES\\icones\\menores\\magnifier.png")); // NOI18N
+        jBTBuscar.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\magnifier.png")); // NOI18N
         jBTBuscar.setText("Buscar");
         jBTBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -211,7 +211,7 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
             }
         });
 
-        jBTVerDatasheet.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/edu/GPEDSCVP/icones/eye.png"))); // NOI18N
+        jBTVerDatasheet.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\eye.png")); // NOI18N
         jBTVerDatasheet.setText("Ver datasheet");
         jBTVerDatasheet.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -223,7 +223,7 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
 
         jLabel15.setText("Tipo:");
 
-        jBTConcluir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/edu/GPEDSCVP/icones/accept.png"))); // NOI18N
+        jBTConcluir.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\accept.png")); // NOI18N
         jBTConcluir.setText("Concluir");
         jBTConcluir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -315,7 +315,7 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
                     .addComponent(jFTValorUnit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/edu/GPEDSCVP/icones/add.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\add.png")); // NOI18N
         jButton1.setText("Novo");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -343,12 +343,11 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
                                 .addComponent(jCBTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTFFiltro)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
+                            .addComponent(jTFFiltro)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel29)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jBTBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -418,12 +417,25 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
         int linha = jTBConsultaComponentes.getSelectedRow();
         String descricao = jTBConsultaComponentes.getValueAt(linha, 2).toString();
         Integer id_componente = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 0).toString());
-    
-        jTFComponenteFornecido.setText(descricao);
-        jTFIDCompFornec.setText(id_componente.toString());
-        jTFQntdComponenteFornecido.setEnabled(true);
-        jFTValorUnit.setEnabled(true);
-        jCBMoedaValorUnit.setEnabled(true);
+        
+        //verifica se o componente possui composição
+        componente.setId_componente(id_componente);
+        if(dao_componente.verificaExisteComposicao(componente) == true){
+            //se sim, então calcula o total da composição do componente para obter o custo unitario do componente
+            jTFComponenteFornecido.setText(descricao);
+            jTFIDCompFornec.setText(id_componente.toString());
+            jTFQntdComponenteFornecido.setEnabled(true);
+            jFTValorUnit.setEnabled(false);
+            jFTValorUnit.setText("0.00");
+            jCBMoedaValorUnit.setEnabled(true);
+            
+        }else{
+            jTFComponenteFornecido.setText(descricao);
+            jTFIDCompFornec.setText(id_componente.toString());
+            jTFQntdComponenteFornecido.setEnabled(true);
+            jFTValorUnit.setEnabled(true);
+            jCBMoedaValorUnit.setEnabled(true);
+        }
     }//GEN-LAST:event_jTBConsultaComponentesMouseClicked
 
     private void jBTBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTBuscarActionPerformed
@@ -610,26 +622,31 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
             String descricao = jTBConsultaComponentes.getValueAt(linha, 2).toString();
             if(Jtable.evitarDuplicacao(comp_fornec.getTabela(), descricao) == false){
                 if (valida_campos.validacamposobrigatorios(jPInfoCompFornec, "COMPONENTES_FORNECIMENTO") == 0) { 
-                    try {
-                        getComponente();
-      
-                        dao_comp_fornec.addComponenteFornecimento(comp_fornec,jTBConsultaComponentes,comp_fornec.getSituacao());
-                        //Seta mascara na coluna de valores monetários da jtable
-                        Jtable.setarMascaraMonetaria(comp_fornec.getTabela(), jFTMascaraMonetaria,4);
-                        Jtable.ajustarColunasDaTabela(comp_fornec.getTabela());
+                    Integer qntd = Integer.parseInt(jTFQntdComponenteFornecido.getText());
+                    if(qntd>0){
+                        try {
+                            getComponente();
 
-                        valida_campos.LimparCampos(jPInfoCompFornec);
-                        jFTValorUnit.setValue(null);
+                            dao_comp_fornec.addComponenteFornecimento(comp_fornec,jTBConsultaComponentes,comp_fornec.getSituacao());
+                            //Seta mascara na coluna de valores monetários da jtable
+                            Jtable.setarMascaraMonetaria(comp_fornec.getTabela(), jFTMascaraMonetaria,4);
+                            Jtable.ajustarColunasDaTabela(comp_fornec.getTabela());
 
-                        dao_moeda.consultaGeral(moeda);
-                        //Preenche dados nas ComboBox de moeda
-                        array_moedas = combo.PreencherCombo(jCBMoedaValorUnit, "unidade", moeda.getRetorno(), "id_moeda");
-                        //seta no array da classe de moeda a lista de moedas listadas na combo
-                        moeda.setArray_moeda(array_moedas);
-                        // fecha tela
-                        this.dispose();
-                    } catch (SQLException ex) {
-                        JOptionPane.showMessageDialog(null, "Falha ao adicionar componente");
+                            valida_campos.LimparCampos(jPInfoCompFornec);
+                            jFTValorUnit.setValue(null);
+
+                            dao_moeda.consultaGeral(moeda);
+                            //Preenche dados nas ComboBox de moeda
+                            array_moedas = combo.PreencherCombo(jCBMoedaValorUnit, "unidade", moeda.getRetorno(), "id_moeda");
+                            //seta no array da classe de moeda a lista de moedas listadas na combo
+                            moeda.setArray_moeda(array_moedas);
+                            // fecha tela
+                            this.dispose();
+                        } catch (SQLException ex) {
+                            JOptionPane.showMessageDialog(null, "Falha ao adicionar componente");
+                        }
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Quantidade deve ser maior que zero!");
                     }
                 } 
             }else{
@@ -716,7 +733,7 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
@@ -779,7 +796,7 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
         
         int id_componente = Integer.parseInt(jTFIDCompFornec.getText());
         int qntd = Integer.parseInt(jTFQntdComponenteFornecido.getText());
-        Double valor_unit = Double.parseDouble(jFTValorUnit.getText().replace(",", "."));
+        Double valor_unit = Double.parseDouble(jFTValorUnit.getText().replace(".","").replace(",", "."));
         
         comp_fornec.setId_componente(id_componente);
         comp_fornec.setId_moeda(moeda.getArray_moeda(jCBMoedaValorUnit.getSelectedIndex() - 1));

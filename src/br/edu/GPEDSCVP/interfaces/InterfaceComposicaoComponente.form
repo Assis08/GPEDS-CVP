@@ -127,7 +127,7 @@
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
-                      <Component id="jScrollPane1" pref="271" max="32767" attributes="0"/>
+                      <Component id="jScrollPane1" pref="270" max="32767" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jBTConcluir" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -265,7 +265,7 @@
             <Component class="javax.swing.JButton" name="jBTBuscar">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\menores\magnifier.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\magnifier.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Buscar"/>
               </Properties>
@@ -276,7 +276,7 @@
             <Component class="javax.swing.JButton" name="jBTVerDatasheet">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/br/edu/GPEDSCVP/icones/eye.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\eye.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Ver datasheet"/>
               </Properties>
@@ -303,7 +303,7 @@
             <Component class="javax.swing.JButton" name="jBTConcluir">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/br/edu/GPEDSCVP/icones/accept.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\accept.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Concluir"/>
               </Properties>

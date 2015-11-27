@@ -36,7 +36,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="jTBComponente" max="32767" attributes="0"/>
+              <Component id="jTBComponente" pref="649" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -269,7 +269,7 @@
                 <Component class="javax.swing.JButton" name="jButton1">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\Botoes_Site_5752_Knob_Add.png"/>
+                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_Site_5752_Knob_Add.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Novo"/>
                     <Property name="toolTipText" type="java.lang.String" value="Cidade"/>
@@ -282,7 +282,7 @@
                 <Component class="javax.swing.JButton" name="jButton2">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\32x32\document-pencil-icon (Custom).png"/>
+                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_5122_pencil_48.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Alterar"/>
                   </Properties>
@@ -293,7 +293,7 @@
                 <Component class="javax.swing.JButton" name="jButton3">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\Botoes_Site_5751_Knob_Remove_Red.png"/>
+                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_Site_5751_Knob_Remove_Red.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Excluir"/>
                   </Properties>
@@ -304,7 +304,7 @@
                 <Component class="javax.swing.JButton" name="jButton5">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\Hardware-Floppy-icon (Custom).png"/>
+                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Hardware-Floppy-icon (Custom).png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Gravar"/>
                   </Properties>
@@ -316,7 +316,7 @@
                 <Component class="javax.swing.JButton" name="jButton4">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\Botoes_Site_5750_Knob_Cancel.png"/>
+                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_Site_5750_Knob_Cancel.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Cancelar"/>
                   </Properties>
@@ -358,7 +358,7 @@
             <Component class="javax.swing.JButton" name="jBTNovoMaterial">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\menores\add.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\add.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Novo"/>
               </Properties>
@@ -511,7 +511,7 @@
             <Component class="javax.swing.JButton" name="jBTAddComposicao">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\Botoes_Site_5752_Knob_Add.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_Site_5752_Knob_Add.png"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="descricao" noResource="true"/>
               </Properties>
@@ -522,7 +522,7 @@
             <Component class="javax.swing.JButton" name="jBTRemoveComposicao">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\Botoes_Site_5751_Knob_Remove_Red.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_Site_5751_Knob_Remove_Red.png"/>
                 </Property>
               </Properties>
               <Events>
@@ -549,7 +549,7 @@
             <Component class="javax.swing.JButton" name="jBTNovoDatasheet">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\menores\add.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\add.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Novo"/>
               </Properties>
@@ -631,7 +631,7 @@
             <Component class="javax.swing.JButton" name="jBTRemoveFornecedores">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\Botoes_Site_5751_Knob_Remove_Red.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_Site_5751_Knob_Remove_Red.png"/>
                 </Property>
               </Properties>
               <Events>
@@ -641,7 +641,7 @@
             <Component class="javax.swing.JButton" name="jBTAddFornecedor">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\Botoes_Site_5752_Knob_Add.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_Site_5752_Knob_Add.png"/>
                 </Property>
                 <Property name="name" type="java.lang.String" value="descricao" noResource="true"/>
               </Properties>
@@ -881,7 +881,7 @@
             <Component class="javax.swing.JButton" name="jBTBuscar">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="D:\MEUS ARQUIVOS\arquivos faculdade\6PERIODO\TCCII\ICONES\icones\menores\magnifier.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\magnifier.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Buscar"/>
               </Properties>
@@ -956,7 +956,7 @@
             <Component class="javax.swing.JButton" name="jBTVerDatasheet">
               <Properties>
                 <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="3" name="/br/edu/GPEDSCVP/icones/eye.png"/>
+                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\eye.png"/>
                 </Property>
                 <Property name="text" type="java.lang.String" value="Ver datasheet"/>
               </Properties>

@@ -168,6 +168,14 @@ public class FormatarData {
         return data_atual;
     }
     
+    public String DataHoraAtual()
+    {
+        java.sql.Date data = new java.sql.Date(System.currentTimeMillis());
+        SimpleDateFormat fmt = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        String data_atual = fmt.format(data);
+        return data_atual;
+    }
+    
     //Calcula a Idade baseado em uma String data;
     public static int calculaIdade(String dataNasc, String pattern){
 

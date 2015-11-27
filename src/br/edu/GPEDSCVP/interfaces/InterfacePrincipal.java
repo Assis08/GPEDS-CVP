@@ -58,15 +58,15 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         jMCadastros = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
-        jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenuItem4 = new javax.swing.JMenuItem();
         jMenuItem6 = new javax.swing.JMenuItem();
         jMenuItem7 = new javax.swing.JMenuItem();
         jMenuItem8 = new javax.swing.JMenuItem();
         jMenuItem2 = new javax.swing.JMenuItem();
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
-        jMenu3 = new javax.swing.JMenu();
+        jMGerenciarProjetos = new javax.swing.JMenu();
         jMAlterarMoeda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -110,14 +110,6 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         });
         jMCadastros.add(jMenuItem3);
 
-        jMenuItem4.setText("Estados");
-        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem4ActionPerformed(evt);
-            }
-        });
-        jMCadastros.add(jMenuItem4);
-
         jMenuItem5.setText("Países");
         jMenuItem5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,6 +117,14 @@ public class InterfacePrincipal extends javax.swing.JFrame {
             }
         });
         jMCadastros.add(jMenuItem5);
+
+        jMenuItem4.setText("Estados");
+        jMenuItem4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem4ActionPerformed(evt);
+            }
+        });
+        jMCadastros.add(jMenuItem4);
 
         jMenuItem6.setText("Projetos");
         jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
@@ -176,22 +176,27 @@ public class InterfacePrincipal extends javax.swing.JFrame {
 
         jMBMenuPrincipal.add(jMCadastros);
 
-        jMenu3.setText("Gerenciar Projetos");
-        jMenu3.addMouseListener(new java.awt.event.MouseAdapter() {
+        jMGerenciarProjetos.setText("Gerenciar Projetos");
+        jMGerenciarProjetos.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMenu3MouseClicked(evt);
+                jMGerenciarProjetosMouseClicked(evt);
             }
         });
-        jMenu3.addMenuListener(new javax.swing.event.MenuListener() {
+        jMGerenciarProjetos.addMenuListener(new javax.swing.event.MenuListener() {
             public void menuCanceled(javax.swing.event.MenuEvent evt) {
             }
             public void menuDeselected(javax.swing.event.MenuEvent evt) {
             }
             public void menuSelected(javax.swing.event.MenuEvent evt) {
-                jMenu3MenuSelected(evt);
+                jMGerenciarProjetosMenuSelected(evt);
             }
         });
-        jMBMenuPrincipal.add(jMenu3);
+        jMGerenciarProjetos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMGerenciarProjetosActionPerformed(evt);
+            }
+        });
+        jMBMenuPrincipal.add(jMGerenciarProjetos);
 
         jMAlterarMoeda.setText("Atualizar Moeda");
         jMAlterarMoeda.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -339,8 +344,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMBMenuPrincipalFocusGained
 
     private void jMAlterarMoedaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMAlterarMoedaMouseClicked
-          jMAlterarMoeda.setSelected(false);
-        
+          
         try {
             //atualiza dados do usuario logado
             dao_acesso.retornaUsuarioLogado(acesso);
@@ -376,6 +380,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
+        jMAlterarMoeda.setSelected(false);
     }//GEN-LAST:event_jMAlterarMoedaMouseClicked
 
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
@@ -699,11 +704,11 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         jMCadastros.setSelected(false);
     }//GEN-LAST:event_jMenuItem10ActionPerformed
 
-    private void jMenu3MenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jMenu3MenuSelected
-       
-    }//GEN-LAST:event_jMenu3MenuSelected
+    private void jMGerenciarProjetosMenuSelected(javax.swing.event.MenuEvent evt) {//GEN-FIRST:event_jMGerenciarProjetosMenuSelected
+            
+    }//GEN-LAST:event_jMGerenciarProjetosMenuSelected
 
-    private void jMenu3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenu3MouseClicked
+    private void jMGerenciarProjetosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMGerenciarProjetosMouseClicked
          try {
             //atualiza dados do usuario logado
             dao_acesso.retornaUsuarioLogado(acesso);
@@ -739,7 +744,47 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }//GEN-LAST:event_jMenu3MouseClicked
+        jMGerenciarProjetos.setSelected(false);
+    }//GEN-LAST:event_jMGerenciarProjetosMouseClicked
+
+    private void jMGerenciarProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMGerenciarProjetosActionPerformed
+         try {
+            //atualiza dados do usuario logado
+            dao_acesso.retornaUsuarioLogado(acesso);
+            
+            //Inclui a opção todas telas como primeira opção
+            tela.setDescricao("Todas telas");
+            tela.setId_tela(1);
+            dao_tela.incluir(tela);
+            
+            //Inclui a tela de Materiais
+            tela.setDescricao("Versões Projetos");
+            tela.setId_tela(13);
+            dao_tela.incluir(tela);
+            
+            //Armazena dados de acesso da tela para verificar permissões
+            acesso.setId_tela(13);
+            acesso.setNome_tela("Versões Projetos");
+            
+            //se naõ for gerente
+            if(acesso.getIn_gerente() == 0){
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            } 
+          
+           //Verifica se o usuario possui permissao para acessar essa tela
+           if (validaacesso.verificaAcesso("acesso",acesso, permissao) == true){
+                //Traz para tela a tela de cadastro de pessoas 
+                new InterfaceVersaoProjeto().setVisible(true);
+           }else{
+               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
+           }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+    }//GEN-LAST:event_jMGerenciarProjetosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -780,7 +825,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMAlterarMoeda;
     private javax.swing.JMenuBar jMBMenuPrincipal;
     private javax.swing.JMenu jMCadastros;
-    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMGerenciarProjetos;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
     private javax.swing.JMenuItem jMenuItem2;
