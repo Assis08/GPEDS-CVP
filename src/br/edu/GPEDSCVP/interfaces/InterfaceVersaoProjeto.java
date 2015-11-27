@@ -149,6 +149,10 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jCBComercializado.addItem("Sim");
         jCBComercializado.addItem("Não");
         
+        jCBCertificacao.addItem("Selecione");
+        jCBCertificacao.addItem("Sim");
+        jCBCertificacao.addItem("Não");
+        
         limpa_dados_versao();
     }
 
@@ -195,6 +199,8 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jTFIDVersao = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jBTNovoEstado = new javax.swing.JButton();
+        jCBCertificacao = new javax.swing.JComboBox();
+        jLabel11 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
         jTBComponentesMecanicos = new javax.swing.JTable();
@@ -353,6 +359,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
         jLabel9.setText("Total Componentes R$:");
 
+        jTFLote.setName("lote"); // NOI18N
         jTFLote.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jTFLoteKeyTyped(evt);
@@ -362,7 +369,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jLabel6.setText("Lote:");
 
         jCBComercializado.setToolTipText("Material");
-        jCBComercializado.setName("id_material"); // NOI18N
+        jCBComercializado.setName("comercializado"); // NOI18N
         jCBComercializado.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -377,7 +384,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jLabel3.setText("Comercializado:");
 
         jCBVersao.setToolTipText("Tipo");
-        jCBVersao.setName("tipo"); // NOI18N
+        jCBVersao.setName("versao"); // NOI18N
         jCBVersao.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -392,7 +399,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jLabel13.setText("Versão");
 
         jCBProjeto.setToolTipText("Tipo");
-        jCBProjeto.setName("tipo"); // NOI18N
+        jCBProjeto.setName("id_projeto"); // NOI18N
         jCBProjeto.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -413,7 +420,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jLabel7.setText("Data:");
 
         jTFIDVersao.setEditable(false);
-        jTFIDVersao.setName("id_componente"); // NOI18N
+        jTFIDVersao.setName("cod_vers_proj"); // NOI18N
 
         jLabel1.setText("ID Versão:");
 
@@ -424,6 +431,8 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 jBTNovoEstadoActionPerformed(evt);
             }
         });
+
+        jLabel11.setText("Certificação:");
 
         javax.swing.GroupLayout jPDadosVersaoLayout = new javax.swing.GroupLayout(jPDadosVersao);
         jPDadosVersao.setLayout(jPDadosVersaoLayout);
@@ -445,27 +454,43 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel13)
                     .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jCBComercializado, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTFLote, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6))
+                .addGap(18, 18, 18)
+                .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPDadosVersaoLayout.createSequentialGroup()
-                        .addComponent(jTFLote, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
-                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
-                        .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addComponent(jCBCertificacao, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPDadosVersaoLayout.setVerticalGroup(
             jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPDadosVersaoLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jCBComercializado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
+                        .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel11))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTFLote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCBCertificacao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPDadosVersaoLayout.createSequentialGroup()
                         .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPDadosVersaoLayout.createSequentialGroup()
@@ -481,19 +506,12 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                         .addComponent(jTFIDVersao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPDadosVersaoLayout.createSequentialGroup()
-                        .addComponent(jLabel13)
-                        .addGap(26, 26, 26))
-                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jCBComercializado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPDadosVersaoLayout.createSequentialGroup()
-                        .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel7))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTFLote, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel13)
+                            .addGroup(jPDadosVersaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jLabel7)))
+                        .addGap(26, 26, 26)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -676,13 +694,13 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5MouseExited
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-       /*
+/*
         //Se for inclusão
         if (situacao == Rotinas.INCLUIR) {
-            if (valida_campos.validacamposobrigatorios(jPVersaoProjeto, "COMPONENTE") == 0) {
+            if (valida_campos.validacamposobrigatorios(jPVersaoProjeto, "Versao_Projeto") == 0) {
                 try {
-                    //pega dados do componente na tela
-                    getComponente();
+                    //pega dados da versão na tela
+                    getVersaoProjeto();
                     //inclui componente
                     if(dao_componente.incluir(componente,jCBProjeto.getSelectedItem().toString()) == true){
 
@@ -961,6 +979,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             
             //ajusta largura das colunas
             Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
+           
         }else{
             limpa_dados_versao();
             //desabilita jtables da tela
@@ -1097,6 +1116,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JComboBox jCBCertificacao;
     private javax.swing.JComboBox jCBComercializado;
     private javax.swing.JComboBox jCBProjeto;
     private javax.swing.JComboBox jCBVersao;
@@ -1106,6 +1126,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     private javax.swing.JFormattedTextField jFTTotalMecanico;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -1134,9 +1155,8 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         
         int id_versao = Integer.parseInt(jTFIDVersao.getText());
       
-        
         versao.setCod_vers_projeto(id_versao);
-        versao.setCod_vers_projeto(versao.getArray_versoes(jCBVersao.getSelectedIndex() - 1));
+        //versao.setVersao(Double.parseDouble(String.valueOf(versao.getArray_versoes(jCBVersao.getSelectedIndex() - 1))) );
         versao.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
         if(jCBComercializado.getSelectedItem().equals("Sim")){
             versao.setComercializado("Sim");
@@ -1166,6 +1186,14 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jTFLote.setEnabled(false);
     }
     
+    if(versao.getCertificacao().equals("S")){
+        jCBCertificacao.setSelectedItem("Sim");
+    }else if (versao.getComercializado().equals("N")){
+         jCBCertificacao.setSelectedItem("Não"); 
+    }else{
+        jCBCertificacao.setSelectedIndex(0); 
+    }
+    
     jFTData.setText(data.organizaData(versao.getData_cadastro()));
     }
  
@@ -1175,6 +1203,8 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     jTFLote.setText("");
     jCBComercializado.setSelectedIndex(0);
     jCBComercializado.setEnabled(false);
+    jCBCertificacao.setSelectedIndex(0);
+    jCBCertificacao.setEnabled(false);
     jTFLote.setEnabled(false);
  }
 }
