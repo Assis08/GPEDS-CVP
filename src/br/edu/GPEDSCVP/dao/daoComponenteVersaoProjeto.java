@@ -588,4 +588,55 @@ public class daoComponenteVersaoProjeto {
         }
        return total;
     }
+    
+     //Método para remover um registro da Jtable
+    public void removeItensAtulizaTotal(JTable jtable, int situacao, JFormattedTextField JTFTotalComp,JFormattedTextField JTFTotal) {
+        DefaultTableModel tabela = (DefaultTableModel) jtable.getModel();
+        int totlinha = tabela.getRowCount();
+        int totcolun = tabela.getColumnCount();
+        Boolean sel = false;
+        Double valor_remover = 0.0;
+        Double total_remover = 0.0;
+        Double valor_total_comp = Double.parseDouble(JTFTotalComp.getText().replace(".", "").replace(",", "."));
+        Double valor_total = Double.parseDouble(JTFTotal.getText().replace(".", "").replace(",", "."));;
+        Boolean achou = false;
+        
+        int opcao = JOptionPane.showConfirmDialog(null, "Deseja remover os registros selecionados? ",
+                "remover",
+                JOptionPane.YES_NO_OPTION);
+        if (opcao == JOptionPane.YES_OPTION) {
+        //Percorre linhas da jtable
+        for(int i = totlinha-1; i >= 0; i--){
+
+            sel = (Boolean) tabela.getValueAt(i, 0);
+            valor_remover = Double.parseDouble(tabela.getValueAt(i, 8).toString().replace(".", "").replace(",", "."));
+            
+            //Se a linha estiver selecionada
+            if(sel != null){
+                if(sel == true){
+                    
+                    total_remover = total_remover + valor_remover;
+                    
+                    //ativa flag que achou uma linha selecionada
+                    achou = true;
+                    if(situacao == Rotinas.ALTERAR){
+                        //seta o valor 1 na coluna excluido da jtable
+                        jtable.setValueAt(1, i, totcolun-1);
+                        jtable.setValueAt(false, i, 0);
+                        //habilita e desabilita para atualizar o jtable (caso contrario pinta de vermelho só quando clica na linha)
+                        jtable.setEnabled(false);
+                        jtable.setEnabled(true);
+                    }else{
+                        tabela.removeRow(i);
+                    }
+                }
+            }
+        }
+        JTFTotalComp.setText(conversoes.doubleParaObjectDecimalFormat(valor_total_comp - total_remover).toString());
+        JTFTotal.setText(conversoes.doubleParaObjectDecimalFormat(valor_total - total_remover).toString());
+        if(achou == false){
+            JOptionPane.showMessageDialog(null, "Nehuma linha selecionada!");
+        }
+        }
+    }
 }

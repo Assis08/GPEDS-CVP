@@ -310,7 +310,7 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
 
             },
             new String [] {
-                "ID Cidade", "Descrição", "Data Cadastro"
+                "ID Datasheet", "Descrição", "Data Cadastro"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -718,7 +718,7 @@ public class InterfaceDatasheet extends javax.swing.JFrame {
                 //escreve bytes no arquivo
                 fos.write( arquivo_banco );
                 //abre arquivo
-                Desktop.getDesktop().open(f);
+                Desktop.getDesktop().open(f); 
                 fos.close();
                 //deleta arquivo quando fechar a aplicação
                 f.deleteOnExit();
