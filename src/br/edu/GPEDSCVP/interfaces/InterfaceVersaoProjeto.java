@@ -348,17 +348,21 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         });
 
         jFTTotalEletronico.setEditable(false);
+        jFTTotalEletronico.setName("TotalEletronicos"); // NOI18N
 
         jLabel4.setText("Total R$:");
 
         jFTTotalMecanico.setEditable(false);
+        jFTTotalMecanico.setName("TotalMecanicos"); // NOI18N
 
         jLabel8.setText("Total R$:");
 
         jFTTotalComponentes.setEditable(false);
+        jFTTotalComponentes.setName("TotalComponentes"); // NOI18N
 
         jLabel9.setText("Total Componentes R$:");
 
+        jTFLote.setToolTipText("Lote");
         jTFLote.setName("lote"); // NOI18N
         jTFLote.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
@@ -368,7 +372,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
         jLabel6.setText("Lote:");
 
-        jCBComercializado.setToolTipText("Material");
+        jCBComercializado.setToolTipText("Comercializado");
         jCBComercializado.setName("comercializado"); // NOI18N
         jCBComercializado.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
@@ -383,7 +387,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
         jLabel3.setText("Comercializado:");
 
-        jCBVersao.setToolTipText("Tipo");
+        jCBVersao.setToolTipText("Versão");
         jCBVersao.setName("versao"); // NOI18N
         jCBVersao.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
@@ -398,7 +402,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
         jLabel13.setText("Versão");
 
-        jCBProjeto.setToolTipText("Tipo");
+        jCBProjeto.setToolTipText("Projeto");
         jCBProjeto.setName("id_projeto"); // NOI18N
         jCBProjeto.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
@@ -431,6 +435,9 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 jBTNovoEstadoActionPerformed(evt);
             }
         });
+
+        jCBCertificacao.setToolTipText("Certificação");
+        jCBCertificacao.setName("certificacao"); // NOI18N
 
         jLabel11.setText("Certificação:");
 
@@ -694,16 +701,17 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5MouseExited
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-/*
+
         //Se for inclusão
         if (situacao == Rotinas.INCLUIR) {
-            if (valida_campos.validacamposobrigatorios(jPVersaoProjeto, "Versao_Projeto") == 0) {
+            if (valida_campos.validacamposobrigatorios(jPDadosVersao, "Versao_Projeto") == 0) {
                 try {
                     //pega dados da versão na tela
                     getVersaoProjeto();
                     //inclui componente
-                    if(dao_componente.incluir(componente,jCBProjeto.getSelectedItem().toString()) == true){
-
+                    if(dao_versao.incluir(versao) == true){
+                    JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+/*
                         getComposicao();
                         getFornecedores();
                         dao_componente.gravarComposicao(composicao);
@@ -728,26 +736,28 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
                         //desabilita campos
                         valida_campos.desabilitaCampos(jPVersaoProjeto);
+                        */
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao incluir componente");
+                    JOptionPane.showMessageDialog(null, "Falha ao manipular versão");
                 }
 
             }
         }else if(situacao == Rotinas.ALTERAR) {
             //pega dados do material na tela
-            if (valida_campos.validacamposobrigatorios(jPVersaoProjeto, "COMPONENTE") == 0) {
+            if (valida_campos.validacamposobrigatorios(jPDadosVersao, "Versao_Projeto") == 0) {
                 try {
-                    getComponente();
+                    getVersaoProjeto();
                     //alterar componente
-                    if(dao_componente.alterar(componente, componente.getTipo()) == true){
-                        //altera composição
+                    if(dao_versao.alterar(versao)== true){
+                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                    /*    //altera composição
                         getComposicao();
                         getFornecedores();
                         dao_composicao.alterarComposicao(composicao);
                         dao_fornec_comp.alterarFornecedores(fornec_comp);
 
-                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
+                       
                         //limpa campos
                         valida_campos.LimparCampos(jPVersaoProjeto);
                         valida_campos.LimparJtable(jTBComponentesEletronicos);
@@ -765,13 +775,13 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
                         //desabilita campos
                         valida_campos.desabilitaCampos(jPVersaoProjeto);
+                        */
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao alterar componente");
+                    JOptionPane.showMessageDialog(null, "Falha ao alterar versão");
                 }
             }
         }
-        */
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -787,50 +797,57 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         if (valida_acesso.verificaAcesso("inserir", acesso, permissao) == true) {
 
             try {
+                
+                if (mensagem.ValidaMensagem("Deseja criar uma nova versão deste projeto ?") == 0) {
 
-                if(jCBProjeto.getSelectedIndex() > 0){
+                    if(jCBProjeto.getSelectedIndex() > 0){
 
-                    Integer id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
-                    projeto.setId_projeto(id_projeto);
-                    versao.setPrim_opcao_versao(dao_versao.criaCodigoVersao(versao, "PRIMEIRA_CASA"));
-                    versao.setSegun_opcao_versao(dao_versao.criaCodigoVersao(versao, "SEGUNDA_CASA"));
-                      
-                    InterfaceSelecionaVersao dialog = new InterfaceSelecionaVersao(this,true); //= new InterfaceSelecionaVersao();   
-                    dialog.setModal(true);  
-                    dialog.setVisible(true); 
-                    dialog = null; 
+                        Integer id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
+                        projeto.setId_projeto(id_projeto);
+                        versao.setPrim_opcao_versao(dao_versao.criaCodigoVersao(versao, "PRIMEIRA_CASA"));
+                        versao.setSegun_opcao_versao(dao_versao.criaCodigoVersao(versao, "SEGUNDA_CASA"));
 
-                    if(VersaoProjeto.getVersao_selecionada() != null){
-                        
-                        //Gera id sequencial
-                        ultima = new UltimaSequencia();
-                        int sequencia = (Integer) (ultima.ultimasequencia("VERSAO_PROJETO", "COD_VERS_PROJETO"));
-                        //seta id da nova versão no campo ID
-                        jTFIDVersao.setText(Integer.toString(sequencia));
+                        InterfaceSelecionaVersao dialog = new InterfaceSelecionaVersao(this,true); //= new InterfaceSelecionaVersao();   
+                        dialog.setModal(true);  
+                        dialog.setVisible(true); 
+                        dialog = null; 
 
-                        //Seta a data atual no campo data
-                        jFTData.setEnabled(true);
-                        jFTData.setText(data.DataAtual());
-                        
-                        jCBVersao.removeAllItems();
-                        jCBVersao.addItem(String.valueOf(versao.getVersao_selecionada()));  
-                        versao.setVersao_selecionada(null);
-                        
-                        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
-                        situacao = Rotinas.INCLUIR;
-                        
-                        //habilita campos da tela
-                        valida_campos.habilitaCampos(jPVersaoProjeto);
+                        if(VersaoProjeto.getVersao_selecionada() != null){
 
-                        //habilita os botoes utilizados na inclusão e desabilita os restantes
-                        valida_botoes.ValidaEstado(jPBotoes, situacao);
+                            //Gera id sequencial
+                            ultima = new UltimaSequencia();
+                            int sequencia = (Integer) (ultima.ultimasequencia("VERSAO_PROJETO", "COD_VERS_PROJETO"));
+                            //seta id da nova versão no campo ID
+                            jTFIDVersao.setText(Integer.toString(sequencia));
+
+                            //Seta a data atual no campo data
+                            jFTData.setEnabled(true);
+                            jFTData.setText(data.DataAtual());
+
+                            jCBVersao.removeAllItems();
+                            jCBVersao.addItem("Selecione item");  
+                            jCBVersao.addItem(String.valueOf(versao.getVersao_selecionada())); 
+                            jCBVersao.setSelectedIndex(1);
+                            versao.setVersao_selecionada(null);
+
+                            jCBCertificacao.setEnabled(true);
+                            jCBComercializado.setEnabled(true);
+
+                            //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                            situacao = Rotinas.INCLUIR;
+
+                            //habilita campos da tela
+                            valida_campos.habilitaCampos(jPVersaoProjeto);
+
+                            //habilita os botoes utilizados na inclusão e desabilita os restantes
+                            valida_botoes.ValidaEstado(jPBotoes, situacao);
+                        }
+
+                    }else{
+                        JOptionPane.showMessageDialog(null, "Selecione um Projeto!");
                     }
-
-                }else{
-                    JOptionPane.showMessageDialog(null, "Selecione um Projeto!");
-                }
                        
-               
+                }
 
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de componente");
@@ -866,9 +883,12 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             versao.setArray_versoes(array_versoes);
             
             jTFIDVersao.setText("");
-
             
-           
+            situacao = Rotinas.INICIAL;
+            
+            //habilita os botoes utilizados na inclusão e desabilita os restantes
+            valida_botoes.ValidaEstado(jPBotoes, situacao);
+
        }else{
             limpa_dados_versao();
             jCBVersao.removeAllItems();
@@ -952,38 +972,42 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     private void jCBVersaoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBVersaoPopupMenuWillBecomeInvisible
         Double versao_projeto;
         Integer id_projeto;
-        //se estiver selecionado uma versão
-        if(jCBVersao.getSelectedIndex() > 0){
-            //retorna os dados da versão selecionada
-            id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
-            versao_projeto = Double.parseDouble(jCBVersao.getSelectedItem().toString());
-            versao.setId_projeto(id_projeto);
-            versao.setVersao(versao_projeto);
-            dao_versao.retornardados(versao);
+        
+        if(situacao == Rotinas.ALTERAR || situacao == Rotinas.INICIAL ){
+            //se estiver selecionado uma versão
+            if(jCBVersao.getSelectedIndex() > 0){
+                //retorna os dados da versão selecionada
+                id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
+                versao_projeto = Double.parseDouble(jCBVersao.getSelectedItem().toString());
+                versao.setId_projeto(id_projeto);
+                versao.setVersao(versao_projeto);
+                dao_versao.retornardados(versao);
             
-            //seta dados da versão na tela
-            setcompVersaoProjeto();
+                //seta dados da versão na tela
+                setcompVersaoProjeto();
             
-            //habilita jtables da tela
-            valida_campos.habilitaCampos(jPVersaoProjeto);
-            jCBComercializado.setEnabled(true);
+                //habilita jtables da tela
+                valida_campos.habilitaCampos(jPVersaoProjeto);
+                jCBComercializado.setEnabled(true);
+                jCBCertificacao.setEnabled(true);
             
-            //Lista componentes eletrônicos da versão
-            comp_vers_proj.setId_projeto(id_projeto);
-            comp_vers_proj.setVersao(versao_projeto);
-            comp_vers_proj.setTipo("E");
-            dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
+                //Lista componentes eletrônicos da versão
+                comp_vers_proj.setId_projeto(id_projeto);
+                comp_vers_proj.setVersao(versao_projeto);
+                comp_vers_proj.setTipo("E");
+                dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
             
-            //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
-            Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false"}, comp_vers_proj.getRetorno());
-            
-            //ajusta largura das colunas
-            Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
-           
-        }else{
-            limpa_dados_versao();
-            //desabilita jtables da tela
-            valida_campos.desabilitaCampos(jPVersaoProjeto);
+                //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
+                Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false"}, comp_vers_proj.getRetorno());
+
+                //ajusta largura das colunas
+                Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
+                 
+            }else{
+                limpa_dados_versao();
+                //desabilita jtables da tela
+                valida_campos.desabilitaCampos(jPVersaoProjeto);
+            }
         }
     }//GEN-LAST:event_jCBVersaoPopupMenuWillBecomeInvisible
 
@@ -1020,6 +1044,10 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         jCBComercializado.addItem("Selecione");
         jCBComercializado.addItem("Sim");
         jCBComercializado.addItem("Não");
+        
+        jCBCertificacao.addItem("Selecione");
+        jCBCertificacao.addItem("Sim");
+        jCBCertificacao.addItem("Não");
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jBTNovoEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoEstadoActionPerformed
@@ -1158,11 +1186,12 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         versao.setCod_vers_projeto(id_versao);
         //versao.setVersao(Double.parseDouble(String.valueOf(versao.getArray_versoes(jCBVersao.getSelectedIndex() - 1))) );
         versao.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
+        versao.setVersao(Double.parseDouble(jCBVersao.getSelectedItem().toString()));
         if(jCBComercializado.getSelectedItem().equals("Sim")){
-            versao.setComercializado("Sim");
+            versao.setComercializado("S");
             versao.setLote(Integer.parseInt(jTFLote.getText()));
         }else if (jCBComercializado.getSelectedItem().equals("Não")){
-             versao.setComercializado("Não");
+             versao.setComercializado("N");
         }else{
             versao.setComercializado("Não");
         }

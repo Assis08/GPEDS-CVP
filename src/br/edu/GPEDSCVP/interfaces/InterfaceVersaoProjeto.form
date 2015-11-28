@@ -375,6 +375,7 @@
             <Component class="javax.swing.JFormattedTextField" name="jFTTotalEletronico">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="TotalEletronicos" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel4">
@@ -385,6 +386,7 @@
             <Component class="javax.swing.JFormattedTextField" name="jFTTotalMecanico">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="TotalMecanicos" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel8">
@@ -395,6 +397,7 @@
             <Component class="javax.swing.JFormattedTextField" name="jFTTotalComponentes">
               <Properties>
                 <Property name="editable" type="boolean" value="false"/>
+                <Property name="name" type="java.lang.String" value="TotalComponentes" noResource="true"/>
               </Properties>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel9">
@@ -513,6 +516,7 @@
               <SubComponents>
                 <Component class="javax.swing.JTextField" name="jTFLote">
                   <Properties>
+                    <Property name="toolTipText" type="java.lang.String" value="Lote"/>
                     <Property name="name" type="java.lang.String" value="lote" noResource="true"/>
                   </Properties>
                   <Events>
@@ -529,7 +533,7 @@
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Material"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Comercializado"/>
                     <Property name="name" type="java.lang.String" value="comercializado" noResource="true"/>
                   </Properties>
                   <Events>
@@ -547,7 +551,7 @@
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Tipo"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Vers&#xe3;o"/>
                     <Property name="name" type="java.lang.String" value="versao" noResource="true"/>
                   </Properties>
                   <Events>
@@ -565,7 +569,7 @@
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Tipo"/>
+                    <Property name="toolTipText" type="java.lang.String" value="Projeto"/>
                     <Property name="name" type="java.lang.String" value="id_projeto" noResource="true"/>
                   </Properties>
                   <Events>
@@ -617,6 +621,8 @@
                     <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
                       <StringArray count="0"/>
                     </Property>
+                    <Property name="toolTipText" type="java.lang.String" value="Certifica&#xe7;&#xe3;o"/>
+                    <Property name="name" type="java.lang.String" value="certificacao" noResource="true"/>
                   </Properties>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel11">

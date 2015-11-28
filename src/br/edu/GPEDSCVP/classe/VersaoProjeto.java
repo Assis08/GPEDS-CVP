@@ -18,7 +18,7 @@ public class VersaoProjeto {
     private int cod_vers_projeto;
     private int id_projeto;
     private Double versao;
-    private int oculto;
+    private String in_ativo;
     private String comercializado;
     private int lote;
     private String certificacao;
@@ -35,7 +35,6 @@ public class VersaoProjeto {
         cod_vers_projeto = 0;
         id_projeto = 0;
         versao = 0.0;
-        oculto = 0;
         comercializado = "";
         lote = 0;
         certificacao = "";
@@ -66,15 +65,6 @@ public class VersaoProjeto {
     public void setVersao(Double versao) {
         this.versao = versao;
     }
-
-    public int getOculto() {
-        return oculto;
-    }
-
-    public void setOculto(int oculto) {
-        this.oculto = oculto;
-    }
-
     public String getComercializado() {
         return comercializado;
     }
