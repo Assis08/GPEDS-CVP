@@ -574,7 +574,7 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
         Double valor_unit = Double.parseDouble(jTBConsultaComponentes.getValueAt(linha, 15).toString().replace(",", "."));
         Integer qntd_para_projeto = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 11).toString());
         Integer qntd_no_projeto = Integer.parseInt(jTFQntd.getText());
-        
+
         comp_vers_proj.setId_comp_versao(id_comp_vers);
         comp_vers_proj.setId_componente(id_componente);
         comp_vers_proj.setComponente(ds_componente);

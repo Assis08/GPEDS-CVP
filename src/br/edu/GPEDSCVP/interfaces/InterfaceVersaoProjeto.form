@@ -191,7 +191,7 @@
                 <Component class="javax.swing.JButton" name="jButton3">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\Botoes_5122_pencil_48.png"/>
+                      <Image iconType="3" name="/br/edu/GPEDSCVP/icones/Botoes_Site_5751_Knob_Remove_Red.png"/>
                     </Property>
                     <Property name="text" type="java.lang.String" value="Excluir"/>
                   </Properties>
@@ -256,7 +256,7 @@
                         <Column editable="false" title="Moeda" type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit" type="java.lang.Object"/>
                         <Column editable="false" title="Quantidade" type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total R$" type="java.lang.Object"/>
                         <Column editable="true" title="exc" type="java.lang.Object"/>
                       </Table>
                     </Property>
@@ -656,7 +656,7 @@
                         <Column editable="false" title="Moeda" type="java.lang.Object"/>
                         <Column editable="false" title="Valor Unit" type="java.lang.Object"/>
                         <Column editable="false" title="Quantidade" type="java.lang.Object"/>
-                        <Column editable="false" title="Total" type="java.lang.Object"/>
+                        <Column editable="false" title="Total R$" type="java.lang.Object"/>
                         <Column editable="true" title="exc" type="java.lang.Object"/>
                       </Table>
                     </Property>

@@ -6,6 +6,7 @@
 package br.edu.GPEDSCVP.dao;
 
 import br.edu.GPEDSCVP.classe.ComponenteFornecimento;
+import br.edu.GPEDSCVP.classe.ComponenteVersaoProjeto;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.Rotinas;
@@ -417,5 +418,21 @@ public class daoComponentesFornecimento {
                                          + " WHERE ID_COMP_FORNEC = " + id_fornecidos);
             }
         }
-    } 
+    }
+     
+    //metodo para retornar a data que foi fornecida um determinado componente
+    public Timestamp retornaDataFornecimentoComponente(ComponenteVersaoProjeto componente){
+        conecta_banco.executeSQL("select * from componentes_fornecimento" 
+        + " inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)"
+        + " inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)" 
+        + " where componentes_versao_projeto.id_comp_versao = "+componente.getId_comp_versao()+" and componentes_fornecimento.in_ativo = 'A'");
+        
+        try {        
+           conecta_banco.resultset.first();
+           Timestamp data_fornec = conecta_banco.resultset.getTimestamp("data_cadastro");
+           return data_fornec;
+        } catch (SQLException ex) {
+           return null;
+        }                     
+    }
 }

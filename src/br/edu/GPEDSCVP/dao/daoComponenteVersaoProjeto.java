@@ -5,15 +5,19 @@
  */
 package br.edu.GPEDSCVP.dao;
 
+import br.edu.GPEDSCVP.classe.Componente;
 import br.edu.GPEDSCVP.classe.ComponenteVersaoProjeto;
 import br.edu.GPEDSCVP.classe.VersaoProjeto;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.Conversoes;
+import br.edu.GPEDSCVP.util.ExcessaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.Rotinas;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaCampos;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -30,7 +34,10 @@ public class daoComponenteVersaoProjeto {
     Conversoes conversoes = new Conversoes();
     daoMoeda dao_moeda = new daoMoeda();
     daoComponente dao_componente = new daoComponente();
+    daoComponentesFornecimento dao_comp_fornec = new daoComponentesFornecimento();
     FormatarData data = new FormatarData();
+    ComponenteVersaoProjeto comp_vers_proj = new ComponenteVersaoProjeto();
+    Componente componente = new Componente();
     
     public daoComponenteVersaoProjeto()
     {
@@ -444,6 +451,8 @@ public class daoComponenteVersaoProjeto {
                                comp_vers_proj.setRetorno(conecta_banco.resultset);
     }
     
+    
+    
     //Método de incluir componentes para uma versão do projeto
     public void addCompParaProjeto(ComponenteVersaoProjeto comp_vers_proj,JTable componente, int situacao) throws SQLException{
         
@@ -458,9 +467,12 @@ public class daoComponenteVersaoProjeto {
         Double total_mecanicos = 0.0;
         Double total_comp = 0.0;
         Double total_composicao = 0.0;
+        Integer id_componente;
        
         int totlinha_comp_proj = TabelaCompVersProj.getRowCount();
         int totlinha_comp_fornec = TabelaCompFornec.getRowCount();
+        //armazena o id do componente antes de calcular a composição do componente pois no processo do calculo altera o id do componente
+        id_componente = comp_vers_proj.getId_componente();
         total_composicao = dao_componente.calculaComposicaoComponente(comp_vers_proj);
        
         //se não possuir linhas
@@ -471,7 +483,7 @@ public class daoComponenteVersaoProjeto {
             //seta valores na jtable
             TabelaCompVersProj.setValueAt(false, 0, 0);
             TabelaCompVersProj.setValueAt(comp_vers_proj.getId_comp_versao(), 0,1);
-            TabelaCompVersProj.setValueAt(comp_vers_proj.getId_componente(),0,2);
+            TabelaCompVersProj.setValueAt(id_componente,0,2);
             TabelaCompVersProj.setValueAt(comp_vers_proj.getComponente(), 0, 3);
             TabelaCompVersProj.setValueAt(comp_vers_proj.getId_moeda(), 0, 4);
             TabelaCompVersProj.setValueAt(comp_vers_proj.getUnidade(), 0, 5);
@@ -497,7 +509,7 @@ public class daoComponenteVersaoProjeto {
                 Integer exc = Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 9).toString());
                 total = comp_vers_proj.getQntd_no_projeto() * comp_vers_proj.getValor_unit();
                 //se o componente ja existir e não estiver excluido entao sobreescreve apenas a quantidade 
-                if((Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 2).toString()) == comp_vers_proj.getId_componente()) && exc == 0) {
+                if((Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 1).toString()) == comp_vers_proj.getId_comp_versao()) && exc == 0) {
                     // adiciona a nova quantidade para o componente e racalcula o total
                     Integer qntd_atual = Integer.parseInt(TabelaCompVersProj.getValueAt(i_comp, 7).toString());
                     TabelaCompVersProj.setValueAt(qntd_atual+comp_vers_proj.getQntd_no_projeto(), i_comp, 7);
@@ -521,7 +533,7 @@ public class daoComponenteVersaoProjeto {
                         //seta valores na jtable
                         TabelaCompVersProj.setValueAt(false, 0, 0);
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getId_comp_versao(),totlinha_comp_proj,1);
-                        TabelaCompVersProj.setValueAt(comp_vers_proj.getId_componente(),totlinha_comp_proj,2);
+                        TabelaCompVersProj.setValueAt(id_componente,totlinha_comp_proj,2);
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getComponente(), totlinha_comp_proj, 3);
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getId_moeda(), totlinha_comp_proj, 4);
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getUnidade(), totlinha_comp_proj, 5);
@@ -572,6 +584,133 @@ public class daoComponenteVersaoProjeto {
             total_mecanicos = 0.0;
         }
         JftTotalComp.setText(conversoes.doubleParaObjectDecimalFormat(total_eletronicos + total_mecanicos).toString());
+    }
+    
+    //metodo para converter para reais o total de todos componentes
+    public void converteTotalComp(JTable Tabela_comp){
+        
+        DefaultTableModel tabela = (DefaultTableModel) Tabela_comp.getModel();
+        int totlinha_comp = tabela.getRowCount();
+        Double total_comp = 0.0;
+        Object total_convertido = 0.0;
+        Integer id_moeda;
+        Integer id_comp_vers;
+        Integer id_componente;
+        Timestamp data_fornec;
+        
+        for (int i_comp = 0; i_comp < totlinha_comp; i_comp++){
+            
+            id_comp_vers = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 1).toString());
+            id_componente = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 2).toString());
+            id_moeda = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 4).toString());
+            total_comp = Double.parseDouble(Tabela_comp.getValueAt(i_comp, 8).toString().replace(".", "").replace(",", "."));
+            
+            //retorna a data de fornecimento do componente
+            comp_vers_proj.setId_comp_versao(id_comp_vers);
+            componente.setId_componente(id_componente);
+            data_fornec = dao_comp_fornec.retornaDataFornecimentoComponente(comp_vers_proj);
+            
+            //verifica se o componente possui composição
+            if(dao_componente.verificaExisteComposicao(componente) == true){
+                total_comp =  dao_componente.calculaComposicaoComponente(comp_vers_proj);
+                total_convertido = conversoes.doubleParaObjectDecimalFormat(total_comp);
+                //seta na jtable o novo valor
+                tabela.setValueAt(total_convertido, i_comp, 8);
+            }else{
+                
+                //converte o valor em reais
+                total_comp = dao_moeda.converteparaReais(total_comp, id_moeda, data_fornec);
+                total_convertido = conversoes.doubleParaObjectDecimalFormat(total_comp);
+                //seta na jtable o novo valor
+                tabela.setValueAt(total_convertido, i_comp, 8);
+            }
+        }
+    }
+    
+     //Método para calcular o custo do componente que possui composição
+    public void atualizaQntdFornecComposicaoComponente(ComponenteVersaoProjeto componente){
+        int resultado;
+        Integer id_componente_composicao;
+        Integer id_comp_Versao;
+        Integer id_moeda;
+        Integer qntd_para_composicao;
+        Integer qntd_no_projeto;
+        Integer qntd_para_projeto;
+        Integer qntd_restante;
+        Integer nova_qntd;
+        Timestamp data_fornec;
+        Double valor_unit = 0.0;
+        Double total_composicao = 0.0;
+        ResultSet result_composicao = null;
+        ResultSet result_composicao_fornec = null;
+        //faz a consulta de composição do componente
+        conecta_banco.executeSQL("select * from composicao_componente where id_componente = "+componente.getId_componente());
+        result_composicao = conecta_banco.resultset;
+        try {
+            while ( result_composicao.next()) {
+                
+                id_componente_composicao = result_composicao.getInt("id_subcomponente");
+                qntd_para_composicao = result_composicao.getInt("qntd");
+                componente.setId_componente(id_componente_composicao);
+                
+                conecta_banco.executeSQL("select * from componentes_fornecimento" 
+                +" inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)"
+                +" inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)"
+                +" where componentes_versao_projeto.cod_vers_projeto = "+componente.getCod_vers_projeto()+" and componentes_versao_projeto.id_componente = "+id_componente_composicao+" and qntd_para_projeto - qntd_no_projeto  > 0;");
+                
+                result_composicao_fornec = conecta_banco.resultset;
+                
+                try {   
+                    //percorre todos fornecimentos do componente em especifico
+                   while(result_composicao_fornec.next()){
+                       //armazena dados do componente para o projeto
+                       id_comp_Versao = result_composicao_fornec.getInt("id_comp_versao");
+                       qntd_no_projeto = result_composicao_fornec.getInt("qntd_no_projeto");
+                       qntd_para_projeto = result_composicao_fornec.getInt("qntd_para_projeto");
+                       
+                       //armazena a quantidade que ainda não esta sendo utilizada no projeto
+                       qntd_restante = qntd_para_projeto - qntd_no_projeto;
+                       
+                       //verifica se a quantidade que não esta sendo utilizada é maior que a quantidade que esta precisando para o projeto
+                       if(qntd_restante >= qntd_para_composicao){
+                           //se sim então adiciona para o projeto a quantidade necesseria que não estava sendo utilizada
+                            nova_qntd = qntd_para_projeto  + qntd_para_composicao;
+                           
+                            
+       
+                            resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ? "
+                            + "WHERE id_comp_versao = ? ",
+                            nova_qntd,
+                            id_comp_Versao);
+                            
+                            break;
+                       }else{
+                            //se não então utiliza todos componentes desse fornecimento e utiliza o restante de outros fornecimento que seja desse componente e para este projeto
+                           
+                           qntd_para_composicao = qntd_para_composicao - (qntd_para_projeto - qntd_no_projeto);
+                           
+                            resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ? "
+                            + "WHERE id_comp_versao = ? ",
+                            qntd_para_projeto,
+                            id_comp_Versao);
+
+                       }
+                       /*
+                       JOptionPane.showMessageDialog(null, "id_comp_versao "+id_comp_Versao);
+                       JOptionPane.showMessageDialog(null, "qntd no projeto "+qntd_no_projeto);
+                       JOptionPane.showMessageDialog(null, "qntd_para_projeto "+qntd_para_projeto);
+                               */
+                   }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Falha ao calcular valor unitário da composição do componente.");
+                }
+                
+                atualizaQntdFornecComposicaoComponente(componente);
+            }
+        } catch (SQLException ex) {
+             //JOptionPane.showMessageDialog(null, "Falha ao calcular valor unitário da composição do componente.");
+        }
+       
     }
     
     //metodo para calcular o total de componentes na jtable

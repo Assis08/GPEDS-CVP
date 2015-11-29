@@ -722,12 +722,12 @@ public class daoComponente {
            return true;
         } catch (SQLException ex) {
            return false;
-           
         }
     }
     
     //Método para calcular o custo do componente que possui composição
     public Double calculaComposicaoComponente(ComponenteVersaoProjeto componente){
+        
         Integer id_componente_composicao;
         Integer id_moeda;
         Integer qntd_componente_composicao;
@@ -770,15 +770,7 @@ public class daoComponente {
                     valor_unit = result_valor_comp.getDouble("valor_unit");
                     id_moeda = result_valor_comp.getInt("id_moeda");
                     data_fornec = result_valor_comp.getTimestamp("data_cadastro");
-                    
-                    /*
-                    JOptionPane.showMessageDialog(null, "ID Componente = "+id_componente_composicao);
-                    JOptionPane.showMessageDialog(null, "Valor unitário = "+valor_unit);
-                    JOptionPane.showMessageDialog(null, "ID Moeda = "+id_moeda);
-                    JOptionPane.showMessageDialog(null, "Data = "+data_fornec);
-                    JOptionPane.showMessageDialog(null, "Qntd = "+qntd_componente_composicao);
-                    */
-                    
+
                     //converte valor_unitario para reais
                     valor_unit = dao_moeda.converteparaReais(valor_unit, id_moeda, data_fornec);
                     //calcula o total
@@ -795,6 +787,7 @@ public class daoComponente {
         
         return total_composicao;
     }
+    
 }
 
 
