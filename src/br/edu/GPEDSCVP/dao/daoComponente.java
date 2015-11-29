@@ -745,8 +745,7 @@ public class daoComponente {
                 id_componente_composicao = result_composicao.getInt("id_subcomponente");
                 qntd_componente_composicao = result_composicao.getInt("qntd");
                 componente.setId_componente(id_componente_composicao);
-                
-             
+
                 //sql para consulta do custo unitário do componente(composição) baseado no ultimo fornecimento feito do mesmo para a versão do projeto
                 
                 conecta_banco.executeSQL("select componentes_fornecimento.id_comp_fornec, componentes_fornecimento.id_componente,componentes_fornecimento.id_fornecimento," 

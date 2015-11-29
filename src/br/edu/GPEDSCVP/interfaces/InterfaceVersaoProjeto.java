@@ -38,12 +38,16 @@ import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
 import java.awt.Color;
+import java.awt.Component;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableCellRenderer;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -129,6 +133,12 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBComponentesEletronicos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBComponentesMecanicos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        
+        //Cria renderer para as Jtable  
+        TableCellRenderer renderer = new InterfaceVersaoProjeto.EvenOddRenderer();
+        jTBComponentesEletronicos.setDefaultRenderer(Object.class, renderer);
+        jTBComponentesMecanicos.setDefaultRenderer(Object.class, renderer);
+        
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
 
@@ -1002,6 +1012,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 //Lista componentes eletrônicos da versão
                 comp_vers_proj.setId_projeto(id_projeto);
                 comp_vers_proj.setVersao(versao_projeto);
+                comp_vers_proj.setCod_vers_projeto(Integer.parseInt(jTFIDVersao.getText()));
                 
                 comp_vers_proj.setTipo("E");
                 
@@ -1014,7 +1025,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
                 
                 //converte os totais dos compoenntes em reais pois o banco retorna o valor calculado referente a moeda que o mesmo foi cadastrado
-                dao_comp_vers.converteTotalComp(jTBComponentesEletronicos);
+                dao_comp_vers.converteTotalComp(comp_vers_proj, jTBComponentesEletronicos);
                 //seta o total de componentes eletronicos
                 jFTTotalEletronico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesEletronicos))));
                 
@@ -1030,7 +1041,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
                 
                 //converte os totais dos compoenntes em reais pois o banco retorna o valor calculado referente a moeda que o mesmo foi cadastrado
-                dao_comp_vers.converteTotalComp(jTBComponentesMecanicos);
+                dao_comp_vers.converteTotalComp(comp_vers_proj,jTBComponentesMecanicos);
                 //seta o total de componentes eletronicos
                 jFTTotalMecanico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesMecanicos))));
                 
@@ -1070,7 +1081,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         valida_campos.LimparCampos(jPDadosVersao);
         valida_campos.LimparCampos(jPVersaoProjeto);
         valida_campos.LimparJtable(jTBComponentesEletronicos);
-        valida_campos.LimparJtable(jTBComponentesEletronicos);
+        valida_campos.LimparJtable(jTBComponentesMecanicos);
        
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
         situacao = Rotinas.INICIAL;
@@ -1292,4 +1303,52 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     jCBCertificacao.setEnabled(false);
     jTFLote.setEnabled(false);
  }
+ 
+ class EvenOddRenderer implements TableCellRenderer {
+
+        public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
+
+        public Component getTableCellRendererComponent(JTable table, Object value,
+        boolean isSelected, boolean hasFocus, int row, int column) {
+            Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
+                table, value, isSelected, hasFocus, row, column);
+            ((JLabel) renderer).setOpaque(true);
+            Color foreground, background;
+            int totcolun = table.getColumnCount();
+
+            Integer exc = 0;
+            Boolean sel = false;
+
+
+            exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
+            sel = (Boolean) table.getValueAt(row, 0);
+
+            if(isSelected){
+                if(exc == 1){
+                   background = Color.RED;
+                   renderer.setBackground(background);
+                }
+                //garante que quando estiver selecinado é true e caso contrario e false (nunca sera nulo)
+
+                if(sel != null){
+                    if(sel == true){
+                        table.setValueAt(true, row, 0);
+                    }else{
+                        table.setValueAt(false, row, 0);
+                    }
+                }       
+             }
+             if(!isSelected){
+                if(exc == 1){
+                    background = Color.RED;
+                    renderer.setBackground(background);
+                }else{
+                    background = Color.WHITE;
+                    renderer.setBackground(background);
+                }
+             }
+            return renderer;
+        }
+    }
+ 
 }

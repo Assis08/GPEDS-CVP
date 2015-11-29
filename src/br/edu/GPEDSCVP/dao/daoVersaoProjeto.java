@@ -174,8 +174,8 @@ public class daoVersaoProjeto {
         Integer id_componente;
         Integer id_comp_vers;
         Integer nova_qntd;
-        Integer qntd_atual_no_projeto = 0;
         Integer id_comp_atualizar;
+        int resultado;
         
         ResultSet resultset_comp_fornec;
 
@@ -190,26 +190,21 @@ public class daoVersaoProjeto {
             componente.setId_componente(id_componente);
             comp_vers_proj.setId_componente(id_componente);
             comp_vers_proj.setId_comp_versao(id_comp_vers);
+            comp_vers_proj.setQntd_no_projeto(nova_qntd);
             
             //verifica se o componente possui composicao
             if(dao_comp.verificaExisteComposicao(componente) == true){
-                
-                //**************verifica pois esta com erro***********************
+                //se possui composição então atualiza a quantidade utilizada no projeto de todos componentes da composição
                 dao_comp_vers.atualizaQntdFornecComposicaoComponente(comp_vers_proj);
-            
-            }else{
-              //não possui composição então atualiza a quantidade para projeto do componente
                 
-              resultset_comp_fornec = retornaCompFornecVersProj(comp_vers_proj);
-              //percorre o resultset de todos fornecimento do componente especifico para o projeto
+                resultset_comp_fornec = retornaCompFornecVersProj(comp_vers_proj);
+                //percorre o resultset de todos fornecimento do componente especifico para o projeto
                 try {
                     while ( resultset_comp_fornec.next()) {
-                        
+                        //armaezna o id do componente
                         id_comp_atualizar =  resultset_comp_fornec.getInt("id_comp_versao");
-                        qntd_atual_no_projeto =  resultset_comp_fornec.getInt("qntd_no_projeto");
-
-                        int resultado;
-       
+                        
+                        //atualiza a quantidade utilizada no projeto
                         resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ?, situacao = ? "
                         + "WHERE id_comp_versao = ? ",
                         nova_qntd,
@@ -225,11 +220,39 @@ public class daoVersaoProjeto {
                         }
                     } 
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao converter valores dos componentes");
+                    JOptionPane.showMessageDialog(null, "Falha ao atualizar a quantidade dos componentes para o projeto");
+                }
+            }else{
+              //não possui composição então atualiza a quantidade para projeto do componente
+                
+              resultset_comp_fornec = retornaCompFornecVersProj(comp_vers_proj);
+              //percorre o resultset de todos fornecimento do componente especifico para o projeto
+                try {
+                    while ( resultset_comp_fornec.next()) {
+                        //armazena o id do componente para atualizar a quantidade
+                        id_comp_atualizar =  resultset_comp_fornec.getInt("id_comp_versao");
+                        
+                        //atualiza a quantidade utilizada no projeto
+                        resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ?, situacao = ? "
+                        + "WHERE id_comp_versao = ? ",
+                        nova_qntd,
+                        "C",
+                        id_comp_atualizar);
+
+                        if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+                            return false;
+                        }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+                            return false;
+                        }else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO){
+                            return false;
+                        }
+                    } 
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Falha ao atualizar a quantidade dos componentes para o projeto");
                 }
             }
         }
-          return true;    
+        return true;    
      }
     
     //retorna dados do fornecimento de um componente me especifico

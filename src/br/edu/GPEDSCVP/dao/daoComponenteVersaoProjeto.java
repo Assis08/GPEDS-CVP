@@ -36,7 +36,7 @@ public class daoComponenteVersaoProjeto {
     daoComponente dao_componente = new daoComponente();
     daoComponentesFornecimento dao_comp_fornec = new daoComponentesFornecimento();
     FormatarData data = new FormatarData();
-    ComponenteVersaoProjeto comp_vers_proj = new ComponenteVersaoProjeto();
+    //ComponenteVersaoProjeto comp_vers_proj = new ComponenteVersaoProjeto();
     Componente componente = new Componente();
     
     public daoComponenteVersaoProjeto()
@@ -587,7 +587,7 @@ public class daoComponenteVersaoProjeto {
     }
     
     //metodo para converter para reais o total de todos componentes
-    public void converteTotalComp(JTable Tabela_comp){
+    public void converteTotalComp(ComponenteVersaoProjeto comp_vers_proj, JTable Tabela_comp){
         
         DefaultTableModel tabela = (DefaultTableModel) Tabela_comp.getModel();
         int totlinha_comp = tabela.getRowCount();
@@ -595,6 +595,7 @@ public class daoComponenteVersaoProjeto {
         Object total_convertido = 0.0;
         Integer id_moeda;
         Integer id_comp_vers;
+        Integer qntd_comp;
         Integer id_componente;
         Timestamp data_fornec;
         
@@ -603,25 +604,36 @@ public class daoComponenteVersaoProjeto {
             id_comp_vers = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 1).toString());
             id_componente = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 2).toString());
             id_moeda = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 4).toString());
+            qntd_comp = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 7).toString());
             total_comp = Double.parseDouble(Tabela_comp.getValueAt(i_comp, 8).toString().replace(".", "").replace(",", "."));
             
             //retorna a data de fornecimento do componente
             comp_vers_proj.setId_comp_versao(id_comp_vers);
+            comp_vers_proj.setId_componente(id_componente);
             componente.setId_componente(id_componente);
+            
             data_fornec = dao_comp_fornec.retornaDataFornecimentoComponente(comp_vers_proj);
             
             //verifica se o componente possui composição
             if(dao_componente.verificaExisteComposicao(componente) == true){
+              
                 total_comp =  dao_componente.calculaComposicaoComponente(comp_vers_proj);
+                total_comp = total_comp * qntd_comp;
                 total_convertido = conversoes.doubleParaObjectDecimalFormat(total_comp);
-                //seta na jtable o novo valor
+                
+                //seta na jtable o valor unitario do componente
+                
+                //seta na jtable o valor unitário do componente
+                tabela.setValueAt(total_convertido, i_comp, 6);
+                
+                //seta na jtable o novo valor total
                 tabela.setValueAt(total_convertido, i_comp, 8);
             }else{
                 
                 //converte o valor em reais
                 total_comp = dao_moeda.converteparaReais(total_comp, id_moeda, data_fornec);
                 total_convertido = conversoes.doubleParaObjectDecimalFormat(total_comp);
-                //seta na jtable o novo valor
+                //seta na jtable o novo valor total
                 tabela.setValueAt(total_convertido, i_comp, 8);
             }
         }
@@ -649,10 +661,13 @@ public class daoComponenteVersaoProjeto {
         try {
             while ( result_composicao.next()) {
                 
+                //armazena dados da composição
                 id_componente_composicao = result_composicao.getInt("id_subcomponente");
                 qntd_para_composicao = result_composicao.getInt("qntd");
+                qntd_para_composicao = qntd_para_composicao * componente.getQntd_no_projeto();
                 componente.setId_componente(id_componente_composicao);
                 
+                //consulta todos os fornecimentos do componente na composição para o projeto
                 conecta_banco.executeSQL("select * from componentes_fornecimento" 
                 +" inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)"
                 +" inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)"
@@ -673,11 +688,9 @@ public class daoComponenteVersaoProjeto {
                        
                        //verifica se a quantidade que não esta sendo utilizada é maior que a quantidade que esta precisando para o projeto
                        if(qntd_restante >= qntd_para_composicao){
-                           //se sim então adiciona para o projeto a quantidade necesseria que não estava sendo utilizada
-                            nova_qntd = qntd_para_projeto  + qntd_para_composicao;
-                           
-                            
-       
+                           //se sim então adiciona para o projeto a quantidade necesseria 
+                            nova_qntd = qntd_no_projeto  + qntd_para_composicao;
+                            //atualiza no banco a quantidade
                             resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ? "
                             + "WHERE id_comp_versao = ? ",
                             nova_qntd,
@@ -693,22 +706,16 @@ public class daoComponenteVersaoProjeto {
                             + "WHERE id_comp_versao = ? ",
                             qntd_para_projeto,
                             id_comp_Versao);
-
                        }
-                       /*
-                       JOptionPane.showMessageDialog(null, "id_comp_versao "+id_comp_Versao);
-                       JOptionPane.showMessageDialog(null, "qntd no projeto "+qntd_no_projeto);
-                       JOptionPane.showMessageDialog(null, "qntd_para_projeto "+qntd_para_projeto);
-                               */
                    }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao calcular valor unitário da composição do componente.");
+                    JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");
                 }
                 
                 atualizaQntdFornecComposicaoComponente(componente);
             }
         } catch (SQLException ex) {
-             //JOptionPane.showMessageDialog(null, "Falha ao calcular valor unitário da composição do componente.");
+             JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");
         }
        
     }
