@@ -43,6 +43,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -1417,13 +1418,37 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                         try { 
                             //verifica se o valor setado é um valor numerico
                             Integer qntd = Integer.parseInt(table.getValueAt(row, column).toString());
+                            Integer id_comp_vers = Integer.parseInt(table.getValueAt(row, 1).toString());
+                            Integer id_moeda = Integer.parseInt(table.getValueAt(row, 4).toString());
+                            Timestamp data_fornec;
                             Double valor_unit = Double.parseDouble(table.getValueAt(row, 6).toString().replace(",", "."));
                             Double total;
+                            Object total_convert;
+                            Double total_eletronicos = 0.00;
+                            Double total_mecanicos = 0.00;
                             if(qntd > 0){
-                                //recalcula o total
+                                //recalcula o total pela moeda padrão do fornecimento
                                 total = valor_unit * qntd;
-                                table.setValueAt(total, row, 8);
-                               
+                                //retorna a data de fornecimento do componente para converão em reais
+                                comp_vers_proj.setId_comp_versao(id_comp_vers);
+                                data_fornec = dao_comp_fornec.retornaDataFornecimentoComponente(comp_vers_proj);
+                                //converte para reais o total
+                                total = dao_moeda.converteparaReais(total, id_moeda, data_fornec);
+                                //formata para monetario
+                                total_convert = conversao.doubleParaObjectDecimalFormat(total);
+                                table.setValueAt(total_convert, row, 8);
+                                
+                                //seta o total de componentes eletronicos
+                                jFTTotalEletronico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesEletronicos))));
+                                
+                                //seta o total de componentes eletronicos
+                                jFTTotalMecanico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesMecanicos))));
+                                
+                                 //calcula o total de todos componentes
+                                total_eletronicos = Double.parseDouble(jFTTotalEletronico.getText().replace(".", "").replace(",", "."));
+                                total_mecanicos = Double.parseDouble(jFTTotalMecanico.getText().replace(".", "").replace(",", "."));
+                                jFTTotalComponentes.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(total_eletronicos + total_mecanicos)));
+
                             }else{
                                 JOptionPane.showMessageDialog(null, "A quantidade deve ser maior que zero!");
                                 table.setValueAt(oldValue, row, column);
@@ -1441,6 +1466,8 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                     table.setValueAt(oldValue, row, column);
                 }
             }
+            
+             
           
     }
 
