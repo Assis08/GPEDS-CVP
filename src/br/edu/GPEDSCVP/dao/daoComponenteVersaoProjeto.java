@@ -52,7 +52,7 @@ public class daoComponenteVersaoProjeto {
     }
     
     //Método de incluir fornecedores para um componente
-    public void addComponenteVersao( ComponenteVersaoProjeto componente_projeto ,JTable componente_fornec, int situacao) throws SQLException{
+    public void addComponenteVersao( ComponenteVersaoProjeto componente_projeto,JTable componente_fornec, int situacao) throws SQLException{
 
         DefaultTableModel TabelaCompVersProj = (DefaultTableModel) componente_projeto.getTabela().getModel();
         DefaultTableModel TabelaCompFornec = (DefaultTableModel) componente_fornec.getModel();
@@ -61,6 +61,10 @@ public class daoComponenteVersaoProjeto {
         
         Integer qntd_fornecida;
         Integer id_componentes;
+        Double valor_comp = 0.0;
+        Double total_comp = 0.0;
+        Object valor_comp_convert;
+        Object total_comp_convert;
         Integer exc;
       
         int totlinha_comp_proj = TabelaCompVersProj.getRowCount();
@@ -85,13 +89,27 @@ public class daoComponenteVersaoProjeto {
             TabelaCompVersProj.setValueAt(componente_projeto.getQntd_para_projeto(), 0, 9);
             TabelaCompVersProj.setValueAt(0, 0, 10);
          
-            //processo para dar baixa na quantidade fornecida
+            //processo para dar baixa na quantidade fornecida e para calcular o custo unitário do componente caso seja formado por uma composição
             for (int i_comp_fornec = 0; i_comp_fornec < totlinha_comp_fornec; i_comp_fornec++){
                 if(TabelaCompFornec.getValueAt(i_comp_fornec, 2) != null){
                     if(Integer.parseInt(TabelaCompFornec.getValueAt(i_comp_fornec, 2).toString()) == componente_projeto.getId_componente()){
                         qntd_fornecida = Integer.parseInt(TabelaCompFornec.getValueAt(i_comp_fornec, 8).toString());
                         //da baixa em componente fornecidos referente ao valor fornecido para projeto
                         TabelaCompFornec.setValueAt(qntd_fornecida - componente_projeto.getQntd_para_projeto(), i_comp_fornec, 8);
+                        
+                        //verifica se o componente possui composição
+                        componente.setId_componente(componente_projeto.getId_componente());
+                        
+                        if(dao_componente.verificaExisteComposicao(componente)== true){
+                            //se possui composição então calcula o custo unitário do componente e seta na jtable
+                            valor_comp = dao_componente.calculaComposicaoComponente(componente_projeto);
+                            valor_comp_convert = conversoes.doubleParaObjectDecimalFormat(valor_comp);
+                            TabelaCompFornec.setValueAt(valor_comp_convert, i_comp_fornec, 4);
+                            //calcula o total 
+                            total_comp = valor_comp * componente_projeto.getQntd_para_projeto();
+                            total_comp_convert = conversoes.doubleParaObjectDecimalFormat(total_comp);
+                            TabelaCompFornec.setValueAt(total_comp_convert, i_comp_fornec, 9);
+                        }
                     }
                 }
             }
@@ -169,6 +187,20 @@ public class daoComponenteVersaoProjeto {
                                     qntd_fornecida = Integer.parseInt(TabelaCompFornec.getValueAt(i_comp_fornec, 8).toString());
                                     //da baixa em componente fornecidos referente ao valor fornecido para projeto
                                     TabelaCompFornec.setValueAt(qntd_fornecida - componente_projeto.getQntd_para_projeto(), i_comp_fornec, 8);
+                                    
+                                    //verifica se o componente possui composição
+                                    componente.setId_componente(componente_projeto.getId_componente());
+                        
+                                    if(dao_componente.verificaExisteComposicao(componente)== true){
+                                        //se possui composição então calcula o custo unitário do componente e seta na jtable
+                                        valor_comp = dao_componente.calculaComposicaoComponente(componente_projeto);
+                                        valor_comp_convert = conversoes.doubleParaObjectDecimalFormat(valor_comp);
+                                        TabelaCompFornec.setValueAt(valor_comp_convert, i_comp_fornec, 4);
+                                        //calcula o total 
+                                        total_comp = valor_comp * componente_projeto.getQntd_para_projeto();
+                                        total_comp_convert = conversoes.doubleParaObjectDecimalFormat(total_comp);
+                                        TabelaCompFornec.setValueAt(total_comp_convert, i_comp_fornec, 9);
+                                    }
                                 }
                             }
                         }
@@ -501,6 +533,7 @@ public class daoComponenteVersaoProjeto {
             TabelaCompVersProj.setValueAt(comp_vers_proj.getQntd_no_projeto(), 0, 7);
             TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total), 0, 8);
             TabelaCompVersProj.setValueAt(0, 0, 9);
+            TabelaCompVersProj.setValueAt(0, 0, 10);
 
         }else{
          
@@ -549,6 +582,7 @@ public class daoComponenteVersaoProjeto {
                         TabelaCompVersProj.setValueAt(comp_vers_proj.getQntd_no_projeto(), totlinha_comp_proj, 7);
                         TabelaCompVersProj.setValueAt(conversoes.doubleParaObjectDecimalFormat(total), totlinha_comp_proj, 8);
                         TabelaCompVersProj.setValueAt(0, totlinha_comp_proj, 9);
+                        TabelaCompVersProj.setValueAt(0, totlinha_comp_proj, 10);
                     }
                 }
             }  
@@ -600,7 +634,7 @@ public class daoComponenteVersaoProjeto {
         Timestamp data_fornec;
         
         for (int i_comp = 0; i_comp < totlinha_comp; i_comp++){
-            
+
             id_comp_vers = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 1).toString());
             id_componente = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 2).toString());
             id_moeda = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 4).toString());
@@ -613,34 +647,19 @@ public class daoComponenteVersaoProjeto {
             componente.setId_componente(id_componente);
             
             data_fornec = dao_comp_fornec.retornaDataFornecimentoComponente(comp_vers_proj);
+
+            //converte o valor em reais
+            total_comp = dao_moeda.converteparaReais(total_comp, id_moeda, data_fornec);
+            total_convertido = conversoes.doubleParaObjectDecimalFormat(total_comp);
+            //seta na jtable o novo valor total
+            tabela.setValueAt(total_convertido, i_comp, 8);
             
-            //verifica se o componente possui composição
-            if(dao_componente.verificaExisteComposicao(componente) == true){
-              
-                total_comp =  dao_componente.calculaComposicaoComponente(comp_vers_proj);
-                total_comp = total_comp * qntd_comp;
-                total_convertido = conversoes.doubleParaObjectDecimalFormat(total_comp);
-                
-                //seta na jtable o valor unitario do componente
-                
-                //seta na jtable o valor unitário do componente
-                tabela.setValueAt(total_convertido, i_comp, 6);
-                
-                //seta na jtable o novo valor total
-                tabela.setValueAt(total_convertido, i_comp, 8);
-            }else{
-                
-                //converte o valor em reais
-                total_comp = dao_moeda.converteparaReais(total_comp, id_moeda, data_fornec);
-                total_convertido = conversoes.doubleParaObjectDecimalFormat(total_comp);
-                //seta na jtable o novo valor total
-                tabela.setValueAt(total_convertido, i_comp, 8);
-            }
         }
     }
-    
+
      //Método para calcular o custo do componente que possui composição
-    public void atualizaQntdFornecComposicaoComponente(ComponenteVersaoProjeto componente){
+    public void atualizaQntdFornecComposicaoComponente(ComponenteVersaoProjeto componente, Integer qntd_inicial_comp){
+       
         int resultado;
         Integer id_componente_composicao;
         Integer id_comp_Versao;
@@ -664,7 +683,7 @@ public class daoComponenteVersaoProjeto {
                 //armazena dados da composição
                 id_componente_composicao = result_composicao.getInt("id_subcomponente");
                 qntd_para_composicao = result_composicao.getInt("qntd");
-                qntd_para_composicao = qntd_para_composicao * componente.getQntd_no_projeto();
+                qntd_para_composicao = qntd_para_composicao * (componente.getQntd_no_projeto() - qntd_inicial_comp);
                 componente.setId_componente(id_componente_composicao);
                 
                 //consulta todos os fornecimentos do componente na composição para o projeto
@@ -712,7 +731,7 @@ public class daoComponenteVersaoProjeto {
                     JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");
                 }
                 
-                atualizaQntdFornecComposicaoComponente(componente);
+                atualizaQntdFornecComposicaoComponente(componente, qntd_inicial_comp);
             }
         } catch (SQLException ex) {
              JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");

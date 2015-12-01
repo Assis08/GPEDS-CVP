@@ -232,7 +232,7 @@ public class InterfaceSelecionaProjeto extends javax.swing.JFrame {
                     
                     //componene possui composição ?
                     if(dao_componente.verificaExisteComposicao(componente) == true){
-                        //Toda composição do componente tem um registro de fornecimento para a versão do proejto em questão?
+                        //Toda composição do componente tem um registro de fornecimento para a versão do projeto em questão?
                         if(dao_fornecimento.verificaExisteFornecimentoComposicao(comp_vers_proj, versao) == true){  
                             //sim, então add o componente para a versão
                             dao_comp_vers.addComponenteVersao(comp_vers_proj, comp_fornec.getTabela(), comp_fornec.getSituacao());

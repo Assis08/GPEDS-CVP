@@ -33,16 +33,19 @@ import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.ManipulaJtable;
 import br.edu.GPEDSCVP.util.Mensagens;
 import br.edu.GPEDSCVP.util.Rotinas;
+import br.edu.GPEDSCVP.util.TableCellListener;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
@@ -133,11 +136,15 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBComponentesEletronicos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBComponentesMecanicos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        
+
         //Cria renderer para as Jtable  
         TableCellRenderer renderer = new InterfaceVersaoProjeto.EvenOddRenderer();
         jTBComponentesEletronicos.setDefaultRenderer(Object.class, renderer);
         jTBComponentesMecanicos.setDefaultRenderer(Object.class, renderer);
+        
+        //implementa Listener para edição da jtable
+        new TableCellListener(jTBComponentesEletronicos, new InterfaceVersaoProjeto.TableCellEditorAction());
+        new TableCellListener(jTBComponentesMecanicos, new InterfaceVersaoProjeto.TableCellEditorAction());
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -294,14 +301,14 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Sel", "ID Componentes Versão", "ID Componente", "Componente", "ID Moeda", "Moeda", "Valor Unit", "Quantidade", "Total R$", "exc"
+                "Sel", "ID Componentes Versão", "ID Componente", "Componente", "ID Moeda", "Moeda", "Valor Unit", "Quantidade", "Total R$", "exc", "old_qntd"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, true
+                true, false, false, false, false, false, false, true, false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -539,14 +546,14 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Sel", "ID Componentes Versão", "ID Componente", "Componente", "ID Moeda", "Moeda", "Valor Unit", "Quantidade", "Total R$", "exc"
+                "Sel", "ID Componentes Versão", "ID Componente", "Componente", "ID Moeda", "Moeda", "Valor Unit", "Quantidade", "Total R$", "exc", "old_qntd"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                true, false, false, false, false, false, false, false, false, true
+                true, false, false, false, false, false, false, true, false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -798,6 +805,50 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 }
             }
         }
+        
+        
+        Integer id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
+        Double versao_projeto = Double.parseDouble(jCBVersao.getSelectedItem().toString());
+        versao.setId_projeto(id_projeto);
+        versao.setVersao(versao_projeto);
+        dao_versao.retornardados(versao);
+            
+       
+        //Lista componentes eletrônicos da versão
+        comp_vers_proj.setId_projeto(id_projeto);
+        comp_vers_proj.setVersao(versao_projeto);
+        comp_vers_proj.setCod_vers_projeto(Integer.parseInt(jTFIDVersao.getText()));
+
+        comp_vers_proj.setTipo("E");
+
+        dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
+
+        //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
+        Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false","qntd_no_projeto"}, comp_vers_proj.getRetorno());
+
+        //ajusta largura das colunas
+        Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
+
+        //converte os totais dos compoenntes em reais pois o banco retorna o valor calculado referente a moeda que o mesmo foi cadastrado
+        dao_comp_vers.converteTotalComp(comp_vers_proj, jTBComponentesEletronicos);
+        //seta o total de componentes eletronicos
+        jFTTotalEletronico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesEletronicos))));
+
+        //Lista componentes mecânicos da versão
+        comp_vers_proj.setTipo("M");
+
+        dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
+
+        //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
+        Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false","qntd_no_projeto"}, comp_vers_proj.getRetorno());
+
+        //ajusta largura das colunas
+        Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
+
+        //converte os totais dos compoenntes em reais pois o banco retorna o valor calculado referente a moeda que o mesmo foi cadastrado
+        dao_comp_vers.converteTotalComp(comp_vers_proj,jTBComponentesMecanicos);
+        //seta o total de componentes eletronicos
+        jFTTotalMecanico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesMecanicos))));
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -1019,7 +1070,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
             
                 //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
-                Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false"}, comp_vers_proj.getRetorno());
+                Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false","qntd_no_projeto"}, comp_vers_proj.getRetorno());
 
                 //ajusta largura das colunas
                 Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
@@ -1035,7 +1086,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
             
                 //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
-                Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false"}, comp_vers_proj.getRetorno());
+                Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false","qntd_no_projeto"}, comp_vers_proj.getRetorno());
 
                 //ajusta largura das colunas
                 Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
@@ -1320,7 +1371,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             Boolean sel = false;
 
 
-            exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
+            exc = Integer.parseInt(table.getValueAt(row, 9).toString());
             sel = (Boolean) table.getValueAt(row, 0);
 
             if(isSelected){
@@ -1348,6 +1399,57 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 }
              }
             return renderer;
+        }
+    }
+ 
+  private void onCellEditor(JTable table, int column, int row, Object oldValue, Object newValue){
+        System.out.println("Coluna:" + column + "Valor novo: " + newValue + " Valor antigo: " + oldValue);
+
+            Integer exc = Integer.parseInt(table.getValueAt(row, 9).toString());
+             
+            //se não for um item excluido, deixa manipular valores
+            if(exc == 0){
+                
+                //Se o valor novo não for vazio
+                if(!newValue.toString().replace(" ", "").equals("")){
+
+                    if(column == 7 ){
+                        try { 
+                            //verifica se o valor setado é um valor numerico
+                            Integer qntd = Integer.parseInt(table.getValueAt(row, column).toString());
+                            Double valor_unit = Double.parseDouble(table.getValueAt(row, 6).toString().replace(",", "."));
+                            Double total;
+                            if(qntd > 0){
+                                //recalcula o total
+                                total = valor_unit * qntd;
+                                table.setValueAt(total, row, 8);
+                               
+                            }else{
+                                JOptionPane.showMessageDialog(null, "A quantidade deve ser maior que zero!");
+                                table.setValueAt(oldValue, row, column);
+                            }
+                        } catch (Exception e) {
+                            //se não for double, emite a mensagem e retorna para o valor que estava
+                            JOptionPane.showMessageDialog(null, "Informe um valor numérico para quantidade!");  
+                            table.setValueAt(oldValue, row, column);
+                        }
+                    }
+
+                }else
+                {
+                    //seta na jtable o valor que estava antes de apagar
+                    table.setValueAt(oldValue, row, column);
+                }
+            }
+          
+    }
+
+    class TableCellEditorAction extends AbstractAction {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            TableCellListener tbListener = (TableCellListener) e.getSource();
+            
+            onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
         }
     }
  

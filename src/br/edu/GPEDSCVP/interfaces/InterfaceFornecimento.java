@@ -42,6 +42,7 @@ import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -418,12 +419,32 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jFTData.setToolTipText("Data");
         jFTData.setName("data_cadastro"); // NOI18N
+        jFTData.addCaretListener(new javax.swing.event.CaretListener() {
+            public void caretUpdate(javax.swing.event.CaretEvent evt) {
+                jFTDataCaretUpdate(evt);
+            }
+        });
         jFTData.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jFTDataFocusLost(evt);
             }
         });
+        jFTData.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jFTDataMouseClicked(evt);
+            }
+        });
+        jFTData.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                jFTDataInputMethodTextChanged(evt);
+            }
+        });
         jFTData.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jFTDataKeyPressed(evt);
+            }
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 jFTDataKeyTyped(evt);
             }
@@ -536,14 +557,19 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 jFTValorFreteCaretUpdate(evt);
             }
         });
+        jFTValorFrete.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jFTValorFreteFocusLost(evt);
+            }
+        });
         jFTValorFrete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jFTValorFreteActionPerformed(evt);
             }
         });
-        jFTValorFrete.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jFTValorFreteFocusLost(evt);
+        jFTValorFrete.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jFTValorFreteKeyPressed(evt);
             }
         });
 
@@ -883,7 +909,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTBFornecimento, javax.swing.GroupLayout.DEFAULT_SIZE, 662, Short.MAX_VALUE)
+                .addComponent(jTBFornecimento)
                 .addContainerGap())
         );
 
@@ -1450,11 +1476,68 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBFornecimentoStateChanged
 
     private void jFTValorFreteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTValorFreteFocusLost
-        
+         Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());
+        if(jFTValorFrete.isEnabled())
+        {
+            if(!jFTValorFrete.getText().equals("")){
+                Double valor_inserido;
+                Double valor_convertido = 0.00;
+                String valor;
+                valor = jFTValorFrete.getText();
+                valor = valor.replace(".", "").replace(",", ".");
+                valor_inserido = Double.parseDouble(valor);
+                if(valor_inserido > 0){
+                    valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1),data_fornec);
+                    
+                }else{
+                    jFTFreteReais.setText("0.00");
+                    jFTValorFrete.setText("0.00");
+                }
+                
+                if(valor_convertido <= 0 && valor_inserido > 0){
+                    jFTFreteReais.setValue(null);
+                    jFTImpostosReais.setValue(null);
+                    jFTFreteReais.setText(null);
+                    jFTImpostosReais.setText(null);
+                }else{
+                    jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+                }
+                    
+            }
+        }
     }//GEN-LAST:event_jFTValorFreteFocusLost
 
     private void jFTValorImpostosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTValorImpostosFocusLost
+         Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());
+        
+        //Verifica se foi selecionado uma moeda
+        if(jFTValorImpostos.isEnabled()){
+            //se o campo do valor não for vazio
+            if(!jFTValorImpostos.getText().equals("")){
+                Double valor_inserido;
+                Double valor_convertido = 0.00;
+                String valor;
+                valor = jFTValorImpostos.getText();
+                valor = valor.replace(".", "").replace(",", ".");
+                valor_inserido = Double.parseDouble(valor);
        
+                if(valor_inserido > 0){
+                    valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1),data_fornec);
+                }else{
+                    jFTImpostosReais.setText("0.00");
+                    jFTValorImpostos.setText("0.00");
+                }
+                
+                if(valor_convertido <= 0 && valor_inserido > 0){
+                    jFTFreteReais.setValue(null);
+                    jFTImpostosReais.setValue(null);
+                    jFTFreteReais.setText(null);
+                    jFTImpostosReais.setText(null);
+                }else{
+                    jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+                }
+            }
+        }
     }//GEN-LAST:event_jFTValorImpostosFocusLost
 
     private void jFTValorFreteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFTValorFreteActionPerformed
@@ -1462,42 +1545,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jFTValorFreteActionPerformed
 
     private void jFTValorFreteCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jFTValorFreteCaretUpdate
-    
-        if(jFTValorFrete.isEnabled())
-        {
-            if(!jFTValorFrete.getText().equals("")){
-                Double valor_inserido;
-                Double valor_convertido;
-                String valor;
-                valor = jFTValorFrete.getText();
-                valor = valor.replace(".", "").replace(",", ".");
-                valor_inserido = Double.parseDouble(valor);
-                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1),null);
-                jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
-            }
-        }
+       
     }//GEN-LAST:event_jFTValorFreteCaretUpdate
 
     private void jFTValorImpostosCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jFTValorImpostosCaretUpdate
-        //Verifica se foi selecionado uma moeda
-        if(jFTValorImpostos.isEnabled()){
-            //se o campo do valor não for vazio
-            if(!jFTValorImpostos.getText().equals("")){
-                Double valor_inserido;
-                Double valor_convertido;
-                String valor;
-                valor = jFTValorImpostos.getText();
-                valor = valor.replace(".", "").replace(",", ".");
-                valor_inserido = Double.parseDouble(valor);
+        
        
-                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1),null);
-                jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
-            }
-        }
     }//GEN-LAST:event_jFTValorImpostosCaretUpdate
 
     private void jCBMoedaImpostosPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaImpostosPopupMenuWillBecomeInvisible
-         
+        Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());  
         //Verifica se foi selecionado uma moeda
         if(jCBMoedaImpostos.getSelectedIndex() > 0){
             jFTValorImpostos.setEnabled(true);
@@ -1506,7 +1563,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 double valor_inserido;
                 double valor_convertido;
                 valor_inserido = Double.parseDouble(jFTValorImpostos.getText().replace(",", "."));
-                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1),null);
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1),data_fornec);
                 jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
             }
         }else{
@@ -1518,7 +1575,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBMoedaImpostosPopupMenuWillBecomeInvisible
 
     private void jCBMoedaFretePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaFretePopupMenuWillBecomeInvisible
-         //se estiver selecionado uma moeda
+        Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());         
+        //se estiver selecionado uma moeda
         if(jCBMoedaFrete.getSelectedIndex() > 0){
             jFTValorFrete.setEnabled(true);
             //se o campo do valor não for vazio
@@ -1526,7 +1584,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 double valor_inserido;
                 double valor_convertido;
                 valor_inserido = Double.parseDouble(jFTValorFrete.getText().replace(",", "."));
-                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1),null);
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1),data_fornec);
                 jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
             }
         }else{
@@ -1552,6 +1610,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 comp_fornec.setTabela(jTBComponentes);
                 comp_vers_proj.setId_comp_fornec(id_comp_fornec);
                 comp_vers_proj.setTabela(jTBComponentesProjetos);
+                
                 new InterfaceSelecionaProjeto().setVisible(true);
             }else{
                 JOptionPane.showMessageDialog(null, "Este componente foi removido, não pode ser adicionado para projetos!");
@@ -1596,8 +1655,35 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 jFTData.grabFocus();
             }
         }
-        
     }//GEN-LAST:event_jFTDataFocusLost
+
+    private void jFTDataCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jFTDataCaretUpdate
+        
+       
+    }//GEN-LAST:event_jFTDataCaretUpdate
+
+    private void jFTDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFTDataMouseClicked
+        
+    }//GEN-LAST:event_jFTDataMouseClicked
+
+    private void jFTDataInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jFTDataInputMethodTextChanged
+       
+    }//GEN-LAST:event_jFTDataInputMethodTextChanged
+
+    private void jFTDataKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFTDataKeyPressed
+        jFTFreteReais.setValue(null);
+        jFTImpostosReais.setValue(null);
+        jFTValorFrete.setValue(null);
+        jFTValorImpostos.setValue(null);
+        jFTFreteReais.setText(null);
+        jFTImpostosReais.setText(null);
+        jFTValorFrete.setText(null);
+        jFTValorImpostos.setText(null);
+    }//GEN-LAST:event_jFTDataKeyPressed
+
+    private void jFTValorFreteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFTValorFreteKeyPressed
+      
+    }//GEN-LAST:event_jFTValorFreteKeyPressed
 
     /**
      * @param args the command line arguments
@@ -1757,10 +1843,10 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
          jCBFornecedor.setSelectedItem(fornecimento.getDs_pessoa());
          jCBMoedaFrete.setSelectedItem(fornecimento.getDs_moeda_frete());
          jFTValorFrete.setText(String.valueOf(fornecimento.getValor_frete()).replace(".", ","));
-         jFTFreteReais.setText(String.valueOf(dao_moeda.converteparaReais(fornecimento.getValor_frete(), fornecimento.getId_moeda_frete(), null)).replace(".", ","));
+         jFTFreteReais.setText(String.valueOf(dao_moeda.converteparaReais(fornecimento.getValor_frete(), fornecimento.getId_moeda_frete(), fornecimento.getData_cadastro())).replace(".", ","));
          jCBMoedaImpostos.setSelectedItem(fornecimento.getDs_moeda_imp());
          jFTValorImpostos.setText(String.valueOf(fornecimento.getValor_impostos()).replace(".", ","));
-         jFTImpostosReais.setText(String.valueOf(dao_moeda.converteparaReais(fornecimento.getValor_impostos(), fornecimento.getId_moeda_imp(), null)).replace(".", ","));
+         jFTImpostosReais.setText(String.valueOf(dao_moeda.converteparaReais(fornecimento.getValor_impostos(), fornecimento.getId_moeda_imp(), fornecimento.getData_cadastro())).replace(".", ","));
          jFTData.setText(String.valueOf(data.organizaData(fornecimento.getData_cadastro())));
      }
 

@@ -45,7 +45,7 @@
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="1" attributes="0">
-              <Component id="jTBFornecimento" pref="662" max="32767" attributes="0"/>
+              <Component id="jTBFornecimento" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -533,7 +533,11 @@
                 <Property name="name" type="java.lang.String" value="data_cadastro" noResource="true"/>
               </Properties>
               <Events>
+                <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="jFTDataCaretUpdate"/>
                 <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jFTDataFocusLost"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jFTDataMouseClicked"/>
+                <EventHandler event="inputMethodTextChanged" listener="java.awt.event.InputMethodListener" parameters="java.awt.event.InputMethodEvent" handler="jFTDataInputMethodTextChanged"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jFTDataKeyPressed"/>
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jFTDataKeyTyped"/>
               </Events>
             </Component>
@@ -741,8 +745,9 @@
               </Properties>
               <Events>
                 <EventHandler event="caretUpdate" listener="javax.swing.event.CaretListener" parameters="javax.swing.event.CaretEvent" handler="jFTValorFreteCaretUpdate"/>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jFTValorFreteActionPerformed"/>
                 <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jFTValorFreteFocusLost"/>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jFTValorFreteActionPerformed"/>
+                <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="jFTValorFreteKeyPressed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JFormattedTextField" name="jFTValorImpostos">

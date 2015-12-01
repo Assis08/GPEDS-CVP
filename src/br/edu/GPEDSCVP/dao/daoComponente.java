@@ -737,6 +737,7 @@ public class daoComponente {
         ResultSet result_composicao = null;
         ResultSet result_valor_comp = null;
         //faz a consulta de composição do componente
+       
         conecta_banco.executeSQL("select * from composicao_componente where id_componente = "+componente.getId_componente());
         result_composicao = conecta_banco.resultset;
         try {

@@ -427,7 +427,9 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
             jTFQntdComponenteFornecido.setEnabled(true);
             jFTValorUnit.setEnabled(false);
             jFTValorUnit.setText("0.00");
-            jCBMoedaValorUnit.setEnabled(true);
+            jCBMoedaValorUnit.setEnabled(false);
+            jCBMoedaValorUnit.setSelectedItem("R$");
+            JOptionPane.showMessageDialog(null, "Este componente é composto por uma composição.\nO valor unitário será calculado no momento que adiciona-lo para um projeto.");
             
         }else{
             jTFComponenteFornecido.setText(descricao);

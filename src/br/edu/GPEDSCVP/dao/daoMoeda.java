@@ -206,7 +206,8 @@ public class daoMoeda {
                 return (valor_moeda * valor);
             } catch (SQLException ex) {
                JOptionPane.showMessageDialog(null, "Falha ao converter moeda");
+               return 0;
             }
-        return 0;
+        
     }
 }

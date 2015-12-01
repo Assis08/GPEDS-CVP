@@ -151,7 +151,12 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTBConsultaComponentes.setName("Componentes"); // NOI18N
+        jTBConsultaComponentes.setName("jTBConsultaComponentes"); // NOI18N
+        jTBConsultaComponentes.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jTBConsultaComponentesMouseDragged(evt);
+            }
+        });
         jTBConsultaComponentes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBConsultaComponentesMouseClicked(evt);
@@ -161,11 +166,6 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTBConsultaComponentesMousePressed(evt);
-            }
-        });
-        jTBConsultaComponentes.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jTBConsultaComponentesMouseDragged(evt);
             }
         });
         jScrollPane1.setViewportView(jTBConsultaComponentes);
@@ -380,10 +380,10 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
             //Preenche na JTABLE os dados dos componentes cadastrados
             Jtable.PreencherJtableGenerico(jTBConsultaComponentes, new String[]{"id_comp_versao", "id_projeto", "projeto.descricao", "cod_vers_projeto", "versao", "id_fornecimento",
             "fornecimento.descricao","fornecimento.data_cadastro","id_componente","componente.descricao","tipo","qntd_para_projeto","qntd_no_projeto","id_moeda","unidade","valor_unit"}, comp_vers_proj.getRetorno());
-
+            
             //ajusta largura das colunas
             Jtable.ajustarColunasDaTabela(jTBConsultaComponentes);
-
+            
             if(jTBConsultaComponentes.getRowCount() <= 0){
                 JOptionPane.showMessageDialog(null, "Nenhum componente encontrado!");
             }
@@ -454,7 +454,7 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
                             
                                 encontrou = true;
                                 qntd_add = Integer.parseInt(tabela.getValueAt(i_comp, 7).toString());
-                           
+
                                 if(qntd_add + qntd > comp_vers_proj.getQntd_para_projeto()){
                                     JOptionPane.showMessageDialog(null, "Quantidade excede a quantidade restante para este projeto");
                                     break;
@@ -468,10 +468,13 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
                         }
                     
                         if(encontrou == false){
-                            dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
-                            Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
-                            this.dispose();
-
+                            if(qntd <= comp_vers_proj.getQntd_para_projeto()){
+                                dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
+                                Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
+                                this.dispose();
+                            }else{
+                                JOptionPane.showMessageDialog(null, "Quantidade excede a quantidade restante para este projeto");
+                            } 
                         }
                     }else{
                         if(qntd <= comp_vers_proj.getQntd_para_projeto()){

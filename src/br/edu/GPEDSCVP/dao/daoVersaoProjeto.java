@@ -175,6 +175,7 @@ public class daoVersaoProjeto {
         Integer id_comp_vers;
         Integer nova_qntd;
         Integer id_comp_atualizar;
+        Integer qntd_inicial_comp;
         int resultado;
         
         ResultSet resultset_comp_fornec;
@@ -186,6 +187,7 @@ public class daoVersaoProjeto {
             id_comp_vers = Integer.parseInt(tabela.getValueAt(i, 1).toString());
             id_componente = Integer.parseInt(tabela.getValueAt(i, 2).toString());
             nova_qntd = Integer.parseInt(tabela.getValueAt(i, 7).toString());
+            qntd_inicial_comp = Integer.parseInt(tabela.getValueAt(i, 10).toString());
             
             componente.setId_componente(id_componente);
             comp_vers_proj.setId_componente(id_componente);
@@ -195,7 +197,7 @@ public class daoVersaoProjeto {
             //verifica se o componente possui composicao
             if(dao_comp.verificaExisteComposicao(componente) == true){
                 //se possui composição então atualiza a quantidade utilizada no projeto de todos componentes da composição
-                dao_comp_vers.atualizaQntdFornecComposicaoComponente(comp_vers_proj);
+                dao_comp_vers.atualizaQntdFornecComposicaoComponente(comp_vers_proj, qntd_inicial_comp);
                 
                 resultset_comp_fornec = retornaCompFornecVersProj(comp_vers_proj);
                 //percorre o resultset de todos fornecimento do componente especifico para o projeto
