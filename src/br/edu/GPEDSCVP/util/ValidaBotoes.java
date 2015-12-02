@@ -40,7 +40,14 @@ public class ValidaBotoes {
                     } else {
                         field.setEnabled(true);
                     }
+                }else if (estado == Rotinas.TODOS){
+                    if (texto.equals("Novo") || (texto.equals("Gravar")) || (texto.equals("Excluir")) || (texto.equals("Cancelar"))) {
+                        field.setEnabled(true);
+                    } else {
+                        field.setEnabled(false);
+                    }
                 }
+                
             }
         }
     }

@@ -15,6 +15,7 @@ public class Rotinas {
     public static final int ALTERAR = 2;
     public static final int EXCLUIR = 3;
     public static final int INICIAL = 4;
+    public static final int TODOS = 5;
     public static final int PADRAO = -1;
     
 }

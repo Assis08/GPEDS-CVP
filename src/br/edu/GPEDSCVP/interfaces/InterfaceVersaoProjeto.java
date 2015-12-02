@@ -44,6 +44,7 @@ import java.awt.event.ActionEvent;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractAction;
@@ -92,6 +93,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     int[] array_versoes;
     int[] array_projetos;
     int situacao = Rotinas.PADRAO;
+    Double ultima_versao ;
     
     public InterfaceVersaoProjeto() {
         initComponents();
@@ -327,11 +329,6 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTBComponentesEletronicos);
-        if (jTBComponentesEletronicos.getColumnModel().getColumnCount() > 0) {
-            jTBComponentesEletronicos.getColumnModel().getColumn(9).setMinWidth(0);
-            jTBComponentesEletronicos.getColumnModel().getColumn(9).setPreferredWidth(0);
-            jTBComponentesEletronicos.getColumnModel().getColumn(9).setMaxWidth(0);
-        }
 
         jBTAddComposicao.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
         jBTAddComposicao.setName("descricao"); // NOI18N
@@ -774,7 +771,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                         dao_versao.SalvarCompNoProjeto(comp_vers_proj,jTBComponentesEletronicos); 
                         dao_versao.SalvarCompNoProjeto(comp_vers_proj,jTBComponentesMecanicos); 
                         
-                        JOptionPane.showMessageDialog(null, "alterado com Sucesso");
+                        JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                     /*    //altera composição
                         getComposicao();
                         getFornecedores();
@@ -918,10 +915,10 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 }
 
             } catch (SQLException ex) {
-                JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de componente");
+                JOptionPane.showMessageDialog(null, "Falha ao iniciar criação da versão");
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir componentes no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para criar versões de projetos!");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -956,6 +953,8 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             
             //habilita os botoes utilizados na inclusão e desabilita os restantes
             valida_botoes.ValidaEstado(jPBotoes, situacao);
+            
+            ultima_versao = dao_versao.retornaUltimaVersao(versao);
 
        }else{
             limpa_dados_versao();
@@ -989,8 +988,10 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTAddComposicaoActionPerformed
 
     private void jBTRemoveComposicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComposicaoActionPerformed
-        if (valida_campos.VerificaJtable(jTBComponentesEletronicos) == 1) {
-            int linha = jTBComponentesEletronicos.getSelectedRow();
+     
+        int linha = jTBComponentesEletronicos.getSelectedRow();
+        if(linha > 0){
+            
             Integer exc = Integer.parseInt(jTBComponentesEletronicos.getValueAt(linha, 9).toString());
             //se não for um item removido
             if (exc == 0) {
@@ -1006,7 +1007,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Item já removido");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Não possui componentes para remover");
+            JOptionPane.showMessageDialog(null, "Nenhuma linha foi selecionada!");
         }
     }//GEN-LAST:event_jBTRemoveComposicaoActionPerformed
 
@@ -1043,80 +1044,100 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
         Double total_mecanicos = 0.0;
         Integer id_projeto;
         
-        if(situacao == Rotinas.ALTERAR || situacao == Rotinas.INICIAL ){
-            //se estiver selecionado uma versão
-            if(jCBVersao.getSelectedIndex() > 0){
-                //retorna os dados da versão selecionada
-                id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
-                versao_projeto = Double.parseDouble(jCBVersao.getSelectedItem().toString());
-                versao.setId_projeto(id_projeto);
-                versao.setVersao(versao_projeto);
-                dao_versao.retornardados(versao);
-            
-                //seta dados da versão na tela
-                setcompVersaoProjeto();
-            
-                //habilita jtables da tela
-                valida_campos.habilitaCampos(jPVersaoProjeto);
-                jCBComercializado.setEnabled(true);
-                jCBCertificacao.setEnabled(true);
-            
-                //Lista componentes eletrônicos da versão
-                comp_vers_proj.setId_projeto(id_projeto);
-                comp_vers_proj.setVersao(versao_projeto);
-                comp_vers_proj.setCod_vers_projeto(Integer.parseInt(jTFIDVersao.getText()));
-                
-                comp_vers_proj.setTipo("E");
-                
-                dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
-            
-                //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
-                Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false","qntd_no_projeto"}, comp_vers_proj.getRetorno());
+         //Se não for gerente
+        if (acesso.getIn_gerente() == 0) {
+            //retorna as permissoes de acesso do usuario
+            dao_permissao.retornaDadosPermissao(acesso, permissao);
+        }
 
-                //ajusta largura das colunas
-                Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
-                
-                //converte os totais dos compoenntes em reais pois o banco retorna o valor calculado referente a moeda que o mesmo foi cadastrado
-                dao_comp_vers.converteTotalComp(comp_vers_proj, jTBComponentesEletronicos);
-                //seta o total de componentes eletronicos
-                jFTTotalEletronico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesEletronicos))));
-                
-                //Lista componentes mecânicos da versão
-                comp_vers_proj.setTipo("M");
-                
-                dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
-            
-                //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
-                Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false","qntd_no_projeto"}, comp_vers_proj.getRetorno());
+        //Verifica se o usuario possui permissao para acessar essa tela
+        if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
+        
+            if(situacao == Rotinas.ALTERAR || situacao == Rotinas.INICIAL || situacao == Rotinas.TODOS ){
+                //se estiver selecionado uma versão
+                if(jCBVersao.getSelectedIndex() > 0){
+                    //retorna os dados da versão selecionada
+                    id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
+                    versao_projeto = Double.parseDouble(jCBVersao.getSelectedItem().toString());
+                    versao.setId_projeto(id_projeto);
+                    versao.setVersao(versao_projeto);
+                    dao_versao.retornardados(versao);
 
-                //ajusta largura das colunas
-                Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
-                
-                //converte os totais dos compoenntes em reais pois o banco retorna o valor calculado referente a moeda que o mesmo foi cadastrado
-                dao_comp_vers.converteTotalComp(comp_vers_proj,jTBComponentesMecanicos);
-                //seta o total de componentes eletronicos
-                jFTTotalMecanico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesMecanicos))));
-                
-                situacao = Rotinas.ALTERAR;
+                    //seta dados da versão na tela
+                    setcompVersaoProjeto();
 
-                //habilita os botoes utilizados na inclusão e desabilita os restantes
-                valida_botoes.ValidaEstado(jPBotoes, situacao);
-                
-                //calcula o total de todos componentes
-                total_eletronicos = Double.parseDouble(jFTTotalEletronico.getText().replace(".", "").replace(",", "."));
-                total_mecanicos = Double.parseDouble(jFTTotalMecanico.getText().replace(".", "").replace(",", "."));
-                jFTTotalComponentes.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(total_eletronicos + total_mecanicos)));
-                 
-            }else{
-                limpa_dados_versao();
-                //desabilita jtables da tela
-                valida_campos.desabilitaCampos(jPVersaoProjeto);
-                
-                situacao = Rotinas.INICIAL;
+                    //habilita jtables da tela
+                    valida_campos.habilitaCampos(jPVersaoProjeto);
+                    jCBComercializado.setEnabled(true);
+                    jCBCertificacao.setEnabled(true);
 
-                //habilita os botoes utilizados na inclusão e desabilita os restantes
-                valida_botoes.ValidaEstado(jPBotoes, situacao);
+                    //Lista componentes eletrônicos da versão
+                    comp_vers_proj.setId_projeto(id_projeto);
+                    comp_vers_proj.setVersao(versao_projeto);
+                    comp_vers_proj.setCod_vers_projeto(Integer.parseInt(jTFIDVersao.getText()));
+
+                    comp_vers_proj.setTipo("E");
+
+                    dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
+
+                    //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
+                    Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false","qntd_no_projeto"}, comp_vers_proj.getRetorno());
+
+                    //ajusta largura das colunas
+                    Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
+
+                    //converte os totais dos compoenntes em reais pois o banco retorna o valor calculado referente a moeda que o mesmo foi cadastrado
+                    dao_comp_vers.converteTotalComp(comp_vers_proj, jTBComponentesEletronicos);
+                    //seta o total de componentes eletronicos
+                    jFTTotalEletronico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesEletronicos))));
+
+                    //Lista componentes mecânicos da versão
+                    comp_vers_proj.setTipo("M");
+
+                    dao_comp_vers.consultaCompVersaoProjeto(comp_vers_proj);
+
+                    //Preenche na JTABLE de componentes eletrônicos todos componentes eletronicos sendo utilizados nesta versão do projeto
+                    Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"null","id_comp_versao","id_componente","componente.descricao","id_moeda","unidade","valor_unit","qntd_no_projeto","total","false","qntd_no_projeto"}, comp_vers_proj.getRetorno());
+
+                    //ajusta largura das colunas
+                    Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
+
+                    //converte os totais dos compoenntes em reais pois o banco retorna o valor calculado referente a moeda que o mesmo foi cadastrado
+                    dao_comp_vers.converteTotalComp(comp_vers_proj,jTBComponentesMecanicos);
+                    //seta o total de componentes eletronicos
+                    jFTTotalMecanico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesMecanicos))));
+
+                    //calcula o total de todos componentes
+                    total_eletronicos = Double.parseDouble(jFTTotalEletronico.getText().replace(".", "").replace(",", "."));
+                    total_mecanicos = Double.parseDouble(jFTTotalMecanico.getText().replace(".", "").replace(",", "."));
+                    jFTTotalComponentes.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(total_eletronicos + total_mecanicos)));
+
+                    //verifica se a versão lista é a ultima versão do projeto
+                    if(versao_projeto.equals(ultima_versao)){
+                        //se sim deixar alterar e inserir uma nova versão
+                        situacao = Rotinas.TODOS;
+                        //habilita os botoes utilizados na inclusão e desabilita os restantes
+                        valida_botoes.ValidaEstado(jPBotoes, situacao);
+
+                    }else{
+                        //se não, desabilita botões da tela
+                        valida_campos.desabilitaCampos(jPBotoes);
+                        valida_campos.desabilitaCampos(jPVersaoProjeto);
+                    }
+
+                }else{
+                    limpa_dados_versao();
+                    //desabilita jtables da tela
+                    valida_campos.desabilitaCampos(jPVersaoProjeto);
+
+                    situacao = Rotinas.INICIAL;
+
+                    //habilita os botoes utilizados na inclusão e desabilita os restantes
+                    valida_botoes.ValidaEstado(jPBotoes, situacao);
+                }
             }
+        }else{
+            JOptionPane.showMessageDialog(null, "Você não possuí permissões para consultar versões de projetos no sistema!");      
         }
     }//GEN-LAST:event_jCBVersaoPopupMenuWillBecomeInvisible
 
@@ -1418,7 +1439,9 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                         try { 
                             //verifica se o valor setado é um valor numerico
                             Integer qntd = Integer.parseInt(table.getValueAt(row, column).toString());
+                            Integer qntd_p_projeto;
                             Integer id_comp_vers = Integer.parseInt(table.getValueAt(row, 1).toString());
+                            comp_vers_proj.setId_comp_versao(id_comp_vers);
                             Integer id_moeda = Integer.parseInt(table.getValueAt(row, 4).toString());
                             Timestamp data_fornec;
                             Double valor_unit = Double.parseDouble(table.getValueAt(row, 6).toString().replace(",", "."));
@@ -1426,33 +1449,43 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                             Object total_convert;
                             Double total_eletronicos = 0.00;
                             Double total_mecanicos = 0.00;
+                            
+                            qntd_p_projeto = dao_comp_vers.retornaQntdParaProjeto(comp_vers_proj);
+                           
+                            //quantidade informada e maior que 0 ?
                             if(qntd > 0){
-                                //recalcula o total pela moeda padrão do fornecimento
-                                total = valor_unit * qntd;
-                                //retorna a data de fornecimento do componente para converão em reais
-                                comp_vers_proj.setId_comp_versao(id_comp_vers);
-                                data_fornec = dao_comp_fornec.retornaDataFornecimentoComponente(comp_vers_proj);
-                                //converte para reais o total
-                                total = dao_moeda.converteparaReais(total, id_moeda, data_fornec);
-                                //formata para monetario
-                                total_convert = conversao.doubleParaObjectDecimalFormat(total);
-                                table.setValueAt(total_convert, row, 8);
-                                
-                                //seta o total de componentes eletronicos
-                                jFTTotalEletronico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesEletronicos))));
-                                
-                                //seta o total de componentes eletronicos
-                                jFTTotalMecanico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesMecanicos))));
-                                
-                                 //calcula o total de todos componentes
-                                total_eletronicos = Double.parseDouble(jFTTotalEletronico.getText().replace(".", "").replace(",", "."));
-                                total_mecanicos = Double.parseDouble(jFTTotalMecanico.getText().replace(".", "").replace(",", "."));
-                                jFTTotalComponentes.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(total_eletronicos + total_mecanicos)));
+                                //quantidade informa esta dentro do limite fornecido para este projeto?
+                                if(qntd <= qntd_p_projeto){
+                                    //recalcula o total pela moeda padrão do fornecimento
+                                    total = valor_unit * qntd;
+                                    //retorna a data de fornecimento do componente para converão em reais
 
+                                    data_fornec = dao_comp_fornec.retornaDataFornecimentoComponente(comp_vers_proj);
+                                    //converte para reais o total
+                                    total = dao_moeda.converteparaReais(total, id_moeda, data_fornec);
+                                    //formata para monetario
+                                    total_convert = conversao.doubleParaObjectDecimalFormat(total);
+                                    table.setValueAt(total_convert, row, 8);
+
+                                    //seta o total de componentes eletronicos
+                                    jFTTotalEletronico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesEletronicos))));
+
+                                    //seta o total de componentes eletronicos
+                                    jFTTotalMecanico.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(dao_comp_vers.calcula_total_componentes(jTBComponentesMecanicos))));
+
+                                     //calcula o total de todos componentes
+                                    total_eletronicos = Double.parseDouble(jFTTotalEletronico.getText().replace(".", "").replace(",", "."));
+                                    total_mecanicos = Double.parseDouble(jFTTotalMecanico.getText().replace(".", "").replace(",", "."));
+                                    jFTTotalComponentes.setText(String.valueOf(conversao.doubleParaObjectDecimalFormat(total_eletronicos + total_mecanicos)));
+
+                                }else{
+                                    JOptionPane.showMessageDialog(null, "A quantidade informada excede a quantidade restante para este projeto!");
+                                    table.setValueAt(oldValue, row, column);
+                                }
                             }else{
                                 JOptionPane.showMessageDialog(null, "A quantidade deve ser maior que zero!");
                                 table.setValueAt(oldValue, row, column);
-                            }
+                            }  
                         } catch (Exception e) {
                             //se não for double, emite a mensagem e retorna para o valor que estava
                             JOptionPane.showMessageDialog(null, "Informe um valor numérico para quantidade!");  
@@ -1466,9 +1499,6 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                     table.setValueAt(oldValue, row, column);
                 }
             }
-            
-             
-          
     }
 
     class TableCellEditorAction extends AbstractAction {

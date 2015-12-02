@@ -1344,15 +1344,6 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         //Verifica se o usuario possui permissao para acessar essa tela
         if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
 
-            //Se não for gerente
-            if (acesso.getIn_gerente() == 0) {
-                //retorna as permissoes de acesso do usuario
-                dao_permissao.retornaDadosPermissao(acesso, permissao);
-            }
-
-            //Verifica se o usuario possui permissao para acessar essa tela
-            if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
-
                 // recupera linha selecionada
                 int linha = jTBConsultaFornecimentos.getSelectedRow();
                 int id_busca = 0;
@@ -1461,7 +1452,6 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                     }
                     break;
                 }
-            }
             //Preenche na JTABLE os dados dos componentes cadastrados
             Jtable.PreencherJtableGenerico(jTBConsultaFornecimentos, new String[]{"fornecimento.id_fornecimento","fornecimento.descricao","fornecedor.id_pessoa","pessoa.nome",
             "id_moeda_frete","moeda_frete.unidade","vl_frete","id_moeda_imp","moeda_imposto.unidade","vl_impostos","fornecimento.data_cadastro","fornecimento.data_alter"}, fornecimento.getRetorno());

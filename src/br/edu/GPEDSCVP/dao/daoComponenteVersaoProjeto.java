@@ -737,6 +737,135 @@ public class daoComponenteVersaoProjeto {
              JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");
         }
        
+        
+        /*
+        
+          //Método para calcular o custo do componente que possui composição
+    public void atualizaQntdFornecComposicaoComponente(ComponenteVersaoProjeto componente, Integer qntd_inicial_comp){
+       
+        int resultado;
+        Integer id_componente_composicao;
+        Integer id_comp_Versao;
+        Integer id_moeda;
+        Integer qntd_para_composicao;
+        Integer qntd_removida;
+        Integer qntd_para_remover = 0;
+        Integer qntd_no_projeto;
+        Integer qntd_para_projeto;
+        Integer qntd_restante;
+        Integer nova_qntd;
+        Timestamp data_fornec;
+        Double valor_unit = 0.0;
+        Double total_composicao = 0.0;
+        ResultSet result_composicao = null;
+        ResultSet result_composicao_fornec = null;
+        boolean inserir = false;
+        boolean remover = false;
+        //faz a consulta de composição do componente
+        conecta_banco.executeSQL("select * from composicao_componente where id_componente = "+componente.getId_componente());
+        result_composicao = conecta_banco.resultset;
+        try {
+            while ( result_composicao.next()) {
+                
+                //armazena dados da composição
+                id_componente_composicao = result_composicao.getInt("id_subcomponente");
+                qntd_para_composicao = result_composicao.getInt("qntd");
+                
+                if(qntd_inicial_comp > componente.getQntd_no_projeto()){
+                    remover = true;
+                    inserir = false;
+                    qntd_removida = qntd_inicial_comp - componente.getQntd_no_projeto();
+                    qntd_para_remover = qntd_removida * qntd_para_composicao;
+                }else{
+                    inserir = true;
+                    remover = false;
+                    qntd_para_composicao = qntd_para_composicao * (componente.getQntd_no_projeto() - qntd_inicial_comp);
+                }
+                
+                componente.setId_componente(id_componente_composicao);
+                
+                //consulta todos os fornecimentos do componente na composição para o projeto
+                conecta_banco.executeSQL("select * from componentes_fornecimento" 
+                +" inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)"
+                +" inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)"
+                +" where componentes_versao_projeto.cod_vers_projeto = "+componente.getCod_vers_projeto()+" and componentes_versao_projeto.id_componente = "+id_componente_composicao+" and qntd_para_projeto - qntd_no_projeto  > 0;");
+                
+                result_composicao_fornec = conecta_banco.resultset;
+                
+                try {   
+                    //percorre todos fornecimentos do componente em especifico
+                   while(result_composicao_fornec.next()){
+                       //armazena dados do componente para o projeto
+                       id_comp_Versao = result_composicao_fornec.getInt("id_comp_versao");
+                       qntd_no_projeto = result_composicao_fornec.getInt("qntd_no_projeto");
+                       qntd_para_projeto = result_composicao_fornec.getInt("qntd_para_projeto");
+                       
+                       //se for para inserção de componente no projeto, então da baixa
+                       if(inserir){
+                           
+                            //armazena a quantidade que ainda não esta sendo utilizada no projeto
+                            qntd_restante = qntd_para_projeto - qntd_no_projeto;
+                       
+                            //verifica se a quantidade que não esta sendo utilizada é maior que a quantidade que esta precisando para o projeto
+                            if(qntd_restante >= qntd_para_composicao){
+                                //se sim então adiciona para o projeto a quantidade necesseria 
+                                nova_qntd = qntd_no_projeto  + qntd_para_composicao;
+                                //atualiza no banco a quantidade
+                                resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ? "
+                                + "WHERE id_comp_versao = ? ",
+                                nova_qntd,
+                                id_comp_Versao);
+                                break;
+                            }else{
+                                //se não então utiliza todos componentes desse fornecimento e utiliza o restante de outros fornecimento que seja desse componente e para este projeto
+
+                               qntd_para_composicao = qntd_para_composicao - (qntd_para_projeto - qntd_no_projeto);
+
+                                resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ? "
+                                + "WHERE id_comp_versao = ? ",
+                                qntd_para_projeto,
+                                id_comp_Versao);
+                            }
+                       }
+                       //se for remoção de componente no projeto, então reintegra no estoque
+                       if(remover){
+
+                            //verifica se a quantidade que não esta sendo utilizada é maior que a quantidade que esta precisando para o projeto
+                            if(qntd_no_projeto - qntd_para_remover >=0){
+                                //se sim então adiciona para o projeto a quantidade necesseria 
+                                nova_qntd = qntd_no_projeto  - qntd_para_remover;
+                                //atualiza no banco a quantidade
+                                resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ? "
+                                + "WHERE id_comp_versao = ? ",
+                                nova_qntd,
+                                id_comp_Versao);
+                                break;
+                            }else{
+                                //se não então utiliza todos componentes desse fornecimento e utiliza o restante de outros fornecimento que seja desse componente e para este projeto
+                               qntd_para_remover = qntd_para_remover - qntd_no_projeto;
+                               
+                                resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ? "
+                                + "WHERE id_comp_versao = ? ",
+                                0,
+                                id_comp_Versao);
+                            }
+                           
+                       }
+                   }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");
+                }
+                
+                atualizaQntdFornecComposicaoComponente(componente, qntd_inicial_comp);
+            }
+        } catch (SQLException ex) {
+             JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");
+        }
+       
+    }
+
+        
+        */
     }
     
     //metodo para calcular o total de componentes na jtable
@@ -756,6 +885,7 @@ public class daoComponenteVersaoProjeto {
     
      //Método para remover um registro da Jtable
     public void removeItensAtulizaTotal(JTable jtable, int situacao, JFormattedTextField JTFTotalComp,JFormattedTextField JTFTotal) {
+        
         DefaultTableModel tabela = (DefaultTableModel) jtable.getModel();
         int totlinha = tabela.getRowCount();
         int totcolun = tabela.getColumnCount();
@@ -786,7 +916,7 @@ public class daoComponenteVersaoProjeto {
                     achou = true;
                     if(situacao == Rotinas.ALTERAR){
                         //seta o valor 1 na coluna excluido da jtable
-                        jtable.setValueAt(1, i, totcolun-1);
+                        jtable.setValueAt(1, i, 9);
                         jtable.setValueAt(false, i, 0);
                         //habilita e desabilita para atualizar o jtable (caso contrario pinta de vermelho só quando clica na linha)
                         jtable.setEnabled(false);
@@ -803,5 +933,22 @@ public class daoComponenteVersaoProjeto {
             JOptionPane.showMessageDialog(null, "Nehuma linha selecionada!");
         }
         }
+    }
+    
+    public Integer retornaQntdParaProjeto(ComponenteVersaoProjeto componente){
+        Integer qntd_para_projeto = 0;
+        String sql = "select * from componentes_versao_projeto where id_comp_versao = "+ componente.getId_comp_versao();
+           
+        conecta_banco.executeSQL(sql);
+        try {        
+            conecta_banco.resultset.first();
+            qntd_para_projeto = conecta_banco.resultset.getInt("qntd_para_projeto");
+
+            return qntd_para_projeto;
+           
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao retornar quantidade fornecida do componente");
+        }
+       return 0;
     }
 }
