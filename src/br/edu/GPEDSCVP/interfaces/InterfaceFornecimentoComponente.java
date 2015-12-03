@@ -625,28 +625,34 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
             if(Jtable.evitarDuplicacao(comp_fornec.getTabela(), descricao) == false){
                 if (valida_campos.validacamposobrigatorios(jPInfoCompFornec, "COMPONENTES_FORNECIMENTO") == 0) { 
                     Integer qntd = Integer.parseInt(jTFQntdComponenteFornecido.getText());
+                    Double valor_unit = Double.parseDouble(jFTValorUnit.getText().replace(",", "."));
                     if(qntd>0){
-                        try {
-                            getComponente();
+                        if(valor_unit > 0 || jFTValorUnit.isEnabled() == false){
+                             try {
+                                getComponente();
 
-                            dao_comp_fornec.addComponenteFornecimento(comp_fornec,jTBConsultaComponentes,comp_fornec.getSituacao());
-                            //Seta mascara na coluna de valores monetários da jtable
-                            Jtable.setarMascaraMonetaria(comp_fornec.getTabela(), jFTMascaraMonetaria,4);
-                            Jtable.ajustarColunasDaTabela(comp_fornec.getTabela());
+                                dao_comp_fornec.addComponenteFornecimento(comp_fornec,jTBConsultaComponentes,comp_fornec.getSituacao());
+                                //Seta mascara na coluna de valores monetários da jtable
+                                Jtable.setarMascaraMonetaria(comp_fornec.getTabela(), jFTMascaraMonetaria,4);
+                                Jtable.ajustarColunasDaTabela(comp_fornec.getTabela());
 
-                            valida_campos.LimparCampos(jPInfoCompFornec);
-                            jFTValorUnit.setValue(null);
+                                valida_campos.LimparCampos(jPInfoCompFornec);
+                                jFTValorUnit.setValue(null);
 
-                            dao_moeda.consultaGeral(moeda);
-                            //Preenche dados nas ComboBox de moeda
-                            array_moedas = combo.PreencherCombo(jCBMoedaValorUnit, "unidade", moeda.getRetorno(), "id_moeda");
-                            //seta no array da classe de moeda a lista de moedas listadas na combo
-                            moeda.setArray_moeda(array_moedas);
-                            // fecha tela
-                            this.dispose();
-                        } catch (SQLException ex) {
-                            JOptionPane.showMessageDialog(null, "Falha ao adicionar componente");
+                                dao_moeda.consultaGeral(moeda);
+                                //Preenche dados nas ComboBox de moeda
+                                array_moedas = combo.PreencherCombo(jCBMoedaValorUnit, "unidade", moeda.getRetorno(), "id_moeda");
+                                //seta no array da classe de moeda a lista de moedas listadas na combo
+                                moeda.setArray_moeda(array_moedas);
+                                // fecha tela
+                                this.dispose();
+                            } catch (SQLException ex) {
+                                JOptionPane.showMessageDialog(null, "Falha ao adicionar componente");
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Valor deve ser maior que zero!");
                         }
+                       
                     }else{
                         JOptionPane.showMessageDialog(null, "Quantidade deve ser maior que zero!");
                     }

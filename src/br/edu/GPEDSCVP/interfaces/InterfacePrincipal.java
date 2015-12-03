@@ -67,6 +67,9 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         jMenuItem9 = new javax.swing.JMenuItem();
         jMenuItem10 = new javax.swing.JMenuItem();
         jMGerenciarProjetos = new javax.swing.JMenu();
+        jMenuItem11 = new javax.swing.JMenuItem();
+        jMenuItem12 = new javax.swing.JMenuItem();
+        jMCustos = new javax.swing.JMenu();
         jMAlterarMoeda = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
@@ -177,11 +180,6 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         jMBMenuPrincipal.add(jMCadastros);
 
         jMGerenciarProjetos.setText("Gerenciar Projetos");
-        jMGerenciarProjetos.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMGerenciarProjetosMouseClicked(evt);
-            }
-        });
         jMGerenciarProjetos.addMenuListener(new javax.swing.event.MenuListener() {
             public void menuCanceled(javax.swing.event.MenuEvent evt) {
             }
@@ -191,12 +189,37 @@ public class InterfacePrincipal extends javax.swing.JFrame {
                 jMGerenciarProjetosMenuSelected(evt);
             }
         });
+        jMGerenciarProjetos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMGerenciarProjetosMouseClicked(evt);
+            }
+        });
         jMGerenciarProjetos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jMGerenciarProjetosActionPerformed(evt);
             }
         });
+
+        jMenuItem11.setText("Versões");
+        jMenuItem11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem11ActionPerformed(evt);
+            }
+        });
+        jMGerenciarProjetos.add(jMenuItem11);
+
+        jMenuItem12.setText("Comparar");
+        jMGerenciarProjetos.add(jMenuItem12);
+
         jMBMenuPrincipal.add(jMGerenciarProjetos);
+
+        jMCustos.setText("Custos");
+        jMCustos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMCustosMouseClicked(evt);
+            }
+        });
+        jMBMenuPrincipal.add(jMCustos);
 
         jMAlterarMoeda.setText("Atualizar Moeda");
         jMAlterarMoeda.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -709,6 +732,15 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_jMGerenciarProjetosMenuSelected
 
     private void jMGerenciarProjetosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMGerenciarProjetosMouseClicked
+        
+    }//GEN-LAST:event_jMGerenciarProjetosMouseClicked
+
+    private void jMGerenciarProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMGerenciarProjetosActionPerformed
+        
+        
+    }//GEN-LAST:event_jMGerenciarProjetosActionPerformed
+
+    private void jMenuItem11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem11ActionPerformed
          try {
             //atualiza dados do usuario logado
             dao_acesso.retornaUsuarioLogado(acesso);
@@ -745,10 +777,10 @@ public class InterfacePrincipal extends javax.swing.JFrame {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
         jMGerenciarProjetos.setSelected(false);
-    }//GEN-LAST:event_jMGerenciarProjetosMouseClicked
+    }//GEN-LAST:event_jMenuItem11ActionPerformed
 
-    private void jMGerenciarProjetosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMGerenciarProjetosActionPerformed
-         try {
+    private void jMCustosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMCustosMouseClicked
+        try {
             //atualiza dados do usuario logado
             dao_acesso.retornaUsuarioLogado(acesso);
             
@@ -758,13 +790,13 @@ public class InterfacePrincipal extends javax.swing.JFrame {
             dao_tela.incluir(tela);
             
             //Inclui a tela de Materiais
-            tela.setDescricao("Versões Projetos");
-            tela.setId_tela(13);
+            tela.setDescricao("Custos Projetos");
+            tela.setId_tela(14);
             dao_tela.incluir(tela);
             
             //Armazena dados de acesso da tela para verificar permissões
-            acesso.setId_tela(13);
-            acesso.setNome_tela("Versões Projetos");
+            acesso.setId_tela(14);
+            acesso.setNome_tela("Custos Projetos");
             
             //se naõ for gerente
             if(acesso.getIn_gerente() == 0){
@@ -775,7 +807,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
            //Verifica se o usuario possui permissao para acessar essa tela
            if (validaacesso.verificaAcesso("acesso",acesso, permissao) == true){
                 //Traz para tela a tela de cadastro de pessoas 
-                new InterfaceVersaoProjeto().setVisible(true);
+                new InterfaceCustosProjeto().setVisible(true);
            }else{
                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
            }
@@ -783,8 +815,8 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    }//GEN-LAST:event_jMGerenciarProjetosActionPerformed
+        jMCustos.setSelected(false);
+    }//GEN-LAST:event_jMCustosMouseClicked
 
     /**
      * @param args the command line arguments
@@ -825,9 +857,12 @@ public class InterfacePrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu jMAlterarMoeda;
     private javax.swing.JMenuBar jMBMenuPrincipal;
     private javax.swing.JMenu jMCadastros;
+    private javax.swing.JMenu jMCustos;
     private javax.swing.JMenu jMGerenciarProjetos;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem10;
+    private javax.swing.JMenuItem jMenuItem11;
+    private javax.swing.JMenuItem jMenuItem12;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;

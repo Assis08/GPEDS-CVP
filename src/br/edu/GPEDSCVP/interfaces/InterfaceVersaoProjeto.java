@@ -1345,14 +1345,16 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     }else if (versao.getComercializado().equals("N")){
         jCBComercializado.setSelectedItem("Não"); 
         jTFLote.setEnabled(false);
+        jTFLote.setText("");
     }else{
         jCBComercializado.setSelectedIndex(0); 
         jTFLote.setEnabled(false);
+        jTFLote.setText("");
     }
     
     if(versao.getCertificacao().equals("S")){
         jCBCertificacao.setSelectedItem("Sim");
-    }else if (versao.getComercializado().equals("N")){
+    }else if (versao.getCertificacao().equals("N")){
          jCBCertificacao.setSelectedItem("Não"); 
     }else{
         jCBCertificacao.setSelectedIndex(0); 
