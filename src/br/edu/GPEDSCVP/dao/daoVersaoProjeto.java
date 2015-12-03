@@ -83,7 +83,7 @@ public class daoVersaoProjeto {
         Double cod_versao = 0.0;
         String valor;
         //Verifica se existe versões para este projeto
-        String sql = "select max(versao) versao from versao_projeto where id_projeto = "+versao.getId_projeto()+" and  in_ativo = 'A'";
+        String sql = "select max(versao) versao from versao_projeto where id_projeto = "+versao.getId_projeto()+"";
            
         conecta_banco.executeSQL(sql);
         try {
@@ -369,5 +369,13 @@ public class daoVersaoProjeto {
             //cod_versao = 1.0;
         }
         return cod_versao;
+    }
+    
+    //Método para inativar versão
+    public void inativaVersao(VersaoProjeto versao){
+        //Inativa versão    
+        conecta_banco.atualizarSQL("UPDATE VERSAO_PROJETO SET IN_ATIVO = 'I'"
+                               + " WHERE COD_VERS_PROJETO = " + versao.getCod_vers_projeto());
+        
     }
 }

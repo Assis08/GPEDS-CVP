@@ -1124,7 +1124,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
                     valida_botoes.ValidaEstado(jPBotoes, situacao);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir pessoas no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir componentes no sistema");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
