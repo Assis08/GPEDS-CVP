@@ -11,7 +11,10 @@ import br.edu.GPEDSCVP.dao.daoCustos;
 import br.edu.GPEDSCVP.dao.daoProjeto;
 import br.edu.GPEDSCVP.dao.daoVersaoProjeto;
 import br.edu.GPEDSCVP.util.ComboBox;
+import br.edu.GPEDSCVP.util.ManipulaJtable;
 import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.table.TableCellRenderer;
 
 /**
  *
@@ -21,6 +24,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
 
     Projeto projeto;
     VersaoProjeto versao_projeto;
+    ManipulaJtable Jtable;
     daoProjeto dao_projeto;
     daoCustos dao_custos;
     daoVersaoProjeto dao_versao;
@@ -38,7 +42,13 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         combo = new ComboBox();
         dao_versao = new daoVersaoProjeto();
         dao_custos = new daoCustos();
+        Jtable = new ManipulaJtable();
         
+        //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
+        jTBComponentesEletronicos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBComponentesMecanicos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBCertificações.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+
         //carrega dados nas combobox
         dao_projeto.consultaGeral(projeto);
         //Preenche dados nas ComboBox de projetos
@@ -353,15 +363,34 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
             //caso selecionou custo total do projeto
             case 1:
                 if(jCBProjeto.getSelectedIndex() > 0){
+                    
                     id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
                     projeto.setId_projeto(id_projeto);
                     dao_custos.consultaTodosCompFornecProjeto(projeto, "E");
-                    //dao_custos.consultaTodosCompFornecProjeto(projeto, "M");
+                    
+                    //Preenche todos os componentes eletronicos fornecidos 
+                    Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"id_comp_versao","id_componente","componente.descricao","qntd_para_projeto",
+                    "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
+                    "vl_frete","id_moeda_imp","vl_impostos"}, projeto.getRetorno());
+                    Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
+                    
+                   
+                    dao_custos.consultaTodosCompFornecProjeto(projeto, "M");
+                    
+                    //Preenche todos os componentes mecânicos fornecidos 
+                    Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"id_comp_versao","id_componente","componente.descricao","qntd_para_projeto",
+                    "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
+                    "vl_frete","id_moeda_imp","vl_impostos"}, projeto.getRetorno());
+                    Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
+
                 }else{
                     JOptionPane.showMessageDialog(null, "Selecione um projeto!");
                 }
                 break;
         }
+        
+
+        
     }//GEN-LAST:event_jBTListarActionPerformed
 
     private void jCBTipoCustoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBTipoCustoPopupMenuWillBecomeInvisible
