@@ -862,8 +862,8 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                             situacao = Rotinas.INCLUIR;
                             
                             //limpa jtable de componentes
-                            valida_campos.LimparJtable(jTBComponentesMecanicos);
-                            valida_campos.LimparJtable(jTBComponentesEletronicos);
+                          //  valida_campos.LimparJtable(jTBComponentesMecanicos);
+                          //  valida_campos.LimparJtable(jTBComponentesEletronicos);
                             jFTTotalEletronico.setText("0,00");
                             jFTTotalMecanico.setText("0,00");
                             jFTTotalComponentes.setText("0,00");

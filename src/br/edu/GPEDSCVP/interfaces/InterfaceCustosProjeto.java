@@ -5,17 +5,51 @@
  */
 package br.edu.GPEDSCVP.interfaces;
 
+import br.edu.GPEDSCVP.classe.Projeto;
+import br.edu.GPEDSCVP.classe.VersaoProjeto;
+import br.edu.GPEDSCVP.dao.daoCustos;
+import br.edu.GPEDSCVP.dao.daoProjeto;
+import br.edu.GPEDSCVP.dao.daoVersaoProjeto;
+import br.edu.GPEDSCVP.util.ComboBox;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author rafa
  */
 public class InterfaceCustosProjeto extends javax.swing.JFrame {
 
-    /**
-     * Creates new form InterfaceCustosProjeto
-     */
+    Projeto projeto;
+    VersaoProjeto versao_projeto;
+    daoProjeto dao_projeto;
+    daoCustos dao_custos;
+    daoVersaoProjeto dao_versao;
+    int[] array_versoes;
+    int[] array_projetos;
+    ComboBox combo;
+    
+    
     public InterfaceCustosProjeto() {
         initComponents();
+        
+        projeto = new Projeto();
+        versao_projeto = new VersaoProjeto();
+        dao_projeto = new daoProjeto();
+        combo = new ComboBox();
+        dao_versao = new daoVersaoProjeto();
+        dao_custos = new daoCustos();
+        
+        //carrega dados nas combobox
+        dao_projeto.consultaGeral(projeto);
+        //Preenche dados nas ComboBox de projetos
+        array_projetos = combo.PreencherCombo(jCBProjeto, "descricao", projeto.getRetorno(), "id_projeto");
+        //seta no array da classe de projetos a lista de projetos listadas na combo
+        projeto.setArray_projetos(array_projetos);
+        
+        jCBTipoCusto.addItem("Selecione item");
+        jCBTipoCusto.addItem("Total do projeto");
+        jCBTipoCusto.addItem("Versão do projeto");
+        jCBTipoCusto.addItem("Protótipo versão");
     }
 
     /**
@@ -41,27 +75,45 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         jLabel6 = new javax.swing.JLabel();
         jTFTotalProjeto = new javax.swing.JTextField();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTBComponentesEletronicos2 = new javax.swing.JTable();
+        jTBComponentesEletronicos = new javax.swing.JTable();
         jTFTotalEletronicos1 = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         jTFTotalEletronicos2 = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTBFornecimentos = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
         jTFTotalEletronicos3 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane4 = new javax.swing.JScrollPane();
-        jTBCertificações1 = new javax.swing.JTable();
+        jTBCertificações = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
-        jTFTotalEletronicos4 = new javax.swing.JTextField();
-        jLabel12 = new javax.swing.JLabel();
+        jBTListar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Custos do projeto");
         setResizable(false);
 
+        jCBTipoCusto.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jCBTipoCustoPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+            }
+        });
+
         jLabel1.setText("Custo:");
+
+        jCBProjeto.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
+            public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
+            }
+            public void popupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {
+                jCBProjetoPopupMenuWillBecomeInvisible(evt);
+            }
+            public void popupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {
+                jCBProjetoPopupMenuWillBecomeVisible(evt);
+            }
+        });
 
         jLabel2.setText("Projeto:");
 
@@ -83,35 +135,39 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
 
         jLabel6.setText("Total R$:");
 
-        jTBComponentesEletronicos2.setModel(new javax.swing.table.DefaultTableModel(
+        jTBComponentesEletronicos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Título 1", "Título 2", "Título 3", "Título 4"
+                "ID Componentes versão", "ID Componente", "Descrição", "Qntd", "ID Moeda", "Moeda", "Valor unit", "Imposto unit R$", "Data Fornecimento", "Total R$", "ID moeda", "Valor frete", "ID moeda", "Valor imposto"
             }
-        ));
-        jScrollPane3.setViewportView(jTBComponentesEletronicos2);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane3.setViewportView(jTBComponentesEletronicos);
 
         jLabel7.setText("Total R$:");
 
         jLabel8.setText("Total R$:");
 
-        jTBFornecimentos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "Título 1", "Título 2", "Título 3", "Título 4"
-            }
-        ));
-        jScrollPane2.setViewportView(jTBFornecimentos);
-
         jLabel9.setText("Certificações:");
+
+        jTFTotalEletronicos3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTFTotalEletronicos3ActionPerformed(evt);
+            }
+        });
 
         jLabel10.setText("Total R$:");
 
-        jTBCertificações1.setModel(new javax.swing.table.DefaultTableModel(
+        jTBCertificações.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -119,11 +175,17 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                 "Título 1", "Título 2", "Título 3", "Título 4"
             }
         ));
-        jScrollPane4.setViewportView(jTBCertificações1);
+        jScrollPane4.setViewportView(jTBCertificações);
 
-        jLabel11.setText("Fornecimentos:");
+        jLabel11.setText("Certificações:");
 
-        jLabel12.setText("Total R$:");
+        jBTListar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/edu/GPEDSCVP/icones/application_cascade.png"))); // NOI18N
+        jBTListar.setText("Listar");
+        jBTListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTListarActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPCustosProjetoLayout = new javax.swing.GroupLayout(jPCustosProjeto);
         jPCustosProjeto.setLayout(jPCustosProjetoLayout);
@@ -138,64 +200,49 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                         .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTFTotalEletronicos3, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel10)))
-                    .addGroup(jPCustosProjetoLayout.createSequentialGroup()
-                        .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCustosProjetoLayout.createSequentialGroup()
+                        .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPCustosProjetoLayout.createSequentialGroup()
-                                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPCustosProjetoLayout.createSequentialGroup()
-                                        .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel1)
-                                            .addComponent(jCBTipoCusto, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jLabel2))
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel3)
-                                            .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING))
-                                .addGap(60, 65, Short.MAX_VALUE))
-                            .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCustosProjetoLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
-                                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCustosProjetoLayout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jTFTotalProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(jPCustosProjetoLayout.createSequentialGroup()
-                                            .addComponent(jLabel11)
-                                            .addGap(421, 421, 421))
-                                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 495, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCustosProjetoLayout.createSequentialGroup()
-                                            .addComponent(jLabel12)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(jTFTotalEletronicos4, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                        .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTFTotalEletronicos1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPCustosProjetoLayout.createSequentialGroup()
-                                .addGap(37, 37, 37)
-                                .addComponent(jLabel5)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCustosProjetoLayout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jLabel11)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTFTotalProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPCustosProjetoLayout.createSequentialGroup()
+                                .addComponent(jLabel4)
+                                .addGap(8, 8, 8))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPCustosProjetoLayout.createSequentialGroup()
                                 .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCustosProjetoLayout.createSequentialGroup()
-                                            .addComponent(jLabel8)
-                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                            .addComponent(jTFTotalEletronicos2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPCustosProjetoLayout.createSequentialGroup()
-                                        .addGap(217, 217, 217)
-                                        .addComponent(jLabel7)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jTFTotalEletronicos1, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                    .addComponent(jLabel1)
+                                    .addComponent(jCBTipoCusto, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(29, 29, 29)))
+                        .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCustosProjetoLayout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
-                                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                .addContainerGap())
+                                .addGap(337, 337, 337)
+                                .addComponent(jLabel8)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jTFTotalEletronicos2, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPCustosProjetoLayout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jBTListar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
         );
         jPCustosProjetoLayout.setVerticalGroup(
             jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -209,42 +256,41 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                 .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCBTipoCusto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBTListar))
+                .addGap(14, 14, 14)
+                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
                     .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTFTotalEletronicos2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel6)
-                    .addComponent(jTFTotalProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(47, 47, 47)
-                .addComponent(jLabel11)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
-                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPCustosProjetoLayout.createSequentialGroup()
-                        .addGap(26, 26, 26)
-                        .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel12)
-                            .addComponent(jTFTotalEletronicos4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(166, 166, 166)
-                        .addComponent(jLabel9)
-                        .addContainerGap(123, Short.MAX_VALUE))
-                    .addGroup(jPCustosProjetoLayout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPCustosProjetoLayout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jTFTotalProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jTFTotalEletronicos2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(jLabel8))))
+                            .addGroup(jPCustosProjetoLayout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jLabel11)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(jTFTotalEletronicos1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(149, 149, 149)
+                        .addComponent(jLabel9)
+                        .addContainerGap())
+                    .addGroup(jPCustosProjetoLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTFTotalEletronicos3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
@@ -258,14 +304,86 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPCustosProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jPCustosProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 624, Short.MAX_VALUE)
         );
 
-        setSize(new java.awt.Dimension(1020, 663));
+        setSize(new java.awt.Dimension(1034, 663));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jTFTotalEletronicos3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTFTotalEletronicos3ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTFTotalEletronicos3ActionPerformed
+
+    private void jCBProjetoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBProjetoPopupMenuWillBecomeInvisible
+        try {
+            if(jCBProjeto.getSelectedIndex() > 0){
+                jCBVersao.setEditable(true);
+                versao_projeto.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
+                //consulta versões para preencher na combobox de versões
+                dao_versao.consultaCodigo(versao_projeto);
+                array_versoes = combo.PreencherCombo(jCBVersao, "versao", versao_projeto.getRetorno(), "cod_vers_projeto");
+                //seta no array da classe de versoes a lista de versoes listadas na combo
+                versao_projeto.setArray_versoes(array_versoes);
+            }else{
+                jCBVersao.removeAllItems();
+            } 
+        } catch (Exception e) {
+        }
+    }//GEN-LAST:event_jCBProjetoPopupMenuWillBecomeInvisible
+
+    private void jCBProjetoPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBProjetoPopupMenuWillBecomeVisible
+         //carrega dados nas combobox
+        dao_projeto.consultaGeral(projeto);
+        //Preenche dados nas ComboBox de projetos
+        array_projetos = combo.PreencherCombo(jCBProjeto, "descricao", projeto.getRetorno(), "id_projeto");
+        //seta no array da classe de projetos a lista de projetos listadas na combo
+        projeto.setArray_projetos(array_projetos);
+    }//GEN-LAST:event_jCBProjetoPopupMenuWillBecomeVisible
+
+    private void jBTListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTListarActionPerformed
+        Integer id_projeto;
+        Integer id_versao;
+        
+        switch(jCBTipoCusto.getSelectedIndex()){
+            //caso não selecionou nenhuma opção
+            case 0:
+                JOptionPane.showMessageDialog(null, "Selecione o tipo de custo para consulta!");
+                break;
+            //caso selecionou custo total do projeto
+            case 1:
+                if(jCBProjeto.getSelectedIndex() > 0){
+                    id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
+                    projeto.setId_projeto(id_projeto);
+                    dao_custos.consultaTodosCompFornecProjeto(projeto, "E");
+                    //dao_custos.consultaTodosCompFornecProjeto(projeto, "M");
+                }else{
+                    JOptionPane.showMessageDialog(null, "Selecione um projeto!");
+                }
+                break;
+        }
+    }//GEN-LAST:event_jBTListarActionPerformed
+
+    private void jCBTipoCustoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBTipoCustoPopupMenuWillBecomeInvisible
+        switch(jCBTipoCusto.getSelectedIndex()){
+            case 1:
+                try {
+                    jCBVersao.setSelectedIndex(0);
+                    jCBVersao.setEnabled(false);
+                } catch (Exception e) {
+                    jCBVersao.setEnabled(false);
+                }
+                break;
+                
+            case 2:
+                jCBVersao.setEnabled(true);
+                break;
+                
+            case 3:
+                jCBVersao.setEnabled(true);
+                break;
+        }
+    }//GEN-LAST:event_jCBTipoCustoPopupMenuWillBecomeInvisible
 
     /**
      * @param args the command line arguments
@@ -303,13 +421,13 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBTListar;
     private javax.swing.JComboBox jCBProjeto;
     private javax.swing.JComboBox jCBTipoCusto;
     private javax.swing.JComboBox jCBVersao;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -320,17 +438,14 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPCustosProjeto;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JTable jTBCertificações1;
-    private javax.swing.JTable jTBComponentesEletronicos2;
+    private javax.swing.JTable jTBCertificações;
+    private javax.swing.JTable jTBComponentesEletronicos;
     private javax.swing.JTable jTBComponentesMecanicos;
-    private javax.swing.JTable jTBFornecimentos;
     private javax.swing.JTextField jTFTotalEletronicos1;
     private javax.swing.JTextField jTFTotalEletronicos2;
     private javax.swing.JTextField jTFTotalEletronicos3;
-    private javax.swing.JTextField jTFTotalEletronicos4;
     private javax.swing.JTextField jTFTotalProjeto;
     // End of variables declaration//GEN-END:variables
 }

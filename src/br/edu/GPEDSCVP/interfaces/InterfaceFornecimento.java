@@ -1969,8 +1969,14 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             Integer restante = 0;
             Integer qntd_add = 0;
             Integer qntd_remov = 0;
+            Integer qntd_no_projeto = 0;
             Integer id_componente = Integer.parseInt(table.getValueAt(row, 7).toString());
             Integer exc = Integer.parseInt(table.getValueAt(row, 10).toString());
+            Integer id_comp_versao = Integer.parseInt(table.getValueAt(row, 1).toString());
+            
+            //retorna a quantidade utiliza no projeto do componente
+            comp_vers_proj.setId_comp_versao(id_comp_versao);
+            qntd_no_projeto = dao_comp_vers.retornaQntdNoProjeto(comp_vers_proj);
             
             //se não for um item excluido, deixa manipular valores
             if(exc == 0){
@@ -1981,29 +1987,35 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         try {
                             Integer qntd = Integer.parseInt(table.getValueAt(row, column).toString());
                             if(qntd > 0){
-                                //percorre jtable dos componentes fornecidos para saber a quantidade restante de cada
-                                for(int i = 0; i < jTBComponentes.getRowCount(); i++){
-                                    //encontrou o componente que esta sendo alterado a quantidade na jtable de fornecidos?
-                                    if(Integer.parseInt(jTBComponentes.getValueAt(i, 2).toString()) == id_componente){
-                                        //recupera a quantidade restante do mesmo
-                                        restante = Integer.parseInt(jTBComponentes.getValueAt(i, 8).toString());
-                                        //calcula a quantiade que foi adicionada para o componente
-                                        if(Integer.parseInt(newValue.toString()) > Integer.parseInt(oldValue.toString())){
-                                            qntd_add = Integer.parseInt(newValue.toString()) - Integer.parseInt(oldValue.toString());
-                                            //quantidade adicionada é maior que o restante ?
-                                            if(qntd_add > restante){
-                                                JOptionPane.showMessageDialog(null, "Quantidade adicionada excede a quantidade restante!");
-                                                table.setValueAt(oldValue, row, column);
+                                if(qntd > qntd_no_projeto){
+                                    
+                                    //percorre jtable dos componentes fornecidos para saber a quantidade restante de cada
+                                    for(int i = 0; i < jTBComponentes.getRowCount(); i++){
+                                        //encontrou o componente que esta sendo alterado a quantidade na jtable de fornecidos?
+                                        if(Integer.parseInt(jTBComponentes.getValueAt(i, 2).toString()) == id_componente){
+                                            //recupera a quantidade restante do mesmo
+                                            restante = Integer.parseInt(jTBComponentes.getValueAt(i, 8).toString());
+                                            //calcula a quantiade que foi adicionada para o componente
+                                            if(Integer.parseInt(newValue.toString()) > Integer.parseInt(oldValue.toString())){
+                                                qntd_add = Integer.parseInt(newValue.toString()) - Integer.parseInt(oldValue.toString());
+                                                //quantidade adicionada é maior que o restante ?
+                                                if(qntd_add > restante){
+                                                    JOptionPane.showMessageDialog(null, "Quantidade adicionada excede a quantidade restante!");
+                                                    table.setValueAt(oldValue, row, column);
+                                                }else{
+                                                    jTBComponentes.setValueAt(restante - qntd_add, i, 8);
+                                                }
+                                                break;
+                                                // foi decrementado a quantidade
                                             }else{
-                                                jTBComponentes.setValueAt(restante - qntd_add, i, 8);
-                                            }
-                                        break;
-                                        // foi decrementado a quantidade
-                                        }else{
                                             qntd_remov = Integer.parseInt(oldValue.toString()) - Integer.parseInt(newValue.toString());
                                             jTBComponentes.setValueAt(restante + qntd_remov, i, 8);
+                                            }
                                         }
                                     }
+                                }else{
+                                    JOptionPane.showMessageDialog(null, "Quantidade informada é menor que a quantidade que já está sendo utilizada no projeto!");
+                                    table.setValueAt(oldValue,row, column);
                                 }
                             }else{
                                 JOptionPane.showMessageDialog(null, "Quantidade deve ser maior que zero!");

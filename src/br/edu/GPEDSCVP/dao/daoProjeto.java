@@ -104,7 +104,6 @@ public class daoProjeto {
        
     }
     
-    
     public boolean inativaProjeto(Projeto projeto){
             
         int result;
@@ -122,5 +121,4 @@ public class daoProjeto {
         }      
         return true;
     }  
-    
 }

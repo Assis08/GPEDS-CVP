@@ -951,4 +951,21 @@ public class daoComponenteVersaoProjeto {
         }
        return 0;
     }
+    
+    public Integer retornaQntdNoProjeto(ComponenteVersaoProjeto componente){
+        Integer qntd_no_projeto = 0;
+        String sql = "select * from componentes_versao_projeto where id_comp_versao = "+ componente.getId_comp_versao();
+           
+        conecta_banco.executeSQL(sql);
+        try {        
+            conecta_banco.resultset.first();
+            qntd_no_projeto = conecta_banco.resultset.getInt("qntd_no_projeto");
+
+            return qntd_no_projeto;
+           
+        } catch (SQLException ex) {
+            
+        }
+       return 0;
+    }
 }
