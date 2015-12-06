@@ -505,7 +505,7 @@ public class daoComponenteVersaoProjeto {
         int totlinha_comp_fornec = TabelaCompFornec.getRowCount();
         //armazena o id do componente antes de calcular a composição do componente pois no processo do calculo altera o id do componente
         id_componente = comp_vers_proj.getId_componente();
-        total_composicao = dao_componente.calculaComposicaoComponente(comp_vers_proj);
+        //total_composicao = dao_componente.calculaComposicaoComponente(comp_vers_proj);
        
         //se não possuir linhas
         if(totlinha_comp_proj == 0){

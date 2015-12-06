@@ -168,13 +168,15 @@ public class daoComponentesFornecimento {
      public boolean verificaCompFornec (JTable componentes){
         
         Integer qntd;
+        Integer exc;
         Double valor_unit;
 
         DefaultTableModel tabela = (DefaultTableModel) componentes.getModel();
         int totlinha = tabela.getRowCount();
         for (int i = 0; i < totlinha; i++){
             qntd = Integer.parseInt(tabela.getValueAt(i, 8).toString());
-            if(qntd >0){
+            exc = Integer.parseInt(tabela.getValueAt(i, 10).toString());
+            if(qntd >0 && exc == 0){
                 return false;
             }
         }

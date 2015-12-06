@@ -1013,6 +1013,10 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 valida_campos.LimparJtable(jTBComponentesProjetos);
                 valida_campos.LimparJtable(jTBConsultaFornecimentos);
                 valida_campos.LimparJtable(jTBConsultaCompFornec);
+                jFTFreteReais.setValue(null);
+                jFTValorFrete.setValue(null);
+                jFTValorImpostos.setValue(null);
+                jFTImpostosReais.setValue(null);
 
                 //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
                 situacao = Rotinas.INICIAL;
@@ -1049,16 +1053,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                                 //se ocorreu tudo bem na inclusão
                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                                 //limpa campos
+                                jFTFreteReais.setValue(null);
+                                jFTValorFrete.setValue(null);
+                                jFTValorImpostos.setValue(null);
+                                jFTImpostosReais.setValue(null);
                                 valida_campos.LimparCampos(jPFornecimento);
                                 valida_campos.LimparJtable(jTBComponentes);
                                 valida_campos.LimparJtable(jTBComponentesProjetos);
                                 valida_campos.LimparJtable(jTBConsultaFornecimentos);
                                 valida_campos.LimparJtable(jTBConsultaCompFornec);
-                                jFTFreteReais.setValue(null);
-                                jFTValorFrete.setValue(null);
-                                jFTValorImpostos.setValue(null);
-                                jFTImpostosReais.setValue(null);
-
+                               
                                 //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                                 situacao = Rotinas.INICIAL;
 
@@ -1096,16 +1100,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
                                 JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                                 //limpa campos
+                                jFTFreteReais.setValue(null);
+                                jFTValorFrete.setValue(null);
+                                jFTValorImpostos.setValue(null);
+                                jFTImpostosReais.setValue(null);
                                 valida_campos.LimparCampos(jPFornecimento);
                                 valida_campos.LimparJtable(jTBComponentes);
                                 valida_campos.LimparJtable(jTBComponentesProjetos);
                                 valida_campos.LimparJtable(jTBConsultaFornecimentos);
                                 valida_campos.LimparJtable(jTBConsultaCompFornec);
-                                jFTFreteReais.setValue(null);
-                                jFTValorFrete.setValue(null);
-                                jFTValorImpostos.setValue(null);
-                                jFTImpostosReais.setValue(null);
-
+                                
                                 //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                                 situacao = Rotinas.INICIAL;
 

@@ -961,7 +961,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     private void jBTRemoveComposicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComposicaoActionPerformed
      
         int linha = jTBComponentesEletronicos.getSelectedRow();
-        if(linha > 0){
+        if(linha >= 0){
             
             Integer exc = Integer.parseInt(jTBComponentesEletronicos.getValueAt(linha, 9).toString());
             //se não for um item removido
