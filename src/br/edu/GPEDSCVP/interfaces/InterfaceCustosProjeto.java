@@ -5,8 +5,10 @@
  */
 package br.edu.GPEDSCVP.interfaces;
 
+import br.edu.GPEDSCVP.classe.Acesso;
 import br.edu.GPEDSCVP.classe.Projeto;
 import br.edu.GPEDSCVP.classe.VersaoProjeto;
+import br.edu.GPEDSCVP.dao.daoAcesso;
 import br.edu.GPEDSCVP.dao.daoCustos;
 import br.edu.GPEDSCVP.dao.daoProjeto;
 import br.edu.GPEDSCVP.dao.daoVersaoProjeto;
@@ -31,6 +33,8 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
     daoCustos dao_custos;
     daoVersaoProjeto dao_versao;
     ValidaCampos valida_campos;
+    Acesso acesso;
+    daoAcesso dao_acesso;
     int[] array_versoes;
     int[] array_projetos;
     ComboBox combo;
@@ -47,6 +51,8 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         dao_versao = new daoVersaoProjeto();
         dao_custos = new daoCustos();
         Jtable = new ManipulaJtable();
+        acesso = new Acesso();
+        dao_acesso = new daoAcesso();
         try {
             valida_campos = new ValidaCampos();
         } catch (Exception e) {
@@ -75,6 +81,9 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         jTFTotalMecanicos.setText("0,00");
         jTFTotalCertificações.setText("0,00");
         jTFTotalGeral.setText("0,00");
+        
+        //atualiza dados do usuario logado
+        dao_acesso.retornaUsuarioLogado(acesso);
     }
 
     /**
