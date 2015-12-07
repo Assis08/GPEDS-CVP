@@ -473,6 +473,11 @@
               </SubComponents>
             </Container>
             <Container class="javax.swing.JTabbedPane" name="jTBPAdicionais">
+              <Events>
+                <EventHandler event="hierarchyChanged" listener="java.awt.event.HierarchyListener" parameters="java.awt.event.HierarchyEvent" handler="jTBPAdicionaisHierarchyChanged"/>
+                <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jTBPAdicionaisStateChanged"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jTBPAdicionaisMouseClicked"/>
+              </Events>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout"/>
               <SubComponents>
@@ -1093,6 +1098,9 @@
                   </SubComponents>
                 </Container>
                 <Container class="javax.swing.JPanel" name="jPanel4">
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jPanel4MouseClicked"/>
+                  </Events>
                   <Constraints>
                     <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout" value="org.netbeans.modules.form.compat2.layouts.support.JTabbedPaneSupportLayout$JTabbedPaneConstraintsDescription">
                       <JTabbedPaneConstraints tabName="Permiss&#xf5;es de Acesso">
@@ -1253,8 +1261,8 @@
                             <Property name="text" type="java.lang.String" value="Gerente"/>
                           </Properties>
                           <Events>
-                            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jCBGerenteStateChanged"/>
                             <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jCBGerenteItemStateChanged"/>
+                            <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jCBGerenteStateChanged"/>
                           </Events>
                         </Component>
                         <Component class="javax.swing.JCheckBox" name="jCBInserir">
@@ -1462,10 +1470,10 @@
                             <Property name="name" type="java.lang.String" value="senha" noResource="true"/>
                           </Properties>
                           <Events>
+                            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jPFSenhaFocusLost"/>
                             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jPFSenhaMouseClicked"/>
                             <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jPFSenhaMouseEntered"/>
                             <EventHandler event="mouseExited" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jPFSenhaMouseExited"/>
-                            <EventHandler event="focusLost" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="jPFSenhaFocusLost"/>
                           </Events>
                         </Component>
                         <Component class="javax.swing.JLabel" name="jLabel28">
@@ -1555,9 +1563,9 @@
                     <Property name="text" type="java.lang.String" value="Pessoa F&#xed;sica"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jRBPessoaFisicaMouseClicked"/>
-                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jRBPessoaFisicaStateChanged"/>
                     <EventHandler event="itemStateChanged" listener="java.awt.event.ItemListener" parameters="java.awt.event.ItemEvent" handler="jRBPessoaFisicaItemStateChanged"/>
+                    <EventHandler event="stateChanged" listener="javax.swing.event.ChangeListener" parameters="javax.swing.event.ChangeEvent" handler="jRBPessoaFisicaStateChanged"/>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jRBPessoaFisicaMouseClicked"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JLabel" name="jLabel17">

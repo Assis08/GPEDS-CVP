@@ -82,7 +82,7 @@ public class daoCustos {
     public void consultaTodosCompNaVersao(VersaoProjeto versao, String tipo){
 
         conecta_banco.executeSQL("select fornecimento.id_fornecimento,componentes_versao_projeto.id_comp_versao, componentes_versao_projeto.id_componente, componente.descricao,"
-        +"versao_projeto.versao,componentes_versao_projeto.qntd_para_projeto,componentes_fornecimento.id_moeda, moeda.unidade, " 
+        +"versao_projeto.versao,componentes_versao_projeto.qntd_no_projeto,componentes_fornecimento.id_moeda, moeda.unidade, " 
         +"componentes_fornecimento.valor_unit, 0 as imposto_unit, fornecimento.data_cadastro, 0 as total,fornecimento.id_moeda_frete," 
         +"fornecimento.vl_frete, fornecimento.id_moeda_imp, fornecimento.vl_impostos,componentes_versao_projeto.situacao from fornecimento" 
         +" inner join componentes_fornecimento on (componentes_fornecimento.id_fornecimento = fornecimento.id_fornecimento)" 

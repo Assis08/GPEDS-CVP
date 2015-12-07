@@ -438,12 +438,14 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
         int linha = jTBConsultaComponentes.getSelectedRow();
         Integer id_comp;
         Integer qntd_add;
+        Integer qntd_atual_no_projeto;
         boolean encontrou = false;
         
         if(linha >= 0){
             
             try {
                 Integer qntd = Integer.parseInt(jTFQntd.getText());
+                qntd_atual_no_projeto = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 12).toString());
                 if(qntd > 0){
                     getCompVersProj();
                     //verfica se a quantidade ja adicionada para o projeto + a quantidade informada excede a quantidade para o projeto
@@ -451,7 +453,7 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
                         for (int i_comp = 0; i_comp < totlinha_comp_proj; i_comp++){
                             id_comp = Integer.parseInt(tabela.getValueAt(i_comp, 2).toString());
                             if(id_comp == comp_vers_proj.getId_componente()){
-                            
+                           
                                 encontrou = true;
                                 qntd_add = Integer.parseInt(tabela.getValueAt(i_comp, 7).toString());
 
@@ -468,7 +470,8 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
                         }
                     
                         if(encontrou == false){
-                            if(qntd <= comp_vers_proj.getQntd_para_projeto()){
+                            //verifica se quantidade informada não é maior que a quantidade restante
+                            if(qntd <= comp_vers_proj.getQntd_para_projeto() - Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 12).toString())){
                                 dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
                                 Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
                                 this.dispose();
@@ -477,7 +480,8 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
                             } 
                         }
                     }else{
-                        if(qntd <= comp_vers_proj.getQntd_para_projeto()){
+                        //verifica se quantidade informada não é maior que a quantidade restante
+                        if(qntd <= comp_vers_proj.getQntd_para_projeto() - Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 12).toString())){
                             dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
                             Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
                             this.dispose();

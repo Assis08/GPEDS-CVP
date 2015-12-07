@@ -809,6 +809,7 @@ public class InterfacePrincipal extends javax.swing.JFrame {
             
             //se naõ for gerente
             if(acesso.getIn_gerente() == 0){
+               
                 //retorna as permissoes de acesso do usuario  
                 dao_permissao.retornaDadosPermissao(acesso, permissao);
             } 

@@ -862,8 +862,8 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                             situacao = Rotinas.INCLUIR;
                             
                             //limpa jtable de componentes
-                          //  valida_campos.LimparJtable(jTBComponentesMecanicos);
-                          //  valida_campos.LimparJtable(jTBComponentesEletronicos);
+                            valida_campos.LimparJtable(jTBComponentesMecanicos);
+                            valida_campos.LimparJtable(jTBComponentesEletronicos);
                             jFTTotalEletronico.setText("0,00");
                             jFTTotalMecanico.setText("0,00");
                             jFTTotalComponentes.setText("0,00");
@@ -983,8 +983,10 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTRemoveComposicaoActionPerformed
 
     private void jBTRemoveFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveFornecedoresActionPerformed
-        if (valida_campos.VerificaJtable(jTBComponentesMecanicos) == 1) {
-            int linha = jTBComponentesMecanicos.getSelectedRow();
+
+        int linha = jTBComponentesMecanicos.getSelectedRow();
+        if(linha >= 0){
+            
             Integer exc = Integer.parseInt(jTBComponentesMecanicos.getValueAt(linha, 9).toString());
             //se não for um item removido
             if (exc == 0) {
@@ -994,7 +996,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Item já removido");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Não possui fornecedores para remover");
+            JOptionPane.showMessageDialog(null, "Nenhuma linha foi selecionada!");
         }
     }//GEN-LAST:event_jBTRemoveFornecedoresActionPerformed
 
@@ -1123,6 +1125,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
 
     private void jCBVersaoPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBVersaoPopupMenuWillBecomeVisible
         //atualiza lsita de versão dos projetos assim que clicar na jtable de versões
+        /*
         if(jCBProjeto.getSelectedIndex() > 0){
             versao.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
             //consulta versões para preencher na combobox de versões
@@ -1131,6 +1134,7 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             //seta no array da classe de versoes a lista de versoes listadas na combo
             versao.setArray_versoes(array_versoes);
         }
+        */
     }//GEN-LAST:event_jCBVersaoPopupMenuWillBecomeVisible
 
     private void jTBComponenteStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBComponenteStateChanged

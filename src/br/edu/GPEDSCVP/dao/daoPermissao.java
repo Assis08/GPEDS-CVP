@@ -384,6 +384,11 @@ public class daoPermissao {
             
         } catch (SQLException ex) {
             
+            permissao.setAcesso("N");
+            permissao.setInserir("N");
+            permissao.setAlterar("N");
+            permissao.setExcluir("N");
+            permissao.setConsultar("N");
         }
     }
 }

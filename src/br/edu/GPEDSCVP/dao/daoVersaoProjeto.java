@@ -259,6 +259,7 @@ public class daoVersaoProjeto {
                     }
                 }
             }else{
+               
                 //remove componente do projeto
                 resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ?, situacao = ? "
                 + "WHERE id_comp_versao = ? ",

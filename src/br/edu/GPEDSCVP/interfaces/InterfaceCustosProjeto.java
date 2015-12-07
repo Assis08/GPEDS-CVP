@@ -191,6 +191,20 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         });
         jTBComponentesEletronicos.setName("ComponentesEletronicos"); // NOI18N
         jScrollPane3.setViewportView(jTBComponentesEletronicos);
+        if (jTBComponentesEletronicos.getColumnModel().getColumnCount() > 0) {
+            jTBComponentesEletronicos.getColumnModel().getColumn(12).setMinWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(12).setPreferredWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(12).setMaxWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(13).setMinWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(13).setPreferredWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(13).setMaxWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(14).setMinWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(14).setPreferredWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(14).setMaxWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(15).setMinWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(15).setPreferredWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(15).setMaxWidth(0);
+        }
 
         jTFTotalCertificações.setEditable(false);
 
@@ -254,6 +268,20 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         });
         jTBComponentesMecanicos.setName("ComponentesMecanicos"); // NOI18N
         jScrollPane5.setViewportView(jTBComponentesMecanicos);
+        if (jTBComponentesMecanicos.getColumnModel().getColumnCount() > 0) {
+            jTBComponentesMecanicos.getColumnModel().getColumn(12).setMinWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(12).setPreferredWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(12).setMaxWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(13).setMinWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(13).setPreferredWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(13).setMaxWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(14).setMinWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(14).setPreferredWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(14).setMaxWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(15).setMinWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(15).setPreferredWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(15).setMaxWidth(0);
+        }
 
         jTFTotalGeral.setEditable(false);
 
@@ -307,9 +335,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                                     .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPCustosProjetoLayout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                    .addComponent(jLabel3)
                                     .addGroup(jPCustosProjetoLayout.createSequentialGroup()
                                         .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
@@ -368,7 +394,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                                         .addGap(5, 5, 5)))
                                 .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPCustosProjetoLayout.createSequentialGroup()
-                                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jTFTotalMecanicos, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel8))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -611,14 +637,14 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                         dao_custos.consultaTodosCompNaVersao(versao_projeto, "E");
                         
                         //Preenche todos os componentes eletronicos fornecidos para a versão
-                        Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"id_fornecimento","id_comp_versao","id_componente","componente.descricao","versao","qntd_para_projeto",
+                        Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"id_fornecimento","id_comp_versao","id_componente","componente.descricao","versao","qntd_no_projeto",
                         "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
                         "vl_frete","id_moeda_imp","vl_impostos"}, versao_projeto.getRetorno());
                         Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
-                        
+                      /*  
                         //calcula o imposto unitário dos componentes eletronicos
                         dao_custos.calculaImpostoUnitarioComp(jTBComponentesEletronicos);
-                        
+                      */  
                         //calcula o total do componente
                         dao_custos.calculaTotalCompProjeto(jTBComponentesEletronicos);
                         
@@ -628,7 +654,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                         dao_custos.consultaTodosCompNaVersao(versao_projeto, "M");
                         
                         //Preenche todos os componentes eletronicos fornecidos para a versão 
-                        Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"id_fornecimento","id_comp_versao","id_componente","componente.descricao","versao","qntd_para_projeto",
+                        Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"id_fornecimento","id_comp_versao","id_componente","componente.descricao","versao","qntd_no_projeto",
                         "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
                         "vl_frete","id_moeda_imp","vl_impostos"}, versao_projeto.getRetorno());
                         Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);

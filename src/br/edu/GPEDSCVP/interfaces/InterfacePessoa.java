@@ -617,6 +617,22 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jTBPAdicionais.addHierarchyListener(new java.awt.event.HierarchyListener() {
+            public void hierarchyChanged(java.awt.event.HierarchyEvent evt) {
+                jTBPAdicionaisHierarchyChanged(evt);
+            }
+        });
+        jTBPAdicionais.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jTBPAdicionaisStateChanged(evt);
+            }
+        });
+        jTBPAdicionais.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTBPAdicionaisMouseClicked(evt);
+            }
+        });
+
         jTBContato.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
@@ -1026,6 +1042,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jTBPAdicionais.addTab("Endereço", jPanel3);
 
+        jPanel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jPanel4MouseClicked(evt);
+            }
+        });
+
         jLabel15.setText("Permissões de acesso:");
 
         jCBTela.setToolTipText("Tela");
@@ -1043,14 +1065,14 @@ public class InterfacePessoa extends javax.swing.JFrame {
         jLabel26.setText("Tela:");
 
         jCBGerente.setText("Gerente");
-        jCBGerente.addChangeListener(new javax.swing.event.ChangeListener() {
-            public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                jCBGerenteStateChanged(evt);
-            }
-        });
         jCBGerente.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jCBGerenteItemStateChanged(evt);
+            }
+        });
+        jCBGerente.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jCBGerenteStateChanged(evt);
             }
         });
 
@@ -1195,6 +1217,11 @@ public class InterfacePessoa extends javax.swing.JFrame {
 
         jPFSenha.setToolTipText("Senha");
         jPFSenha.setName("senha"); // NOI18N
+        jPFSenha.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jPFSenhaFocusLost(evt);
+            }
+        });
         jPFSenha.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jPFSenhaMouseClicked(evt);
@@ -1204,11 +1231,6 @@ public class InterfacePessoa extends javax.swing.JFrame {
             }
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 jPFSenhaMouseExited(evt);
-            }
-        });
-        jPFSenha.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jPFSenhaFocusLost(evt);
             }
         });
 
@@ -3000,6 +3022,12 @@ public class InterfacePessoa extends javax.swing.JFrame {
         }
     //Garante que sempre que atualizar uma pessoa, irá retornar os dados do usuário logado novamente 
     dao_acesso.retornaUsuarioLogado(acesso);
+    
+    //se naõ for gerente
+    if(acesso.getIn_gerente() == 0){
+        //retorna as permissoes de acesso do usuario  
+        dao_permissao.retornaDadosPermissao(acesso, permissao);
+    } 
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -3607,8 +3635,15 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBMostSenhaStateChanged
 
     private void jRBPessoaFisicaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRBPessoaFisicaItemStateChanged
-        //Habilita campos do usuario
-        habilitaCamposUsuario();
+
+        if(acesso.getIn_gerente() == 0){
+            if(jRBPessoaFisica.isSelected()){
+                JOptionPane.showMessageDialog(null, "Apenas gerente pode incluir pessoas físicas no sistema!");
+            }
+        }else{
+            //Habilita campos do usuario
+            habilitaCamposUsuario();
+        } 
     }//GEN-LAST:event_jRBPessoaFisicaItemStateChanged
 
     private void jRBPessoaJuridicaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jRBPessoaJuridicaItemStateChanged
@@ -3912,14 +3947,24 @@ public class InterfacePessoa extends javax.swing.JFrame {
             array_tela = combo.PreencherCombo(jCBTela, "descricao", tela.getRetorno(), "id_tela");
             //seta no array da classe da tela a lista de telas listadas na combo
             tela.setArray_tela(array_tela);
-
+            
+            situacao = Rotinas.PADRAO;
+            
             //se é busca geral
             if (jCBBuscarPessoa.getSelectedIndex() == 0) {
 
                 //Se for usuario
                 if (tipo.equals("U")) {
-                    //seta na tela de cadastro os dados do usuario
-                    setaUsuarioTela();
+                    //se o usuario logado for gerente, seta na tela de cadastro os dados do usuario
+                   
+                    if(acesso.getIn_gerente() == 0){
+                        JOptionPane.showMessageDialog(null, "Apenas gerente pode alterar pessoas físicas no sistema!");
+                        situacao = Rotinas.INICIAL;
+                    }else{
+                        //Habilita campos do usuario
+                        habilitaCamposUsuario();
+                        setaUsuarioTela();
+                    } 
                     //se for certificadora    
                 } else if (tipo.equals("C")) {
                     //seta na tela de cadastro os dados da certificadora
@@ -3932,7 +3977,13 @@ public class InterfacePessoa extends javax.swing.JFrame {
                 //se é busca de usuarios
             } else if (jCBBuscarPessoa.getSelectedIndex() == 1) {
                 //seta na tela de cadastro os dados do usuario 
-                setaUsuarioTela();
+                
+                if(acesso.getIn_gerente() == 0){
+                    JOptionPane.showMessageDialog(null, "Apenas gerente pode alterar pessoas físicas no sistema!");
+                    situacao = Rotinas.INICIAL;
+                }else{
+                     setaUsuarioTela();
+                }
                 // se é busca de certificadoras
             } else if (jCBBuscarPessoa.getSelectedIndex() == 2) {
                 //seta na tela de cadastro os dados da certificadora 
@@ -3946,7 +3997,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             jTBPessoas.setSelectedIndex(0);
             jTBPAdicionais.setSelectedIndex(0);
             //Define a situação como padrao para habilitar os botoes utilizados apenas na alteração ou exclusão
-            situacao = Rotinas.PADRAO;
+
             //habilita os botoes utilizados na alteraçao e exclusão e desabilita os restantes
             validabotoes.ValidaEstado(jPBotoes, situacao);
             
@@ -4071,6 +4122,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jRBCPFItemStateChanged
 
     private void jCBGerenteItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCBGerenteItemStateChanged
+
         if (jCBGerente.isSelected()) {
             jCBTela.setSelectedIndex(1);
             jCBTela.setEnabled(false);
@@ -4087,7 +4139,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
             jCBConsultar.setEnabled(true);
             jCBExcluir.setEnabled(true);
         }
-
+        
     }//GEN-LAST:event_jCBGerenteItemStateChanged
 
     private void jPFSenhaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPFSenhaMouseClicked
@@ -4106,8 +4158,8 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jPFSenhaMouseExited
 
     private void jPFSenhaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPFSenhaMouseEntered
-        if (acesso.getId_usuario() != Integer.parseInt(jTFIDPessoa.getText())) {
-            if (situacao == Rotinas.ALTERAR) {
+        if (situacao == Rotinas.ALTERAR) {
+            if (acesso.getIn_gerente() == 1) {
                 jPFSenha.setEnabled(true);
                 jPFSenha.grabFocus();
             }
@@ -4261,6 +4313,22 @@ public class InterfacePessoa extends javax.swing.JFrame {
     private void jCBCidadeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBCidadeActionPerformed
        
     }//GEN-LAST:event_jCBCidadeActionPerformed
+
+    private void jTBPAdicionaisStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBPAdicionaisStateChanged
+        
+    }//GEN-LAST:event_jTBPAdicionaisStateChanged
+
+    private void jTBPAdicionaisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBPAdicionaisMouseClicked
+       
+    }//GEN-LAST:event_jTBPAdicionaisMouseClicked
+
+    private void jPanel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel4MouseClicked
+       
+    }//GEN-LAST:event_jPanel4MouseClicked
+
+    private void jTBPAdicionaisHierarchyChanged(java.awt.event.HierarchyEvent evt) {//GEN-FIRST:event_jTBPAdicionaisHierarchyChanged
+        
+    }//GEN-LAST:event_jTBPAdicionaisHierarchyChanged
 
     /**
      * @param args the command line arguments

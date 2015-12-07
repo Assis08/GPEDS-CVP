@@ -1490,9 +1490,9 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 
                 if(valor_convertido <= 0 && valor_inserido > 0){
                     jFTFreteReais.setValue(null);
-                    jFTImpostosReais.setValue(null);
                     jFTFreteReais.setText(null);
-                    jFTImpostosReais.setText(null);
+                    jFTValorFrete.setText(null);
+                    jFTValorFrete.setValue(null);
                 }else{
                     jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
                 }
@@ -1523,10 +1523,10 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 }
                 
                 if(valor_convertido <= 0 && valor_inserido > 0){
-                    jFTFreteReais.setValue(null);
                     jFTImpostosReais.setValue(null);
-                    jFTFreteReais.setText(null);
                     jFTImpostosReais.setText(null);
+                    jFTValorImpostos.setValue(null);
+                    jFTValorImpostos.setText(null);
                 }else{
                     jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
                 }

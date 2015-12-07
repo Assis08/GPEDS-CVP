@@ -76,7 +76,7 @@ public class InterfaceNorma extends javax.swing.JFrame {
         valida_campos.desabilitaCampos(jPNorma);
         
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
-        jTBConsultaMateriais.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+        jTBConsultaNormas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
@@ -117,7 +117,7 @@ public class InterfaceNorma extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTBConsultaMateriais = new javax.swing.JTable();
+        jTBConsultaNormas = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro de Normas");
@@ -269,11 +269,11 @@ public class InterfaceNorma extends javax.swing.JFrame {
             jPNormaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPNormaLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPNormaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel1)
+                .addGroup(jPNormaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPNormaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel7)
-                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTFIDNorma, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(15, 15, 15)
@@ -296,7 +296,7 @@ public class InterfaceNorma extends javax.swing.JFrame {
 
         jTBNorma.addTab("Cadastro", jPNorma);
 
-        jTBConsultaMateriais.setModel(new javax.swing.table.DefaultTableModel(
+        jTBConsultaNormas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -312,12 +312,12 @@ public class InterfaceNorma extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTBConsultaMateriais.addMouseListener(new java.awt.event.MouseAdapter() {
+        jTBConsultaNormas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTBConsultaMateriaisMouseClicked(evt);
+                jTBConsultaNormasMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(jTBConsultaMateriais);
+        jScrollPane1.setViewportView(jTBConsultaNormas);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -400,7 +400,7 @@ public class InterfaceNorma extends javax.swing.JFrame {
             valida_campos.habilitaCampos(jPNorma);
 
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para alterar cidades no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para alterar normas no sistema");
         }
     }//GEN-LAST:event_jBTAlterarActionPerformed
 
@@ -415,7 +415,7 @@ public class InterfaceNorma extends javax.swing.JFrame {
 
             if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
 
-                if(dao_material.excluir(material) == true){
+                if(dao_norma.excluir(norma) == true){
                     JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
                     //limpa campos
                     valida_campos.LimparCampos(jPNorma);
@@ -432,7 +432,7 @@ public class InterfaceNorma extends javax.swing.JFrame {
 
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir materiais no sistema");
+            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir normas no sistema");
         }
     }//GEN-LAST:event_jBTExcluirActionPerformed
 
@@ -470,11 +470,11 @@ public class InterfaceNorma extends javax.swing.JFrame {
             }
         }else if(situacao == Rotinas.ALTERAR) {
             //pega dados do material na tela
-            if (valida_campos.validacamposobrigatorios(jPNorma, "MATERIAL") == 0) {
+            if (valida_campos.validacamposobrigatorios(jPNorma, "NORMA") == 0) {
                 try {
-                    getMaterial();
+                    getNorma();
                     //altera material
-                    if(dao_material.alterar(material) == true){
+                    if(dao_norma.alterar(norma) == true){
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
                         valida_campos.LimparCampos(jPNorma);
@@ -489,7 +489,7 @@ public class InterfaceNorma extends javax.swing.JFrame {
                         valida_campos.desabilitaCampos(jPNorma);
                     }
                 } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(null, "Falha ao alterar material");
+                    JOptionPane.showMessageDialog(null, "Falha ao alterar norma");
                 }
             }
         }
@@ -509,25 +509,25 @@ public class InterfaceNorma extends javax.swing.JFrame {
         valida_campos.desabilitaCampos(jPNorma);
     }//GEN-LAST:event_jBTCancelarActionPerformed
 
-    private void jTBConsultaMateriaisMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaMateriaisMouseClicked
+    private void jTBConsultaNormasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaNormasMouseClicked
         //Verifica se houve 2 cliques do mouse
         if (evt.getClickCount() == 2) {
 
             //recupera a linha clicada
-            int linha = jTBConsultaMateriais.getSelectedRow();
+            int linha = jTBConsultaNormas.getSelectedRow();
 
-            //Limpa os campos da tela material
+            //Limpa os campos da tela norma
             valida_campos.LimparCampos(jPNorma);
 
-            //recupera o id do material selecionado
-            String codigo = (String) jTBConsultaMateriais.getValueAt(linha, 0);
+            //recupera o id da norma selecionada
+            String codigo = (String) jTBConsultaNormas.getValueAt(linha, 0);
 
-            //retorna dados do material
-            material.setId_material(Integer.parseInt(codigo));
-            dao_material.retornardados(material);
+            //retorna dados da norma
+            norma.setId_norma(Integer.parseInt(codigo));
+            dao_norma.retornardados(norma);
 
-            //Seta na tela de cadastro os dados do material
-            setcompMaterial();
+            //Seta na tela de cadastro os dados da norma
+            setcompNorma();
             //retorna para tela de cadastro
             jTBNorma.setSelectedIndex(0);
 
@@ -537,10 +537,10 @@ public class InterfaceNorma extends javax.swing.JFrame {
             //habilita os botoes utilizados na inclusão e desabilita os restantes
             valida_botoes.ValidaEstado(jPBotoes, situacao);
 
-            //desabilita campos da tela de cidade
+            //desabilita campos da tela de norma
             valida_campos.desabilitaCampos(jPNorma);
         }
-    }//GEN-LAST:event_jTBConsultaMateriaisMouseClicked
+    }//GEN-LAST:event_jTBConsultaNormasMouseClicked
 
     private void jTBNormaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBNormaStateChanged
         if(jTBNorma.getSelectedIndex() == 1){
@@ -553,13 +553,13 @@ public class InterfaceNorma extends javax.swing.JFrame {
             //Verifica se o usuario possui permissao para acessar essa tela
             if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
                 //faz uma consulta geral de cidade no banco
-                dao_material.consultaGeral(material);
+                dao_norma.consultaGeral(norma);
                 //preenche dados na jtable
-                Jtable.PreencherJtableGenerico(jTBConsultaMateriais, new String[]{"id_material","descricao","data_alter"}, material.getRetorno());
+                Jtable.PreencherJtableGenerico(jTBConsultaNormas, new String[]{"id_norma","descricao","titulo","edicao","data_cadastro","data_alter"}, norma.getRetorno());
                 //ajusta largura das colunas
-                Jtable.ajustarColunasDaTabela(jTBConsultaMateriais);
+                Jtable.ajustarColunasDaTabela(jTBConsultaNormas);
             }else{
-                JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar materiais no sistema");
+                JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar normas no sistema");
                 //retorna para a tela de cadastro
                 jTBNorma.setSelectedIndex(0);
             }
@@ -617,7 +617,7 @@ public class InterfaceNorma extends javax.swing.JFrame {
     private javax.swing.JPanel jPNorma;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTBConsultaMateriais;
+    private javax.swing.JTable jTBConsultaNormas;
     private javax.swing.JTabbedPane jTBNorma;
     private javax.swing.JTextField jTFDescricao;
     private javax.swing.JTextField jTFEdicao;
@@ -642,4 +642,12 @@ public class InterfaceNorma extends javax.swing.JFrame {
         return norma;
     }
 
+    public void setcompNorma(){
+        //Seta dados do projeto na tela
+        jTFIDNorma.setText(Integer.toString(norma.getId_norma()));
+        jTFDescricao.setText(norma.getDescricao());
+        jTFTitulo.setText(norma.getTitulo());
+        jTFEdicao.setText(norma.getEdicao());
+        jFTData.setText(data.dateParaString(norma.getData_cadastro()));
+    }
 }

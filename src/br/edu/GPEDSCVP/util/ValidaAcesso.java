@@ -32,6 +32,7 @@ public class ValidaAcesso {
             
             case "inserir":
                 if (permissao.getInserir().equals("S")){
+                    JOptionPane.showMessageDialog(null, "inserir");
                     return true;
                 }else{
                     return false;

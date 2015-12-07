@@ -905,6 +905,7 @@ public class daoComponenteVersaoProjeto {
 
             sel = (Boolean) tabela.getValueAt(i, 0);
             valor_remover = Double.parseDouble(tabela.getValueAt(i, 8).toString().replace(".", "").replace(",", "."));
+            Integer old_qntd = Integer.parseInt(tabela.getValueAt(i, 10).toString());
             
             //Se a linha estiver selecionada
             if(sel != null){
@@ -914,7 +915,7 @@ public class daoComponenteVersaoProjeto {
                     
                     //ativa flag que achou uma linha selecionada
                     achou = true;
-                    if(situacao == Rotinas.ALTERAR){
+                    if((situacao == Rotinas.ALTERAR || situacao == Rotinas.TODOS) && old_qntd > 0){
                         //seta o valor 1 na coluna excluido da jtable
                         jtable.setValueAt(1, i, 9);
                         jtable.setValueAt(false, i, 0);
