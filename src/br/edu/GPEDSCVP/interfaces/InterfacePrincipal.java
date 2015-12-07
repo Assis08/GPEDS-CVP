@@ -90,11 +90,6 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         });
 
         jMenuItem1.setText("Pessoas");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
-            }
-        });
         jMenuItem1.addAncestorListener(new javax.swing.event.AncestorListener() {
             public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
             }
@@ -102,6 +97,11 @@ public class InterfacePrincipal extends javax.swing.JFrame {
                 jMenuItem1AncestorAdded(evt);
             }
             public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
             }
         });
         jMCadastros.add(jMenuItem1);
@@ -218,6 +218,11 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         jMGerenciarProjetos.add(jMenuItem11);
 
         jMenuItem12.setText("Comparar");
+        jMenuItem12.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem12ActionPerformed(evt);
+            }
+        });
         jMGerenciarProjetos.add(jMenuItem12);
 
         jMBMenuPrincipal.add(jMGerenciarProjetos);
@@ -231,12 +236,9 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         jMBMenuPrincipal.add(jMCustos);
 
         jMAlterarMoeda.setText("Atualizar Moeda");
-        jMAlterarMoeda.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jMAlterarMoedaMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jMAlterarMoedaMouseEntered(evt);
+        jMAlterarMoeda.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jMAlterarMoedaItemStateChanged(evt);
             }
         });
         jMAlterarMoeda.addMenuListener(new javax.swing.event.MenuListener() {
@@ -248,9 +250,12 @@ public class InterfacePrincipal extends javax.swing.JFrame {
                 jMAlterarMoedaMenuSelected(evt);
             }
         });
-        jMAlterarMoeda.addItemListener(new java.awt.event.ItemListener() {
-            public void itemStateChanged(java.awt.event.ItemEvent evt) {
-                jMAlterarMoedaItemStateChanged(evt);
+        jMAlterarMoeda.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMAlterarMoedaMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                jMAlterarMoedaMouseEntered(evt);
             }
         });
         jMAlterarMoeda.addActionListener(new java.awt.event.ActionListener() {
@@ -866,6 +871,10 @@ public class InterfacePrincipal extends javax.swing.JFrame {
         }
         jMCadastros.setSelected(false);
     }//GEN-LAST:event_jMenuItem13ActionPerformed
+
+    private void jMenuItem12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem12ActionPerformed
+        new InterfaceCompararVersões().setVisible(true);
+    }//GEN-LAST:event_jMenuItem12ActionPerformed
 
     /**
      * @param args the command line arguments

@@ -698,6 +698,24 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
                 valida_botoes.ValidaEstado(jPBotoes, situacao);
                 
                 limpa_dados_versao();
+                //limpa componentes jtable
+                valida_campos.LimparJtable(jTBComponentesEletronicos);
+                valida_campos.LimparJtable(jTBComponentesMecanicos);
+                jFTTotalEletronico.setText(null);
+                jFTTotalMecanico.setText(null);
+                jFTTotalComponentes.setText(null);
+                
+                //atualiza combo de versões
+                versao.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
+                //consulta versões para preencher na combobox de versões
+                dao_versao.consultaCodigo(versao);
+                array_versoes = combo.PreencherCombo(jCBVersao, "versao", versao.getRetorno(), "cod_vers_projeto");
+                //seta no array da classe de versoes a lista de versoes listadas na combo
+                versao.setArray_versoes(array_versoes);
+                
+                //retorna ultima versão
+                ultima_versao = dao_versao.retornaUltimaVersao(versao);
+
                 jCBVersao.setSelectedIndex(0);
             }
         } else {
