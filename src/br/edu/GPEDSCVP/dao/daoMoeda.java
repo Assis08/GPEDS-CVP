@@ -168,6 +168,17 @@ public class daoMoeda {
         atualizacao.setRetorno(conecta_banco.resultset);
       
     }
+    
+    //traz apenas a última atualizações de cada moeda
+    public void consultaTodasAtualizacao(AtualizacaoMoeda atualizacao){
+        
+        conecta_banco.executeSQL("select moeda.id_moeda,moeda.descricao,moeda.unidade,valor,atualizacao_moeda.data_atualizacao,false from atualizacao_moeda"+
+                                " inner join moeda on (moeda.id_moeda = atualizacao_moeda.id_moeda)"+
+                                " order by atualizacao_moeda.data_atualizacao desc");
+
+        atualizacao.setRetorno(conecta_banco.resultset);
+      
+    }
      
     public void retornardadosMoeda(Moeda moeda) {
             
@@ -205,7 +216,7 @@ public class daoMoeda {
                 valor_moeda = conecta_banco.resultset.getDouble("valor");
                 return (valor_moeda * valor);
             } catch (SQLException ex) {
-               JOptionPane.showMessageDialog(null, "Falha ao converter moeda");
+               JOptionPane.showMessageDialog(null, "Falha ao converter moeda, ");
                return 0;
             }
         
