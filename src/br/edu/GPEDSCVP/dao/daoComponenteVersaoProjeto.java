@@ -368,6 +368,11 @@ public class daoComponenteVersaoProjeto {
                     FormatarData.dateParaTimeStamp(compVersProj.getData_alter()),
                     id_comp_vers_proj);
                 }
+                
+                //atualiza valor unitário dos componentes que possuem este na composição 
+                compVersProj.setId_componente(id_componente);
+                compVersProj.setCod_vers_projeto(id_versao);
+                atualizaValorUnitCompPai(compVersProj);
 
             } catch (Exception e) {
                 
@@ -968,5 +973,56 @@ public class daoComponenteVersaoProjeto {
             
         }
        return 0;
+    }
+    
+    //método para atualizar o valor unitario de todos componentes que possuem o componente na composição, ou seja o componente que foi alterado.
+    public void atualizaValorUnitCompPai(ComponenteVersaoProjeto compVersProj){
+        ResultSet composicao;
+        ResultSet comp_fornec;
+        
+        Integer id_comp_fornec;
+        Integer cod_vers_proj;
+
+        
+        //lista todos componentes pai que possuem o componente na composição
+        Double valor_composicao;
+        conecta_banco.executeSQL("select * from composicao_componente where id_subcomponente = "+compVersProj.getId_componente()); 
+        composicao =  conecta_banco.resultset;
+        try {     
+            
+            while ( composicao.next()) {
+                
+                Integer id_componente_pai = composicao.getInt("id_componente");
+
+                //lista todos fornecimentos do componente pai
+                conecta_banco.executeSQL("select * from componentes_fornecimento"
+                +" inner join componentes_versao_projeto on (componentes_fornecimento.id_comp_fornec = componentes_versao_projeto.id_comp_fornec)"
+                +" where componentes_fornecimento.id_componente = "+id_componente_pai); 
+                comp_fornec =  conecta_banco.resultset;
+
+                //percorre todos fornecimento do componente pai
+                while ( comp_fornec.next()) {
+                   
+                    cod_vers_proj = comp_fornec.getInt("cod_vers_projeto");
+                    id_comp_fornec = comp_fornec.getInt("id_comp_fornec");
+                    compVersProj.setCod_vers_projeto(cod_vers_proj);
+                    compVersProj.setId_componente(id_componente_pai);
+                    
+                    valor_composicao = dao_componente.calculaComposicaoComponente(compVersProj);
+                    /*
+                    JOptionPane.showMessageDialog(null, "id_comp_fornec "+id_comp_fornec);
+                    JOptionPane.showMessageDialog(null, "valor "+valor_composicao);
+                    */
+                    //atualiza valor unitario do componente pai
+                    conecta_banco.executeSQL("UPDATE componentes_fornecimento SET valor_unit = ? "
+                    + "WHERE id_comp_fornec = ? ",
+                    valor_composicao,
+                    id_comp_fornec);          
+                }
+            }
+           
+        } catch (SQLException ex) {
+          JOptionPane.showMessageDialog(null, "Falha");
+        }               
     }
 }

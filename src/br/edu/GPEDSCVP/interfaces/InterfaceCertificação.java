@@ -22,21 +22,31 @@ import br.edu.GPEDSCVP.dao.daoProjeto;
 import br.edu.GPEDSCVP.dao.daoTela;
 import br.edu.GPEDSCVP.dao.daoVersaoProjeto;
 import br.edu.GPEDSCVP.util.ComboBox;
+import br.edu.GPEDSCVP.util.DocumentoLimitado;
 import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.ManipulaJtable;
 import br.edu.GPEDSCVP.util.Mensagens;
 import br.edu.GPEDSCVP.util.Rotinas;
+import br.edu.GPEDSCVP.util.TamanhoLimitadoListener;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
+import br.edu.GPEDSCVP.util.ValorLimitadoListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.Date;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.text.DefaultFormatterFactory;
+import javax.swing.text.NumberFormatter;
 
 /**
  *
@@ -44,7 +54,6 @@ import javax.swing.text.DefaultFormatterFactory;
  */
 public class InterfaceCertificação extends javax.swing.JFrame {
 
-    
     Certificacao certificacao;
     daoCertificacao dao_certificacao;
     Projeto projeto;
@@ -72,9 +81,9 @@ public class InterfaceCertificação extends javax.swing.JFrame {
     int[] array_certificadoras;
     int[] array_projetos;
     int[] array_versoes;
-            
+
     int situacao = Rotinas.PADRAO;
-    
+
     public InterfaceCertificação() {
         initComponents();
 
@@ -105,17 +114,19 @@ public class InterfaceCertificação extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar registro");
         }
-        
+        //limita numeros monetarios
+        //jFTValorCertif.addKeyListener( new ValorLimitadoListener(0,999999999));
+
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBConsultaCertificacoes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 
         //seta mascaras nos campos
         valida_campos.formataMonetario(jFTValorCertif);
         jFTDataEnsaio.setFormatterFactory(new DefaultFormatterFactory(valida_campos.formata("##/##/####")));
-        
+
         //atualiza dados do usuario logado
         dao_acesso.retornaUsuarioLogado(acesso);
-        
+
         dao_pessoa.consultageral(certificadora);
         //Preenche dados nas ComboBox de certificadoras
         array_certificadoras = combo.PreencherCombo(jCBCertificadora, "nome", certificadora.getRetorno(), "id_pessoa");
@@ -133,10 +144,10 @@ public class InterfaceCertificação extends javax.swing.JFrame {
         array_normas = combo.PreencherCombo(jCBNorma, "titulo", norma.getRetorno(), "id_norma");
         //seta no array da classe de normas a lista de normas listadas na combo
         norma.setArray_norma(array_normas);
-        
+
         //desabilita campos da tela de componente
         valida_campos.desabilitaCampos(jPCertificacao);
-       
+
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
 
@@ -424,25 +435,6 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                     .addGroup(jPCertificacaoLayout.createSequentialGroup()
                         .addContainerGap()
                         .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPCertificacaoLayout.createSequentialGroup()
-                                .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jFTDataEnsaio, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel13))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel8))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel10)
-                                    .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(46, 46, 46)
-                                .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPCertificacaoLayout.createSequentialGroup()
-                                        .addComponent(jCBNorma, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(jBTNovoMaterial1))
-                                    .addComponent(jLabel5)))
                             .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addGroup(jPCertificacaoLayout.createSequentialGroup()
                                     .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -463,16 +455,37 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                                     .addComponent(jLabel9)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jFTData, javax.swing.GroupLayout.PREFERRED_SIZE, 108, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jLabel16)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPCertificacaoLayout.createSequentialGroup()
                                 .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jCBResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel2))
-                                .addGap(18, 18, 18)
+                                    .addGroup(jPCertificacaoLayout.createSequentialGroup()
+                                        .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jFTDataEnsaio, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel13))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel8))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel10)
+                                            .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPCertificacaoLayout.createSequentialGroup()
+                                        .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jCBResultado, javax.swing.GroupLayout.PREFERRED_SIZE, 147, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jLabel2))
+                                        .addGap(18, 18, 18)
+                                        .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(jLabel6)
+                                            .addComponent(jFTValorCertif, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(46, 46, 46)
                                 .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jFTValorCertif, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jLabel16)
-                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 684, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addGroup(jPCertificacaoLayout.createSequentialGroup()
+                                        .addComponent(jCBNorma, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addComponent(jBTNovoMaterial1))
+                                    .addComponent(jLabel5)))))
                     .addGroup(jPCertificacaoLayout.createSequentialGroup()
                         .addGap(51, 51, 51)
                         .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -698,7 +711,7 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                 array_projetos = combo.PreencherCombo(jCBProjeto, "descricao", projeto.getRetorno(), "id_projeto");
                 //seta no array da classe de projetos a lista de projetos listadas na combo
                 projeto.setArray_projetos(array_projetos);
-                
+
                 dao_norma.consultaGeral(norma);
                 //Preenche dados nas ComboBox de normas
                 array_normas = combo.PreencherCombo(jCBNorma, "titulo", norma.getRetorno(), "id_norma");
@@ -708,7 +721,7 @@ public class InterfaceCertificação extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de certificação");
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir certificações no sistema");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -754,9 +767,8 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                 valida_campos.LimparCampos(jPCertificacao);
                 valida_campos.LimparJtable(jTBConsultaCertificacoes);
                 jFTValorCertif.setText(null);
-                jFTValorCertif.setValue(null);
                 jTADescReprov.setText("");
-               
+
                 //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
                 situacao = Rotinas.INICIAL;
 
@@ -774,23 +786,21 @@ public class InterfaceCertificação extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
 
-       
         //Se for inclusão
         if (situacao == Rotinas.INCLUIR) {
             if (valida_campos.validacamposobrigatorios(jPCertificacao, "CERTIFICACAO") == 0) {
-    
+
                 try {
                     //pega dados da certificação na tela
                     getCertificacao();
                     //inclui componente
-                    if(dao_certificacao.incluir(certificacao) == true){
+                    if (dao_certificacao.incluir(certificacao) == true) {
 
                         //se ocorreu tudo bem na inclusão
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
                         valida_campos.LimparCampos(jPCertificacao);
                         jFTValorCertif.setText(null);
-                        jFTValorCertif.setValue(null);
                         jTADescReprov.setText("");
                         valida_campos.LimparJtable(jTBConsultaCertificacoes);
 
@@ -809,21 +819,20 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                 }
 
             }
-        }else if(situacao == Rotinas.ALTERAR) {
-            
+        } else if (situacao == Rotinas.ALTERAR) {
+
             //pega dados do material na tela
             if (valida_campos.validacamposobrigatorios(jPCertificacao, "CERTIFICACAO") == 0) {
                 try {
                     getCertificacao();
                     //alterar componente
-                    if(dao_certificacao.alterar(certificacao) == true){
+                    if (dao_certificacao.alterar(certificacao) == true) {
                         //altera composição
-                       
+
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
                         valida_campos.LimparCampos(jPCertificacao);
                         jFTValorCertif.setText(null);
-                        jFTValorCertif.setValue(null);
                         jTADescReprov.setText("");
                         valida_campos.LimparJtable(jTBConsultaCertificacoes);
 
@@ -837,13 +846,13 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                         valida_campos.desabilitaCampos(jPCertificacao);
                         jTADescReprov.setEnabled(false);
                     }
-                    
+
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Falha ao alterar certificação");
                 }
             }
         }
-            
+
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
@@ -851,7 +860,6 @@ public class InterfaceCertificação extends javax.swing.JFrame {
         //limpa campos
         valida_campos.LimparCampos(jPCertificacao);
         jFTValorCertif.setText(null);
-        jFTValorCertif.setValue(null);
         jTADescReprov.setText("");
 
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
@@ -863,7 +871,7 @@ public class InterfaceCertificação extends javax.swing.JFrame {
         //desabilita campos
         valida_campos.desabilitaCampos(jPCertificacao);
         jTADescReprov.setEnabled(false);
-        
+
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jCBCertificadoraPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBCertificadoraPopupMenuWillBecomeInvisible
@@ -879,7 +887,7 @@ public class InterfaceCertificação extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBCertificadoraPopupMenuWillBecomeVisible
 
     private void jCBProjetoPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBProjetoPopupMenuWillBecomeVisible
-       
+
     }//GEN-LAST:event_jCBProjetoPopupMenuWillBecomeVisible
 
     private void jTBConsultaCertificacoesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaCertificacoesMouseClicked
@@ -888,20 +896,19 @@ public class InterfaceCertificação extends javax.swing.JFrame {
         //recupera a linha clicada
         int linha = jTBConsultaCertificacoes.getSelectedRow();
         Integer id_certificacao = Integer.parseInt(jTBConsultaCertificacoes.getValueAt(linha, 0).toString());
-        
-        if(evt.getClickCount() == 1){
-            
+
+        if (evt.getClickCount() == 1) {
+
             //retorna dados da certificacao
             certificacao.setId_certificacao(id_certificacao);
             dao_certificacao.retornardados(certificacao);
             jTAConsultaDescReprov.setText(certificacao.getDesc_reprov());
-            
-        }else
-        if (evt.getClickCount() == 2){
+
+        } else if (evt.getClickCount() == 2) {
 
             //Limpa os campos da tela componente
             valida_campos.LimparCampos(jPCertificacao);
-          
+
             //desabilita campos
             valida_campos.desabilitaCampos(jPCertificacao);
 
@@ -973,14 +980,13 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                 //Tira aspas simples da string para evitar código sql
                 valida_campos.IgnoraSQL(jTFFiltro);
 
-              
-                    //Combobox buscar por: geral
-                    switch(jCBBuscarPor.getSelectedIndex()){
-                        case 0:
-                            //Consulta geral de componentes
-                            dao_certificacao.consultaGeral(certificacao);
-                            break;
-                        case 1:
+                //Combobox buscar por: geral
+                switch (jCBBuscarPor.getSelectedIndex()) {
+                    case 0:
+                        //Consulta geral de componentes
+                        dao_certificacao.consultaGeral(certificacao);
+                        break;
+                    case 1:
                         //Consulta geral de componentes por código
                         try {
                             id_busca = Integer.parseInt(jTFFiltro.getText());
@@ -991,22 +997,22 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                             jTFFiltro.grabFocus();
                         }
                         break;
-                        case 2:
+                    case 2:
                         //Consulta geral de componentes pela descrição
                         ds_busca = jTFFiltro.getText();
-                        if(!ds_busca.replace(" ", "").equals("")){
+                        if (!ds_busca.replace(" ", "").equals("")) {
                             certificacao.setDescricao(ds_busca);
                             dao_certificacao.consultaGeralDescricao(certificacao);
-                        }else{
+                        } else {
                             JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
                             jTFFiltro.grabFocus();
                         }
                         break;
-                    }
+                }
             }
             //Preenche na JTABLE os dados dos componentes cadastrados
-            Jtable.PreencherJtableGenerico(jTBConsultaCertificacoes, new String[]{"id_certificacao", "certificacao.descricao", "id_pessoa","pessoa.nome","id_norma", "norma.titulo",
-                "id_projeto", "projeto.descricao","versao_projeto.versao","resultado", "data_ensaio","certificacao.valor","certificacao.data_cadastro","certificacao.data_alter"}, certificacao.getRetorno());
+            Jtable.PreencherJtableGenerico(jTBConsultaCertificacoes, new String[]{"id_certificacao", "certificacao.descricao", "id_pessoa", "pessoa.nome", "id_norma", "norma.titulo",
+                "id_projeto", "projeto.descricao", "versao_projeto.versao", "resultado", "data_ensaio", "certificacao.valor", "certificacao.data_cadastro", "certificacao.data_alter"}, certificacao.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBConsultaCertificacoes);
         } else {
             JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar certificações no sistema");
@@ -1034,15 +1040,15 @@ public class InterfaceCertificação extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBNormaPopupMenuWillBecomeVisible
 
     private void jCBProjetoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBProjetoPopupMenuWillBecomeInvisible
-         if(jCBProjeto.getSelectedIndex() > 0){
-          
+        if (jCBProjeto.getSelectedIndex() > 0) {
+
             versao.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
             //consulta versões para preencher na combobox de versões
             dao_versao.consultaCodigo(versao);
             array_versoes = combo.PreencherCombo(jCBVersao, "versao", versao.getRetorno(), "cod_vers_projeto");
             //seta no array da classe de versoes a lista de versoes listadas na combo
             versao.setArray_versoes(array_versoes);
-       }
+        }
     }//GEN-LAST:event_jCBProjetoPopupMenuWillBecomeInvisible
 
     private void jBTNovoMaterialActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoMaterialActionPerformed
@@ -1053,30 +1059,30 @@ public class InterfaceCertificação extends javax.swing.JFrame {
             tela.setDescricao("Todas telas");
             tela.setId_tela(1);
             dao_tela.incluir(tela);
-            
+
             //Inclui a a tela de Pessoas
             tela.setDescricao("Pessoas");
             tela.setId_tela(2);
             dao_tela.incluir(tela);
-            
+
             //Armazena dados de acesso da tela para verificar permissões
             acesso.setId_tela(2);
             acesso.setNome_tela("Pessoas");
-            
+
             //se naõ for gerente
-            if(acesso.getIn_gerente() == 0){
+            if (acesso.getIn_gerente() == 0) {
                 //retorna as permissoes de acesso do usuario  
                 dao_permissao.retornaDadosPermissao(acesso, permissao);
-            } 
-          
-           //Verifica se o usuario possui permissao para acessar essa tela
-           if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
+            }
+
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("acesso", acesso, permissao) == true) {
                 //Traz para tela a tela de cadastro de pessoas 
                 new InterfacePessoa().setVisible(true);
-           }else{
-               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
-           }
-            
+            } else {
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela");
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -1084,54 +1090,54 @@ public class InterfaceCertificação extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTNovoMaterialActionPerformed
 
     private void jBTNovoMaterial1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTNovoMaterial1ActionPerformed
-         try {
+        try {
             //atualiza dados do usuario logado
             dao_acesso.retornaUsuarioLogado(acesso);
-            
+
             //Inclui a opção todas telas como primeira opção
             tela.setDescricao("Todas telas");
             tela.setId_tela(1);
             dao_tela.incluir(tela);
-            
+
             //Inclui a tela de Projetos
             tela.setDescricao("Normas");
             tela.setId_tela(15);
             dao_tela.incluir(tela);
-            
+
             //Armazena dados de acesso da tela para verificar permissões
             acesso.setId_tela(15);
             acesso.setNome_tela("Normas");
-            
+
             //se naõ for gerente
-            if(acesso.getIn_gerente() == 0){
+            if (acesso.getIn_gerente() == 0) {
                 //retorna as permissoes de acesso do usuario  
                 dao_permissao.retornaDadosPermissao(acesso, permissao);
-            } 
-          
-           //Verifica se o usuario possui permissao para acessar essa tela
-           if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
+            }
+
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("acesso", acesso, permissao) == true) {
                 //Traz para tela a tela de cadastro de pessoas 
                 new InterfaceNorma().setVisible(true);
-           }else{
-               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
-           }
-            
+            } else {
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela");
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(InterfaceNorma.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jBTNovoMaterial1ActionPerformed
 
     private void jCBResultadoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBResultadoPopupMenuWillBecomeInvisible
-        if(jCBResultado.getSelectedIndex() == 2){
+        if (jCBResultado.getSelectedIndex() == 2) {
             jTADescReprov.setEnabled(true);
-        }else{
+        } else {
             jTADescReprov.setText("");
             jTADescReprov.setEnabled(false);
         }
     }//GEN-LAST:event_jCBResultadoPopupMenuWillBecomeInvisible
 
     private void jFTDataEnsaioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTDataEnsaioFocusLost
-        
+
         String data_fornec;
 
         //pega a data do campo 
@@ -1233,12 +1239,12 @@ public class InterfaceCertificação extends javax.swing.JFrame {
     private javax.swing.JTextField jTFIDCertificacao;
     // End of variables declaration//GEN-END:variables
 
- public Certificacao getCertificacao(){
-        
+    public Certificacao getCertificacao() {
+
         certificacao = new Certificacao();
-        
+
         Date data_atual = new Date(System.currentTimeMillis());
-        
+
         int id_certificacao = Integer.parseInt(jTFIDCertificacao.getText());
         Double valor = Double.parseDouble(jFTValorCertif.getText().replace(".", "").replace(",", "."));
 
@@ -1247,46 +1253,45 @@ public class InterfaceCertificação extends javax.swing.JFrame {
         certificacao.setId_certificadora(certificadora.getArray_pessoas(jCBCertificadora.getSelectedIndex() - 1));
         certificacao.setId_norma(norma.getArray_norma(jCBNorma.getSelectedIndex() - 1));
         certificacao.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
-        
+
         certificacao.setCod_versao_projeto(versao.getArray_versoes(jCBVersao.getSelectedIndex() - 1));
         certificacao.setValor(valor);
         certificacao.setData_ensaio(data.stringParaSQLDate(jFTDataEnsaio.getText()));
         certificacao.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
-        if(jCBResultado.getSelectedItem().equals("Aprovado")){
-             certificacao.setResultado("A");
-        }else if(jCBResultado.getSelectedItem().equals("Reprovado")){
+        if (jCBResultado.getSelectedItem().equals("Aprovado")) {
+            certificacao.setResultado("A");
+        } else if (jCBResultado.getSelectedItem().equals("Reprovado")) {
             certificacao.setDesc_reprov(jTADescReprov.getText());
             certificacao.setResultado("R");
         }
-        
+
         certificacao.setData_alter(data_atual);
 
         return certificacao;
     }
- 
- public void setcompCertificacao(){
-     
+
+    public void setcompCertificacao() {
+
         jTFIDCertificacao.setText(String.valueOf(certificacao.getId_certificacao()));
         jTFDescrição.setText(certificacao.getDescricao());
         jCBCertificadora.setSelectedItem(certificacao.getDs_certificadora());
         jFTDataEnsaio.setText(data.organizaData(certificacao.getData_ensaio()));
         jCBProjeto.setSelectedItem(certificacao.getDs_projeto());
-         
-         
+
         versao.setId_projeto(certificacao.getId_projeto());
         //consulta versões para preencher na combobox de versões
         dao_versao.consultaCodigo(versao);
         array_versoes = combo.PreencherCombo(jCBVersao, "versao", versao.getRetorno(), "cod_vers_projeto");
         //seta no array da classe de versoes a lista de versoes listadas na combo
         versao.setArray_versoes(array_versoes);
-         
+
         jCBVersao.setSelectedItem(certificacao.getVersao());
         jCBNorma.setSelectedItem(certificacao.getDs_norma());
-        if(certificacao.getResultado().equals("A")){
+        if (certificacao.getResultado().equals("A")) {
             jCBResultado.setSelectedIndex(1);
-        }else if(certificacao.getResultado().equals("R")){
+        } else if (certificacao.getResultado().equals("R")) {
             jCBResultado.setSelectedIndex(2);
-        }else{
+        } else {
             jCBResultado.setSelectedIndex(0);
         }
         jFTValorCertif.setText(String.valueOf(certificacao.getValor()).replace(".", ","));

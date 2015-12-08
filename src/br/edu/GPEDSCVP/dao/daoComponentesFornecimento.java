@@ -12,6 +12,7 @@ import br.edu.GPEDSCVP.util.FormatarData;
 import br.edu.GPEDSCVP.util.Rotinas;
 import br.edu.GPEDSCVP.util.UltimaSequencia;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.DecimalFormat;
@@ -28,6 +29,7 @@ public class daoComponentesFornecimento {
     ConexaoBanco conecta_banco;
     UltimaSequencia ultima;
     daoMoeda dao_moeda = new daoMoeda();
+    daoComponente dao_comp = new daoComponente();
     FormatarData data = new FormatarData();
     
     public daoComponentesFornecimento()

@@ -33,410 +33,414 @@ import javax.swing.text.NumberFormatter;
  *
  * @author Willys
  */
-
 //Método para desabilitar todos os campos contidos no container passado por parametro
 public class ValidaCampos {
-    
+
     ConexaoBanco conecta_banco;
     public ResultSetMetaData metaData;
     //Constantes do método de validação para cpf e cnpj
     private static final int[] pesoCPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};
     private static final int[] pesoCNPJ = {6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2};
-    
+
     public ValidaCampos()
-        throws SQLException
-    {
+            throws SQLException {
         conecta_banco = new ConexaoBanco();
     }
-       
-    public void desabilitaCampos(Container container){
-        
-        Component components[] = container.getComponents();
-           for (Component component : components){   
-               //Desabilita todas JTextField do container
-               if (component instanceof JTextField){
-                   JTextField field = (JTextField) component;
-                   if (field.isEnabled()){
-                        if ((field.getText().equals(""))){
-                            field.setEnabled(false);
-                        }
-                   }
-               } 
-               //Desabilita botoes do container
-               if (component instanceof JButton){
-                   JButton button = (JButton) component;
-                   if (button.isEnabled()){
-                        button.setEnabled(false);
-                   }
-               } 
-               
-               //Desabilita todas JFormattedTextField do container
-               if (component instanceof JFormattedTextField){
-                   JFormattedTextField field = (JFormattedTextField) component;
-                   if (field.isEnabled()){
-                        field.setEnabled(false); 
-                   }    
-               }
-               //Desabilita todos JRadioButton do container
-               if (component instanceof JRadioButton){
-                    JRadioButton JRBT = (JRadioButton) component; 
-                    if(JRBT.isEnabled()){
-                        JRBT.setEnabled(false);
-                   }
-               }
-               
-               //Desabilita todos JCheckBox do container
-               if (component instanceof JCheckBox){
-                    JCheckBox JCB = (JCheckBox) component; 
-                    if(JCB.isEnabled()){
-                        JCB.setEnabled(false);
-                   }
-               }
-               
-               if (component instanceof JComboBox){
-                    JComboBox JCB = (JComboBox) component; 
-                    if(JCB.isEnabled()){
-                        JCB.setEnabled(false);
-                   }
-               }
-               
-                if (component instanceof JTextArea){
-                    JTextArea JTA = (JTextArea) component; 
-                    if(JTA.isEnabled()){
-                        JTA.setEnabled(false);
-                   }
-               }
-           }
-     }
-    
-    public void habilitaCampos(Container container){
-        
-        Component components[] = container.getComponents();
-           for (Component component : components){   
-               //Habilita todas JTextField do container
-               if (component instanceof JTextField){
-                   JTextField field = (JTextField) component;
-                   if (!field.isEnabled()){
-                        field.setEnabled(true); 
-                   }
-               } 
-               //Habilita todas JFormattedTextField do container
-               if (component instanceof JFormattedTextField){
-                   JFormattedTextField field = (JFormattedTextField) component;
-                   if (!field.isEnabled()){
-                        field.setEnabled(true); 
-                   }    
-               }
-               
-               //Habilita todos botoes do container
-               if (component instanceof JButton){
-                   JButton button = (JButton) component;
-                   if (!button.isEnabled()){
-                        button.setEnabled(true); 
-                   }    
-               }
-               //Habilita todos JRadioButton do container
-               if (component instanceof JRadioButton){
-                    JRadioButton JRBT = (JRadioButton) component; 
-                    if(!JRBT.isEnabled()){
-                        JRBT.setEnabled(true);
-                   }
-               }
-               
-               //Habilita todos JCheckBox do container
-               if (component instanceof JCheckBox){
-                    JCheckBox JCB = (JCheckBox) component; 
-                    if(!JCB.isEnabled()){
-                        JCB.setEnabled(true);
-                   }
-               }
-               //Habilita todos JComboBox do container
-               if (component instanceof JComboBox){
-                    JComboBox JCB = (JComboBox) component; 
-                    if(!JCB.isEnabled()){
-                        JCB.setEnabled(true);
-                   }
-               }
-           }
-     }
-    
-    //Método para limpar os campos de um container
-        public void LimparCampos(Container container) {
+
+    public void desabilitaCampos(Container container) {
+
         Component components[] = container.getComponents();
         for (Component component : components) {
-             if (component instanceof JTextField) {
+            //Desabilita todas JTextField do container
+            if (component instanceof JTextField) {
+                JTextField field = (JTextField) component;
+                if (field.isEnabled()) {
+                    if ((field.getText().equals(""))) {
+                        field.setEnabled(false);
+                    }
+                }
+            }
+            //Desabilita botoes do container
+            if (component instanceof JButton) {
+                JButton button = (JButton) component;
+                if (button.isEnabled()) {
+                    button.setEnabled(false);
+                }
+            }
+
+            //Desabilita todas JFormattedTextField do container
+            if (component instanceof JFormattedTextField) {
+                JFormattedTextField field = (JFormattedTextField) component;
+                if (field.isEnabled()) {
+                    field.setEnabled(false);
+                }
+            }
+            //Desabilita todos JRadioButton do container
+            if (component instanceof JRadioButton) {
+                JRadioButton JRBT = (JRadioButton) component;
+                if (JRBT.isEnabled()) {
+                    JRBT.setEnabled(false);
+                }
+            }
+
+            //Desabilita todos JCheckBox do container
+            if (component instanceof JCheckBox) {
+                JCheckBox JCB = (JCheckBox) component;
+                if (JCB.isEnabled()) {
+                    JCB.setEnabled(false);
+                }
+            }
+
+            if (component instanceof JComboBox) {
+                JComboBox JCB = (JComboBox) component;
+                if (JCB.isEnabled()) {
+                    JCB.setEnabled(false);
+                }
+            }
+
+            if (component instanceof JTextArea) {
+                JTextArea JTA = (JTextArea) component;
+                if (JTA.isEnabled()) {
+                    JTA.setEnabled(false);
+                }
+            }
+        }
+    }
+
+    public void habilitaCampos(Container container) {
+
+        Component components[] = container.getComponents();
+        for (Component component : components) {
+            //Habilita todas JTextField do container
+            if (component instanceof JTextField) {
+                JTextField field = (JTextField) component;
+                if (!field.isEnabled()) {
+                    field.setEnabled(true);
+                }
+            }
+            //Habilita todas JFormattedTextField do container
+            if (component instanceof JFormattedTextField) {
+                JFormattedTextField field = (JFormattedTextField) component;
+                if (!field.isEnabled()) {
+                    field.setEnabled(true);
+                }
+            }
+
+            //Habilita todos botoes do container
+            if (component instanceof JButton) {
+                JButton button = (JButton) component;
+                if (!button.isEnabled()) {
+                    button.setEnabled(true);
+                }
+            }
+            //Habilita todos JRadioButton do container
+            if (component instanceof JRadioButton) {
+                JRadioButton JRBT = (JRadioButton) component;
+                if (!JRBT.isEnabled()) {
+                    JRBT.setEnabled(true);
+                }
+            }
+
+            //Habilita todos JCheckBox do container
+            if (component instanceof JCheckBox) {
+                JCheckBox JCB = (JCheckBox) component;
+                if (!JCB.isEnabled()) {
+                    JCB.setEnabled(true);
+                }
+            }
+            //Habilita todos JComboBox do container
+            if (component instanceof JComboBox) {
+                JComboBox JCB = (JComboBox) component;
+                if (!JCB.isEnabled()) {
+                    JCB.setEnabled(true);
+                }
+            }
+        }
+    }
+
+    //Método para limpar os campos de um container
+    public void LimparCampos(Container container) {
+        Component components[] = container.getComponents();
+        for (Component component : components) {
+            if (component instanceof JTextField) {
                 JTextField field = (JTextField) component;
                 field.setText("");
-             }
-             else if ((component instanceof JComboBox)) {
+            } else if ((component instanceof JComboBox)) {
                 JComboBox field = (JComboBox) component;
                 field.removeAllItems();
-            } else if ((component instanceof JRadioButton)){
+            } else if ((component instanceof JRadioButton)) {
                 JRadioButton field = (JRadioButton) component;
                 field.setSelected(false);
-            } else if ((component instanceof JCheckBox )){
+            } else if ((component instanceof JCheckBox)) {
                 JCheckBox field = (JCheckBox) component;
                 field.setSelected(false);
-            }else if (component instanceof JFormattedTextField) {
+            } else if (component instanceof JFormattedTextField) {
                 JFormattedTextField field = (JFormattedTextField) component;
                 field.setText("");
                 field.setValue(null);
             }
         }
     }
-       
+
     //Método para validar se os campos obrigatórios estão preenchidos     
-    public int validacamposobrigatorios(Container container, String tabela){
-         
-        Integer retorno =0;
-        
+    public int validacamposobrigatorios(Container container, String tabela) {
+
+        Integer retorno = 0;
+
         conecta_banco.executeSQL("select * from " + tabela + " LIMIT 1");
-        try{           
+        try {
             metaData = conecta_banco.resultset.getMetaData();
             int conta = metaData.getColumnCount();
-               for ( int i = 1; i <= conta; i++){
-                   String atributo = metaData.getColumnName(i);
-                   int situacao = metaData.isNullable(i);
-                   if (situacao == 0){
-                        Component components[] = container.getComponents();
-                        for (Component component : components){
-                            if (component instanceof JTextField){
-                                JTextField field = (JTextField) component;
-                                if (field.isEnabled()){
-                                    //Remove aspas simples do texto da String para evitar codigos SQL
-                                    field.setText(field.getText().replace("'", ""));
+            for (int i = 1; i <= conta; i++) {
+                String atributo = metaData.getColumnName(i);
+                int situacao = metaData.isNullable(i);
+                if (situacao == 0) {
+                    Component components[] = container.getComponents();
+                    for (Component component : components) {
+                        if (component instanceof JTextField) {
+                            JTextField field = (JTextField) component;
+                            if (field.isEnabled()) {
+                                //Remove aspas simples do texto da String para evitar codigos SQL
+                                field.setText(field.getText().replace("'", ""));
 
-                                    if (field.getName().equals(atributo)){
-                                        if (field.getText().equals("") || (field.getText().equals("  /  /    ")) || (field.getText().equals("  .   .   /    -  ")) ||
-                                        (field.getText().equals("   .   .   -  ")) ||(field.getText().equals("  .   .   - ")) ||(field.getText().equals("(  )    -    ")) || 
-                                        (field.getText().equals("     -   ")) || (field.getText().equals("(  )         "))|| (field.getText().equals("   "))|| (field.getText().equals("  ")) ||
-                                        field.getText().equals("  /  /       :  :  "))  {
-                                        JOptionPane.showMessageDialog(null, "campo: "+ field.getToolTipText()+ " é obrigatorio");
-                                        
-                                        field.grabFocus(); 
+                                if (field.getName().equals(atributo)) {
+                                    if (field.getText().equals("") || (field.getText().equals("  /  /    ")) || (field.getText().equals("  .   .   /    -  "))
+                                            || (field.getText().equals("   .   .   -  ")) || (field.getText().equals("  .   .   - ")) || (field.getText().equals("(  )    -    "))
+                                            || (field.getText().equals("     -   ")) || (field.getText().equals("(  )         ")) || (field.getText().equals("   ")) || (field.getText().equals("  "))
+                                            || field.getText().equals("  /  /       :  :  ")) {
+                                        JOptionPane.showMessageDialog(null, "campo: " + field.getToolTipText() + " é obrigatorio");
+
+                                        field.grabFocus();
                                         retorno = 1;
                                         break;
-                                        }
-                                    }                                 
-                                }
-                            }else if (component instanceof JComboBox){
-                                JComboBox combo = (JComboBox) component;
-                                if (combo.isEnabled()){
-                                    if (combo.getName().equals(atributo)){
-                                        if(combo.getSelectedIndex() == 0){
-                                            JOptionPane.showMessageDialog(null, "Caixa de seleção: "+ combo.getToolTipText()+ " é obrigatorio");
-                                            retorno = 1;
-                                            break;
-                                        }
                                     }
                                 }
-                                
                             }
-                        }                   
+                        } else if (component instanceof JComboBox) {
+                            JComboBox combo = (JComboBox) component;
+                            if (combo.isEnabled()) {
+                                if (combo.getName().equals(atributo)) {
+                                    if (combo.getSelectedIndex() == 0) {
+                                        JOptionPane.showMessageDialog(null, "Caixa de seleção: " + combo.getToolTipText() + " é obrigatorio");
+                                        retorno = 1;
+                                        break;
+                                    }
+                                }
+                            }
+
+                        }
                     }
-               }
-           }catch (SQLException ex){   
-           }                      
+                }
+            }
+        } catch (SQLException ex) {
+        }
         return retorno;
     }
-    
+
     //Método para criar e retornar uma mascara(JTextField) por parâmetro 
     public static MaskFormatter formata(String mascara) {
-   
-       try {
-            MaskFormatter mascara_cpf = new MaskFormatter(mascara);   
+
+        try {
+            MaskFormatter mascara_cpf = new MaskFormatter(mascara);
             mascara_cpf.setValidCharacters("0123456789");
             //tf_CPF = new javax.swing.JFormattedTextField(mascara_cpf);
             return mascara_cpf;
-      }
-      catch (Exception error_mask) {
-          JOptionPane.showMessageDialog(null,"Erro: "+error_mask);
-      }
-       return null;
+        } catch (Exception error_mask) {
+            JOptionPane.showMessageDialog(null, "Erro: " + error_mask);
+        }
+        return null;
     }
-    
-    
-     //Método para formatar um field para receber valores monetários
+
+    //Método para formatar um field para receber valores monetários
     public static void formataMonetario(JFormattedTextField field) {
-   
-       try {
-           
-            DecimalFormat dFormat = new DecimalFormat("#,###,##0.00") ;
-            NumberFormatter formatter = new NumberFormatter(dFormat) ;
-            formatter.setFormat(dFormat) ;
-            formatter.setAllowsInvalid(false) ; 
-           
-           field.setFormatterFactory ( new DefaultFormatterFactory ( formatter )) ;
 
-      }
-      catch (Exception error_mask) {
-          JOptionPane.showMessageDialog(null,"Erro: "+error_mask);
-      }
+        try {
+            DecimalFormat dFormat = new DecimalFormat("#,###,###,##0.00");
+            NumberFormatter formatter = new NumberFormatter(dFormat);
+            formatter.setFormat(dFormat);
+            formatter.setAllowsInvalid(false);
+            
+            field.setFormatterFactory(new DefaultFormatterFactory(formatter));
+            field.addKeyListener( new ValorLimitadoListener(0,999999999));
+            
+        } catch (Exception error_mask) {
+            JOptionPane.showMessageDialog(null, "Erro: " + error_mask);
+        }
     }
-    
-     //Método para criar e retornar uma mascara(JTextField) por parâmetro 
-    public static MaskFormatter limitaCaracteres (String mascara) {
-   
-      try {
-        MaskFormatter mascara_string = new MaskFormatter(mascara);   
-        //tf_CPF = new javax.swing.JFormattedTextField(mascara_cpf);
-        return mascara_string;
-      }
-      catch (Exception error_mask) {
-          JOptionPane.showMessageDialog(null,"Erro: "+error_mask);
-      }
-     return null; 
+
+    //Método para criar e retornar uma mascara(JTextField) por parâmetro 
+    public static MaskFormatter limitaCaracteres(String mascara) {
+
+        try {
+            MaskFormatter mascara_string = new MaskFormatter(mascara);
+            //tf_CPF = new javax.swing.JFormattedTextField(mascara_cpf);
+            return mascara_string;
+        } catch (Exception error_mask) {
+            JOptionPane.showMessageDialog(null, "Erro: " + error_mask);
+        }
+        return null;
     }
-    
+
     //Método para limpar dados de uma Jtable
-    public void LimparJtable(JTable tabela){
+    public void LimparJtable(JTable tabela) {
 
-        DefaultTableModel tableModel =(DefaultTableModel) tabela.getModel();  
+        DefaultTableModel tableModel = (DefaultTableModel) tabela.getModel();
         tableModel.setNumRows(0);
     }
-    
+
     //Método para verificar se a Jtable possui registros
-    public int VerificaJtable(JTable tabela){
+    public int VerificaJtable(JTable tabela) {
         int i;
         boolean possui_regitro = false;
         Integer exc;
-         if (tabela.getRowCount()>0){
-             System.out.println("total colunas " +tabela.getColumnCount());
-             for(i = 0; i < tabela.getRowCount(); i++){
-                 exc = Integer.parseInt(tabela.getValueAt(i, tabela.getColumnCount()-1).toString());
-                 if(exc == 0){
-                     possui_regitro = true;
-                 }
-             }
-             if(possui_regitro){
-                 return 1;      
-             }else{
-                 return 0;  
-             }
-  
-         }else
-             return 0;
+        if (tabela.getRowCount() > 0) {
+            System.out.println("total colunas " + tabela.getColumnCount());
+            for (i = 0; i < tabela.getRowCount(); i++) {
+                exc = Integer.parseInt(tabela.getValueAt(i, tabela.getColumnCount() - 1).toString());
+                if (exc == 0) {
+                    possui_regitro = true;
+                }
+            }
+            if (possui_regitro) {
+                return 1;
+            } else {
+                return 0;
+            }
+
+        } else {
+            return 0;
+        }
     }
-    
+
     //Método para calcular digito verificador 
     private static int calcularDigito(String str, int[] peso) {
         int soma = 0;
-        for (int indice=str.length()-1, digito; indice >= 0; indice-- ) {
-            digito = Integer.parseInt(str.substring(indice,indice+1));
-            soma += digito*peso[peso.length-str.length()+indice];
+        for (int indice = str.length() - 1, digito; indice >= 0; indice--) {
+            digito = Integer.parseInt(str.substring(indice, indice + 1));
+            soma += digito * peso[peso.length - str.length() + indice];
         }
         soma = 11 - soma % 11;
         return soma > 9 ? 0 : soma;
     }
+
     //Método para validar Cpf
+
     public static boolean ValidaCpf(String cpf) {
-        
+
         cpf = cpf.replace(".", "");
         cpf = cpf.replace("-", "");
         cpf = cpf.replace("/", "");
         cpf = cpf.replace(" ", "");
-        
-        if((cpf.equals("11111111111")) ||
-        (cpf.equals("22222222222")) ||
-        (cpf.equals("33333333333")) ||
-        (cpf.equals("44444444444")) ||
-        (cpf.equals("55555555555")) ||
-        (cpf.equals("66666666666")) ||
-        (cpf.equals("77777777777")) ||
-        (cpf.equals("88888888888")) ||
-        (cpf.equals("99999999999"))){
+
+        if ((cpf.equals("11111111111"))
+                || (cpf.equals("22222222222"))
+                || (cpf.equals("33333333333"))
+                || (cpf.equals("44444444444"))
+                || (cpf.equals("55555555555"))
+                || (cpf.equals("66666666666"))
+                || (cpf.equals("77777777777"))
+                || (cpf.equals("88888888888"))
+                || (cpf.equals("99999999999"))) {
             return false;
         }
-        
-        if ((cpf==null) || (cpf.length()!=11)) return false;
 
-        Integer digito1 = calcularDigito(cpf.substring(0,9), pesoCPF);
-        Integer digito2 = calcularDigito(cpf.substring(0,9) + digito1, pesoCPF);
-        return cpf.equals(cpf.substring(0,9) + digito1.toString() + digito2.toString());
+        if ((cpf == null) || (cpf.length() != 11)) {
+            return false;
+        }
+
+        Integer digito1 = calcularDigito(cpf.substring(0, 9), pesoCPF);
+        Integer digito2 = calcularDigito(cpf.substring(0, 9) + digito1, pesoCPF);
+        return cpf.equals(cpf.substring(0, 9) + digito1.toString() + digito2.toString());
     }
-   //Método para validar Cnpj
+
+    //Método para validar Cnpj
+
     public static boolean ValidaCnpj(String cnpj) {
-        
+
         cnpj = cnpj.replace(".", "");
         cnpj = cnpj.replace("-", "");
         cnpj = cnpj.replace("/", "");
         cnpj = cnpj.replace(" ", "");
 
-        if((cnpj.equals("11111111111111")) ||
-        (cnpj.equals("22222222222222")) ||
-        (cnpj.equals("33333333333333")) ||
-        (cnpj.equals("44444444444444")) ||
-        (cnpj.equals("55555555555555")) ||
-        (cnpj.equals("66666666666666")) ||
-        (cnpj.equals("77777777777777")) ||
-        (cnpj.equals("88888888888888")) ||
-        (cnpj.equals("99999999999999"))){
+        if ((cnpj.equals("11111111111111"))
+                || (cnpj.equals("22222222222222"))
+                || (cnpj.equals("33333333333333"))
+                || (cnpj.equals("44444444444444"))
+                || (cnpj.equals("55555555555555"))
+                || (cnpj.equals("66666666666666"))
+                || (cnpj.equals("77777777777777"))
+                || (cnpj.equals("88888888888888"))
+                || (cnpj.equals("99999999999999"))) {
             return false;
         }
-        if ((cnpj==null)||(cnpj.length()!=14)) return false;
+        if ((cnpj == null) || (cnpj.length() != 14)) {
+            return false;
+        }
 
-        Integer digito1 = calcularDigito(cnpj.substring(0,12), pesoCNPJ);
-        Integer digito2 = calcularDigito(cnpj.substring(0,12) + digito1, pesoCNPJ);
-        return cnpj.equals(cnpj.substring(0,12) + digito1.toString() + digito2.toString());
+        Integer digito1 = calcularDigito(cnpj.substring(0, 12), pesoCNPJ);
+        Integer digito2 = calcularDigito(cnpj.substring(0, 12) + digito1, pesoCNPJ);
+        return cnpj.equals(cnpj.substring(0, 12) + digito1.toString() + digito2.toString());
     }
+
     //Verifica se data é válida
+
     public static boolean ValidaDataNasc(String data) {
-        FormatarData formata_data = new FormatarData(); 
-        Date data_atual = new Date();  
-       
+        FormatarData formata_data = new FormatarData();
+        Date data_atual = new Date();
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setLenient(false);
         try {
             Date data_formatada = sdf.parse(data);
-            
+
             int idade = formata_data.calculaIdade(data, "dd/MM/yyyy");
-            if((idade>13) && (idade < 80)){
+            if ((idade > 13) && (idade < 80)) {
                 //Data válida
                 return true;
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Data fora do limite, favor verificar a data");
                 return false;
             }
 
-        } catch(ParseException e){
+        } catch (ParseException e) {
             // data inválida
             JOptionPane.showMessageDialog(null, "Data inválida, favor verificar a data");
             return false;
-          }
-   }
-    
+        }
+    }
+
     //Verifica se data e hora é válida
     public static boolean ValidaDataHora(String data) {
-        FormatarData formata_data = new FormatarData(); 
+        FormatarData formata_data = new FormatarData();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
         sdf.setLenient(false);
         try {
             Date data_formatada = sdf.parse(data);
             return true;
-        } catch(ParseException e){
+        } catch (ParseException e) {
             // data inválida
             JOptionPane.showMessageDialog(null, "Data inválida, favor verificar a data");
             return false;
-          }
-   }
-    
+        }
+    }
+
     //Verifica se data e hora é válida
     public static boolean ValidaData(String data) {
-        FormatarData formata_data = new FormatarData(); 
+        FormatarData formata_data = new FormatarData();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setLenient(false);
         try {
             Date data_formatada = sdf.parse(data);
             return true;
-        } catch(ParseException e){
+        } catch (ParseException e) {
             // data inválida
             JOptionPane.showMessageDialog(null, "Data inválida, favor verificar a data");
             return false;
-          }
-   }
-    
+        }
+    }
+
     public static String xss(String texto) {
         if (texto == null) {
             return null;
@@ -461,10 +465,8 @@ public class ValidaCampos {
         }
         return textoXSS.toString();
     }
-    
-    public void IgnoraSQL (JTextField field){
+
+    public void IgnoraSQL(JTextField field) {
         field.setText(field.getText().replace("'", ""));
     }
 }
-
-

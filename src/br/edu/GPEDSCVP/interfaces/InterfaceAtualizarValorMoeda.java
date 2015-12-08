@@ -289,7 +289,7 @@ public class InterfaceAtualizarValorMoeda extends javax.swing.JFrame {
                     try { 
                         //verifica se o valor setado é um valor double
                         Double valor = 0.00;    
-                        valor = Double.parseDouble(table.getValueAt(row, column).toString().replace(",", "."));
+                        valor = Double.parseDouble(table.getValueAt(row, column).toString().replace(".", "").replace(",", "."));
                         if(valor > 0){
                             
                             table.setValueAt(1, row, 5);

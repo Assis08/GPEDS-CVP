@@ -248,12 +248,15 @@ public class ManipulaJtable {
             onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
         }
     }
-    //Método para serar mascara em uma determinada coluna da jtable
+    //Método para setar mascara em uma determinada coluna da jtable
     public void setarMascara(JTable tabela, JFormattedTextField jftmascara, int numColuna){
        
         ValidaCampos valida_campos;
         try {
             valida_campos = new ValidaCampos();
+            //limita numeros monetarios
+            jftmascara.addKeyListener( new ValorLimitadoListener(0,999999999));
+            
             valida_campos.formataMonetario(jftmascara);
         } catch (SQLException ex) {
             Logger.getLogger(ManipulaJtable.class.getName()).log(Level.SEVERE, null, ex);

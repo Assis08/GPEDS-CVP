@@ -37,6 +37,7 @@ import br.edu.GPEDSCVP.util.UltimaSequencia;
 import br.edu.GPEDSCVP.util.ValidaAcesso;
 import br.edu.GPEDSCVP.util.ValidaBotoes;
 import br.edu.GPEDSCVP.util.ValidaCampos;
+import br.edu.GPEDSCVP.util.ValorLimitadoListener;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
@@ -152,14 +153,14 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         valida_campos.formataMonetario(jFTFreteReais);
         valida_campos.formataMonetario(jFTValorImpostos);
         valida_campos.formataMonetario(jFTImpostosReais);
-        valida_campos.formataMonetario(jFTMascaMonetaria);
+       // valida_campos.formataMonetario(jFTMascaMonetaria);
+        
+        //Seta mascara na coluna de valor da jtable
+        Jtable.setarMascara(jTBComponentes, jFTMascaMonetaria,4);
         
         //seta mascara no campo de data
         jFTData.setFormatterFactory(new DefaultFormatterFactory(valida_campos.formata("##/##/#### ##:##:##")));
-
-        //Seta mascara na coluna de valor da jtable
-        Jtable.setarMascara(jTBComponentes, jFTMascaMonetaria,4);
-      
+        
         dao_fornecedor.consultageral(fornecedor);
         //Preenche dados nas ComboBox de fornecedor
         array_fornecedores = combo.PreencherCombo(jCBFornecedor, "nome", fornecedor.getRetorno(), "id_pessoa");
@@ -583,6 +584,11 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         jFTValorImpostos.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
                 jFTValorImpostosFocusLost(evt);
+            }
+        });
+        jFTValorImpostos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jFTValorImpostosActionPerformed(evt);
             }
         });
 
@@ -1470,7 +1476,9 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBFornecimentoStateChanged
 
     private void jFTValorFreteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTValorFreteFocusLost
-         Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());
+        
+        Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());
+        
         if(jFTValorFrete.isEnabled())
         {
             if(!jFTValorFrete.getText().equals("")){
@@ -1481,6 +1489,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 valor = valor.replace(".", "").replace(",", ".");
                 valor_inserido = Double.parseDouble(valor);
                 if(valor_inserido > 0){
+                    
                     valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1),data_fornec);
                     
                 }else{
@@ -1494,9 +1503,18 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                     jFTValorFrete.setText(null);
                     jFTValorFrete.setValue(null);
                 }else{
-                    jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
-                }
                     
+                    if(valor_convertido >= 999999999){
+                        JOptionPane.showMessageDialog(null, "Valor convertido excede o valor máximo!");
+                        jFTValorFrete.setValue(null);
+                        jFTValorFrete.setText(null);
+                        jFTFreteReais.setValue(null);
+                        jFTFreteReais.setText(null);
+                        jFTValorFrete.grabFocus();
+                    }else{
+                        jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+                    }
+                }   
             }
         }
     }//GEN-LAST:event_jFTValorFreteFocusLost
@@ -1528,7 +1546,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                     jFTValorImpostos.setValue(null);
                     jFTValorImpostos.setText(null);
                 }else{
-                    jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+                    if(valor_convertido >= 999999999){
+                        JOptionPane.showMessageDialog(null, "Valor convertido excede o valor máximo!");
+                        jFTValorImpostos.setValue(null);
+                        jFTValorImpostos.setText(null);
+                        jFTImpostosReais.setValue(null);
+                        jFTImpostosReais.setText(null);
+                        jFTValorImpostos.grabFocus();
+                    }else{
+                        jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+                    }
                 }
             }
         }
@@ -1556,9 +1583,20 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             if(!jFTValorImpostos.getText().equals("")){
                 double valor_inserido;
                 double valor_convertido;
-                valor_inserido = Double.parseDouble(jFTValorImpostos.getText().replace(",", "."));
+                valor_inserido = Double.parseDouble(jFTValorImpostos.getText().replace(".", "").replace(",", "."));
                 valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1),data_fornec);
-                jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+                
+                if(valor_convertido >= 999999999){
+                        JOptionPane.showMessageDialog(null, "Valor convertido excede o valor máximo!");
+                        jFTValorImpostos.setValue(null);
+                        jFTValorImpostos.setText(null);
+                        jFTImpostosReais.setValue(null);
+                        jFTImpostosReais.setText(null);
+                        jFTValorImpostos.grabFocus();
+                }else{
+                    jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+                }
+              
             }
         }else{
             jFTValorImpostos.setEnabled(false);
@@ -1577,9 +1615,19 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             if(!jFTValorFrete.getText().equals("")){
                 double valor_inserido;
                 double valor_convertido;
-                valor_inserido = Double.parseDouble(jFTValorFrete.getText().replace(",", "."));
+                valor_inserido = Double.parseDouble(jFTValorFrete.getText().replace(".", "").replace(",", "."));
                 valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1),data_fornec);
-                jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+                
+                if(valor_convertido >= 999999999){
+                    JOptionPane.showMessageDialog(null, "Valor convertido excede o valor máximo!");
+                    jFTValorFrete.setValue(null);
+                    jFTValorFrete.setText(null);
+                    jFTFreteReais.setValue(null);
+                    jFTFreteReais.setText(null);
+                    jFTValorFrete.grabFocus();
+                }else{
+                    jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
+                }
             }
         }else{
             jFTValorFrete.setEnabled(false);
@@ -1678,6 +1726,10 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private void jFTValorFreteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFTValorFreteKeyPressed
       
     }//GEN-LAST:event_jFTValorFreteKeyPressed
+
+    private void jFTValorImpostosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFTValorImpostosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jFTValorImpostosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1895,7 +1947,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         System.out.println("Coluna:" + column + "Valor novo: " + newValue + " Valor antigo: " + oldValue);
         if (table == jTBComponentes) {
             Integer exc = Integer.parseInt(table.getValueAt(row, 10).toString());
-             
+            Integer id_comp = Integer.parseInt(table.getValueAt(row, 2).toString());
             //se não for um item excluido, deixa manipular valores
             if(exc == 0){
                 
@@ -1907,7 +1959,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                             //verifica se o valor setado é um valor double
                             Integer qntd = Integer.parseInt(table.getValueAt(row, column).toString());
                             Integer restante = Integer.parseInt(table.getValueAt(row, 8).toString());
-                            Double valor_unit = Double.parseDouble(table.getValueAt(row, 4).toString().replace(",", "."));
+                            Double valor_unit = Double.parseDouble(table.getValueAt(row, 4).toString().replace(".", "").replace(",", "."));
                             Double total;
                             if(qntd > 0){
                                 //recalcula o total
@@ -1939,21 +1991,26 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                     if(column == 4){
 
                          try { 
-                            //verifica se o valor setado é um valor double
-                            Integer qntd = Integer.parseInt(table.getValueAt(row, 7).toString());
-                            Double valor_unit = Double.parseDouble(table.getValueAt(row, column).toString().replace(",", "."));
-                            Double total;
-                            if(valor_unit > 0.00){
-                                //table.setValueAt(qntd, row, column);
-                                //recalcula o total
-                                total = qntd * valor_unit;
-                                table.setValueAt(conversao.doubleParaObjectDecimalFormat(total), row, 9);
+                            //verifica se o componente possui composição, se sim, não deixa alterar o valor
+                            componente.setId_componente(id_comp);
+                            if(dao_componente.verificaExisteComposicao(componente) == false){
+                                //verifica se o valor setado é um valor double
+                                Integer qntd = Integer.parseInt(table.getValueAt(row, 7).toString());
+                                Double valor_unit = Double.parseDouble(table.getValueAt(row, column).toString().replace(".", "").replace(",", "."));
+                                Double total;
+                                if(valor_unit > 0.00){
+                                    //table.setValueAt(qntd, row, column);
+                                    //recalcula o total
+                                    total = qntd * valor_unit;
+                                    table.setValueAt(conversao.doubleParaObjectDecimalFormat(total), row, 9);
+                                }else{
+                                    JOptionPane.showMessageDialog(null, "O Valor unitário deve ser maior que zero!");
+                                    table.setValueAt(oldValue, row, column);
+                                }
                             }else{
-                                JOptionPane.showMessageDialog(null, "O Valor unitário deve ser maior que zero!");
+                                JOptionPane.showMessageDialog(null, "Impossível aterar o valor unitário!\nEste componente é composto por uma composição, o valor unitário é calculado referente ao valor de sua composição");  
                                 table.setValueAt(oldValue, row, column);
                             }
-
-
                         } catch (Exception e) {
                             //se não for double, emite a mensagem e retorna para o valor que estava
                             JOptionPane.showMessageDialog(null, "Informe um valor numérico para valor unitário!");  
@@ -2032,6 +2089,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 }
             }
         }
+        Jtable.ajustarColunasDaTabela(jTBComponentes);
+        Jtable.ajustarColunasDaTabela(jTBComponentesProjetos);
     }
 
     class TableCellEditorAction extends AbstractAction {
