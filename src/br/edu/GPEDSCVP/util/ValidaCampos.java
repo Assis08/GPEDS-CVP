@@ -22,6 +22,7 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JOptionPane;
 import javax.swing.JRadioButton;
 import javax.swing.JTable;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.DefaultFormatterFactory;
@@ -96,6 +97,13 @@ public class ValidaCampos {
                     JComboBox JCB = (JComboBox) component; 
                     if(JCB.isEnabled()){
                         JCB.setEnabled(false);
+                   }
+               }
+               
+                if (component instanceof JTextArea){
+                    JTextArea JTA = (JTextArea) component; 
+                    if(JTA.isEnabled()){
+                        JTA.setEnabled(false);
                    }
                }
            }
@@ -372,7 +380,7 @@ public class ValidaCampos {
         return cnpj.equals(cnpj.substring(0,12) + digito1.toString() + digito2.toString());
     }
     //Verifica se data é válida
-    public static boolean ValidaData(String data) {
+    public static boolean ValidaDataNasc(String data) {
         FormatarData formata_data = new FormatarData(); 
         Date data_atual = new Date();  
        
@@ -397,11 +405,27 @@ public class ValidaCampos {
           }
    }
     
-     //Verifica se data e hora é válida
+    //Verifica se data e hora é válida
     public static boolean ValidaDataHora(String data) {
         FormatarData formata_data = new FormatarData(); 
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        sdf.setLenient(false);
+        try {
+            Date data_formatada = sdf.parse(data);
+            return true;
+        } catch(ParseException e){
+            // data inválida
+            JOptionPane.showMessageDialog(null, "Data inválida, favor verificar a data");
+            return false;
+          }
+   }
+    
+    //Verifica se data e hora é válida
+    public static boolean ValidaData(String data) {
+        FormatarData formata_data = new FormatarData(); 
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         sdf.setLenient(false);
         try {
             Date data_formatada = sdf.parse(data);

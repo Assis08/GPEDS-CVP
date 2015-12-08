@@ -1632,7 +1632,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jFTDataKeyTyped
 
     private void jFTDataFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTDataFocusLost
-         String data_fornec;
+        String data_fornec;
 
         //pega a data do campo 
         data_fornec = jFTData.getText();

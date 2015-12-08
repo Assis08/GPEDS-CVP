@@ -3481,7 +3481,7 @@ public class InterfacePessoa extends javax.swing.JFrame {
         if (data_nasc.equals("")) {
             jFTDataNasc.setValue("");
         } else {
-            if (validaCampos.ValidaData(jFTDataNasc.getText()) == false) {
+            if (validaCampos.ValidaDataNasc(jFTDataNasc.getText()) == false) {
                 jFTDataNasc.grabFocus();
             }
         }

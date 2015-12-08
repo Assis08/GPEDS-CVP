@@ -23,6 +23,7 @@ public class Pessoa
     private Date data_alter;
     private ResultSet retorno;
     private static JTable tabela;
+    private static int[] array_pessoas;
     
     public Pessoa()
     {
@@ -101,6 +102,13 @@ public class Pessoa
     public void setTabela(JTable tabela) {
         this.tabela = tabela;
     }
-                 
+
+    public int getArray_pessoas(int posicao) {
+        return array_pessoas[posicao];
+    }
+
+    public void setArray_pessoas(int[] array_pessoas) {
+        this.array_pessoas = array_pessoas;
+    }
 }
 

@@ -66,7 +66,7 @@ public class daoNorma {
     //Método de alterar norma no banco
     public boolean alterar(Norma norma)throws SQLException
     {
-        int resultado;
+           int resultado;
 
            resultado = conecta_banco.executeSQL("UPDATE norma SET descricao = ?, titulo = ?, edicao = ?, data_alter = ? "
            + "WHERE id_norma = ? ",
