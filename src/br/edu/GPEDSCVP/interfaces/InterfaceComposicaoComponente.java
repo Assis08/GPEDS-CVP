@@ -164,6 +164,11 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
             }
         });
         jTBConsultaComponentes.setName("Componentes"); // NOI18N
+        jTBConsultaComponentes.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jTBConsultaComponentesMouseDragged(evt);
+            }
+        });
         jTBConsultaComponentes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBConsultaComponentesMouseClicked(evt);
@@ -173,11 +178,6 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTBConsultaComponentesMousePressed(evt);
-            }
-        });
-        jTBConsultaComponentes.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jTBConsultaComponentesMouseDragged(evt);
             }
         });
         jScrollPane1.setViewportView(jTBConsultaComponentes);
@@ -269,7 +269,7 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
                             .addComponent(jBTBuscar)
                             .addComponent(jBTVerDatasheet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addGap(12, 12, 12)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 281, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBTConcluir)
                 .addContainerGap())
@@ -287,9 +287,7 @@ public class InterfaceComposicaoComponente extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jTBCidade))
+            .addComponent(jTBCidade, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 419, Short.MAX_VALUE)
         );
 
         setSize(new java.awt.Dimension(779, 458));

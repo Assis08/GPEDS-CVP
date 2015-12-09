@@ -4075,41 +4075,49 @@ public class InterfacePessoa extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-
-        //se naõ for gerente
-        if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario  
-            dao_permissao.retornaDadosPermissao(acesso, permissao);
-        }
-        //Verifica se o usuario possui permissao para acessar essa tela
-        if (validaacesso.verificaAcesso("excluir", acesso, permissao) == true) {
-
-            //Seta o id da pessoa para exclusão
-            pessoa.setId_pessoa(Integer.parseInt(jTFIDPessoa.getText()));
-
-            if (pessoa.getId_pessoa() == acesso.getId_usuario()) {
-                JOptionPane.showMessageDialog(null, "Impossível excluir o usuário logado");
-            } else {
-                if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
-                    //Inativa a pessoa
-                    dao_pessoa.inativaPessoa(pessoa);
-                    JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
-                    //Limpa os campos da tela pessoa
-                    validaCampos.LimparCampos(jPTipoPessoa);
-                    validaCampos.LimparCampos(jPPessoa);
-                    validaCampos.LimparJtable(jTBContato);
-                    validaCampos.LimparJtable(jTBEndereco);
-                    validaCampos.LimparJtable(jTBPermissoes);
-
-                    //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
-                    situacao = Rotinas.INICIAL;
-
-                    //habilita os botoes utilizados na inicialização da tela
-                    validabotoes.ValidaEstado(jPBotoes, situacao);
-                }
+        
+        pessoa.setId_pessoa(Integer.parseInt(jTFIDPessoa.getText()));
+        
+        if(dao_pessoa.verificaExclusao(pessoa) == true){
+        
+            //se naõ for gerente
+            if (acesso.getIn_gerente() == 0) {
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir pessoas no sistema");
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (validaacesso.verificaAcesso("excluir", acesso, permissao) == true) {
+
+                //Seta o id da pessoa para exclusão
+                pessoa.setId_pessoa(Integer.parseInt(jTFIDPessoa.getText()));
+
+                if (pessoa.getId_pessoa() == acesso.getId_usuario()) {
+                    JOptionPane.showMessageDialog(null, "Impossível excluir o usuário logado");
+                } else {
+                    if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
+                        //Inativa a pessoa
+                        dao_pessoa.inativaPessoa(pessoa);
+                        JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
+                        //Limpa os campos da tela pessoa
+                        validaCampos.LimparCampos(jPTipoPessoa);
+                        validaCampos.LimparCampos(jPPessoa);
+                        validaCampos.LimparJtable(jTBContato);
+                        validaCampos.LimparJtable(jTBEndereco);
+                        validaCampos.LimparJtable(jTBPermissoes);
+
+                        //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
+                        situacao = Rotinas.INICIAL;
+
+                        //habilita os botoes utilizados na inicialização da tela
+                        validabotoes.ValidaEstado(jPBotoes, situacao);
+                    }
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir pessoas no sistema");
+            }
+        }else{
+            JOptionPane.showMessageDialog(null, "O registro não pode ser "
+            + "excluído, ele está sendo utilizado em outro cadastro/movimento");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 

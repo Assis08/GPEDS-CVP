@@ -95,16 +95,15 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
     public InterfaceComponente() {
         initComponents();
-        
+
         //Cria renderer para as Jtable  
         TableCellRenderer renderer = new EvenOddRenderer();
         jTBComposicao.setDefaultRenderer(Object.class, renderer);
         jTBFornecedores.setDefaultRenderer(Object.class, renderer);
-        
-        
+
         //implementa Listener para edição da jtable
         new TableCellListener(jTBComposicao, new TableCellEditorAction());
-        
+
         componente = new Componente();
         contato = new Contato();
         fornecedor = new Fornecedor();
@@ -137,10 +136,10 @@ public class InterfaceComponente extends javax.swing.JFrame {
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar registro");
         }
-        
+
         //desabilita campos da tela de componente
         valida_campos.desabilitaCampos(jPComponente);
-        
+
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBConsultaComponentes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBComposicao.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -148,22 +147,22 @@ public class InterfaceComponente extends javax.swing.JFrame {
         jTBConsultaComposicao.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBConsultaFornecedores.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBContatoFornecedores.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        
+
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
 
         //habilita os botoes utilizados na inicialização da tela
         valida_botoes.ValidaEstado(jPBotoes, situacao);
-        
+
         //atualiza dados do usuario logado
         dao_acesso.retornaUsuarioLogado(acesso);
-        
+
         dao_material.consultaGeral(material);
         //Preenche dados nas ComboBox de material
         array_material = combo.PreencherCombo(jCBMaterial, "descricao", material.getRetorno(), "id_material");
         //seta no array da classe de material a lista de materiais listadas na combo
         material.setArray_material(array_material);
-        
+
         dao_datasheet.consultaGeral(datasheet);
         //Preenche dados nas ComboBox de datasheet
         array_datasheet = combo.PreencherCombo(jCBDatasheet, "descricao", datasheet.getRetorno(), "id_datasheet");
@@ -313,12 +312,13 @@ public class InterfaceComponente extends javax.swing.JFrame {
             jPBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPBotoesLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPBotoesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -860,7 +860,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jTBComponente, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE)
+                .addComponent(jTBComponente)
                 .addContainerGap())
         );
 
@@ -884,48 +884,48 @@ public class InterfaceComponente extends javax.swing.JFrame {
         try {
             //atualiza dados do usuario logado
             dao_acesso.retornaUsuarioLogado(acesso);
-            
+
             //Inclui a opção todas telas como primeira opção
             tela.setDescricao("Todas telas");
             tela.setId_tela(1);
             dao_tela.incluir(tela);
-            
+
             //Inclui a tela de Materiais
             tela.setDescricao("Materiais");
             tela.setId_tela(10);
             dao_tela.incluir(tela);
-            
+
             //Armazena dados de acesso da tela para verificar permissões
             acesso.setId_tela(10);
             acesso.setNome_tela("Materiais");
-            
+
             //se naõ for gerente
-            if(acesso.getIn_gerente() == 0){
+            if (acesso.getIn_gerente() == 0) {
                 //retorna as permissoes de acesso do usuario  
                 dao_permissao.retornaDadosPermissao(acesso, permissao);
-            } 
-          
-           //Verifica se o usuario possui permissao para acessar essa tela
-           if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
+            }
+
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("acesso", acesso, permissao) == true) {
                 //Traz para tela a tela de cadastro de material 
                 new InterfaceMaterial().setVisible(true);
-           }else{
-               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
-           }
-            
+            } else {
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela");
+            }
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao abrir tela de cadastro de materiais");
         }
-       
+
     }//GEN-LAST:event_jBTNovoMaterialActionPerformed
 
     private void jTBConsultaComponentesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaComponentesMouseClicked
         //Verifica se houve 1 clique do mouse
-        
+
         //recupera a linha clicada
         int linha = jTBConsultaComponentes.getSelectedRow();
         Integer id_comp = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 0).toString());
-        
+
         //busca composição do componente clicado
         composicao.setId_componente(id_comp);
         dao_composicao.consultaCodigoComponente(composicao);
@@ -933,19 +933,19 @@ public class InterfaceComponente extends javax.swing.JFrame {
         //busca fornecedores do componente clicado
         fornec_comp.setId_componente(id_comp);
         dao_fornec_comp.consultaFornecedoresComponente(fornec_comp);
-        
+
         if (evt.getClickCount() == 1) {
-            
-             //Preenche na JTABLE os dados dos componentes cadastrados
+
+            //Preenche na JTABLE os dados dos componentes cadastrados
             Jtable.PreencherJtableGenerico(jTBConsultaComposicao, new String[]{"id_subcomponente", "tipo", "componente.descricao", "material.id_material", "material.descricao", "qntd"}, composicao.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBConsultaComposicao);
             //Preenche na JTABLE os dados dos fornecedores dos componentes 
             Jtable.PreencherJtableGenerico(jTBConsultaFornecedores, new String[]{"id_pessoa", "nome", "cpf_cnpj", "site"}, fornec_comp.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBConsultaFornecedores);
-            
-        //Verifica se houve 2 cliques do mouse
-        }else  if (evt.getClickCount() == 2){
-            
+
+            //Verifica se houve 2 cliques do mouse
+        } else if (evt.getClickCount() == 2) {
+
             //Limpa os campos da tela componente
             valida_campos.LimparCampos(jPComponente);
             //limpa tabela de endereços e composição na tela de cadastro de componente
@@ -953,7 +953,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
             valida_campos.LimparJtable(jTBFornecedores);
             //desabilita campos
             valida_campos.desabilitaCampos(jPComponente);
-           
+
             //Carrega conteudo das combobox
             jCBTipo.addItem("Selecione tipo");
             jCBTipo.addItem("Eletrônico");
@@ -964,31 +964,31 @@ public class InterfaceComponente extends javax.swing.JFrame {
             array_material = combo.PreencherCombo(jCBMaterial, "descricao", material.getRetorno(), "id_material");
             //seta no array da classe de material a lista de materiais listadas na combo
             material.setArray_material(array_material);
-            
+
             dao_datasheet.consultaGeral(datasheet);
             //Preenche dados nas ComboBox de datasheet
             array_datasheet = combo.PreencherCombo(jCBDatasheet, "descricao", datasheet.getRetorno(), "id_datasheet");
             //seta no array da classe de material a lista de materiais listadas na combo
             datasheet.setArray_datasheet(array_datasheet);
-            
+
             //retorna dados do componente
             componente.setId_componente(id_comp);
             dao_componente.retornardadosComponente(componente);
 
             //seta dados do componente na tela de cadastro
             setcompComponente();
-            
+
             //Preenche na JTABLE composicao para alteração
-            Jtable.PreencherJtableGenerico(jTBComposicao, new String[]{"null","id_composicao","id_subcomponente", "tipo", "componente.descricao", "material.id_material", "material.descricao", "qntd", "false"}, composicao.getRetorno());
+            Jtable.PreencherJtableGenerico(jTBComposicao, new String[]{"null", "id_composicao", "id_subcomponente", "tipo", "componente.descricao", "material.id_material", "material.descricao", "qntd", "false"}, composicao.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBComposicao);
-            
+
             //Preenche na JTABLE os dados dos fornecedores dos componentes 
-            Jtable.PreencherJtableGenerico(jTBFornecedores, new String[]{"null","id_fornecedores_comp","id_pessoa", "nome", "cpf_cnpj", "site", "false"}, fornec_comp.getRetorno());
+            Jtable.PreencherJtableGenerico(jTBFornecedores, new String[]{"null", "id_fornecedores_comp", "id_pessoa", "nome", "cpf_cnpj", "site", "false"}, fornec_comp.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBFornecedores);
-            
+
             //retorna para tela de cadastro
             jTBComponente.setSelectedIndex(0);
-         
+
             //Define a situação como padrao para habilitar os botoes utilizados apenas na alteração ou exclusão
             situacao = Rotinas.PADRAO;
             //habilita os botoes utilizados na alteraçao e exclusão e desabilita os restantes
@@ -997,16 +997,16 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBConsultaComponentesMouseClicked
 
     private void jTBComponenteStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBComponenteStateChanged
-        
+
     }//GEN-LAST:event_jTBComponenteStateChanged
 
     private void jCBTipoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBTipoPopupMenuWillBecomeInvisible
-        if(jCBTipo.getSelectedItem().equals("Eletrônico")){
+        if (jCBTipo.getSelectedItem().equals("Eletrônico")) {
             //desabilita caixa de seleção de material
             jCBMaterial.setSelectedItem("selecione item");
             jCBMaterial.setEnabled(false);
             jBTNovoMaterial.setEnabled(false);
-        }else if (jCBTipo.getSelectedItem().equals("Mecânico")){
+        } else if (jCBTipo.getSelectedItem().equals("Mecânico")) {
             //habilita caixa de seleção de material
             jCBMaterial.setEnabled(true);
             jBTNovoMaterial.setEnabled(true);
@@ -1043,39 +1043,39 @@ public class InterfaceComponente extends javax.swing.JFrame {
                 int sequencia = (Integer) (ultima.ultimasequencia("COMPONENTE", "ID_COMPONENTE"));
                 //seta id no campo camponente
                 jTFIDComponente.setText(Integer.toString(sequencia));
-                
+
                 //Seta a data atual no campo data
                 jFTData.setEnabled(true);
                 jFTData.setText(data.DataAtual());
-                
+
                 //Carrega conteudo das combobox
                 jCBTipo.addItem("Selecione tipo");
                 jCBTipo.addItem("Eletrônico");
                 jCBTipo.addItem("Mecânico");
-                
+
                 dao_material.consultaGeral(material);
                 //Preenche dados nas ComboBox de material
                 array_material = combo.PreencherCombo(jCBMaterial, "descricao", material.getRetorno(), "id_material");
                 //seta no array da classe de material a lista de materiais listadas na combo
                 material.setArray_material(array_material);
-                
+
                 dao_datasheet.consultaGeral(datasheet);
                 //Preenche dados nas ComboBox de datasheet
                 array_datasheet = combo.PreencherCombo(jCBDatasheet, "descricao", datasheet.getRetorno(), "id_datasheet");
                 //seta no array da classe de material a lista de materiais listadas na combo
                 datasheet.setArray_datasheet(array_datasheet);
-                
+
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de componente");
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir componentes no sistema");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
 
-         //se naõ for gerente
+        //se naõ for gerente
         if (acesso.getIn_gerente() == 0) {
             //retorna as permissoes de acesso do usuario  
             dao_permissao.retornaDadosPermissao(acesso, permissao);
@@ -1093,21 +1093,26 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        //se naõ for gerente
-        if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario  
-            dao_permissao.retornaDadosPermissao(acesso, permissao);
-        }
-        //Verifica se o usuario possui permissao para acessar essa tela
-        if (valida_acesso.verificaAcesso("excluir", acesso, permissao) == true) {
 
-            //Seta o id da pessoa para exclusão
-            componente.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
+        componente.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
+
+        if (dao_componente.verificaExclusao(componente) == true) {
+
+            //se naõ for gerente
+            if (acesso.getIn_gerente() == 0) {
+                //retorna as permissoes de acesso do usuario  
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            }
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("excluir", acesso, permissao) == true) {
+
+                //Seta o id da pessoa para exclusão
+                componente.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
 
                 if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
                     //Inativa componente
                     dao_componente.inativaComponente(componente);
-                    JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
+                    JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
                     //Limpa os campos da tela pessoa
                     valida_campos.LimparCampos(jPComponente);
                     valida_campos.LimparJtable(jTBComposicao);
@@ -1116,15 +1121,20 @@ public class InterfaceComponente extends javax.swing.JFrame {
                     valida_campos.LimparJtable(jTBConsultaFornecedores);
                     valida_campos.LimparJtable(jTBConsultaComposicao);
                     valida_campos.LimparJtable(jTBContatoFornecedores);
-                    
+
                     //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
                     situacao = Rotinas.INICIAL;
 
                     //habilita os botoes utilizados na inicialização da tela
                     valida_botoes.ValidaEstado(jPBotoes, situacao);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir componentes no sistema");
             }
+
         } else {
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir componentes no sistema");
+            JOptionPane.showMessageDialog(null, "O registro não pode ser "
+                    + "excluído, ele está sendo utilizado em outro cadastro/movimento");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -1133,20 +1143,20 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5MouseExited
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-         //Se for inclusão
+        //Se for inclusão
         if (situacao == Rotinas.INCLUIR) {
             if (valida_campos.validacamposobrigatorios(jPComponente, "COMPONENTE") == 0) {
                 try {
                     //pega dados do componente na tela
                     getComponente();
                     //inclui componente
-                    if(dao_componente.incluir(componente,jCBTipo.getSelectedItem().toString()) == true){
-                        
-                       getComposicao();
-                       getFornecedores();
-                       dao_componente.gravarComposicao(composicao);
-                       dao_componente.gravarFornecedores(fornec_comp);
-                        
+                    if (dao_componente.incluir(componente, jCBTipo.getSelectedItem().toString()) == true) {
+
+                        getComposicao();
+                        getFornecedores();
+                        dao_componente.gravarComposicao(composicao);
+                        dao_componente.gravarFornecedores(fornec_comp);
+
                         //se ocorreu tudo bem na inclusão
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
@@ -1157,7 +1167,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
                         valida_campos.LimparJtable(jTBConsultaFornecedores);
                         valida_campos.LimparJtable(jTBConsultaComposicao);
                         valida_campos.LimparJtable(jTBContatoFornecedores);
-                        
+
                         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                         situacao = Rotinas.INICIAL;
 
@@ -1172,19 +1182,19 @@ public class InterfaceComponente extends javax.swing.JFrame {
                 }
 
             }
-        }else if(situacao == Rotinas.ALTERAR) {
+        } else if (situacao == Rotinas.ALTERAR) {
             //pega dados do material na tela
             if (valida_campos.validacamposobrigatorios(jPComponente, "COMPONENTE") == 0) {
                 try {
                     getComponente();
                     //alterar componente
-                    if(dao_componente.alterar(componente, componente.getTipo()) == true){
-                       //altera composição
-                       getComposicao();
-                       getFornecedores();
-                       dao_composicao.alterarComposicao(composicao);
-                       dao_fornec_comp.alterarFornecedores(fornec_comp);
-                       
+                    if (dao_componente.alterar(componente, componente.getTipo()) == true) {
+                        //altera composição
+                        getComposicao();
+                        getFornecedores();
+                        dao_composicao.alterarComposicao(composicao);
+                        dao_fornec_comp.alterarFornecedores(fornec_comp);
+
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
                         valida_campos.LimparCampos(jPComponente);
@@ -1228,30 +1238,56 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jBTAddComposicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddComposicaoActionPerformed
-        new InterfaceComposicaoComponente().setVisible(true);
-        componente.setTabela(jTBComposicao);
-        composicao.setSituacao(situacao);
-        composicao.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
+
+        if (situacao == Rotinas.ALTERAR) {
+
+            componente.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
+            //se o componente não está no projeto
+            if (dao_componente.verificaEstaNoProjeto(componente) == false) {
+                //deixa adicionar mais componentes na composição
+                new InterfaceComposicaoComponente().setVisible(true);
+                componente.setTabela(jTBComposicao);
+                composicao.setSituacao(situacao);
+                composicao.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
+            } else {
+                JOptionPane.showMessageDialog(null, "Este componente está sendo utilizado em projetos, não é possível alterar sua composição!");
+            }
+
+        } else {
+
+            new InterfaceComposicaoComponente().setVisible(true);
+            componente.setTabela(jTBComposicao);
+            composicao.setSituacao(situacao);
+            composicao.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
+
+        }
     }//GEN-LAST:event_jBTAddComposicaoActionPerformed
 
     private void jBTRemoveComposicaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveComposicaoActionPerformed
-        if (valida_campos.VerificaJtable(jTBComposicao) == 1) {
-            int linha = jTBComposicao.getSelectedRow();
-            Integer exc = Integer.parseInt(jTBComposicao.getValueAt(linha, 8).toString());
-            //se não for um item removido
-            if (exc == 0) {
-                Jtable.removeItens(jTBComposicao, situacao);
-            }else{
-                JOptionPane.showMessageDialog(null, "Item já removido");
+        componente.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
+        //se o componente não está no projeto
+        if (dao_componente.verificaEstaNoProjeto(componente) == false) {
+
+            if (valida_campos.VerificaJtable(jTBComposicao) == 1) {
+                int linha = jTBComposicao.getSelectedRow();
+                Integer exc = Integer.parseInt(jTBComposicao.getValueAt(linha, 8).toString());
+                //se não for um item removido
+                if (exc == 0) {
+                    Jtable.removeItens(jTBComposicao, situacao);
+                } else {
+                    JOptionPane.showMessageDialog(null, "Item já removido");
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Não possui componentes para remover");
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Não possui componentes para remover");
+            JOptionPane.showMessageDialog(null, "Este componente está sendo utilizado em projetos, não é possível alterar sua composição!");
         }
     }//GEN-LAST:event_jBTRemoveComposicaoActionPerformed
 
     private void jTFRevisaoKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFRevisaoKeyTyped
-        String caracteres="0987654321";
-        if(!caracteres.contains(evt.getKeyChar()+"")){
+        String caracteres = "0987654321";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
             evt.consume();
         }
     }//GEN-LAST:event_jTFRevisaoKeyTyped
@@ -1268,125 +1304,125 @@ public class InterfaceComponente extends javax.swing.JFrame {
         if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
 
             //Se não for gerente
-        if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario
-            dao_permissao.retornaDadosPermissao(acesso, permissao);
-        }
+            if (acesso.getIn_gerente() == 0) {
+                //retorna as permissoes de acesso do usuario
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            }
 
-        //Verifica se o usuario possui permissao para acessar essa tela
-        if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
 
-            // recupera linha selecionada
-            int linha = jTBConsultaComponentes.getSelectedRow(); 
-            int id_busca = 0;
-            String ds_busca = "";
+                // recupera linha selecionada
+                int linha = jTBConsultaComponentes.getSelectedRow();
+                int id_busca = 0;
+                String ds_busca = "";
 
-            //Tira aspas simples da string para evitar código sql
-            valida_campos.IgnoraSQL(jTFFiltro);
-            
-            switch (jCBTipoConsulta.getSelectedIndex()) {
-                //Tipo : Consulta Geral
-                case 0:
-                    //Combobox buscar por: geral
-                    switch(jCBBuscarPor.getSelectedIndex()){
-                        case 0:
-                            //Consulta geral de componentes
-                            dao_componente.consultageral(componente);
-                            break;
-                        case 1:
-                            //Consulta geral de componentes por código
-                            try {
-                                id_busca = Integer.parseInt(jTFFiltro.getText());
-                                componente.setId_componente(id_busca);
-                                dao_componente.consultageralCodigo(componente);
-                            } catch (Exception e) {
-                                JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
-                                jTFFiltro.grabFocus();
-                            }
-                            break;
-                        case 2:
-                            //Consulta geral de componentes pela descrição
-                            ds_busca = jTFFiltro.getText();
-                            if(!ds_busca.replace(" ", "").equals("")){
-                                componente.setDescricao(ds_busca);
-                                dao_componente.consultageralDescricao(componente);
-                            }else{
-                                JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
-                                jTFFiltro.grabFocus();
-                            }
-                            break;
-                    }
-                    break;
-                //Tipo: Eletrônico
-                case 1:
-                    
-                     //Combobox buscar por: geral
-                    switch(jCBBuscarPor.getSelectedIndex()){
-                        case 0:
-                            //Consulta geral de componentes
-                            dao_componente.consultageralEletronicos(componente);
-                            break;
-                        case 1:
-                            //Consulta geral de componentes por código
-                            try {
-                                id_busca = Integer.parseInt(jTFFiltro.getText());
-                                componente.setId_componente(id_busca);
-                                dao_componente.consultaeletronicoCodigo(componente);
-                            } catch (Exception e) {
-                                JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
-                                jTFFiltro.grabFocus();
-                            }
-                            break;
-                        case 2:
-                            //Consulta geral de componentes pela descrição
-                            ds_busca = jTFFiltro.getText();
-                            if(!ds_busca.replace(" ", "").equals("")){
-                                componente.setDescricao(ds_busca);
-                                dao_componente.consultaeletronicoDescricao(componente);
-                            }else{
-                                JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
-                                jTFFiltro.grabFocus();
-                            }
-                            break;
-                    }
-                    break;
-                    
-                case 2:
-                    
-                    //Combobox buscar por: geral
-                    switch(jCBBuscarPor.getSelectedIndex()){
-                        case 0:
-                            //Consulta geral de componentes
-                            dao_componente.consultageralMecanicos(componente);
-                            break;
-                        case 1:
-                            //Consulta geral de componentes por código
-                            try {
-                                id_busca = Integer.parseInt(jTFFiltro.getText());
-                                componente.setId_componente(id_busca);
-                                dao_componente.consultamecanicoCodigo(componente);
-                            } catch (Exception e) {
-                                JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
-                                jTFFiltro.grabFocus();
-                            }
-                            break;
-                        case 2:
-                            //Consulta geral de componentes pela descrição
-                            ds_busca = jTFFiltro.getText();
-                            if(!ds_busca.replace(" ", "").equals("")){
-                                componente.setDescricao(ds_busca);
-                                dao_componente.consultamecanicoDescricao(componente);
-                            }else{
-                                JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
-                                jTFFiltro.grabFocus();
-                            }
-                            break;
-                    }
-                    break;
+                //Tira aspas simples da string para evitar código sql
+                valida_campos.IgnoraSQL(jTFFiltro);
+
+                switch (jCBTipoConsulta.getSelectedIndex()) {
+                    //Tipo : Consulta Geral
+                    case 0:
+                        //Combobox buscar por: geral
+                        switch (jCBBuscarPor.getSelectedIndex()) {
+                            case 0:
+                                //Consulta geral de componentes
+                                dao_componente.consultageral(componente);
+                                break;
+                            case 1:
+                                //Consulta geral de componentes por código
+                                try {
+                                    id_busca = Integer.parseInt(jTFFiltro.getText());
+                                    componente.setId_componente(id_busca);
+                                    dao_componente.consultageralCodigo(componente);
+                                } catch (Exception e) {
+                                    JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
+                                    jTFFiltro.grabFocus();
+                                }
+                                break;
+                            case 2:
+                                //Consulta geral de componentes pela descrição
+                                ds_busca = jTFFiltro.getText();
+                                if (!ds_busca.replace(" ", "").equals("")) {
+                                    componente.setDescricao(ds_busca);
+                                    dao_componente.consultageralDescricao(componente);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                    jTFFiltro.grabFocus();
+                                }
+                                break;
+                        }
+                        break;
+                    //Tipo: Eletrônico
+                    case 1:
+
+                        //Combobox buscar por: geral
+                        switch (jCBBuscarPor.getSelectedIndex()) {
+                            case 0:
+                                //Consulta geral de componentes
+                                dao_componente.consultageralEletronicos(componente);
+                                break;
+                            case 1:
+                                //Consulta geral de componentes por código
+                                try {
+                                    id_busca = Integer.parseInt(jTFFiltro.getText());
+                                    componente.setId_componente(id_busca);
+                                    dao_componente.consultaeletronicoCodigo(componente);
+                                } catch (Exception e) {
+                                    JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
+                                    jTFFiltro.grabFocus();
+                                }
+                                break;
+                            case 2:
+                                //Consulta geral de componentes pela descrição
+                                ds_busca = jTFFiltro.getText();
+                                if (!ds_busca.replace(" ", "").equals("")) {
+                                    componente.setDescricao(ds_busca);
+                                    dao_componente.consultaeletronicoDescricao(componente);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                    jTFFiltro.grabFocus();
+                                }
+                                break;
+                        }
+                        break;
+
+                    case 2:
+
+                        //Combobox buscar por: geral
+                        switch (jCBBuscarPor.getSelectedIndex()) {
+                            case 0:
+                                //Consulta geral de componentes
+                                dao_componente.consultageralMecanicos(componente);
+                                break;
+                            case 1:
+                                //Consulta geral de componentes por código
+                                try {
+                                    id_busca = Integer.parseInt(jTFFiltro.getText());
+                                    componente.setId_componente(id_busca);
+                                    dao_componente.consultamecanicoCodigo(componente);
+                                } catch (Exception e) {
+                                    JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
+                                    jTFFiltro.grabFocus();
+                                }
+                                break;
+                            case 2:
+                                //Consulta geral de componentes pela descrição
+                                ds_busca = jTFFiltro.getText();
+                                if (!ds_busca.replace(" ", "").equals("")) {
+                                    componente.setDescricao(ds_busca);
+                                    dao_componente.consultamecanicoDescricao(componente);
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                    jTFFiltro.grabFocus();
+                                }
+                                break;
+                        }
+                        break;
                 }
             }
             //Preenche na JTABLE os dados dos componentes cadastrados
-            Jtable.PreencherJtableGenerico(jTBConsultaComponentes, new String[]{"id_componente", "tipo", "componente.descricao", "revisao", "id_material", "material.descricao", "componente.id_datasheet","datasheet.descricao","data_cadastro", "data_alter"}, componente.getRetorno());
+            Jtable.PreencherJtableGenerico(jTBConsultaComponentes, new String[]{"id_componente", "tipo", "componente.descricao", "revisao", "id_material", "material.descricao", "componente.id_datasheet", "datasheet.descricao", "data_cadastro", "data_alter"}, componente.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBConsultaComponentes);
         } else {
             JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar componentes no sistema");
@@ -1406,7 +1442,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         //Preenche na JTABLE os dados dos fornecedores dos componentes 
         Jtable.PreencherJtableGenerico(jTBConsultaFornecedores, new String[]{"id_pessoa", "nome", "cpf_cnpj", "site"}, fornec_comp.getRetorno());
         Jtable.ajustarColunasDaTabela(jTBConsultaFornecedores);
-        
+
     }//GEN-LAST:event_jTBConsultaComposicaoMouseClicked
 
     private void jBTVerDatasheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTVerDatasheetActionPerformed
@@ -1419,10 +1455,10 @@ public class InterfaceComponente extends javax.swing.JFrame {
             //recupera a linha clicada
             int linha = jTBConsultaComponentes.getSelectedRow();
             //se foi selecionado alguma linha
-            if(linha >= 0){
+            if (linha >= 0) {
                 id = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 6).toString());
                 try {
-                
+
                     datasheet.setId_datasheet(id);
                     arquivo_banco = dao_datasheet.retornaArquivo(datasheet);
                     //cria arquivo pdf temporário
@@ -1430,7 +1466,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
                     f = File.createTempFile(nome_arquivo, ".pdf");
                     FileOutputStream fos = new FileOutputStream(f);
                     //escreve bytes no arquivo
-                    fos.write( arquivo_banco );
+                    fos.write(arquivo_banco);
                     //abre arquivo
                     Desktop.getDesktop().open(f);
                     fos.close();
@@ -1438,12 +1474,12 @@ public class InterfaceComponente extends javax.swing.JFrame {
                     f.deleteOnExit();
                 } catch (Exception e) {
 
-                JOptionPane.showMessageDialog(null, "Arquivo já está aberto");
+                    JOptionPane.showMessageDialog(null, "Arquivo já está aberto");
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Nenhuma linha foi selecionada!");
             }
-           
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Este componente não possui datasheet!");
         }
@@ -1453,35 +1489,35 @@ public class InterfaceComponente extends javax.swing.JFrame {
         try {
             //atualiza dados do usuario logado
             dao_acesso.retornaUsuarioLogado(acesso);
-            
+
             //Inclui a opção todas telas como primeira opção
             tela.setDescricao("Todas telas");
             tela.setId_tela(1);
             dao_tela.incluir(tela);
-            
+
             //Inclui a tela de Datasheets
             tela.setDescricao("Datasheets");
             tela.setId_tela(11);
             dao_tela.incluir(tela);
-            
+
             //Armazena dados de acesso da tela para verificar permissões
             acesso.setId_tela(11);
             acesso.setNome_tela("Datasheets");
-            
+
             //se naõ for gerente
-            if(acesso.getIn_gerente() == 0){
+            if (acesso.getIn_gerente() == 0) {
                 //retorna as permissoes de acesso do usuario  
                 dao_permissao.retornaDadosPermissao(acesso, permissao);
-            } 
-          
-           //Verifica se o usuario possui permissao para acessar essa tela
-           if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
+            }
+
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("acesso", acesso, permissao) == true) {
                 //Traz para tela a tela de cadastro de datasheet 
                 new InterfaceDatasheet().setVisible(true);
-           }else{
-               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
-           }
-            
+            } else {
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela");
+            }
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao abrir tela de cadastro de datasheets");
         }
@@ -1496,13 +1532,13 @@ public class InterfaceComponente extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBDatasheetPopupMenuWillBecomeVisible
 
     private void jBTRemoveFornecedoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRemoveFornecedoresActionPerformed
-         if (valida_campos.VerificaJtable(jTBFornecedores) == 1) {
+        if (valida_campos.VerificaJtable(jTBFornecedores) == 1) {
             int linha = jTBFornecedores.getSelectedRow();
             Integer exc = Integer.parseInt(jTBFornecedores.getValueAt(linha, 6).toString());
             //se não for um item removido
             if (exc == 0) {
                 Jtable.removeItens(jTBFornecedores, situacao);
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Item já removido");
             }
         } else {
@@ -1514,44 +1550,44 @@ public class InterfaceComponente extends javax.swing.JFrame {
         try {
             //atualiza dados do usuario logado
             dao_acesso.retornaUsuarioLogado(acesso);
-            
+
             //Inclui a opção todas telas como primeira opção
             tela.setDescricao("Todas telas");
             tela.setId_tela(1);
             dao_tela.incluir(tela);
-            
+
             //Inclui a tela de Pessoas
             tela.setDescricao("Pessoas");
             tela.setId_tela(2);
             dao_tela.incluir(tela);
-            
+
             //Armazena dados de acesso da tela para verificar permissões
             acesso.setId_tela(2);
             acesso.setNome_tela("Pessoas");
-            
+
             //se naõ for gerente
-            if(acesso.getIn_gerente() == 0){
+            if (acesso.getIn_gerente() == 0) {
                 //retorna as permissoes de acesso do usuario  
                 dao_permissao.retornaDadosPermissao(acesso, permissao);
-            } 
-          
-           //Verifica se o usuario possui permissao para acessar essa tela
-           if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
+            }
+
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("acesso", acesso, permissao) == true) {
                 //Traz para tela a tela de cadastro de pessoas 
                 fornec_comp.setTabela(jTBFornecedores);
                 fornec_comp.setSituacao(situacao);
                 new InterfaceConsultaFornecedores().setVisible(true);
-           }else{
-               JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela"); 
-           }
-            
+            } else {
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela");
+            }
+
         } catch (SQLException ex) {
             Logger.getLogger(InterfacePessoa.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_jBTAddFornecedorActionPerformed
 
     private void jTBConsultaFornecedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaFornecedoresMouseClicked
-       
+
         //recupera a linha clicada
         int linha = jTBConsultaFornecedores.getSelectedRow();
         Integer id_fornec = Integer.parseInt(jTBConsultaFornecedores.getValueAt(linha, 0).toString());
@@ -1561,9 +1597,9 @@ public class InterfaceComponente extends javax.swing.JFrame {
         dao_contato.consultacodigo(contato);
 
         //Preenche na JTABLE os dados dos fornecedores dos componentes 
-        Jtable.PreencherJtableGenerico(jTBContatoFornecedores, new String[]{"id_contato","descricao", "email", "numero"}, contato.getRetorno());
+        Jtable.PreencherJtableGenerico(jTBContatoFornecedores, new String[]{"id_contato", "descricao", "email", "numero"}, contato.getRetorno());
         Jtable.ajustarColunasDaTabela(jTBContatoFornecedores);
-        
+
     }//GEN-LAST:event_jTBConsultaFornecedoresMouseClicked
 
     private void jTBContatoFornecedoresMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBContatoFornecedoresMouseClicked
@@ -1668,181 +1704,183 @@ public class InterfaceComponente extends javax.swing.JFrame {
 
     //Pega dados do componente na tela
     public Componente getComponente() {
-        
+
         componente = new Componente();
-        
+
         Date data_atual = new Date(System.currentTimeMillis());
-        
+
         int id_componente = Integer.parseInt(jTFIDComponente.getText());
         componente.setId_componente(id_componente);
         componente.setDescricao(jTFDescrição.getText());
-        if(jCBTipo.getSelectedItem().equals("Mecânico")){
-            if(jCBMaterial.getSelectedIndex() > 0){
+        if (jCBTipo.getSelectedItem().equals("Mecânico")) {
+            if (jCBMaterial.getSelectedIndex() > 0) {
                 componente.setId_material(material.getArray_material(jCBMaterial.getSelectedIndex() - 1));
-            }else{
+            } else {
                 componente.setId_material(0);
             }
-            
         }
-        if(jCBTipo.getSelectedItem().equals("Eletrônico")){
+        if (jCBTipo.getSelectedItem().equals("Eletrônico")) {
             componente.setTipo("E");
-        }else if (jCBTipo.getSelectedItem().equals("Mecânico")){
+        } else if (jCBTipo.getSelectedItem().equals("Mecânico")) {
             componente.setTipo("M");
         }
         componente.setRevisao(jTFRevisao.getText());
-        if(jCBDatasheet.getSelectedItem().equals("selecione item")){
+        if (jCBDatasheet.getSelectedItem().equals("selecione item")) {
             componente.setId_datasheet(0);
-        }else{
+        } else {
             componente.setId_datasheet(datasheet.getArray_datasheet(jCBDatasheet.getSelectedIndex() - 1));
         }
-        
+
         componente.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
         componente.setData_alter(data_atual);
-      
+
         return componente;
     }
-    
-    public ComposicaoComponente getComposicao(){
-        
-         
+
+    public ComposicaoComponente getComposicao() {
+
         composicao = new ComposicaoComponente();
-        
+
         Date data_atual = new Date(System.currentTimeMillis());
         composicao.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
         composicao.setData_alter(data_atual);
         composicao.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
         composicao.setTabela(jTBComposicao);
-        
+
         return composicao;
     }
-    
-     public FornecedoresComponente getFornecedores(){
-        
-         
+
+    public FornecedoresComponente getFornecedores() {
+
         fornec_comp = new FornecedoresComponente();
-        
+
         Date data_atual = new Date(System.currentTimeMillis());
         fornec_comp.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
         fornec_comp.setData_alter(data_atual);
         fornec_comp.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
         fornec_comp.setTabela(jTBFornecedores);
-        
+
         return fornec_comp;
     }
-     
-     public void setcompComponente(){
-         jTFIDComponente.setText(String.valueOf(componente.getId_componente()));
-         jTFDescrição.setText(componente.getDescricao());
-         jTFRevisao.setText(componente.getRevisao());
-         jFTData.setText(String.valueOf(data.organizaData(componente.getData_cadastro())));
-         if(componente.getTipo().equals("E")){
-             jCBTipo.setSelectedItem("Eletrônico");
-         }else if(componente.getTipo().equals("M")){
-             jCBTipo.setSelectedItem("Mecânico");
-         }else{
-             jCBTipo.setSelectedItem("Selecione item");
-         }
-         if(componente.getDs_material() != null){
-              jCBMaterial.setSelectedItem(componente.getDs_material());
-         }else{
-             jCBMaterial.setSelectedItem("Selecione item");
-         }
-         if(componente.getDs_datasheet()!= null){
-              jCBDatasheet.setSelectedItem(componente.getDs_datasheet());
-         }else{
-             jCBDatasheet.setSelectedItem("Selecione item");
-         }
-     }
-     
+
+    public void setcompComponente() {
+        jTFIDComponente.setText(String.valueOf(componente.getId_componente()));
+        jTFDescrição.setText(componente.getDescricao());
+        jTFRevisao.setText(componente.getRevisao());
+        jFTData.setText(String.valueOf(data.organizaData(componente.getData_cadastro())));
+        if (componente.getTipo().equals("E")) {
+            jCBTipo.setSelectedItem("Eletrônico");
+        } else if (componente.getTipo().equals("M")) {
+            jCBTipo.setSelectedItem("Mecânico");
+        } else {
+            jCBTipo.setSelectedItem("Selecione item");
+        }
+        if (componente.getDs_material() != null) {
+            jCBMaterial.setSelectedItem(componente.getDs_material());
+        } else {
+            jCBMaterial.setSelectedItem("Selecione item");
+        }
+        if (componente.getDs_datasheet() != null) {
+            jCBDatasheet.setSelectedItem(componente.getDs_datasheet());
+        } else {
+            jCBDatasheet.setSelectedItem("Selecione item");
+        }
+    }
+
     class EvenOddRenderer implements TableCellRenderer {
 
         public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
 
         public Component getTableCellRendererComponent(JTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row, int column) {
-        Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
-            table, value, isSelected, hasFocus, row, column);
-        ((JLabel) renderer).setOpaque(true);
-        Color foreground, background;
-        int totcolun = table.getColumnCount();
+                boolean isSelected, boolean hasFocus, int row, int column) {
+            Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
+                    table, value, isSelected, hasFocus, row, column);
+            ((JLabel) renderer).setOpaque(true);
+            Color foreground, background;
+            int totcolun = table.getColumnCount();
 
-        Integer exc = 0;
-        Boolean sel = false;
+            Integer exc = 0;
+            Boolean sel = false;
 
+            exc = Integer.parseInt(table.getValueAt(row, totcolun - 1).toString());
+            sel = (Boolean) table.getValueAt(row, 0);
 
-        exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
-        sel = (Boolean) table.getValueAt(row, 0);
-
-        if(isSelected){
-            if(exc == 1){
-               background = Color.RED;
-               renderer.setBackground(background);
-            }
-            //garante que quando estiver selecinado é true e caso contrario e false (nunca sera nulo)
-
-            if(sel != null){
-                if(sel == true){
-                    table.setValueAt(true, row, 0);
-                }else{
-                    table.setValueAt(false, row, 0);
+            if (isSelected) {
+                if (exc == 1) {
+                    background = Color.RED;
+                    renderer.setBackground(background);
                 }
+                //garante que quando estiver selecinado é true e caso contrario e false (nunca sera nulo)
 
-            }       
-         }
-
-         if(!isSelected){
-            if(exc == 1){
-                background = Color.RED;
-                renderer.setBackground(background);
-            }else{
-                background = Color.WHITE;
-                renderer.setBackground(background);
-            }
-         }
-        return renderer;
-      }
-    }
-    
-    private void onCellEditor(JTable table, int column, int row, Object oldValue, Object newValue){
-        System.out.println("Coluna:" + column + "Valor novo: " + newValue + " Valor antigo: " + oldValue);
-        if (table == jTBComposicao) {
-            //Se o valor novo não for vazio 
-            if(!newValue.toString().replace(" ", "").equals("")){
-                
-                if(column == 7 ){
-                    try { 
-                        //verifica se o valor setado é um valor double
-                        Integer qntd = Integer.parseInt(table.getValueAt(row, column).toString());
-                        if(qntd > 0){
-                            //Seta valor com ponto em vez de virgula
-                            table.setValueAt(qntd, row, column);
-                        }else{
-                            JOptionPane.showMessageDialog(null, "A quantidade deve ser maior que zero!");
-                            table.setValueAt(oldValue, row, column);
-                        }
-                       
-                        
-                    } catch (Exception e) {
-                        //se não for double, emite a mensagem e retorna para o valor que estava
-                        JOptionPane.showMessageDialog(null, "Informe um valor numérico para quantidade!");  
-                        table.setValueAt(oldValue, row, column);
+                if (sel != null) {
+                    if (sel == true) {
+                        table.setValueAt(true, row, 0);
+                    } else {
+                        table.setValueAt(false, row, 0);
                     }
 
                 }
-            }else
-            {
+            }
+
+            if (!isSelected) {
+                if (exc == 1) {
+                    background = Color.RED;
+                    renderer.setBackground(background);
+                } else {
+                    background = Color.WHITE;
+                    renderer.setBackground(background);
+                }
+            }
+            return renderer;
+        }
+    }
+
+    private void onCellEditor(JTable table, int column, int row, Object oldValue, Object newValue) {
+        System.out.println("Coluna:" + column + "Valor novo: " + newValue + " Valor antigo: " + oldValue);
+        if (table == jTBComposicao) {
+            //Se o valor novo não for vazio 
+            if (!newValue.toString().replace(" ", "").equals("")) {
+
+                if (column == 7) {
+                    componente.setId_componente(Integer.parseInt(jTFIDComponente.getText()));
+                    //se o componente não está no projeto
+                    if (dao_componente.verificaEstaNoProjeto(componente) == false) {
+
+                        try {
+                            //verifica se o valor setado é um valor double
+                            Integer qntd = Integer.parseInt(table.getValueAt(row, column).toString());
+                            if (qntd > 0) {
+                                //Seta valor com ponto em vez de virgula
+                                table.setValueAt(qntd, row, column);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "A quantidade deve ser maior que zero!");
+                                table.setValueAt(oldValue, row, column);
+                            }
+
+                        } catch (Exception e) {
+                            //se não for double, emite a mensagem e retorna para o valor que estava
+                            JOptionPane.showMessageDialog(null, "Informe um valor numérico para quantidade!");
+                            table.setValueAt(oldValue, row, column);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Este componente está sendo utilizado em projetos, não é possível alterar sua composição!");
+                        table.setValueAt(oldValue, row, column);
+                    }
+                }
+            } else {
                 //seta na jtable o valor que estava antes de apagar
                 table.setValueAt(oldValue, row, column);
             }
-  
+
         }
     }
 
     class TableCellEditorAction extends AbstractAction {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             TableCellListener tbListener = (TableCellListener) e.getSource();
-            
+
             onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
         }
     }

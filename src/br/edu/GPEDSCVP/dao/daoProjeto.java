@@ -121,4 +121,17 @@ public class daoProjeto {
         }      
         return true;
     }  
+    
+    public boolean verificaExclusao(Projeto projeto){
+        Integer id_projeto = 0;
+        
+        conecta_banco.executeSQL("select * from versao_projeto where id_projeto = "+projeto.getId_projeto()+" and versao_projeto.in_ativo = 'A'");
+        try {        
+           conecta_banco.resultset.first();
+           id_projeto = conecta_banco.resultset.getInt("id_projeto");
+           return false;
+        } catch (SQLException ex) {
+           return true;
+        }
+    }
 }

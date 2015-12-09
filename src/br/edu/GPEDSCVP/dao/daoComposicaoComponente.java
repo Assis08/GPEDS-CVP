@@ -5,6 +5,7 @@
  */
 package br.edu.GPEDSCVP.dao;
 
+import br.edu.GPEDSCVP.classe.ComponenteVersaoProjeto;
 import br.edu.GPEDSCVP.classe.ComposicaoComponente;
 import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.util.FormatarData;
@@ -21,6 +22,8 @@ public class daoComposicaoComponente {
     
     ConexaoBanco conecta_banco;
     UltimaSequencia ultima;
+    daoComponenteVersaoProjeto dao_comp_vers = new daoComponenteVersaoProjeto();
+    ComponenteVersaoProjeto comp_vers_proj = new ComponenteVersaoProjeto();
     
     public daoComposicaoComponente()
     {
@@ -46,6 +49,7 @@ public class daoComposicaoComponente {
      public void alterarComposicao (ComposicaoComponente composicao){
         
         Integer id_subcomponente;
+        Integer id_componente;
         Integer id_composicao;
         Integer qntd;
         String tipo = "";
@@ -78,6 +82,7 @@ public class daoComposicaoComponente {
                     + " WHERE ID_COMPOSICAO = " + id_composicao;
             
                     conecta_banco.atualizarSQL(sql);  
+                
                 }
 
             } catch (Exception e) {

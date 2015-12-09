@@ -27,40 +27,36 @@ import javax.swing.table.DefaultTableModel;
  * @author Willys
  */
 public class daoVersaoProjeto {
-    
+
     ConexaoBanco conecta_banco;
     UltimaSequencia ultima;
     daoComponente dao_comp = new daoComponente();
     daoComponenteVersaoProjeto dao_comp_vers = new daoComponenteVersaoProjeto();
-    daoMoeda  dao_moeda = new daoMoeda();
+    daoMoeda dao_moeda = new daoMoeda();
     Componente componente = new Componente();
-    
-    public daoVersaoProjeto()
-    {
-        try
-        {
+
+    public daoVersaoProjeto() {
+        try {
             conecta_banco = new ConexaoBanco();
-        }
-        catch(SQLException ex)
-        {
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha na fonte de dados");
         }
     }
-    
-    public void consultaCodigo(VersaoProjeto projeto){
-        
-        conecta_banco.executeSQL("select * from versao_projeto where in_Ativo = 'A' and id_projeto = "+projeto.getId_projeto());
+
+    public void consultaCodigo(VersaoProjeto projeto) {
+
+        conecta_banco.executeSQL("select * from versao_projeto where in_Ativo = 'A' and id_projeto = " + projeto.getId_projeto());
 
         projeto.setRetorno(conecta_banco.resultset);
     }
-    
-    public void retornardados(VersaoProjeto versao){
-        String sql = "select * from versao_projeto where id_projeto = "+versao.getId_projeto()+" and versao = "+versao.getVersao()
-        +" and in_ativo = 'A'";
-           
+
+    public void retornardados(VersaoProjeto versao) {
+        String sql = "select * from versao_projeto where id_projeto = " + versao.getId_projeto() + " and versao = " + versao.getVersao()
+                + " and in_ativo = 'A'";
+
         conecta_banco.executeSQL(sql);
-        try {        
-            
+        try {
+
             conecta_banco.resultset.first();
             versao.setCod_vers_projeto(conecta_banco.resultset.getInt("cod_vers_projeto"));
             versao.setId_projeto(conecta_banco.resultset.getInt("id_projeto"));
@@ -70,43 +66,43 @@ public class daoVersaoProjeto {
             versao.setCertificacao(conecta_banco.resultset.getString("certificacao"));
             versao.setData_cadastro(conecta_banco.resultset.getDate("data_cadastro"));
             versao.setData_alter(conecta_banco.resultset.getDate("data_alter"));
-           
+
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Falha ao retornar dados da versão");
         }
-       
+
     }
-    
-    public Double criaCodigoVersao(VersaoProjeto versao, String tipo_inc){
-        
+
+    public Double criaCodigoVersao(VersaoProjeto versao, String tipo_inc) {
+
         Integer versao_prim_casa = 0;
         Double cod_versao = 0.0;
         String valor;
         //Verifica se existe versões para este projeto
-        String sql = "select max(versao) versao from versao_projeto where id_projeto = "+versao.getId_projeto()+"";
-           
+        String sql = "select max(versao) versao from versao_projeto where id_projeto = " + versao.getId_projeto() + " and versao_projeto.in_ativo = 'A'";
+
         conecta_banco.executeSQL(sql);
         try {
             conecta_banco.resultset.first();
             cod_versao = conecta_banco.resultset.getDouble("versao");
-   
-            if(cod_versao > 0.0){
+
+            if (cod_versao > 0.0) {
                 //Incremente casa antes da virgula
-                if(tipo_inc.equals("PRIMEIRA_CASA")){
+                if (tipo_inc.equals("PRIMEIRA_CASA")) {
 
                     valor = String.valueOf(cod_versao).replace(".", "");
                     versao_prim_casa = Integer.parseInt(valor) / 10;
                     cod_versao = Double.parseDouble(versao_prim_casa.toString()) + 1;
 
-                }else if(tipo_inc.equals("SEGUNDA_CASA")){
+                } else if (tipo_inc.equals("SEGUNDA_CASA")) {
                     //incrementa casa após a virgula
-                   String nova_versao;
-                   DecimalFormat fmt = new DecimalFormat("0.0");
-                   cod_versao = cod_versao + 0.1;
-                   nova_versao = fmt.format(cod_versao).replace(",", ".");
-                   cod_versao = Double.parseDouble(nova_versao);
+                    String nova_versao;
+                    DecimalFormat fmt = new DecimalFormat("0.0");
+                    cod_versao = cod_versao + 0.1;
+                    nova_versao = fmt.format(cod_versao).replace(",", ".");
+                    cod_versao = Double.parseDouble(nova_versao);
                 }
-            }else{
+            } else {
                 cod_versao = 1.0;
             }
         } catch (SQLException ex) {
@@ -114,63 +110,63 @@ public class daoVersaoProjeto {
         }
         return cod_versao;
     }
-    
-     //Método de incluir uma nova versão no banco
-    public boolean incluir(VersaoProjeto versao) throws SQLException{
+
+    //Método de incluir uma nova versão no banco
+    public boolean incluir(VersaoProjeto versao) throws SQLException {
         //Insert de versão
         ultima = new UltimaSequencia();
         int resultado;
 
-        int sequencia = (Integer) (ultima.ultimasequencia("VERSAO_PROJETO","COD_VERS_PROJETO"));
+        int sequencia = (Integer) (ultima.ultimasequencia("VERSAO_PROJETO", "COD_VERS_PROJETO"));
 
         resultado = conecta_banco.executeSQL("INSERT INTO versao_projeto (cod_vers_projeto , id_projeto, versao, in_ativo, comercializado, lote, certificacao,"
-        + "data_cadastro,data_alter) "
-        + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ",
-        sequencia,
-        versao.getId_projeto(),
-        versao.getVersao(),
-        "A",
-        versao.getComercializado(),
-        versao.getLote(),
-        versao.getCertificacao(),
-        FormatarData.dateParaSQLDate(versao.getData_cadastro()),
-        FormatarData.dateParaTimeStamp(versao.getData_alter()));
+                + "data_cadastro,data_alter) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?) ",
+                sequencia,
+                versao.getId_projeto(),
+                versao.getVersao(),
+                "A",
+                versao.getComercializado(),
+                versao.getLote(),
+                versao.getCertificacao(),
+                FormatarData.dateParaSQLDate(versao.getData_cadastro()),
+                FormatarData.dateParaTimeStamp(versao.getData_alter()));
 
-        if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+        if (resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES) {
             return false;
-        }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+        } else if (resultado == ExcessaoBanco.OUTROS_ERROS) {
             return false;
-        }else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO){
+        } else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO) {
             return false;
         }
-        return true;    
+        return true;
     }
-    
+
     //Método de alterar fornecimento no banco
     public boolean alterar(VersaoProjeto versao) throws SQLException {
-       
-        int resultado;
-       
-        resultado = conecta_banco.executeSQL("UPDATE versao_projeto SET comercializado = ?, lote = ?, certificacao = ?, data_alter = ? "
-        + "WHERE cod_vers_projeto = ? ",
-        versao.getComercializado(),
-        versao.getLote(),
-        versao.getCertificacao(),
-        versao.getData_alter(),
-        versao.getCod_vers_projeto());
 
-        if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+        int resultado;
+
+        resultado = conecta_banco.executeSQL("UPDATE versao_projeto SET comercializado = ?, lote = ?, certificacao = ?, data_alter = ? "
+                + "WHERE cod_vers_projeto = ? ",
+                versao.getComercializado(),
+                versao.getLote(),
+                versao.getCertificacao(),
+                versao.getData_alter(),
+                versao.getCod_vers_projeto());
+
+        if (resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES) {
             return false;
-        }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+        } else if (resultado == ExcessaoBanco.OUTROS_ERROS) {
             return false;
-        }else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO){
+        } else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO) {
             return false;
         }
-        return true;    
+        return true;
     }
-    
-    public boolean SalvarCompNoProjeto (ComponenteVersaoProjeto comp_vers_proj, JTable tabela_comp){
-        
+
+    public boolean SalvarCompNoProjeto(ComponenteVersaoProjeto comp_vers_proj, JTable tabela_comp) {
+
         Integer id_componente;
         Integer id_comp_vers;
         Integer nova_qntd;
@@ -178,122 +174,120 @@ public class daoVersaoProjeto {
         Integer qntd_inicial_comp;
         Integer exc = 0;
         int resultado;
-        
+
         ResultSet resultset_comp_fornec;
 
-        DefaultTableModel tabela = (DefaultTableModel)tabela_comp.getModel();
+        DefaultTableModel tabela = (DefaultTableModel) tabela_comp.getModel();
         int totlinha = tabela.getRowCount();
-        for (int i = 0; i < totlinha; i++){
-            
+        for (int i = 0; i < totlinha; i++) {
+
             id_comp_vers = Integer.parseInt(tabela.getValueAt(i, 1).toString());
             id_componente = Integer.parseInt(tabela.getValueAt(i, 2).toString());
             nova_qntd = Integer.parseInt(tabela.getValueAt(i, 7).toString());
             exc = Integer.parseInt(tabela.getValueAt(i, 9).toString());
             qntd_inicial_comp = Integer.parseInt(tabela.getValueAt(i, 10).toString());
-            
+
             //se o componente não for excluido
-            if(exc == 0){
-                
+            if (exc == 0) {
+
                 componente.setId_componente(id_componente);
                 comp_vers_proj.setId_componente(id_componente);
                 comp_vers_proj.setId_comp_versao(id_comp_vers);
                 comp_vers_proj.setQntd_no_projeto(nova_qntd);
 
                 //verifica se o componente possui composicao
-                if(dao_comp.verificaExisteComposicao(componente) == true){
+                if (dao_comp.verificaExisteComposicao(componente) == true) {
                     //se possui composição então atualiza a quantidade utilizada no projeto de todos componentes da composição
                     dao_comp_vers.atualizaQntdFornecComposicaoComponente(comp_vers_proj, qntd_inicial_comp);
 
                     resultset_comp_fornec = retornaCompFornecVersProj(comp_vers_proj);
                     //percorre o resultset de todos fornecimento do componente especifico para o projeto
                     try {
-                        while ( resultset_comp_fornec.next()) {
+                        while (resultset_comp_fornec.next()) {
                             //armaezna o id do componente
-                            id_comp_atualizar =  resultset_comp_fornec.getInt("id_comp_versao");
+                            id_comp_atualizar = resultset_comp_fornec.getInt("id_comp_versao");
 
                             //atualiza a quantidade utilizada no projeto
                             resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ?, situacao = ? "
-                            + "WHERE id_comp_versao = ? ",
-                            nova_qntd,
-                            "C",
-                            id_comp_atualizar);
+                                    + "WHERE id_comp_versao = ? ",
+                                    nova_qntd,
+                                    "C",
+                                    id_comp_atualizar);
 
-                            if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+                            if (resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES) {
                                 return false;
-                            }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+                            } else if (resultado == ExcessaoBanco.OUTROS_ERROS) {
                                 return false;
-                            }else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO){
+                            } else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO) {
                                 return false;
                             }
-                        } 
+                        }
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(null, "Falha ao atualizar a quantidade dos componentes para o projeto");
                     }
-                }else{
-                  //não possui composição então atualiza a quantidade para projeto do componente
+                } else {
+                    //não possui composição então atualiza a quantidade para projeto do componente
 
-                  resultset_comp_fornec = retornaCompFornecVersProj(comp_vers_proj);
-                  //percorre o resultset de todos fornecimento do componente especifico para o projeto
+                    resultset_comp_fornec = retornaCompFornecVersProj(comp_vers_proj);
+                    //percorre o resultset de todos fornecimento do componente especifico para o projeto
                     try {
-                        while ( resultset_comp_fornec.next()) {
+                        while (resultset_comp_fornec.next()) {
                             //armazena o id do componente para atualizar a quantidade
-                            id_comp_atualizar =  resultset_comp_fornec.getInt("id_comp_versao");
+                            id_comp_atualizar = resultset_comp_fornec.getInt("id_comp_versao");
 
                             //atualiza a quantidade utilizada no projeto
                             resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ?, situacao = ? "
-                            + "WHERE id_comp_versao = ? ",
-                            nova_qntd,
-                            "C",
-                            id_comp_atualizar);
+                                    + "WHERE id_comp_versao = ? ",
+                                    nova_qntd,
+                                    "C",
+                                    id_comp_atualizar);
 
-                            if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+                            if (resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES) {
                                 return false;
-                            }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+                            } else if (resultado == ExcessaoBanco.OUTROS_ERROS) {
                                 return false;
-                            }else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO){
+                            } else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO) {
                                 return false;
                             }
-                        } 
+                        }
                     } catch (SQLException ex) {
                         JOptionPane.showMessageDialog(null, "Falha ao atualizar a quantidade dos componentes para o projeto");
                     }
                 }
-            }else{
-               
+            } else {
+
                 //remove componente do projeto
                 resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ?, situacao = ? "
-                + "WHERE id_comp_versao = ? ",
-                0,
-                "NC",
-                id_comp_vers);
+                        + "WHERE id_comp_versao = ? ",
+                        0,
+                        "NC",
+                        id_comp_vers);
 
-                if(resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES){
+                if (resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES) {
                     return false;
-                }else if(resultado == ExcessaoBanco.OUTROS_ERROS){
+                } else if (resultado == ExcessaoBanco.OUTROS_ERROS) {
                     return false;
-                }else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO){
+                } else if (resultado == ExcessaoBanco.ERRO_LIMITE_ARQUIVO) {
                     return false;
                 }
-            }   
+            }
         }
-        return true;    
-     }
-    
+        return true;
+    }
+
     //retorna dados do fornecimento de um componente me especifico
-    public ResultSet retornaCompFornecVersProj(ComponenteVersaoProjeto comp_vers_proj){
-        
+    public ResultSet retornaCompFornecVersProj(ComponenteVersaoProjeto comp_vers_proj) {
+
         conecta_banco.executeSQL("select * from componentes_versao_projeto"
-        +" inner join componentes_fornecimento on (componentes_fornecimento.id_comp_fornec = componentes_versao_projeto.id_comp_fornec)"
-        +" where componentes_versao_projeto.id_comp_versao = "+comp_vers_proj.getId_comp_versao()+ " and componentes_fornecimento.in_ativo = 'A'");
+                + " inner join componentes_fornecimento on (componentes_fornecimento.id_comp_fornec = componentes_versao_projeto.id_comp_fornec)"
+                + " where componentes_versao_projeto.id_comp_versao = " + comp_vers_proj.getId_comp_versao() + " and componentes_fornecimento.in_ativo = 'A'");
 
         return conecta_banco.resultset;
 
     }
-    
- 
-    
+
     //Método para calcular o custo do componente que possui composição
-    public Double calculaComposicaoComponente(ComponenteVersaoProjeto componente){
+    public Double calculaComposicaoComponente(ComponenteVersaoProjeto componente) {
         Integer id_componente_composicao;
         Integer id_moeda;
         Integer qntd_componente_composicao;
@@ -303,34 +297,32 @@ public class daoVersaoProjeto {
         ResultSet result_composicao = null;
         ResultSet result_valor_comp = null;
         //faz a consulta de composição do componente
-        conecta_banco.executeSQL("select * from composicao_componente where id_componente = "+componente.getId_componente());
+        conecta_banco.executeSQL("select * from composicao_componente where id_componente = " + componente.getId_componente());
         result_composicao = conecta_banco.resultset;
         try {
-            while ( result_composicao.next()) {
-                
+            while (result_composicao.next()) {
+
                 id_componente_composicao = result_composicao.getInt("id_subcomponente");
                 qntd_componente_composicao = result_composicao.getInt("qntd");
                 componente.setId_componente(id_componente_composicao);
-                
-             
+
                 //sql para consulta do custo unitário do componente(composição) baseado no ultimo fornecimento feito do mesmo para a versão do projeto
-                
-                conecta_banco.executeSQL("select componentes_fornecimento.id_comp_fornec, componentes_fornecimento.id_componente,componentes_fornecimento.id_fornecimento," 
-                                        +" componentes_fornecimento.id_moeda,componentes_fornecimento.qntd_componente,componentes_fornecimento.valor_unit,componentes_fornecimento.in_ativo," 
-                                        +" componentes_versao_projeto.id_projeto,componentes_versao_projeto.cod_vers_projeto, fornecimento.data_cadastro from componentes_fornecimento" 
-                                        +" inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)" 
-                                        +" inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)"
-                                        +" where componentes_fornecimento.id_componente = "+componente.getId_componente()+" and componentes_versao_projeto.cod_vers_projeto = "+componente.getCod_vers_projeto()+" "
-                                        +" and componentes_fornecimento.in_ativo = 'A'" 
-                                        +" and fornecimento.data_cadastro >= (select max(fornecimento.data_cadastro) from componentes_fornecimento"
-                                        +" inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)" 
-                                        +" inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)" 
-                                        +" where componentes_fornecimento.id_componente = "+componente.getId_componente()+" and componentes_versao_projeto.cod_vers_projeto = "+componente.getCod_vers_projeto()+" "
-                                        +" and componentes_fornecimento.in_ativo = 'A')");
-                
-                                        result_valor_comp = conecta_banco.resultset;
-                
-                try {   
+                conecta_banco.executeSQL("select componentes_fornecimento.id_comp_fornec, componentes_fornecimento.id_componente,componentes_fornecimento.id_fornecimento,"
+                        + " componentes_fornecimento.id_moeda,componentes_fornecimento.qntd_componente,componentes_fornecimento.valor_unit,componentes_fornecimento.in_ativo,"
+                        + " componentes_versao_projeto.id_projeto,componentes_versao_projeto.cod_vers_projeto, fornecimento.data_cadastro from componentes_fornecimento"
+                        + " inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)"
+                        + " inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)"
+                        + " where componentes_fornecimento.id_componente = " + componente.getId_componente() + " and componentes_versao_projeto.cod_vers_projeto = " + componente.getCod_vers_projeto() + " "
+                        + " and componentes_fornecimento.in_ativo = 'A'"
+                        + " and fornecimento.data_cadastro >= (select max(fornecimento.data_cadastro) from componentes_fornecimento"
+                        + " inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)"
+                        + " inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)"
+                        + " where componentes_fornecimento.id_componente = " + componente.getId_componente() + " and componentes_versao_projeto.cod_vers_projeto = " + componente.getCod_vers_projeto() + " "
+                        + " and componentes_fornecimento.in_ativo = 'A')");
+
+                result_valor_comp = conecta_banco.resultset;
+
+                try {
                     //armazena valores para o calculo
                     result_valor_comp.first();
                     valor_unit = result_valor_comp.getDouble("valor_unit");
@@ -340,43 +332,65 @@ public class daoVersaoProjeto {
                     //converte valor_unitario para reais
                     valor_unit = dao_moeda.converteparaReais(valor_unit, id_moeda, data_fornec);
                     //calcula o total
-                    total_composicao = total_composicao + (valor_unit*qntd_componente_composicao);
+                    total_composicao = total_composicao + (valor_unit * qntd_componente_composicao);
                 } catch (SQLException ex) {
                     JOptionPane.showMessageDialog(null, "Falha ao calcular valor unitário da composição do componente.");
                 }
-                
+
                 calculaComposicaoComponente(componente);
             }
         } catch (SQLException ex) {
-             JOptionPane.showMessageDialog(null, "Falha ao calcular valor unitário da composição do componente.");
+            JOptionPane.showMessageDialog(null, "Falha ao calcular valor unitário da composição do componente.");
         }
-        
+
         return total_composicao;
     }
+
     //método para retornar qual a ultima versão de um projeto
-    public Double retornaUltimaVersao(VersaoProjeto versao){
-        
+
+    public Double retornaUltimaVersao(VersaoProjeto versao) {
+
         Double cod_versao = 0.0;
 
         //Verifica se existe versões para este projeto
-        String sql = "select max(versao) versao from versao_projeto where id_projeto = "+versao.getId_projeto()+" and  in_ativo = 'A'";
-           
+        String sql = "select max(versao) versao from versao_projeto where id_projeto = " + versao.getId_projeto() + " and  in_ativo = 'A'";
+
         conecta_banco.executeSQL(sql);
         try {
             conecta_banco.resultset.first();
             cod_versao = conecta_banco.resultset.getDouble("versao");
-   
+
         } catch (SQLException ex) {
             //cod_versao = 1.0;
         }
         return cod_versao;
     }
-    
+
     //Método para inativar versão
-    public void inativaVersao(VersaoProjeto versao){
+    public void inativaVersao(VersaoProjeto versao) {
         //Inativa versão    
         conecta_banco.atualizarSQL("UPDATE VERSAO_PROJETO SET IN_ATIVO = 'I'"
-                               + " WHERE COD_VERS_PROJETO = " + versao.getCod_vers_projeto());
+                + " WHERE COD_VERS_PROJETO = " + versao.getCod_vers_projeto());
         
+        //desconecta componentes da versão
+        
+        conecta_banco.atualizarSQL("UPDATE COMPONENTES_VERSAO_PROJETO SET SITUACAO = 'NC', qntd_no_projeto = "+0
+        + " WHERE COD_VERS_PROJETO = " + versao.getCod_vers_projeto());
+
     }
+    
+    public boolean verificaExclusao(VersaoProjeto versao) {
+        Integer id_versao = 0;
+        boolean excluir = false;
+
+        conecta_banco.executeSQL("select * from certificacao where cod_vers_projeto  = " + versao.getCod_vers_projeto() + " and certificacao.in_ativo = 'A'");
+        try {
+            conecta_banco.resultset.first();
+            id_versao = conecta_banco.resultset.getInt("cod_vers_projeto");
+            return false;
+        } catch (SQLException ex) {
+            return true;
+        }
+    }
+
 }

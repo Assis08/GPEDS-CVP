@@ -92,20 +92,19 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     int[] array_moedas;
     int[] array_fornecedores;
     int situacao = Rotinas.PADRAO;
-    
-    
+
     public InterfaceFornecimento() {
         initComponents();
-        
+
         //Cria renderer para as Jtable  
         TableCellRenderer renderer = new EvenOddRenderer();
         jTBComponentes.setDefaultRenderer(Object.class, renderer);
         jTBComponentesProjetos.setDefaultRenderer(Object.class, renderer);
-       
+
         //implementa Listener para edição da jtable
         new TableCellListener(jTBComponentes, new TableCellEditorAction());
         new TableCellListener(jTBComponentesProjetos, new TableCellEditorAction());
-        
+
         componente = new Componente();
         fornecimento = new Fornecimento();
         versao = new VersaoProjeto();
@@ -141,26 +140,26 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         }
         //desabilita campos da tela de fornecimento
         valida_campos.desabilitaCampos(jPFornecimento);
-        
+
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBComponentes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBComponentesProjetos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBConsultaFornecimentos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBConsultaCompFornec.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        
+
         //seta mascaras nos campos monetários
         valida_campos.formataMonetario(jFTValorFrete);
         valida_campos.formataMonetario(jFTFreteReais);
         valida_campos.formataMonetario(jFTValorImpostos);
         valida_campos.formataMonetario(jFTImpostosReais);
        // valida_campos.formataMonetario(jFTMascaMonetaria);
-        
+
         //Seta mascara na coluna de valor da jtable
-        Jtable.setarMascara(jTBComponentes, jFTMascaMonetaria,4);
-        
+        Jtable.setarMascara(jTBComponentes, jFTMascaMonetaria, 4);
+
         //seta mascara no campo de data
         jFTData.setFormatterFactory(new DefaultFormatterFactory(valida_campos.formata("##/##/#### ##:##:##")));
-        
+
         dao_fornecedor.consultageral(fornecedor);
         //Preenche dados nas ComboBox de fornecedor
         array_fornecedores = combo.PreencherCombo(jCBFornecedor, "nome", fornecedor.getRetorno(), "id_pessoa");
@@ -173,13 +172,13 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         array_moedas = combo.PreencherCombo(jCBMoedaImpostos, "unidade", moeda.getRetorno(), "id_moeda");
         //seta no array da classe de moeda a lista de moedas listadas na combo
         moeda.setArray_moeda(array_moedas);
-        
+
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
 
         //habilita os botoes utilizados na inicialização da tela
         valida_botoes.ValidaEstado(jPBotoes, situacao);
-        
+
         //atualiza dados do usuario logado
         dao_acesso.retornaUsuarioLogado(acesso);
     }
@@ -973,7 +972,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de fornecimentos");
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir fornecimentos no sistema");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -998,40 +997,48 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        //se naõ for gerente
-        if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario
-            dao_permissao.retornaDadosPermissao(acesso, permissao);
-        }
-        //Verifica se o usuario possui permissao para acessar essa tela
-        if (valida_acesso.verificaAcesso("excluir", acesso, permissao) == true) {
 
-            //Seta o id do fornecimento para exclusão
-            fornecimento.setId_fornecimento(Integer.parseInt(jTFIDFornecimento.getText()));
+        fornecimento.setId_fornecimento(Integer.parseInt(jTFIDFornecimento.getText()));
+        if (dao_fornecimento.verificaExclusao(fornecimento) == true) {
 
-            if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
-                //Inativa fornecimento
-                dao_fornecimento.inativaFornecimento(fornecimento);
-                JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
-                //Limpa os campos da tela fornecimento
-                valida_campos.LimparCampos(jPFornecimento);
-                valida_campos.LimparJtable(jTBComponentes);
-                valida_campos.LimparJtable(jTBComponentesProjetos);
-                valida_campos.LimparJtable(jTBConsultaFornecimentos);
-                valida_campos.LimparJtable(jTBConsultaCompFornec);
-                jFTFreteReais.setValue(null);
-                jFTValorFrete.setValue(null);
-                jFTValorImpostos.setValue(null);
-                jFTImpostosReais.setValue(null);
-
-                //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
-                situacao = Rotinas.INICIAL;
-
-                //habilita os botoes utilizados na inicialização da tela
-                valida_botoes.ValidaEstado(jPBotoes, situacao);
+            //se naõ for gerente
+            if (acesso.getIn_gerente() == 0) {
+                //retorna as permissoes de acesso do usuario
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
             }
-        } else {
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir fornecimentos no sistema");
+            //Verifica se o usuario possui permissao para acessar essa tela
+            if (valida_acesso.verificaAcesso("excluir", acesso, permissao) == true) {
+
+                //Seta o id do fornecimento para exclusão
+                fornecimento.setId_fornecimento(Integer.parseInt(jTFIDFornecimento.getText()));
+
+                if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
+                    //Inativa fornecimento
+                    dao_fornecimento.inativaFornecimento(fornecimento);
+                    JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
+                    //Limpa os campos da tela fornecimento
+                    valida_campos.LimparCampos(jPFornecimento);
+                    valida_campos.LimparJtable(jTBComponentes);
+                    valida_campos.LimparJtable(jTBComponentesProjetos);
+                    valida_campos.LimparJtable(jTBConsultaFornecimentos);
+                    valida_campos.LimparJtable(jTBConsultaCompFornec);
+                    jFTFreteReais.setValue(null);
+                    jFTValorFrete.setValue(null);
+                    jFTValorImpostos.setValue(null);
+                    jFTImpostosReais.setValue(null);
+
+                    //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
+                    situacao = Rotinas.INICIAL;
+
+                    //habilita os botoes utilizados na inicialização da tela
+                    valida_botoes.ValidaEstado(jPBotoes, situacao);
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir fornecimentos no sistema");
+            }
+        }else{
+             JOptionPane.showMessageDialog(null, "O registro não pode ser "
+            + "excluído, ele está sendo utilizado em outro cadastro/movimento");
         }
     }//GEN-LAST:event_jButton3ActionPerformed
 
@@ -1043,16 +1050,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         //Se for inclusão
         if (situacao == Rotinas.INCLUIR) {
             if (valida_campos.validacamposobrigatorios(jPFornecimento, "FORNECIMENTO") == 0) {
-                if(valida_campos.VerificaJtable(jTBComponentes) == 1){ 
-                    if(dao_comp_fornec.verificaCompFornec(jTBComponentes) == true){
+                if (valida_campos.VerificaJtable(jTBComponentes) == 1) {
+                    if (dao_comp_fornec.verificaCompFornec(jTBComponentes) == true) {
                         try {
                             //pega dados do fornecimento na tela
                             getFornecimento();
                             //inclui componente
-                            if(dao_fornecimento.incluir(fornecimento) == true){
+                            if (dao_fornecimento.incluir(fornecimento) == true) {
                                 getCompFornec();
                                 getCompVersProj();
-                                
+
                                 dao_comp_fornec.gravarCompFornec(comp_fornec);
                                 dao_comp_vers.gravarCompVersProj(comp_vers_proj);
 
@@ -1068,7 +1075,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                                 valida_campos.LimparJtable(jTBComponentesProjetos);
                                 valida_campos.LimparJtable(jTBConsultaFornecimentos);
                                 valida_campos.LimparJtable(jTBConsultaCompFornec);
-                               
+
                                 //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                                 situacao = Rotinas.INICIAL;
 
@@ -1081,22 +1088,22 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         } catch (SQLException ex) {
                             JOptionPane.showMessageDialog(null, "Falha ao incluir fornecimento");
                         }
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(null, "Todos componentes fornecidos devem ser adicionados para projeto(s)!");
-                    } 
-                }else{
-                    JOptionPane.showMessageDialog(null,"Informar quais componentes foram fornecidos!");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Informar quais componentes foram fornecidos!");
                 }
             }
-        }else if(situacao == Rotinas.ALTERAR) {
+        } else if (situacao == Rotinas.ALTERAR) {
             //pega dados do material na tela
             if (valida_campos.validacamposobrigatorios(jPFornecimento, "FORNECIMENTO") == 0) {
-                 if(valida_campos.VerificaJtable(jTBComponentes) == 1){ 
-                    if(dao_comp_fornec.verificaCompFornec(jTBComponentes) == true){
+                if (valida_campos.VerificaJtable(jTBComponentes) == 1) {
+                    if (dao_comp_fornec.verificaCompFornec(jTBComponentes) == true) {
                         try {
                             getFornecimento();
                             //alterar componente
-                            if(dao_fornecimento.alterar(fornecimento) == true){
+                            if (dao_fornecimento.alterar(fornecimento) == true) {
                                 //altera composição
                                 getCompFornec();
                                 getCompVersProj();
@@ -1115,7 +1122,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                                 valida_campos.LimparJtable(jTBComponentesProjetos);
                                 valida_campos.LimparJtable(jTBConsultaFornecimentos);
                                 valida_campos.LimparJtable(jTBConsultaCompFornec);
-                                
+
                                 //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
                                 situacao = Rotinas.INICIAL;
 
@@ -1128,12 +1135,12 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         } catch (SQLException ex) {
                             JOptionPane.showMessageDialog(null, "Falha ao alterar fornecimento");
                         }
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(null, "Todos componentes fornecidos devem ser adicionados para projeto(s)!");
                     }
-                 }else{
-                     JOptionPane.showMessageDialog(null,"Informar quais componentes foram fornecidos!");
-                 }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Informar quais componentes foram fornecidos!");
+                }
             }
         }
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -1189,16 +1196,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             acesso.setNome_tela("Pessoas");
 
             //se naõ for gerente
-            if(acesso.getIn_gerente() == 0){
+            if (acesso.getIn_gerente() == 0) {
                 //retorna as permissoes de acesso do usuario
                 dao_permissao.retornaDadosPermissao(acesso, permissao);
             }
 
             //Verifica se o usuario possui permissao para acessar essa tela
-            if (valida_acesso.verificaAcesso("acesso",acesso, permissao) == true){
+            if (valida_acesso.verificaAcesso("acesso", acesso, permissao) == true) {
                 //Traz para tela a tela de cadastro de pessoas
                 new InterfacePessoa().setVisible(true);
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Voce não possui permissões para acessar essa tela");
             }
 
@@ -1223,8 +1230,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             Integer exc = Integer.parseInt(jTBComponentes.getValueAt(linha, 10).toString());
             //se não for um item removido
             if (exc == 0) {
-                dao_comp_fornec.removeAtualizaItens(jTBComponentes,jTBComponentesProjetos, situacao);
-            }else{
+                dao_comp_fornec.removeAtualizaItens(jTBComponentes, jTBComponentesProjetos, situacao);
+            } else {
                 JOptionPane.showMessageDialog(null, "Item já removido");
             }
         } else {
@@ -1246,8 +1253,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             Integer exc = Integer.parseInt(jTBComponentesProjetos.getValueAt(linha, 10).toString());
             //se não for um item removido
             if (exc == 0) {
-                dao_comp_vers.removeAtualizaItens(jTBComponentesProjetos,jTBComponentes, situacao);
-            }else{
+                dao_comp_vers.removeAtualizaItens(jTBComponentesProjetos, jTBComponentes, situacao);
+            } else {
                 JOptionPane.showMessageDialog(null, "Item já removido");
             }
         } else {
@@ -1270,21 +1277,21 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         if (evt.getClickCount() == 1) {
 
             //Preenche na JTABLE os dados dos componentes cadastrados
-            Jtable.PreencherJtableGenerico(jTBConsultaCompFornec, new String[]{"componentes_fornecimento.id_comp_fornec", "componentes_fornecimento.id_componente", 
-                "componente.descricao", "componente.tipo", "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","null","qntd_componente","null","componentes_fornecimento.data_alter"}, comp_fornec.getRetorno());
+            Jtable.PreencherJtableGenerico(jTBConsultaCompFornec, new String[]{"componentes_fornecimento.id_comp_fornec", "componentes_fornecimento.id_componente",
+                "componente.descricao", "componente.tipo", "componentes_fornecimento.id_moeda", "moeda.unidade", "componentes_fornecimento.valor_unit", "null", "qntd_componente", "null", "componentes_fornecimento.data_alter"}, comp_fornec.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBConsultaCompFornec);
-            
+
             //calcula imposto unitário de cada componente listado no fornecimento
             dao_comp_fornec.calculaImpostoUnit(comp_fornec, jTBConsultaFornecimentos);
-            
+
             //calcula o valor total do componente no fornecimento
             dao_comp_fornec.calculaTotalCompFornec(comp_fornec, jTBConsultaFornecimentos);
-            
+
             //Seta na field de total, o calculo do total do fornecimento selecionado
             jTFTotalFornecimento.setText(dao_comp_fornec.calculaTotalFornec(comp_fornec).toString());
 
             //Verifica se houve 2 cliques do mouse
-        }else  if (evt.getClickCount() == 2){
+        } else if (evt.getClickCount() == 2) {
 
             //Limpa os campos da tela componente
             valida_campos.LimparCampos(jPFornecimento);
@@ -1315,22 +1322,22 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             //busca composição do componente clicado
             comp_fornec.setId_fornecimento(id_fornec);
             dao_comp_fornec.consultaCompFornec(comp_fornec);
-            
+
             comp_vers_proj.setId_fornecimento(id_fornec);
             dao_comp_vers.consultaCompFornecVersProj(comp_vers_proj);
             //seta dados do componente na tela de cadastro
             setcompFornecimento();
-           
+
             //Preenche na JTABLE de componentes fornecidos
-            Jtable.PreencherJtableGenerico(jTBComponentes, new String[]{"null","componentes_fornecimento.id_comp_fornec","componentes_fornecimento.id_componente",
-            "componente.descricao","componentes_fornecimento.valor_unit","componentes_fornecimento.id_moeda","moeda.unidade","qntd_componente","qntd_restante",
-            "total","false"}, comp_fornec.getRetorno());
+            Jtable.PreencherJtableGenerico(jTBComponentes, new String[]{"null", "componentes_fornecimento.id_comp_fornec", "componentes_fornecimento.id_componente",
+                "componente.descricao", "componentes_fornecimento.valor_unit", "componentes_fornecimento.id_moeda", "moeda.unidade", "qntd_componente", "qntd_restante",
+                "total", "false"}, comp_fornec.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBComponentes);
 
             //Preenche na JTABLE os componentes adicionados para os projetos
-            Jtable.PreencherJtableGenerico(jTBComponentesProjetos, new String[]{"null","id_comp_versao","componentes_versao_projeto.id_comp_fornec",
-            "componentes_versao_projeto.id_projeto","componentes_versao_projeto.cod_vers_projeto",
-            "projeto.descricao","versao_projeto.versao","componentes_versao_projeto.id_componente","componente.descricao","qntd_para_projeto","false"}, comp_vers_proj.getRetorno());
+            Jtable.PreencherJtableGenerico(jTBComponentesProjetos, new String[]{"null", "id_comp_versao", "componentes_versao_projeto.id_comp_fornec",
+                "componentes_versao_projeto.id_projeto", "componentes_versao_projeto.cod_vers_projeto",
+                "projeto.descricao", "versao_projeto.versao", "componentes_versao_projeto.id_componente", "componente.descricao", "qntd_para_projeto", "false"}, comp_vers_proj.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBComponentesProjetos);
 
             //retorna para tela de cadastro
@@ -1354,23 +1361,23 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
         //Verifica se o usuario possui permissao para acessar essa tela
         if (valida_acesso.verificaAcesso("consultar", acesso, permissao) == true) {
 
-                // recupera linha selecionada
-                int linha = jTBConsultaFornecimentos.getSelectedRow();
-                int id_busca = 0;
-                String ds_busca = "";
-                
-                //Limpa jtable para nova consulta 
-                valida_campos.LimparJtable(jTBConsultaFornecimentos);
-                valida_campos.LimparJtable(jTBConsultaCompFornec);
+            // recupera linha selecionada
+            int linha = jTBConsultaFornecimentos.getSelectedRow();
+            int id_busca = 0;
+            String ds_busca = "";
 
-                //Tira aspas simples da string para evitar código sql
-                valida_campos.IgnoraSQL(jTFFiltro);
+            //Limpa jtable para nova consulta 
+            valida_campos.LimparJtable(jTBConsultaFornecimentos);
+            valida_campos.LimparJtable(jTBConsultaCompFornec);
 
-                switch (jCBBuscarPor.getSelectedIndex()) {
-                    //Buscar por : Consulta Geral
-                    case 0:
+            //Tira aspas simples da string para evitar código sql
+            valida_campos.IgnoraSQL(jTFFiltro);
+
+            switch (jCBBuscarPor.getSelectedIndex()) {
+                //Buscar por : Consulta Geral
+                case 0:
                     //tipo : Fornecimentos
-                    switch(jCBTipoConsulta.getSelectedIndex()){
+                    switch (jCBTipoConsulta.getSelectedIndex()) {
                         case 0:
                             //Consulta geral de fornecimentos
                             dao_fornecimento.consultageral(fornecimento);
@@ -1382,14 +1389,14 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                         case 2:
                             //Consulta geral de fornecimentos
                             dao_fornecimento.consultageral(fornecimento);
-                        break;
+                            break;
                     }
                     break;
-                    //Buscar por : Código
-                    case 1:
+                //Buscar por : Código
+                case 1:
 
                     //Combobox tipo: fornecimento
-                    switch(jCBTipoConsulta.getSelectedIndex()){
+                    switch (jCBTipoConsulta.getSelectedIndex()) {
                         case 0:
                             //Consulta pelo código do fornecimento
                             try {
@@ -1405,66 +1412,66 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                             //Consulta de fornecimentos pelo codigo do componente
                             try {
                                 id_busca = Integer.parseInt(jTFFiltro.getText());
-                                dao_fornecimento.consultaCodigoCompFornec(fornecimento,id_busca);
+                                dao_fornecimento.consultaCodigoCompFornec(fornecimento, id_busca);
                             } catch (Exception e) {
                                 JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
                                 jTFFiltro.grabFocus();
                             }
                             break;
                         case 2:
-                             //Consulta de fornecimentos pelo codigo do projeto
+                            //Consulta de fornecimentos pelo codigo do projeto
                             try {
                                 id_busca = Integer.parseInt(jTFFiltro.getText());
-                                dao_fornecimento.consultaCodigoProjFornec(fornecimento,id_busca);
+                                dao_fornecimento.consultaCodigoProjFornec(fornecimento, id_busca);
                             } catch (Exception e) {
                                 JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
                                 jTFFiltro.grabFocus();
                             }
-                        break;
+                            break;
                     }
                     break;
 
-                    case 2:
+                case 2:
 
                     //Combobox tipo: fornecimento
-                    switch(jCBTipoConsulta.getSelectedIndex()){
+                    switch (jCBTipoConsulta.getSelectedIndex()) {
                         case 0:
                             //Consulta fornecimentos em geral pela descrição
                             ds_busca = jTFFiltro.getText();
-                            if(!ds_busca.replace(" ", "").equals("")){
+                            if (!ds_busca.replace(" ", "").equals("")) {
                                 fornecimento.setDescricao(ds_busca);
                                 dao_fornecimento.consultaDescFornec(fornecimento);
-                            }else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
                                 jTFFiltro.grabFocus();
                             }
                             break;
                         case 1:
-                        //Consulta fornecimentos em geral pela descrição do componente
+                            //Consulta fornecimentos em geral pela descrição do componente
                             ds_busca = jTFFiltro.getText();
-                            if(!ds_busca.replace(" ", "").equals("")){
-                                dao_fornecimento.consultaDescCompFornec(fornecimento,ds_busca);
-                            }else{
+                            if (!ds_busca.replace(" ", "").equals("")) {
+                                dao_fornecimento.consultaDescCompFornec(fornecimento, ds_busca);
+                            } else {
                                 JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
                                 jTFFiltro.grabFocus();
                             }
-                        break;
+                            break;
                         case 2:
-                        //Consulta geral de componentes pela descrição
-                        ds_busca = jTFFiltro.getText();
-                        if(!ds_busca.replace(" ", "").equals("")){
-                            dao_fornecimento.consultaDescProjFornec(fornecimento,ds_busca);
-                        }else{
-                            JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
-                            jTFFiltro.grabFocus();
-                        }
-                        break;
+                            //Consulta geral de componentes pela descrição
+                            ds_busca = jTFFiltro.getText();
+                            if (!ds_busca.replace(" ", "").equals("")) {
+                                dao_fornecimento.consultaDescProjFornec(fornecimento, ds_busca);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
+                                jTFFiltro.grabFocus();
+                            }
+                            break;
                     }
                     break;
-                }
+            }
             //Preenche na JTABLE os dados dos componentes cadastrados
-            Jtable.PreencherJtableGenerico(jTBConsultaFornecimentos, new String[]{"fornecimento.id_fornecimento","fornecimento.descricao","fornecedor.id_pessoa","pessoa.nome",
-            "id_moeda_frete","moeda_frete.unidade","vl_frete","id_moeda_imp","moeda_imposto.unidade","vl_impostos","fornecimento.data_cadastro","fornecimento.data_alter"}, fornecimento.getRetorno());
+            Jtable.PreencherJtableGenerico(jTBConsultaFornecimentos, new String[]{"fornecimento.id_fornecimento", "fornecimento.descricao", "fornecedor.id_pessoa", "pessoa.nome",
+                "id_moeda_frete", "moeda_frete.unidade", "vl_frete", "id_moeda_imp", "moeda_imposto.unidade", "vl_impostos", "fornecimento.data_cadastro", "fornecimento.data_alter"}, fornecimento.getRetorno());
             Jtable.ajustarColunasDaTabela(jTBConsultaFornecimentos);
         } else {
             JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar componentes no sistema");
@@ -1476,84 +1483,83 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBFornecimentoStateChanged
 
     private void jFTValorFreteFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTValorFreteFocusLost
-        
+
         Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());
-        
-        if(jFTValorFrete.isEnabled())
-        {
-            if(!jFTValorFrete.getText().equals("")){
+
+        if (jFTValorFrete.isEnabled()) {
+            if (!jFTValorFrete.getText().equals("")) {
                 Double valor_inserido;
                 Double valor_convertido = 0.00;
                 String valor;
                 valor = jFTValorFrete.getText();
                 valor = valor.replace(".", "").replace(",", ".");
                 valor_inserido = Double.parseDouble(valor);
-                if(valor_inserido > 0){
-                    
-                    valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1),data_fornec);
-                    
-                }else{
+                if (valor_inserido > 0) {
+
+                    valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1), data_fornec);
+
+                } else {
                     jFTFreteReais.setText("0.00");
                     jFTValorFrete.setText("0.00");
                 }
-                
-                if(valor_convertido <= 0 && valor_inserido > 0){
+
+                if (valor_convertido <= 0 && valor_inserido > 0) {
                     jFTFreteReais.setValue(null);
                     jFTFreteReais.setText(null);
                     jFTValorFrete.setText(null);
                     jFTValorFrete.setValue(null);
-                }else{
-                    
-                    if(valor_convertido >= 999999999){
+                } else {
+
+                    if (valor_convertido >= 999999999) {
                         JOptionPane.showMessageDialog(null, "Valor convertido excede o valor máximo!");
                         jFTValorFrete.setValue(null);
                         jFTValorFrete.setText(null);
                         jFTFreteReais.setValue(null);
                         jFTFreteReais.setText(null);
                         jFTValorFrete.grabFocus();
-                    }else{
+                    } else {
                         jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
                     }
-                }   
+                }
             }
         }
     }//GEN-LAST:event_jFTValorFreteFocusLost
 
     private void jFTValorImpostosFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jFTValorImpostosFocusLost
-         Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());
-        
+        Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());
+
         //Verifica se foi selecionado uma moeda
-        if(jFTValorImpostos.isEnabled()){
+        if (jFTValorImpostos.isEnabled()) {
             //se o campo do valor não for vazio
-            if(!jFTValorImpostos.getText().equals("")){
+            if (!jFTValorImpostos.getText().equals("")) {
                 Double valor_inserido;
                 Double valor_convertido = 0.00;
                 String valor;
                 valor = jFTValorImpostos.getText();
                 valor = valor.replace(".", "").replace(",", ".");
                 valor_inserido = Double.parseDouble(valor);
-       
-                if(valor_inserido > 0){
-                    valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1),data_fornec);
-                }else{
+
+                if (valor_inserido > 0) {
+                    valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1), data_fornec);
+                } else {
                     jFTImpostosReais.setText("0.00");
                     jFTValorImpostos.setText("0.00");
                 }
-                
-                if(valor_convertido <= 0 && valor_inserido > 0){
+
+                if (valor_convertido <= 0 && valor_inserido > 0) {
                     jFTImpostosReais.setValue(null);
                     jFTImpostosReais.setText(null);
                     jFTValorImpostos.setValue(null);
                     jFTValorImpostos.setText(null);
-                }else{
-                    if(valor_convertido >= 999999999){
+                } else {
+                    if (valor_convertido >= 999999999) {
                         JOptionPane.showMessageDialog(null, "Valor convertido excede o valor máximo!");
                         jFTValorImpostos.setValue(null);
                         jFTValorImpostos.setText(null);
                         jFTImpostosReais.setValue(null);
                         jFTImpostosReais.setText(null);
                         jFTValorImpostos.grabFocus();
-                    }else{
+                    } else {
                         jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
                     }
                 }
@@ -1562,74 +1568,74 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jFTValorImpostosFocusLost
 
     private void jFTValorFreteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFTValorFreteActionPerformed
-       
+
     }//GEN-LAST:event_jFTValorFreteActionPerformed
 
     private void jFTValorFreteCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jFTValorFreteCaretUpdate
-       
+
     }//GEN-LAST:event_jFTValorFreteCaretUpdate
 
     private void jFTValorImpostosCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jFTValorImpostosCaretUpdate
-        
-       
+
+
     }//GEN-LAST:event_jFTValorImpostosCaretUpdate
 
     private void jCBMoedaImpostosPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaImpostosPopupMenuWillBecomeInvisible
-        Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());  
+        Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());
         //Verifica se foi selecionado uma moeda
-        if(jCBMoedaImpostos.getSelectedIndex() > 0){
+        if (jCBMoedaImpostos.getSelectedIndex() > 0) {
             jFTValorImpostos.setEnabled(true);
             //se o campo do valor não for vazio
-            if(!jFTValorImpostos.getText().equals("")){
+            if (!jFTValorImpostos.getText().equals("")) {
                 double valor_inserido;
                 double valor_convertido;
                 valor_inserido = Double.parseDouble(jFTValorImpostos.getText().replace(".", "").replace(",", "."));
-                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1),data_fornec);
-                
-                if(valor_convertido >= 999999999){
-                        JOptionPane.showMessageDialog(null, "Valor convertido excede o valor máximo!");
-                        jFTValorImpostos.setValue(null);
-                        jFTValorImpostos.setText(null);
-                        jFTImpostosReais.setValue(null);
-                        jFTImpostosReais.setText(null);
-                        jFTValorImpostos.grabFocus();
-                }else{
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaImpostos.getSelectedIndex() - 1), data_fornec);
+
+                if (valor_convertido >= 999999999) {
+                    JOptionPane.showMessageDialog(null, "Valor convertido excede o valor máximo!");
+                    jFTValorImpostos.setValue(null);
+                    jFTValorImpostos.setText(null);
+                    jFTImpostosReais.setValue(null);
+                    jFTImpostosReais.setText(null);
+                    jFTValorImpostos.grabFocus();
+                } else {
                     jFTImpostosReais.setText(String.valueOf(valor_convertido).replace(".", ","));
                 }
-              
+
             }
-        }else{
+        } else {
             jFTValorImpostos.setEnabled(false);
             jFTValorImpostos.setValue(null);
             jFTImpostosReais.setValue(null);
         }
-        
+
     }//GEN-LAST:event_jCBMoedaImpostosPopupMenuWillBecomeInvisible
 
     private void jCBMoedaFretePopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBMoedaFretePopupMenuWillBecomeInvisible
-        Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());         
+        Timestamp data_fornec = data.stringParaTimeStamp(jFTData.getText());
         //se estiver selecionado uma moeda
-        if(jCBMoedaFrete.getSelectedIndex() > 0){
+        if (jCBMoedaFrete.getSelectedIndex() > 0) {
             jFTValorFrete.setEnabled(true);
             //se o campo do valor não for vazio
-            if(!jFTValorFrete.getText().equals("")){
+            if (!jFTValorFrete.getText().equals("")) {
                 double valor_inserido;
                 double valor_convertido;
                 valor_inserido = Double.parseDouble(jFTValorFrete.getText().replace(".", "").replace(",", "."));
-                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1),data_fornec);
-                
-                if(valor_convertido >= 999999999){
+                valor_convertido = dao_moeda.converteparaReais(valor_inserido, moeda.getArray_moeda(jCBMoedaFrete.getSelectedIndex() - 1), data_fornec);
+
+                if (valor_convertido >= 999999999) {
                     JOptionPane.showMessageDialog(null, "Valor convertido excede o valor máximo!");
                     jFTValorFrete.setValue(null);
                     jFTValorFrete.setText(null);
                     jFTFreteReais.setValue(null);
                     jFTFreteReais.setText(null);
                     jFTValorFrete.grabFocus();
-                }else{
+                } else {
                     jFTFreteReais.setText(String.valueOf(valor_convertido).replace(".", ","));
                 }
             }
-        }else{
+        } else {
             jFTValorFrete.setEnabled(false);
             jFTValorFrete.setValue(null);
             jFTFreteReais.setValue(null);
@@ -1637,10 +1643,10 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBMoedaFretePopupMenuWillBecomeInvisible
 
     private void jBTAddparaProjetoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTAddparaProjetoActionPerformed
-        int linha = jTBComponentes.getSelectedRow();     
+        int linha = jTBComponentes.getSelectedRow();
         Integer exc = Integer.parseInt(jTBComponentes.getValueAt(linha, 10).toString());
-        if(linha >= 0){
-            if(exc == 0){
+        if (linha >= 0) {
+            if (exc == 0) {
                 String componente = jTBComponentes.getValueAt(linha, 3).toString();
                 int qntd_comp = Integer.parseInt(jTBComponentes.getValueAt(linha, 8).toString());
                 int id_componente = Integer.parseInt(jTBComponentes.getValueAt(linha, 2).toString());
@@ -1652,16 +1658,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
                 comp_fornec.setTabela(jTBComponentes);
                 comp_vers_proj.setId_comp_fornec(id_comp_fornec);
                 comp_vers_proj.setTabela(jTBComponentesProjetos);
-                
+
                 new InterfaceSelecionaProjeto().setVisible(true);
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Este componente foi removido, não pode ser adicionado para projetos!");
             }
-           
-        }else{
+
+        } else {
             JOptionPane.showMessageDialog(null, "Selecione um componente!");
         }
-        
+
     }//GEN-LAST:event_jBTAddparaProjetoActionPerformed
 
     private void jTBConsultaCompFornecMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaCompFornecMouseClicked
@@ -1673,8 +1679,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBConsultaFornecimentosMouseEntered
 
     private void jFTDataKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFTDataKeyTyped
-        String caracteres="0987654321";
-        if(!caracteres.contains(evt.getKeyChar()+"")){
+        String caracteres = "0987654321";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
             evt.consume();
         }
     }//GEN-LAST:event_jFTDataKeyTyped
@@ -1700,16 +1706,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jFTDataFocusLost
 
     private void jFTDataCaretUpdate(javax.swing.event.CaretEvent evt) {//GEN-FIRST:event_jFTDataCaretUpdate
-        
-       
+
+
     }//GEN-LAST:event_jFTDataCaretUpdate
 
     private void jFTDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jFTDataMouseClicked
-        
+
     }//GEN-LAST:event_jFTDataMouseClicked
 
     private void jFTDataInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_jFTDataInputMethodTextChanged
-       
+
     }//GEN-LAST:event_jFTDataInputMethodTextChanged
 
     private void jFTDataKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFTDataKeyPressed
@@ -1724,7 +1730,7 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }//GEN-LAST:event_jFTDataKeyPressed
 
     private void jFTValorFreteKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jFTValorFreteKeyPressed
-      
+
     }//GEN-LAST:event_jFTValorFreteKeyPressed
 
     private void jFTValorImpostosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jFTValorImpostosActionPerformed
@@ -1830,16 +1836,16 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     private javax.swing.JTextField jTFTotalFornecimento;
     // End of variables declaration//GEN-END:variables
 
-    public Fornecimento getFornecimento(){
-        
+    public Fornecimento getFornecimento() {
+
         fornecimento = new Fornecimento();
-        
+
         Date data_atual = new Date(System.currentTimeMillis());
-        
+
         int id_fornecimento = Integer.parseInt(jTFIDFornecimento.getText());
         Double valor_frete = Double.parseDouble(jFTValorFrete.getText().replace(",", "."));
         Double valor_imposto = Double.parseDouble(jFTValorImpostos.getText().replace(",", "."));
-        
+
         fornecimento.setId_fornecimento(id_fornecimento);
         fornecimento.setDescricao(jTFDescrição.getText());
         fornecimento.setId_pessoa(fornecedor.getArray_fornecedor(jCBFornecedor.getSelectedIndex() - 1));
@@ -1852,13 +1858,13 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         return fornecimento;
     }
-    
-     public ComponenteFornecimento getCompFornec(){
-        
+
+    public ComponenteFornecimento getCompFornec() {
+
         comp_fornec = new ComponenteFornecimento();
-        
+
         Date data_atual = new Date(System.currentTimeMillis());
-        
+
         int id_fornecimento = Integer.parseInt(jTFIDFornecimento.getText());
 
         comp_fornec.setId_fornecimento(id_fornecimento);
@@ -1867,43 +1873,43 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         return comp_fornec;
     }
-     
-    public ComponenteVersaoProjeto getCompVersProj(){
 
-       comp_vers_proj = new ComponenteVersaoProjeto();
+    public ComponenteVersaoProjeto getCompVersProj() {
 
-       Date data_atual = new Date(System.currentTimeMillis());
+        comp_vers_proj = new ComponenteVersaoProjeto();
 
-       int id_fornecimento = Integer.parseInt(jTFIDFornecimento.getText());
+        Date data_atual = new Date(System.currentTimeMillis());
 
-       comp_vers_proj.setId_fornecimento(id_fornecimento);
-       comp_vers_proj.setData_alter(data_atual);
-       comp_vers_proj.setTabela(jTBComponentesProjetos);
+        int id_fornecimento = Integer.parseInt(jTFIDFornecimento.getText());
 
-       return comp_vers_proj;
-   }
-    
-    public void setcompFornecimento(){
-         jTFIDFornecimento.setText(String.valueOf(fornecimento.getId_fornecimento()));
-         jTFDescrição.setText(fornecimento.getDescricao());
-         jCBFornecedor.setSelectedItem(fornecimento.getDs_pessoa());
-         jCBMoedaFrete.setSelectedItem(fornecimento.getDs_moeda_frete());
-         jFTValorFrete.setText(String.valueOf(fornecimento.getValor_frete()).replace(".", ","));
-         jFTFreteReais.setText(String.valueOf(dao_moeda.converteparaReais(fornecimento.getValor_frete(), fornecimento.getId_moeda_frete(), fornecimento.getData_cadastro())).replace(".", ","));
-         jCBMoedaImpostos.setSelectedItem(fornecimento.getDs_moeda_imp());
-         jFTValorImpostos.setText(String.valueOf(fornecimento.getValor_impostos()).replace(".", ","));
-         jFTImpostosReais.setText(String.valueOf(dao_moeda.converteparaReais(fornecimento.getValor_impostos(), fornecimento.getId_moeda_imp(), fornecimento.getData_cadastro())).replace(".", ","));
-         jFTData.setText(String.valueOf(data.organizaData(fornecimento.getData_cadastro())));
-     }
+        comp_vers_proj.setId_fornecimento(id_fornecimento);
+        comp_vers_proj.setData_alter(data_atual);
+        comp_vers_proj.setTabela(jTBComponentesProjetos);
+
+        return comp_vers_proj;
+    }
+
+    public void setcompFornecimento() {
+        jTFIDFornecimento.setText(String.valueOf(fornecimento.getId_fornecimento()));
+        jTFDescrição.setText(fornecimento.getDescricao());
+        jCBFornecedor.setSelectedItem(fornecimento.getDs_pessoa());
+        jCBMoedaFrete.setSelectedItem(fornecimento.getDs_moeda_frete());
+        jFTValorFrete.setText(String.valueOf(fornecimento.getValor_frete()).replace(".", ","));
+        jFTFreteReais.setText(String.valueOf(dao_moeda.converteparaReais(fornecimento.getValor_frete(), fornecimento.getId_moeda_frete(), fornecimento.getData_cadastro())).replace(".", ","));
+        jCBMoedaImpostos.setSelectedItem(fornecimento.getDs_moeda_imp());
+        jFTValorImpostos.setText(String.valueOf(fornecimento.getValor_impostos()).replace(".", ","));
+        jFTImpostosReais.setText(String.valueOf(dao_moeda.converteparaReais(fornecimento.getValor_impostos(), fornecimento.getId_moeda_imp(), fornecimento.getData_cadastro())).replace(".", ","));
+        jFTData.setText(String.valueOf(data.organizaData(fornecimento.getData_cadastro())));
+    }
 
     class EvenOddRenderer implements TableCellRenderer {
 
         public final DefaultTableCellRenderer DEFAULT_RENDERER = new DefaultTableCellRenderer();
 
         public Component getTableCellRendererComponent(JTable table, Object value,
-        boolean isSelected, boolean hasFocus, int row, int column) {
+                boolean isSelected, boolean hasFocus, int row, int column) {
             Component renderer = DEFAULT_RENDERER.getTableCellRendererComponent(
-                table, value, isSelected, hasFocus, row, column);
+                    table, value, isSelected, hasFocus, row, column);
             ((JLabel) renderer).setOpaque(true);
             Color foreground, background;
             int totcolun = table.getColumnCount();
@@ -1911,122 +1917,119 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             Integer exc = 0;
             Boolean sel = false;
 
-
-            exc = Integer.parseInt(table.getValueAt(row, totcolun-1).toString());
+            exc = Integer.parseInt(table.getValueAt(row, totcolun - 1).toString());
             sel = (Boolean) table.getValueAt(row, 0);
 
-            if(isSelected){
-                if(exc == 1){
-                   background = Color.RED;
-                   renderer.setBackground(background);
+            if (isSelected) {
+                if (exc == 1) {
+                    background = Color.RED;
+                    renderer.setBackground(background);
                 }
                 //garante que quando estiver selecinado é true e caso contrario e false (nunca sera nulo)
 
-                if(sel != null){
-                    if(sel == true){
+                if (sel != null) {
+                    if (sel == true) {
                         table.setValueAt(true, row, 0);
-                    }else{
+                    } else {
                         table.setValueAt(false, row, 0);
                     }
-                }       
-             }
-             if(!isSelected){
-                if(exc == 1){
+                }
+            }
+            if (!isSelected) {
+                if (exc == 1) {
                     background = Color.RED;
                     renderer.setBackground(background);
-                }else{
+                } else {
                     background = Color.WHITE;
                     renderer.setBackground(background);
                 }
-             }
+            }
             return renderer;
         }
     }
-    
-    private void onCellEditor(JTable table, int column, int row, Object oldValue, Object newValue){
+
+    private void onCellEditor(JTable table, int column, int row, Object oldValue, Object newValue) {
         System.out.println("Coluna:" + column + "Valor novo: " + newValue + " Valor antigo: " + oldValue);
         if (table == jTBComponentes) {
             Integer exc = Integer.parseInt(table.getValueAt(row, 10).toString());
             Integer id_comp = Integer.parseInt(table.getValueAt(row, 2).toString());
             //se não for um item excluido, deixa manipular valores
-            if(exc == 0){
-                
-                //Se o valor novo não for vazio
-                if(!newValue.toString().replace(" ", "").equals("")){
+            if (exc == 0) {
 
-                    if(column == 7 ){
-                        try { 
+                //Se o valor novo não for vazio
+                if (!newValue.toString().replace(" ", "").equals("")) {
+
+                    if (column == 7) {
+                        try {
                             //verifica se o valor setado é um valor double
                             Integer qntd = Integer.parseInt(table.getValueAt(row, column).toString());
                             Integer restante = Integer.parseInt(table.getValueAt(row, 8).toString());
                             Double valor_unit = Double.parseDouble(table.getValueAt(row, 4).toString().replace(".", "").replace(",", "."));
                             Double total;
-                            if(qntd > 0){
+                            if (qntd > 0) {
                                 //recalcula o total
                                 total = valor_unit * qntd;
                                 //recalcula o restante
-                                if(Integer.parseInt(newValue.toString()) > Integer.parseInt(oldValue.toString())){
+                                if (Integer.parseInt(newValue.toString()) > Integer.parseInt(oldValue.toString())) {
                                     restante = restante + (Integer.parseInt(newValue.toString()) - Integer.parseInt(oldValue.toString()));
-                                }else{
+                                } else {
                                     restante = restante - (Integer.parseInt(oldValue.toString()) - Integer.parseInt(newValue.toString()));
                                 }
-                                if(restante > -1){
+                                if (restante > -1) {
                                     table.setValueAt(restante, row, 8);
-                                    table.setValueAt(conversao.doubleParaObjectDecimalFormat(total),row, 9);
-                                }else{
-                                    table.setValueAt(oldValue,row, column);
+                                    table.setValueAt(conversao.doubleParaObjectDecimalFormat(total), row, 9);
+                                } else {
+                                    table.setValueAt(oldValue, row, column);
                                     JOptionPane.showMessageDialog(null, "A quantidade informada está abaixo da quantidade atribuida para os projetos!");
                                 }
-                            }else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "A quantidade deve ser maior que zero!");
                                 table.setValueAt(oldValue, row, column);
                             }
                         } catch (Exception e) {
                             //se não for double, emite a mensagem e retorna para o valor que estava
-                            JOptionPane.showMessageDialog(null, "Informe um valor numérico para quantidade!");  
+                            JOptionPane.showMessageDialog(null, "Informe um valor numérico para quantidade!");
                             table.setValueAt(oldValue, row, column);
                         }
                     }
 
-                    if(column == 4){
+                    if (column == 4) {
 
-                         try { 
+                        try {
                             //verifica se o componente possui composição, se sim, não deixa alterar o valor
                             componente.setId_componente(id_comp);
-                            if(dao_componente.verificaExisteComposicao(componente) == false){
+                            if (dao_componente.verificaExisteComposicao(componente) == false) {
                                 //verifica se o valor setado é um valor double
                                 Integer qntd = Integer.parseInt(table.getValueAt(row, 7).toString());
                                 Double valor_unit = Double.parseDouble(table.getValueAt(row, column).toString().replace(".", "").replace(",", "."));
                                 Double total;
-                                if(valor_unit > 0.00){
+                                if (valor_unit > 0.00) {
                                     //table.setValueAt(qntd, row, column);
                                     //recalcula o total
                                     total = qntd * valor_unit;
                                     table.setValueAt(conversao.doubleParaObjectDecimalFormat(total), row, 9);
-                                }else{
+                                } else {
                                     JOptionPane.showMessageDialog(null, "O Valor unitário deve ser maior que zero!");
                                     table.setValueAt(oldValue, row, column);
                                 }
-                            }else{
-                                JOptionPane.showMessageDialog(null, "Impossível aterar o valor unitário!\nEste componente é composto por uma composição, o valor unitário é calculado referente ao valor de sua composição");  
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Impossível aterar o valor unitário!\nEste componente é composto por uma composição, o valor unitário é calculado referente ao valor de sua composição");
                                 table.setValueAt(oldValue, row, column);
                             }
                         } catch (Exception e) {
                             //se não for double, emite a mensagem e retorna para o valor que estava
-                            JOptionPane.showMessageDialog(null, "Informe um valor numérico para valor unitário!");  
+                            JOptionPane.showMessageDialog(null, "Informe um valor numérico para valor unitário!");
                             table.setValueAt(oldValue, row, column);
                         }
 
                     }
-                }else
-                {
+                } else {
                     //seta na jtable o valor que estava antes de apagar
                     table.setValueAt(oldValue, row, column);
                 }
             }
-          
-  
-        }else if (table == jTBComponentesProjetos) {
+
+        } else if (table == jTBComponentesProjetos) {
             Integer restante = 0;
             Integer qntd_add = 0;
             Integer qntd_remov = 0;
@@ -2034,56 +2037,56 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
             Integer id_componente = Integer.parseInt(table.getValueAt(row, 7).toString());
             Integer exc = Integer.parseInt(table.getValueAt(row, 10).toString());
             Integer id_comp_versao = Integer.parseInt(table.getValueAt(row, 1).toString());
-            
+
             //retorna a quantidade utiliza no projeto do componente
             comp_vers_proj.setId_comp_versao(id_comp_versao);
             qntd_no_projeto = dao_comp_vers.retornaQntdNoProjeto(comp_vers_proj);
-            
+
             //se não for um item excluido, deixa manipular valores
-            if(exc == 0){
-            
+            if (exc == 0) {
+
                 //Se o valor novo não for vazio 
-                if(!newValue.toString().replace(" ", "").equals("")){
-                    if(column == 9 ){
+                if (!newValue.toString().replace(" ", "").equals("")) {
+                    if (column == 9) {
                         try {
                             Integer qntd = Integer.parseInt(table.getValueAt(row, column).toString());
-                            if(qntd > 0){
-                                if(qntd > qntd_no_projeto){
-                                    
+                            if (qntd > 0) {
+                                if (qntd > qntd_no_projeto) {
+
                                     //percorre jtable dos componentes fornecidos para saber a quantidade restante de cada
-                                    for(int i = 0; i < jTBComponentes.getRowCount(); i++){
+                                    for (int i = 0; i < jTBComponentes.getRowCount(); i++) {
                                         //encontrou o componente que esta sendo alterado a quantidade na jtable de fornecidos?
-                                        if(Integer.parseInt(jTBComponentes.getValueAt(i, 2).toString()) == id_componente){
+                                        if (Integer.parseInt(jTBComponentes.getValueAt(i, 2).toString()) == id_componente) {
                                             //recupera a quantidade restante do mesmo
                                             restante = Integer.parseInt(jTBComponentes.getValueAt(i, 8).toString());
                                             //calcula a quantiade que foi adicionada para o componente
-                                            if(Integer.parseInt(newValue.toString()) > Integer.parseInt(oldValue.toString())){
+                                            if (Integer.parseInt(newValue.toString()) > Integer.parseInt(oldValue.toString())) {
                                                 qntd_add = Integer.parseInt(newValue.toString()) - Integer.parseInt(oldValue.toString());
                                                 //quantidade adicionada é maior que o restante ?
-                                                if(qntd_add > restante){
+                                                if (qntd_add > restante) {
                                                     JOptionPane.showMessageDialog(null, "Quantidade adicionada excede a quantidade restante!");
                                                     table.setValueAt(oldValue, row, column);
-                                                }else{
+                                                } else {
                                                     jTBComponentes.setValueAt(restante - qntd_add, i, 8);
                                                 }
                                                 break;
                                                 // foi decrementado a quantidade
-                                            }else{
-                                            qntd_remov = Integer.parseInt(oldValue.toString()) - Integer.parseInt(newValue.toString());
-                                            jTBComponentes.setValueAt(restante + qntd_remov, i, 8);
+                                            } else {
+                                                qntd_remov = Integer.parseInt(oldValue.toString()) - Integer.parseInt(newValue.toString());
+                                                jTBComponentes.setValueAt(restante + qntd_remov, i, 8);
                                             }
                                         }
                                     }
-                                }else{
+                                } else {
                                     JOptionPane.showMessageDialog(null, "Quantidade informada é menor que a quantidade que já está sendo utilizada no projeto!");
-                                    table.setValueAt(oldValue,row, column);
+                                    table.setValueAt(oldValue, row, column);
                                 }
-                            }else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "Quantidade deve ser maior que zero!");
-                                table.setValueAt(oldValue,row, column);
+                                table.setValueAt(oldValue, row, column);
                             }
                         } catch (Exception e) {
-                            JOptionPane.showMessageDialog(null, "Informe um valor numérico para quantidade!");  
+                            JOptionPane.showMessageDialog(null, "Informe um valor numérico para quantidade!");
                         }
                     }
                 }
@@ -2094,10 +2097,11 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
     }
 
     class TableCellEditorAction extends AbstractAction {
+
         @Override
         public void actionPerformed(ActionEvent e) {
             TableCellListener tbListener = (TableCellListener) e.getSource();
-            
+
             onCellEditor(tbListener.getTable(), tbListener.getColumn(), tbListener.getRow(), tbListener.getOldValue(), tbListener.getNewValue());
         }
     }

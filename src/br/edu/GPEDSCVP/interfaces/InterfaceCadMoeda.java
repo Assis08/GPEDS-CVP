@@ -393,7 +393,8 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
     }//GEN-LAST:event_jBTAlterarActionPerformed
 
     private void jBTExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTExcluirActionPerformed
-         if (acesso.getIn_gerente() == 0) {
+        
+        if (acesso.getIn_gerente() == 0) {
             //retorna as permissoes de acesso do usuario  
             dao_permissao.retornaDadosPermissao(acesso, permissao);
         }
@@ -404,7 +405,7 @@ public class InterfaceCadMoeda extends javax.swing.JFrame {
                  if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
                      
                     if(dao_moeda.excluir(moeda) == true){
-                        JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
+                        JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
                         //limpa campos 
                         valida_campos.LimparCampos(jPMoeda);
 

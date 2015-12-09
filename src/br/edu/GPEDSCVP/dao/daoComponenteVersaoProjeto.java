@@ -662,6 +662,7 @@ public class daoComponenteVersaoProjeto {
         }
     }
 
+    /*
      //Método para calcular o custo do componente que possui composição
     public void atualizaQntdFornecComposicaoComponente(ComponenteVersaoProjeto componente, Integer qntd_inicial_comp){
        
@@ -741,9 +742,9 @@ public class daoComponenteVersaoProjeto {
         } catch (SQLException ex) {
              JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");
         }
-       
+       */
         
-        /*
+        
         
           //Método para calcular o custo do componente que possui composição
     public void atualizaQntdFornecComposicaoComponente(ComponenteVersaoProjeto componente, Integer qntd_inicial_comp){
@@ -868,10 +869,7 @@ public class daoComponenteVersaoProjeto {
         }
        
     }
-
-        
-        */
-    }
+    
     
     //metodo para calcular o total de componentes na jtable
     public double calcula_total_componentes(JTable Tabela_comp){

@@ -119,7 +119,7 @@ public class daoMaterial {
             }
             
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Falha ao tentar excluir material");
+            JOptionPane.showMessageDialog(null, "Falha ao excluir material");
         }
         return true;
     }

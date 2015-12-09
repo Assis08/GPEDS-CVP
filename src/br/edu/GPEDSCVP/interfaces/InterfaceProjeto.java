@@ -49,10 +49,10 @@ public class InterfaceProjeto extends javax.swing.JFrame {
     ManipulaJtable Jtable;
     FormatarData data;
     int situacao = Rotinas.PADRAO;
-    
+
     public InterfaceProjeto() {
         initComponents();
-        
+
         projeto = new Projeto();
         tela = new Tela();
         dao_tela = new daoTela();
@@ -71,20 +71,19 @@ public class InterfaceProjeto extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Falha ao iniciar registro");
         }
         Jtable = new ManipulaJtable();
-        
-        
+
         //desabilita campos da tela de projeto
         valida_campos.desabilitaCampos(jPProjeto);
-        
+
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBConsultaProjetos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-        
+
         //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
         situacao = Rotinas.INICIAL;
 
         //habilita os botoes utilizados na inicialização da tela
         valida_botoes.ValidaEstado(jPBotoes, situacao);
-        
+
         //atualiza dados do usuario logado
         dao_acesso.retornaUsuarioLogado(acesso);
     }
@@ -342,15 +341,15 @@ public class InterfaceProjeto extends javax.swing.JFrame {
                 int sequencia = (Integer) (ultima.ultimasequencia("PROJETO", "ID_PROJETO"));
                 //seta id no campo id_projeto
                 jTFIDProjeto.setText(Integer.toString(sequencia));
-                
+
                 //Seta a data atual no campo data
                 jFTData.setEnabled(true);
                 jFTData.setText(data.DataAtual());
-                
+
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Falha ao iniciar a inserção de projetos");
             }
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Voce não possui permissões para incluir projetos no sistema");
         }
     }//GEN-LAST:event_jBTNovoActionPerformed
@@ -369,40 +368,48 @@ public class InterfaceProjeto extends javax.swing.JFrame {
 
             valida_campos.habilitaCampos(jPProjeto);
 
-        }else{
+        } else {
             JOptionPane.showMessageDialog(null, "Voce não possui permissões para alterar projetos no sistema");
         }
     }//GEN-LAST:event_jBTAlterarActionPerformed
 
     private void jBTExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTExcluirActionPerformed
-        if (acesso.getIn_gerente() == 0) {
-            //retorna as permissoes de acesso do usuario
-            dao_permissao.retornaDadosPermissao(acesso, permissao);
-        }
+        projeto.setId_projeto(Integer.parseInt(jTFIDProjeto.getText()));
 
-        //Verifica se o usuario possui permissao para excluir registros nessa tela
-        if (valida_acesso.verificaAcesso("excluir", acesso, permissao) == true) {
+        if (dao_projeto.verificaExclusao(projeto) == true) {
 
-            if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
+            if (acesso.getIn_gerente() == 0) {
+                //retorna as permissoes de acesso do usuario
+                dao_permissao.retornaDadosPermissao(acesso, permissao);
+            }
 
-                if(dao_projeto.inativaProjeto(projeto) == true){
-                    JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
-                    //limpa campos
-                    valida_campos.LimparCampos(jPProjeto);
+            //Verifica se o usuario possui permissao para excluir registros nessa tela
+            if (valida_acesso.verificaAcesso("excluir", acesso, permissao) == true) {
 
-                    //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
-                    situacao = Rotinas.INICIAL;
+                if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
 
-                    //habilita os botoes utilizados na inclusão e desabilita os restantes
-                    valida_botoes.ValidaEstado(jPBotoes, situacao);
+                    if (dao_projeto.inativaProjeto(projeto) == true) {
+                        JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
+                        //limpa campos
+                        valida_campos.LimparCampos(jPProjeto);
 
-                    //desabilita campos
-                    valida_campos.desabilitaCampos(jPProjeto);
+                        //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão
+                        situacao = Rotinas.INICIAL;
+
+                        //habilita os botoes utilizados na inclusão e desabilita os restantes
+                        valida_botoes.ValidaEstado(jPBotoes, situacao);
+
+                        //desabilita campos
+                        valida_campos.desabilitaCampos(jPProjeto);
+                    }
+
                 }
-
+            } else {
+                JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir projetos no sistema");
             }
         }else{
-            JOptionPane.showMessageDialog(null, "Voce não possui permissões para excluir projetos no sistema");
+            JOptionPane.showMessageDialog(null, "O registro não pode ser "
+            + "excluído, ele está sendo utilizado em outro cadastro/movimento");
         }
     }//GEN-LAST:event_jBTExcluirActionPerformed
 
@@ -419,7 +426,7 @@ public class InterfaceProjeto extends javax.swing.JFrame {
                     //pega dados do projeto na tela
                     getProjeto();
                     //inclui projeto
-                    if(dao_projeto.incluir(projeto) == true){
+                    if (dao_projeto.incluir(projeto) == true) {
                         //se ocorreu tudo bem na inclusão
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
@@ -439,13 +446,13 @@ public class InterfaceProjeto extends javax.swing.JFrame {
                 }
 
             }
-        }else if(situacao == Rotinas.ALTERAR) {
+        } else if (situacao == Rotinas.ALTERAR) {
             //pega dados do projeto na tela
             if (valida_campos.validacamposobrigatorios(jPProjeto, "PROJETO") == 0) {
                 try {
                     getProjeto();
                     //altera projeto
-                    if(dao_projeto.alterar(projeto) == true){
+                    if (dao_projeto.alterar(projeto) == true) {
                         JOptionPane.showMessageDialog(null, "Salvo com Sucesso");
                         //limpa campos
                         valida_campos.LimparCampos(jPProjeto);
@@ -514,7 +521,7 @@ public class InterfaceProjeto extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBConsultaProjetosMouseClicked
 
     private void jTBProjetoStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBProjetoStateChanged
-        if(jTBProjeto.getSelectedIndex() == 1){
+        if (jTBProjeto.getSelectedIndex() == 1) {
             //Se não for gerente
             if (acesso.getIn_gerente() == 0) {
                 //retorna as permissoes de acesso do usuario
@@ -526,10 +533,10 @@ public class InterfaceProjeto extends javax.swing.JFrame {
                 //faz uma consulta geral de projetos no banco
                 dao_projeto.consultaGeral(projeto);
                 //preenche dados na jtable
-                Jtable.PreencherJtableGenerico(jTBConsultaProjetos, new String[]{"id_projeto","descricao","data_cadastro", "data_alter"}, projeto.getRetorno());
+                Jtable.PreencherJtableGenerico(jTBConsultaProjetos, new String[]{"id_projeto", "descricao", "data_cadastro", "data_alter"}, projeto.getRetorno());
                 //ajusta largura das colunas
                 Jtable.ajustarColunasDaTabela(jTBConsultaProjetos);
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar projetos no sistema");
                 //retorna para a tela de cadastro
                 jTBProjeto.setSelectedIndex(0);
@@ -595,19 +602,19 @@ public class InterfaceProjeto extends javax.swing.JFrame {
     //Pega dados do projeto na tela
     public Projeto getProjeto() {
         projeto = new Projeto();
-        
+
         Date data_atual = new Date(System.currentTimeMillis());
-        
+
         int id_projeto = Integer.parseInt(jTFIDProjeto.getText());
         projeto.setId_projeto(id_projeto);
         projeto.setDescricao(jTFDescricao.getText());
         projeto.setData_alter(data_atual);
         projeto.setData_cadastro(data.stringParaSQLDate(jFTData.getText()));
-      
+
         return projeto;
     }
-    
-    public void setcompProjeto(){
+
+    public void setcompProjeto() {
         //Seta dados do projeto na tela
         jTFIDProjeto.setText(Integer.toString(projeto.getId_projeto()));
         jTFDescricao.setText(projeto.getDescricao());

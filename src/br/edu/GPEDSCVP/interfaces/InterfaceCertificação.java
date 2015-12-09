@@ -762,11 +762,12 @@ public class InterfaceCertificação extends javax.swing.JFrame {
             if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
                 //Inativa componente
                 dao_certificacao.inativaCertificacao(certificacao);
-                JOptionPane.showMessageDialog(null, "Excluido com sucesso!");
+                JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
                 //Limpa os campos da tela certificação
                 valida_campos.LimparCampos(jPCertificacao);
                 valida_campos.LimparJtable(jTBConsultaCertificacoes);
                 jFTValorCertif.setText(null);
+                jFTValorCertif.setValue(null);
                 jTADescReprov.setText("");
 
                 //Define a situação como inicial para habilitar os botoes utilizados apenas quando inicia a tela
@@ -801,6 +802,7 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                         //limpa campos
                         valida_campos.LimparCampos(jPCertificacao);
                         jFTValorCertif.setText(null);
+                        jFTValorCertif.setValue(null);
                         jTADescReprov.setText("");
                         valida_campos.LimparJtable(jTBConsultaCertificacoes);
 
@@ -833,6 +835,7 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                         //limpa campos
                         valida_campos.LimparCampos(jPCertificacao);
                         jFTValorCertif.setText(null);
+                        jFTValorCertif.setValue(null);
                         jTADescReprov.setText("");
                         valida_campos.LimparJtable(jTBConsultaCertificacoes);
 
@@ -860,6 +863,7 @@ public class InterfaceCertificação extends javax.swing.JFrame {
         //limpa campos
         valida_campos.LimparCampos(jPCertificacao);
         jFTValorCertif.setText(null);
+        jFTValorCertif.setValue(null);
         jTADescReprov.setText("");
 
         //Define a situação como incluir para habilitar os botoes utilizados apenas na inclusão

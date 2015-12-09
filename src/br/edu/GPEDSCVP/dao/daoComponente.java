@@ -725,6 +725,20 @@ public class daoComponente {
         }
     }
     
+    //metodo para verificar se um componente foi fornecido para um projeto
+    public boolean verificaEstaNoProjeto(Componente componente){
+        Integer id_componente_composicao = 0;
+        //faz a consulta de composição do componente
+        conecta_banco.executeSQL("select * from componentes_versao_projeto where id_componente = "+componente.getId_componente());
+        try {        
+           conecta_banco.resultset.first();
+           id_componente_composicao = conecta_banco.resultset.getInt("id_componente");
+           return true;
+        } catch (SQLException ex) {
+           return false;
+        }
+    }
+    
     //Método para calcular o custo do componente que possui composição
     public Double calculaComposicaoComponente(ComponenteVersaoProjeto componente){
         
@@ -788,6 +802,19 @@ public class daoComponente {
         return total_composicao;
     }
     
+    
+    public boolean verificaExclusao(Componente componente){
+        Integer id_componente_composicao = 0;
+        //verifica se o componentes faz parte de algum fornecimento ativo
+        conecta_banco.executeSQL("select * from componentes_fornecimento where componentes_fornecimento.id_componente = "+componente.getId_componente()+" and componentes_fornecimento.in_ativo = 'A'");
+        try {        
+           conecta_banco.resultset.first();
+           id_componente_composicao = conecta_banco.resultset.getInt("id_componente");
+           return false;
+        } catch (SQLException ex) {
+           return true;
+        }
+    }
 }
 
 

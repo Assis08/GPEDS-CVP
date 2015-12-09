@@ -68,7 +68,7 @@
                       </Group>
                       <EmptySpace pref="268" max="32767" attributes="0"/>
                   </Group>
-                  <Component id="jPBotoes" alignment="0" pref="0" max="32767" attributes="0"/>
+                  <Component id="jPBotoes" alignment="0" pref="519" max="32767" attributes="0"/>
               </Group>
             </DimensionLayout>
             <DimensionLayout dim="1">

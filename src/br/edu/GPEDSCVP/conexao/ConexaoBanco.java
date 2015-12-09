@@ -134,7 +134,7 @@ public class ConexaoBanco {
     }catch (SQLException sqlex){
         if (sqlex.getErrorCode() == 1451){
             JOptionPane.showMessageDialog(null, "O registro não pode ser "
-            + "excluido, ele está sendo utilizado em outro cadastro/movimento");
+            + "excluído, ele está sendo utilizado em outro cadastro/movimento");
             retorno = 0;
             return ExcessaoBanco.ERRO_CHAVE_ESTRANGEIRA;
         }else if(sqlex.getErrorCode() == 1406){

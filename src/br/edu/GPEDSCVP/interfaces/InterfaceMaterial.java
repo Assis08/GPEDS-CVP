@@ -356,7 +356,7 @@ public class InterfaceMaterial extends javax.swing.JFrame {
             if (mensagem.ValidaMensagem("Deseja realmente excluir o registro ?") == 0) {
 
                 if(dao_material.excluir(material) == true){
-                    JOptionPane.showMessageDialog(null, "Excluido com Sucesso");
+                    JOptionPane.showMessageDialog(null, "Excluído com sucesso!");
                     //limpa campos
                     valida_campos.LimparCampos(jPMaterial);
 

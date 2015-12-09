@@ -345,4 +345,20 @@ public class daoFornecimento {
         }
        return retorno;
     }
+    
+    public boolean verificaExclusao(Fornecimento fornecimento){
+        Integer id_fornecimento = 0;
+        //verifica se o componentes faz parte de algum fornecimento ativo
+        conecta_banco.executeSQL("select * from componentes_fornecimento" 
+        +" inner join componentes_versao_projeto on (componentes_fornecimento.id_comp_fornec = componentes_versao_projeto.id_comp_fornec)" 
+        +" where componentes_fornecimento.id_fornecimento ="+fornecimento.getId_fornecimento()+" and  componentes_versao_projeto.situacao = 'C' and componentes_versao_projeto.in_ativo = 'A'" 
+        +" and componentes_fornecimento.in_ativo = 'A'");
+        try {        
+           conecta_banco.resultset.first();
+           id_fornecimento = conecta_banco.resultset.getInt("id_fornecimento");
+           return false;
+        } catch (SQLException ex) {
+           return true;
+        }
+    }
 }
