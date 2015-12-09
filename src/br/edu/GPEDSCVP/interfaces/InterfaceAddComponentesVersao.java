@@ -64,10 +64,10 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
     ValidaCampos valida_campos;
     ManipulaJtable Jtable;
     FormatarData data;
-    
+
     public InterfaceAddComponentesVersao() {
         initComponents();
-        
+
         componente = new Componente();
         versao_projeto = new VersaoProjeto();
         comp_vers_proj = new ComponenteVersaoProjeto();
@@ -93,7 +93,7 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
         data = new FormatarData();
         combo = new ComboBox();
         Jtable = new ManipulaJtable();
-        
+
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBConsultaComponentes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
     }
@@ -116,7 +116,6 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
         jTFFiltro = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
         jBTBuscar = new javax.swing.JButton();
-        jBTVerDatasheet = new javax.swing.JButton();
         jBTConcluir = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jTFDSComp = new javax.swing.JTextField();
@@ -184,14 +183,6 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
             }
         });
 
-        jBTVerDatasheet.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\eye.png")); // NOI18N
-        jBTVerDatasheet.setText("Ver datasheet");
-        jBTVerDatasheet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBTVerDatasheetActionPerformed(evt);
-            }
-        });
-
         jBTConcluir.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\accept.png")); // NOI18N
         jBTConcluir.setText("Concluir");
         jBTConcluir.addActionListener(new java.awt.event.ActionListener() {
@@ -250,8 +241,7 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
                             .addComponent(jTFFiltro))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBTBuscar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jBTVerDatasheet)))
+                        .addGap(131, 131, 131)))
                 .addGap(116, 116, 116))
         );
         jPanel1Layout.setVerticalGroup(
@@ -266,8 +256,7 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCBBuscarPor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jBTBuscar)
-                            .addComponent(jBTVerDatasheet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jBTBuscar))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -311,7 +300,7 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
         String descricao = jTBConsultaComponentes.getValueAt(linha, 9).toString();
         Integer id_componente = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 8).toString());
         jTFDSComp.setText(descricao);
-        jTFIDComp.setText(String.valueOf(id_componente));      
+        jTFIDComp.setText(String.valueOf(id_componente));
     }//GEN-LAST:event_jTBConsultaComponentesMouseClicked
 
     private void jTBConsultaComponentesMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTBConsultaComponentesMouseEntered
@@ -346,12 +335,12 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
             valida_campos.IgnoraSQL(jTFFiltro);
 
             //Combobox buscar por: geral
-            switch(jCBBuscarPor.getSelectedIndex()){
+            switch (jCBBuscarPor.getSelectedIndex()) {
                 case 0:
                     //Consulta geral de componentes fornecidos para uma versão
                     dao_comp_vers_proj.consultaGeralCompFornecVersao(comp_vers_proj);
-                break;
-                    
+                    break;
+
                 case 1:
                     //Consulta geral de componentes por código
                     try {
@@ -362,75 +351,35 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
                         JOptionPane.showMessageDialog(null, "Deve informar um valor inteiro para consultar por código");
                         jTFFiltro.grabFocus();
                     }
-                break;
-                    
+                    break;
+
                 case 2:
                     //Consulta geral de componentes pela descrição
                     ds_busca = jTFFiltro.getText();
-                    if(!ds_busca.replace(" ", "").equals("")){
+                    if (!ds_busca.replace(" ", "").equals("")) {
                         comp_vers_proj.setComponente(ds_busca);
                         dao_comp_vers_proj.consultaDescricaoCompFornecVersao(comp_vers_proj);
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(null, "Informe a descrição para consulta");
                         jTFFiltro.grabFocus();
                     }
-                break;
+                    break;
             }
-            
+
             //Preenche na JTABLE os dados dos componentes cadastrados
             Jtable.PreencherJtableGenerico(jTBConsultaComponentes, new String[]{"id_comp_versao", "id_projeto", "projeto.descricao", "cod_vers_projeto", "versao", "id_fornecimento",
-            "fornecimento.descricao","fornecimento.data_cadastro","id_componente","componente.descricao","tipo","qntd_para_projeto","qntd_no_projeto","id_moeda","unidade","valor_unit"}, comp_vers_proj.getRetorno());
-            
+                "fornecimento.descricao", "fornecimento.data_cadastro", "id_componente", "componente.descricao", "tipo", "qntd_para_projeto", "qntd_no_projeto", "id_moeda", "unidade", "valor_unit"}, comp_vers_proj.getRetorno());
+
             //ajusta largura das colunas
             Jtable.ajustarColunasDaTabela(jTBConsultaComponentes);
-            
-            if(jTBConsultaComponentes.getRowCount() <= 0){
+
+            if (jTBConsultaComponentes.getRowCount() <= 0) {
                 JOptionPane.showMessageDialog(null, "Nenhum componente encontrado!");
             }
         } else {
             JOptionPane.showMessageDialog(null, "Você nao possui permissões para consultar componentes no sistema");
         }
     }//GEN-LAST:event_jBTBuscarActionPerformed
-
-    private void jBTVerDatasheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTVerDatasheetActionPerformed
-        byte[] arquivo_banco;
-        File f = null;
-        String nome_arquivo;
-        int id = 0;
-
-        try {
-            //recupera a linha clicada
-            int linha = jTBConsultaComponentes.getSelectedRow();
-            //se foi selecionado alguma linha
-            if(linha >= 0){
-                id = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 7).toString());
-                try {
-
-                    datasheet.setId_datasheet(id);
-                    arquivo_banco = dao_datasheet.retornaArquivo(datasheet);
-                    //cria arquivo pdf temporário
-                    nome_arquivo = datasheet.getDescricao().replace(".pdf", "");
-                    f = File.createTempFile(nome_arquivo, ".pdf");
-                    FileOutputStream fos = new FileOutputStream(f);
-                    //escreve bytes no arquivo
-                    fos.write( arquivo_banco );
-                    //abre arquivo
-                    Desktop.getDesktop().open(f);
-                    fos.close();
-                    //deleta arquivo quando fechar a aplicação
-                    f.deleteOnExit();
-                } catch (Exception e) {
-
-                    JOptionPane.showMessageDialog(null, "Arquivo já está aberto");
-                }
-            }else{
-                JOptionPane.showMessageDialog(null, "Nenhuma linha foi selecionada!");
-            }
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Este componente não possui datasheet!");
-        }
-    }//GEN-LAST:event_jBTVerDatasheetActionPerformed
 
     private void jBTConcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTConcluirActionPerformed
         JTable tabela = comp_vers_proj.getTabela();
@@ -440,63 +389,63 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
         Integer qntd_add;
         Integer qntd_atual_no_projeto;
         boolean encontrou = false;
-        
-        if(linha >= 0){
-            
+
+        if (linha >= 0) {
+
             try {
                 Integer qntd = Integer.parseInt(jTFQntd.getText());
                 qntd_atual_no_projeto = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 12).toString());
-                if(qntd > 0){
+                if (qntd > 0) {
                     getCompVersProj();
                     //verfica se a quantidade ja adicionada para o projeto + a quantidade informada excede a quantidade para o projeto
-                    if(totlinha_comp_proj > 0){
-                        for (int i_comp = 0; i_comp < totlinha_comp_proj; i_comp++){
+                    if (totlinha_comp_proj > 0) {
+                        for (int i_comp = 0; i_comp < totlinha_comp_proj; i_comp++) {
                             id_comp = Integer.parseInt(tabela.getValueAt(i_comp, 2).toString());
-                            if(id_comp == comp_vers_proj.getId_componente()){
-                           
+                            if (id_comp == comp_vers_proj.getId_componente()) {
+
                                 encontrou = true;
                                 qntd_add = Integer.parseInt(tabela.getValueAt(i_comp, 7).toString());
 
-                                if(qntd_add + qntd > comp_vers_proj.getQntd_para_projeto()){
+                                if (qntd_add + qntd > comp_vers_proj.getQntd_para_projeto()) {
                                     JOptionPane.showMessageDialog(null, "Quantidade excede a quantidade restante para este projeto");
                                     break;
-                                }else{
-                                    dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
+                                } else {
+                                    dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj, jTBConsultaComponentes, composicao.getSituacao());
                                     Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
                                     this.dispose();
                                     break;
                                 }
                             }
                         }
-                    
-                        if(encontrou == false){
+
+                        if (encontrou == false) {
                             //verifica se quantidade informada não é maior que a quantidade restante
-                            if(qntd <= comp_vers_proj.getQntd_para_projeto() - Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 12).toString())){
-                                dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
+                            if (qntd <= comp_vers_proj.getQntd_para_projeto() - Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 12).toString())) {
+                                dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj, jTBConsultaComponentes, composicao.getSituacao());
                                 Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
                                 this.dispose();
-                            }else{
+                            } else {
                                 JOptionPane.showMessageDialog(null, "Quantidade excede a quantidade restante para este projeto");
-                            } 
+                            }
                         }
-                    }else{
+                    } else {
                         //verifica se quantidade informada não é maior que a quantidade restante
-                        if(qntd <= comp_vers_proj.getQntd_para_projeto() - Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 12).toString())){
-                            dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj,jTBConsultaComponentes,composicao.getSituacao());
+                        if (qntd <= comp_vers_proj.getQntd_para_projeto() - Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 12).toString())) {
+                            dao_comp_vers_proj.addCompParaProjeto(comp_vers_proj, jTBConsultaComponentes, composicao.getSituacao());
                             Jtable.ajustarColunasDaTabela(comp_vers_proj.getTabela());
                             this.dispose();
-                        }else{
+                        } else {
                             JOptionPane.showMessageDialog(null, "Quantidade excede a quantidade restante para este projeto");
-                        } 
+                        }
                     }
-                    }else{
-                        JOptionPane.showMessageDialog(null, "Quantidade deve ser maior que 0!");
-                    }
-           
+                } else {
+                    JOptionPane.showMessageDialog(null, "Quantidade deve ser maior que 0!");
+                }
+
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "Falha ao adicionar composição");
-            } 
-        }else{
+            }
+        } else {
             JOptionPane.showMessageDialog(null, "Selecione um componente!");
         }
     }//GEN-LAST:event_jBTConcluirActionPerformed
@@ -506,8 +455,8 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
     }//GEN-LAST:event_jTBCidadeStateChanged
 
     private void jTFQntdKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTFQntdKeyTyped
-        String caracteres="0987654321";
-        if(!caracteres.contains(evt.getKeyChar()+"")){
+        String caracteres = "0987654321";
+        if (!caracteres.contains(evt.getKeyChar() + "")) {
             evt.consume();
         }
     }//GEN-LAST:event_jTFQntdKeyTyped
@@ -550,7 +499,6 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBTBuscar;
     private javax.swing.JButton jBTConcluir;
-    private javax.swing.JButton jBTVerDatasheet;
     private javax.swing.JComboBox jCBBuscarPor;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel14;
@@ -567,7 +515,7 @@ public class InterfaceAddComponentesVersao extends javax.swing.JFrame {
     private javax.swing.JTextField jTFQntd;
     // End of variables declaration//GEN-END:variables
 
-    public ComponenteVersaoProjeto getCompVersProj(){
+    public ComponenteVersaoProjeto getCompVersProj() {
         comp_vers_proj = new ComponenteVersaoProjeto();
         int linha = jTBConsultaComponentes.getSelectedRow();
         Date data_atual = new Date(System.currentTimeMillis());

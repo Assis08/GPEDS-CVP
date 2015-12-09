@@ -658,10 +658,10 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                         "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
                         "vl_frete","id_moeda_imp","vl_impostos"}, versao_projeto.getRetorno());
                         Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
-                        
+                       /* 
                         //calcula o imposto unitário dos componentes mecânicos
                         dao_custos.calculaImpostoUnitarioComp(jTBComponentesMecanicos);
-                        
+                        */
                         //calcula o total do componente
                         dao_custos.calculaTotalCompProjeto(jTBComponentesMecanicos);
                         

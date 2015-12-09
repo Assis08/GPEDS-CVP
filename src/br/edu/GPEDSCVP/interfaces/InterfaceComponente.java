@@ -1087,6 +1087,9 @@ public class InterfaceComponente extends javax.swing.JFrame {
             situacao = Rotinas.ALTERAR;
             valida_botoes.ValidaEstado(jPBotoes, situacao);
             valida_campos.habilitaCampos(jPComponente);
+            if(jCBTipo.getSelectedItem().equals("Eletrônico")){
+                jCBMaterial.setEnabled(false);
+            }
         } else {
             JOptionPane.showMessageDialog(null, "Você não possui permissões para alterar registros de componentes no sistema");
         }
@@ -1770,6 +1773,7 @@ public class InterfaceComponente extends javax.swing.JFrame {
         jFTData.setText(String.valueOf(data.organizaData(componente.getData_cadastro())));
         if (componente.getTipo().equals("E")) {
             jCBTipo.setSelectedItem("Eletrônico");
+            jCBMaterial.setEnabled(false);
         } else if (componente.getTipo().equals("M")) {
             jCBTipo.setSelectedItem("Mecânico");
         } else {

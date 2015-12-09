@@ -329,6 +329,14 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             }
         });
         jScrollPane2.setViewportView(jTBComponentesEletronicos);
+        if (jTBComponentesEletronicos.getColumnModel().getColumnCount() > 0) {
+            jTBComponentesEletronicos.getColumnModel().getColumn(9).setMinWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(9).setPreferredWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(9).setMaxWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(10).setMinWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(10).setPreferredWidth(0);
+            jTBComponentesEletronicos.getColumnModel().getColumn(10).setMaxWidth(0);
+        }
 
         jBTAddComposicao.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\Botoes_Site_5752_Knob_Add.png")); // NOI18N
         jBTAddComposicao.setName("descricao"); // NOI18N
@@ -573,6 +581,9 @@ public class InterfaceVersaoProjeto extends javax.swing.JFrame {
             jTBComponentesMecanicos.getColumnModel().getColumn(9).setMinWidth(0);
             jTBComponentesMecanicos.getColumnModel().getColumn(9).setPreferredWidth(0);
             jTBComponentesMecanicos.getColumnModel().getColumn(9).setMaxWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(10).setMinWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(10).setPreferredWidth(0);
+            jTBComponentesMecanicos.getColumnModel().getColumn(10).setMaxWidth(0);
         }
 
         javax.swing.GroupLayout jPVersaoProjetoLayout = new javax.swing.GroupLayout(jPVersaoProjeto);

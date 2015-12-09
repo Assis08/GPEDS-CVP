@@ -240,6 +240,12 @@ public class daoComponenteVersaoProjeto {
                     "NC",
                     FormatarData.dateParaTimeStamp(componentes.getData_alter()),
                     "A");
+            /*    
+             //atualiza composicao do componente
+             componentes.setId_componente(id_componente);
+             componentes.setCod_vers_projeto(cod_vers_projeto);
+             AddProjetoComposicaoComponente(componentes);
+             */
         }
     }
 
@@ -623,8 +629,10 @@ public class daoComponenteVersaoProjeto {
 
         DefaultTableModel tabela = (DefaultTableModel) Tabela_comp.getModel();
         int totlinha_comp = tabela.getRowCount();
-        Double total_comp = 0.0;
-        Object total_convertido = 0.0;
+        Double total_comp = 0.00;
+        Object total_convertido = 0.00;
+        Double valor_comp = 0.00;
+        Object total_comp_convertido;
         Integer id_moeda;
         Integer id_comp_vers;
         Integer qntd_comp;
@@ -636,6 +644,7 @@ public class daoComponenteVersaoProjeto {
             id_comp_vers = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 1).toString());
             id_componente = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 2).toString());
             id_moeda = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 4).toString());
+            valor_comp = Double.parseDouble(Tabela_comp.getValueAt(i_comp, 6).toString().replace(".", "").replace(",", "."));
             qntd_comp = Integer.parseInt(Tabela_comp.getValueAt(i_comp, 7).toString());
             total_comp = Double.parseDouble(Tabela_comp.getValueAt(i_comp, 8).toString().replace(".", "").replace(",", "."));
 
@@ -646,11 +655,17 @@ public class daoComponenteVersaoProjeto {
 
             data_fornec = dao_comp_fornec.retornaDataFornecimentoComponente(comp_vers_proj);
 
-            //converte o valor em reais
-            total_comp = dao_moeda.converteparaReais(total_comp, id_moeda, data_fornec);
-            total_convertido = conversoes.doubleParaObjectDecimalFormat(total_comp);
-            //seta na jtable o novo valor total
-            tabela.setValueAt(total_convertido, i_comp, 8);
+            if (dao_componente.verificaExisteComposicao(componente) == false) {
+                //converte o valor em reais
+                total_comp = dao_moeda.converteparaReais(total_comp, id_moeda, data_fornec);
+                total_convertido = conversoes.doubleParaObjectDecimalFormat(total_comp);
+                //seta na jtable o novo valor total
+                tabela.setValueAt(total_convertido, i_comp, 8);
+            } else {
+                total_convertido = conversoes.doubleParaObjectDecimalFormat(valor_comp * qntd_comp);
+                //seta na jtable o novo valor total
+                tabela.setValueAt(total_convertido, i_comp, 8);
+            }
 
         }
     }
@@ -1094,5 +1109,101 @@ public class daoComponenteVersaoProjeto {
             JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");
         }
 
+    }
+
+    public void AddProjetoComposicaoComponente(ComponenteVersaoProjeto componente) {
+
+        int resultado;
+        Integer id_componente_composicao;
+        Integer id_comp_Versao;
+        Integer id_moeda;
+        Integer qntd_para_composicao;
+        Integer qntd_removida;
+        Integer qntd_para_remover = 0;
+        Integer qntd_no_projeto;
+        Integer qntd_para_projeto;
+        Integer qntd_restante;
+        Integer nova_qntd;
+        Timestamp data_fornec;
+        Double valor_unit = 0.0;
+        Double total_composicao = 0.0;
+        ResultSet result_composicao = null;
+        ResultSet result_composicao_fornec = null;
+        boolean inserir = false;
+        boolean remover = false;
+        //faz a consulta de composição do componente
+        conecta_banco.executeSQL("select * from composicao_componente where id_componente = " + componente.getId_componente());
+        result_composicao = conecta_banco.resultset;
+        try {
+            while (result_composicao.next()) {
+
+                //armazena dados da composição
+                id_componente_composicao = result_composicao.getInt("id_subcomponente");
+                qntd_para_composicao = result_composicao.getInt("qntd");
+                componente.setId_componente(id_componente_composicao);
+
+                //consulta todos os fornecimentos do componente na composição para o projeto
+                conecta_banco.executeSQL("select * from componentes_fornecimento"
+                        + " inner join fornecimento on (fornecimento.id_fornecimento = componentes_fornecimento.id_fornecimento)"
+                        + " inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)"
+                        + " where componentes_versao_projeto.cod_vers_projeto = " + componente.getCod_vers_projeto() + " and componentes_versao_projeto.id_componente = " + id_componente_composicao);
+
+                result_composicao_fornec = conecta_banco.resultset;
+
+                try {
+                    //percorre todos fornecimentos do componente em especifico
+                    while (result_composicao_fornec.next()) {
+                        //armazena dados do componente para o projeto
+                        id_comp_Versao = result_composicao_fornec.getInt("id_comp_versao");
+                        qntd_no_projeto = result_composicao_fornec.getInt("qntd_no_projeto");
+                        qntd_para_projeto = result_composicao_fornec.getInt("qntd_para_projeto");
+
+                        //armazena a quantidade que ainda não esta sendo utilizada no projeto
+                        qntd_restante = qntd_para_projeto - qntd_no_projeto;
+
+                        if (qntd_restante >= qntd_para_composicao) {
+                            //se sim então adiciona para o projeto a quantidade necesseria 
+                            nova_qntd = qntd_no_projeto + qntd_para_composicao;
+                            //atualiza no banco a quantidade
+                            resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ? "
+                                    + "WHERE id_comp_versao = ? ",
+                                    nova_qntd,
+                                    id_comp_Versao);
+                            break;
+                        } else {
+                            //se não então utiliza todos componentes desse fornecimento e utiliza o restante de outros fornecimento que seja desse componente e para este projeto
+
+                            qntd_para_composicao = qntd_para_composicao - (qntd_para_projeto - qntd_no_projeto);
+
+                            resultado = conecta_banco.executeSQL("UPDATE componentes_versao_projeto SET qntd_no_projeto = ? "
+                                    + "WHERE id_comp_versao = ? ",
+                                    qntd_para_projeto,
+                                    id_comp_Versao);
+                        }
+
+                    }
+                } catch (SQLException ex) {
+                    JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");
+                }
+
+                AddProjetoComposicaoComponente(componente);
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Falha ao atualizar quantidade dos componentes na composição");
+        }
+
+    }
+
+    public boolean verificaExclusao(ComponenteVersaoProjeto componente) {
+        Integer id_componente = 0;
+        //verifica se o componentes faz parte de algum fornecimento ativo
+        conecta_banco.executeSQL("select * from componentes_versao_projeto where id_comp_versao ="+componente.getId_comp_versao()+" and situacao = 'C' and in_ativo = 'A'");
+        try {
+            conecta_banco.resultset.first();
+            id_componente = conecta_banco.resultset.getInt("id_comp_versao");
+            return false;
+        } catch (SQLException ex) {
+            return true;
+        }
     }
 }

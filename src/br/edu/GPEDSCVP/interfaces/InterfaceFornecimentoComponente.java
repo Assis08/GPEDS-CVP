@@ -133,7 +133,6 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
         jTFFiltro = new javax.swing.JTextField();
         jLabel29 = new javax.swing.JLabel();
         jBTBuscar = new javax.swing.JButton();
-        jBTVerDatasheet = new javax.swing.JButton();
         jCBTipo = new javax.swing.JComboBox();
         jLabel15 = new javax.swing.JLabel();
         jBTConcluir = new javax.swing.JButton();
@@ -179,6 +178,11 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
             }
         });
         jTBConsultaComponentes.setName("Componentes"); // NOI18N
+        jTBConsultaComponentes.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+            public void mouseDragged(java.awt.event.MouseEvent evt) {
+                jTBConsultaComponentesMouseDragged(evt);
+            }
+        });
         jTBConsultaComponentes.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTBConsultaComponentesMouseClicked(evt);
@@ -188,11 +192,6 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
                 jTBConsultaComponentesMousePressed(evt);
-            }
-        });
-        jTBConsultaComponentes.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
-            public void mouseDragged(java.awt.event.MouseEvent evt) {
-                jTBConsultaComponentesMouseDragged(evt);
             }
         });
         jScrollPane1.setViewportView(jTBConsultaComponentes);
@@ -208,14 +207,6 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
         jBTBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBTBuscarActionPerformed(evt);
-            }
-        });
-
-        jBTVerDatasheet.setIcon(new javax.swing.ImageIcon("C:\\Users\\rafa\\Documents\\GPEDS-CVP\\src\\br\\edu\\GPEDSCVP\\icones\\eye.png")); // NOI18N
-        jBTVerDatasheet.setText("Ver datasheet");
-        jBTVerDatasheet.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBTVerDatasheetActionPerformed(evt);
             }
         });
 
@@ -348,11 +339,9 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
                                 .addComponent(jLabel29)
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jBTBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBTVerDatasheet))
+                        .addComponent(jBTBuscar)
+                        .addGap(42, 42, 42)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPInfoCompFornec, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -369,16 +358,14 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
                             .addComponent(jLabel29)
                             .addComponent(jLabel15)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel14)
-                            .addComponent(jButton1))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel14)
+                        .addGap(17, 17, 17)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCBBuscarPor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jCBTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTFFiltro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBTBuscar)
-                            .addComponent(jBTVerDatasheet, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(jButton1))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 242, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -572,46 +559,6 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jBTBuscarActionPerformed
 
-    private void jBTVerDatasheetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTVerDatasheetActionPerformed
-        byte[] arquivo_banco;
-        File f = null;
-        String nome_arquivo;
-        int id = 0;
-
-        try {
-            //recupera a linha clicada
-            int linha = jTBConsultaComponentes.getSelectedRow();
-            //se foi selecionado alguma linha
-            if(linha >= 0){
-                id = Integer.parseInt(jTBConsultaComponentes.getValueAt(linha, 7).toString());
-                try {
-                
-                    datasheet.setId_datasheet(id);
-                    arquivo_banco = dao_datasheet.retornaArquivo(datasheet);
-                    //cria arquivo pdf temporário
-                    nome_arquivo = datasheet.getDescricao().replace(".pdf", "");
-                    f = File.createTempFile(nome_arquivo, ".pdf");
-                    FileOutputStream fos = new FileOutputStream(f);
-                    //escreve bytes no arquivo
-                    fos.write( arquivo_banco );
-                    //abre arquivo
-                    Desktop.getDesktop().open(f);
-                    fos.close();
-                    //deleta arquivo quando fechar a aplicação
-                    f.deleteOnExit();
-                } catch (Exception e) {
-
-                JOptionPane.showMessageDialog(null, "Arquivo já está aberto");
-                }
-            }else{
-                JOptionPane.showMessageDialog(null, "Nenhuma linha foi selecionada!");
-            }
-           
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Este componente não possui datasheet!");
-        }
-    }//GEN-LAST:event_jBTVerDatasheetActionPerformed
-
     private void jTBCidadeStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jTBCidadeStateChanged
 
     }//GEN-LAST:event_jTBCidadeStateChanged
@@ -768,7 +715,6 @@ public class InterfaceFornecimentoComponente extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBTBuscar;
     private javax.swing.JButton jBTConcluir;
-    private javax.swing.JButton jBTVerDatasheet;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox jCBBuscarPor;
     private javax.swing.JComboBox jCBMoedaValorUnit;

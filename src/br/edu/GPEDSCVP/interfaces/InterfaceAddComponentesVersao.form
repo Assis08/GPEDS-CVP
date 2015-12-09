@@ -93,8 +93,7 @@
                               </Group>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="jBTBuscar" min="-2" max="-2" attributes="0"/>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jBTVerDatasheet" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace min="-2" pref="131" max="-2" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
@@ -114,7 +113,6 @@
                                   <Component id="jCBBuscarPor" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jTFFiltro" alignment="3" min="-2" max="-2" attributes="0"/>
                                   <Component id="jBTBuscar" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jBTVerDatasheet" alignment="3" min="-2" pref="24" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -305,17 +303,6 @@
               </Properties>
               <Events>
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBTBuscarActionPerformed"/>
-              </Events>
-            </Component>
-            <Component class="javax.swing.JButton" name="jBTVerDatasheet">
-              <Properties>
-                <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                  <Image iconType="2" name="C:\Users\rafa\Documents\GPEDS-CVP\src\br\edu\GPEDSCVP\icones\eye.png"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Ver datasheet"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBTVerDatasheetActionPerformed"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="jBTConcluir">

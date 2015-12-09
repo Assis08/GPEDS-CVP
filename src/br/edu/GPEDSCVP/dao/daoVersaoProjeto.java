@@ -79,7 +79,7 @@ public class daoVersaoProjeto {
         Double cod_versao = 0.0;
         String valor;
         //Verifica se existe versões para este projeto
-        String sql = "select max(versao) versao from versao_projeto where id_projeto = " + versao.getId_projeto() + " and versao_projeto.in_ativo = 'A'";
+        String sql = "select max(versao) versao from versao_projeto where id_projeto = " + versao.getId_projeto();
 
         conecta_banco.executeSQL(sql);
         try {
@@ -198,7 +198,7 @@ public class daoVersaoProjeto {
                 //verifica se o componente possui composicao
                 if (dao_comp.verificaExisteComposicao(componente) == true) {
                     //se possui composição então atualiza a quantidade utilizada no projeto de todos componentes da composição
-                    dao_comp_vers.atualizaQntdFornecComposicaoComponente(comp_vers_proj, qntd_inicial_comp);
+                   //  dao_comp_vers.atualizaQntdFornecComposicaoComponente(comp_vers_proj, qntd_inicial_comp);
 
                     resultset_comp_fornec = retornaCompFornecVersProj(comp_vers_proj);
                     //percorre o resultset de todos fornecimento do componente especifico para o projeto
@@ -263,7 +263,7 @@ public class daoVersaoProjeto {
                         "NC",
                         id_comp_vers);
                 
-                dao_comp_vers.RemoveProjetoComposicaoComponente(comp_vers_proj);
+                //dao_comp_vers.RemoveProjetoComposicaoComponente(comp_vers_proj);
 
                 if (resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES) {
                     return false;

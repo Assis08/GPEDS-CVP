@@ -216,7 +216,7 @@ public class daoMoeda {
                 valor_moeda = conecta_banco.resultset.getDouble("valor");
                 return (valor_moeda * valor);
             } catch (SQLException ex) {
-               JOptionPane.showMessageDialog(null, "Falha ao converter moeda, ");
+               JOptionPane.showMessageDialog(null, "Falha ao converter moeda! verifique a data de atualização da moeda");
                return 0;
             }
         

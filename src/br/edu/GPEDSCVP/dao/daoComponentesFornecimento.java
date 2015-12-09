@@ -439,4 +439,17 @@ public class daoComponentesFornecimento {
            return null;
         }                     
     }
+    
+    public boolean verificaExclusao(ComponenteFornecimento componente) {
+        Integer id_comp_fornec = 0;
+        //verifica se o componentes faz parte de algum fornecimento ativo
+        conecta_banco.executeSQL("select * from componentes_versao_projeto where id_comp_fornec ="+componente.getId_comp_fornec()+" and situacao = 'C' and in_ativo = 'A'");
+        try {
+            conecta_banco.resultset.first();
+            id_comp_fornec = conecta_banco.resultset.getInt("id_comp_fornec");
+            return false;
+        } catch (SQLException ex) {
+            return true;
+        }
+    }
 }
