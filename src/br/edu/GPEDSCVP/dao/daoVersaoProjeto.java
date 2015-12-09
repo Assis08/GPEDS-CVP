@@ -187,13 +187,13 @@ public class daoVersaoProjeto {
             exc = Integer.parseInt(tabela.getValueAt(i, 9).toString());
             qntd_inicial_comp = Integer.parseInt(tabela.getValueAt(i, 10).toString());
 
+            componente.setId_componente(id_componente);
+            comp_vers_proj.setId_componente(id_componente);
+            comp_vers_proj.setId_comp_versao(id_comp_vers);
+            comp_vers_proj.setQntd_no_projeto(nova_qntd);
+
             //se o componente não for excluido
             if (exc == 0) {
-
-                componente.setId_componente(id_componente);
-                comp_vers_proj.setId_componente(id_componente);
-                comp_vers_proj.setId_comp_versao(id_comp_vers);
-                comp_vers_proj.setQntd_no_projeto(nova_qntd);
 
                 //verifica se o componente possui composicao
                 if (dao_comp.verificaExisteComposicao(componente) == true) {
@@ -262,6 +262,8 @@ public class daoVersaoProjeto {
                         0,
                         "NC",
                         id_comp_vers);
+                
+                dao_comp_vers.RemoveProjetoComposicaoComponente(comp_vers_proj);
 
                 if (resultado == ExcessaoBanco.ERRO_LIMITE_CARACTERES) {
                     return false;
