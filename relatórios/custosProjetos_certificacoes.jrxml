@@ -112,6 +112,11 @@ where certificacao.cod_vers_projeto = $P{ID_VERSAO} and certificacao.in_ativo = 
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="30" splitType="Stretch"/>
+		<band height="57" splitType="Stretch">
+			<staticText>
+				<reportElement x="394" y="37" width="49" height="20" uuid="663229a9-3d70-4c91-8b9c-cddaab9cdc60"/>
+				<text><![CDATA[Total R$:]]></text>
+			</staticText>
+		</band>
 	</columnFooter>
 </jasperReport>

@@ -302,7 +302,7 @@ public class InterfaceCertificação extends javax.swing.JFrame {
         jLabel1.setText("ID Certificação:");
 
         jCBCertificadora.setToolTipText("Certificadora");
-        jCBCertificadora.setName("id_certificadora"); // NOI18N
+        jCBCertificadora.setName("id_pessoa"); // NOI18N
         jCBCertificadora.addPopupMenuListener(new javax.swing.event.PopupMenuListener() {
             public void popupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {
             }
@@ -517,7 +517,6 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                     .addGroup(jPCertificacaoLayout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addGap(31, 31, 31)))
-                .addGap(18, 18, 18)
                 .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPCertificacaoLayout.createSequentialGroup()
                         .addGroup(jPCertificacaoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -544,7 +543,7 @@ public class InterfaceCertificação extends javax.swing.JFrame {
                 .addComponent(jLabel16)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 57, Short.MAX_VALUE)
                 .addComponent(jPBotoes, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
