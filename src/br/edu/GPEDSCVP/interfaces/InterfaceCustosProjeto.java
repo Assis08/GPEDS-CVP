@@ -8,17 +8,22 @@ package br.edu.GPEDSCVP.interfaces;
 import br.edu.GPEDSCVP.classe.Acesso;
 import br.edu.GPEDSCVP.classe.Projeto;
 import br.edu.GPEDSCVP.classe.VersaoProjeto;
+import br.edu.GPEDSCVP.conexao.ConexaoBanco;
 import br.edu.GPEDSCVP.dao.daoAcesso;
 import br.edu.GPEDSCVP.dao.daoCustos;
 import br.edu.GPEDSCVP.dao.daoProjeto;
 import br.edu.GPEDSCVP.dao.daoVersaoProjeto;
+import br.edu.GPEDSCVP.relatorios.Relatorio;
 import br.edu.GPEDSCVP.util.ComboBox;
 import br.edu.GPEDSCVP.util.Conversoes;
 import br.edu.GPEDSCVP.util.ManipulaJtable;
 import br.edu.GPEDSCVP.util.ValidaCampos;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
+import net.sf.jasperreports.engine.JRException;
 
 /**
  *
@@ -39,11 +44,10 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
     int[] array_projetos;
     ComboBox combo;
     Conversoes converte;
-    
-    
+
     public InterfaceCustosProjeto() {
         initComponents();
-        
+
         projeto = new Projeto();
         versao_projeto = new VersaoProjeto();
         dao_projeto = new daoProjeto();
@@ -58,7 +62,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         } catch (Exception e) {
         }
         converte = new Conversoes();
-        
+
         //Adiciona barra de rolagem obs: obrigatorio para conseguir dimensionar automatico as colunas da jtable
         jTBComponentesEletronicos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         jTBComponentesMecanicos.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
@@ -70,18 +74,18 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         array_projetos = combo.PreencherCombo(jCBProjeto, "descricao", projeto.getRetorno(), "id_projeto");
         //seta no array da classe de projetos a lista de projetos listadas na combo
         projeto.setArray_projetos(array_projetos);
-        
+
         jCBTipoCusto.addItem("Selecione item");
         jCBTipoCusto.addItem("Total do projeto");
         jCBTipoCusto.addItem("Versão do projeto");
         jCBTipoCusto.addItem("Protótipo versão");
-        
+
         //zera campo de totais
         jTFTotalEletronicos.setText("0,00");
         jTFTotalMecanicos.setText("0,00");
         jTFTotalCertificações.setText("0,00");
         jTFTotalGeral.setText("0,00");
-        
+
         //atualiza dados do usuario logado
         dao_acesso.retornaUsuarioLogado(acesso);
     }
@@ -289,6 +293,11 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         jLabel12.setText("Total geral R$:");
 
         jBTRelatório.setText("Relatório");
+        jBTRelatório.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBTRelatórioActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPCustosProjetoLayout = new javax.swing.GroupLayout(jPCustosProjeto);
         jPCustosProjeto.setLayout(jPCustosProjetoLayout);
@@ -344,8 +353,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                                     .addGroup(jPCustosProjetoLayout.createSequentialGroup()
                                         .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jBTListar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addComponent(jBTListar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGap(311, 311, 311)
                                 .addComponent(jBTRelatório))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPCustosProjetoLayout.createSequentialGroup()
@@ -442,7 +450,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
 
     private void jCBProjetoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBProjetoPopupMenuWillBecomeInvisible
         try {
-            if(jCBProjeto.getSelectedIndex() > 0){
+            if (jCBProjeto.getSelectedIndex() > 0) {
                 jCBVersao.setEditable(true);
                 versao_projeto.setId_projeto(projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1));
                 //consulta versões para preencher na combobox de versões
@@ -450,26 +458,26 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                 array_versoes = combo.PreencherCombo(jCBVersao, "versao", versao_projeto.getRetorno(), "cod_vers_projeto");
                 //seta no array da classe de versoes a lista de versoes listadas na combo
                 versao_projeto.setArray_versoes(array_versoes);
-            }else{
+            } else {
                 jCBVersao.removeAllItems();
-            } 
+            }
         } catch (Exception e) {
         }
     }//GEN-LAST:event_jCBProjetoPopupMenuWillBecomeInvisible
 
     private void jCBProjetoPopupMenuWillBecomeVisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBProjetoPopupMenuWillBecomeVisible
-         //carrega dados nas combobox
+        //carrega dados nas combobox
         dao_projeto.consultaGeral(projeto);
         //Preenche dados nas ComboBox de projetos
         array_projetos = combo.PreencherCombo(jCBProjeto, "descricao", projeto.getRetorno(), "id_projeto");
         //seta no array da classe de projetos a lista de projetos listadas na combo
         projeto.setArray_projetos(array_projetos);
-        
+
         //limpa jtables
         valida_campos.LimparJtable(jTBComponentesEletronicos);
         valida_campos.LimparJtable(jTBComponentesMecanicos);
         valida_campos.LimparJtable(jTBCertificações);
-        
+
         //limpa campo de totais
         jTFTotalEletronicos.setText("0,00");
         jTFTotalMecanicos.setText("0,00");
@@ -485,214 +493,214 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         Double total_certificacao = 0.00;
         Double total = 0.00;
 
-        switch(jCBTipoCusto.getSelectedIndex()){
+        switch (jCBTipoCusto.getSelectedIndex()) {
             //caso não selecionou nenhuma opção
             case 0:
                 JOptionPane.showMessageDialog(null, "Selecione o tipo de custo para consulta!");
                 break;
             //caso selecionou custo total do projeto
             case 1:
-                if(jCBProjeto.getSelectedIndex() > 0){
-                    
+                if (jCBProjeto.getSelectedIndex() > 0) {
+
                     id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
                     projeto.setId_projeto(id_projeto);
                     dao_custos.consultaTodosCompFornecProjeto(projeto, "E");
-                    
+
                     //Preenche todos os componentes eletronicos fornecidos 
-                    Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"id_fornecimento","id_comp_versao","id_componente","componente.descricao","versao","qntd_para_projeto",
-                    "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
-                    "vl_frete","id_moeda_imp","vl_impostos"}, projeto.getRetorno());
+                    Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"id_fornecimento", "id_comp_versao", "id_componente", "componente.descricao", "versao", "qntd_para_projeto",
+                        "componentes_fornecimento.id_moeda", "moeda.unidade", "componentes_fornecimento.valor_unit", "imposto_unit", "data_cadastro", "total", "id_moeda_frete",
+                        "vl_frete", "id_moeda_imp", "vl_impostos"}, projeto.getRetorno());
                     Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
-                    
+
                     //remove os componentes eletronicos compostos
                     dao_custos.removeComponentesCompostos(jTBComponentesEletronicos);
-                    
+
                     //calcula o imposto unitário dos componentes eletronicos
                     dao_custos.calculaImpostoUnitarioComp(jTBComponentesEletronicos);
-                    
+
                     //calcula o total do componente
                     dao_custos.calculaTotalCompProjeto(jTBComponentesEletronicos);
-                    
+
                     //seta no campo total eletronicos o valor total de eletronicos
                     jTFTotalEletronicos.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalComponentes(jTBComponentesEletronicos)).toString());
 
                     dao_custos.consultaTodosCompFornecProjeto(projeto, "M");
-                    
+
                     //Preenche todos os componentes mecânicos fornecidos 
-                    Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"id_fornecimento","id_comp_versao","id_componente","componente.descricao","versao","qntd_para_projeto",
-                    "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
-                    "vl_frete","id_moeda_imp","vl_impostos"}, projeto.getRetorno());
+                    Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"id_fornecimento", "id_comp_versao", "id_componente", "componente.descricao", "versao", "qntd_para_projeto",
+                        "componentes_fornecimento.id_moeda", "moeda.unidade", "componentes_fornecimento.valor_unit", "imposto_unit", "data_cadastro", "total", "id_moeda_frete",
+                        "vl_frete", "id_moeda_imp", "vl_impostos"}, projeto.getRetorno());
                     Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
-                    
+
                     //remove os componentes mecanicos compostos
                     dao_custos.removeComponentesCompostos(jTBComponentesMecanicos);
-                    
+
                     //calcula o imposto unitário dos componentes mecânicos
                     dao_custos.calculaImpostoUnitarioComp(jTBComponentesMecanicos);
-                    
+
                     //calcula o total do componente
                     dao_custos.calculaTotalCompProjeto(jTBComponentesMecanicos);
-                    
+
                     //seta no campo total mecanicos o valor total de mecanicos
                     jTFTotalMecanicos.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalComponentes(jTBComponentesMecanicos)).toString());
-                    
+
                     dao_custos.consultaTodasCertifProjeto(projeto);
-                  
+
                     //Preenche todos as certificações 
-                    Jtable.PreencherJtableGenerico(jTBCertificações, new String[]{"id_certificacao","descricao","versao","nome","titulo",
-                    "resultado","valor","data_ensaio"}, projeto.getRetorno());
+                    Jtable.PreencherJtableGenerico(jTBCertificações, new String[]{"id_certificacao", "descricao", "versao", "nome", "titulo",
+                        "resultado", "valor", "data_ensaio"}, projeto.getRetorno());
                     Jtable.ajustarColunasDaTabela(jTBCertificações);
-                    
+
                     //seta no campo total certificação o valor total de certificações
                     jTFTotalCertificações.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalCertificacao(jTBCertificações)).toString());
 
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Selecione um projeto!");
                 }
                 break;
             //caso selecionou custo da versão    
-            case 2 :
+            case 2:
                 //verifica se selecionou algum projeto
-                if(jCBProjeto.getSelectedIndex() > 0){
-                    
+                if (jCBProjeto.getSelectedIndex() > 0) {
+
                     id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
-                    
-                    switch(jCBVersao.getSelectedIndex()){
-                    case 0:
-                        JOptionPane.showMessageDialog(null, "Selecione uma versão!");
-                        break;
-                        
-                    default:
-                        id_versao = versao_projeto.getArray_versoes(jCBVersao.getSelectedIndex() - 1);
-                        
-                        versao_projeto.setId_projeto(id_projeto);
-                        versao_projeto.setCod_vers_projeto(id_versao);
-  
-                        dao_custos.consultaTodosCompFornecVersao(versao_projeto, "E");
-                        
-                        //Preenche todos os componentes eletronicos fornecidos para a versão
-                        Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"id_fornecimento","id_comp_versao","id_componente","componente.descricao","versao","qntd_para_projeto",
-                        "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
-                        "vl_frete","id_moeda_imp","vl_impostos"}, versao_projeto.getRetorno());
-                        Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
-                        
-                        //remove os componentes eletronicos compostos
-                        dao_custos.removeComponentesCompostos(jTBComponentesEletronicos);
-                        
-                        //calcula o imposto unitário dos componentes eletronicos
-                        dao_custos.calculaImpostoUnitarioComp(jTBComponentesEletronicos);
-                        
-                        //calcula o total do componente
-                        dao_custos.calculaTotalCompProjeto(jTBComponentesEletronicos);
-                        
-                        //seta no campo total eletronicos o valor total de eletronicos
-                        jTFTotalEletronicos.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalComponentes(jTBComponentesEletronicos)).toString());
-                        
-                        dao_custos.consultaTodosCompFornecVersao(versao_projeto, "M");
-                        
-                        //Preenche todos os componentes eletronicos fornecidos para a versão 
-                        Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"id_fornecimento","id_comp_versao","id_componente","componente.descricao","versao","qntd_para_projeto",
-                        "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
-                        "vl_frete","id_moeda_imp","vl_impostos"}, versao_projeto.getRetorno());
-                        Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
-                        
-                        //remove os componentes mecanicos compostos
-                        dao_custos.removeComponentesCompostos(jTBComponentesMecanicos);
-                        
-                        //calcula o imposto unitário dos componentes mecânicos
-                        dao_custos.calculaImpostoUnitarioComp(jTBComponentesMecanicos);
-                        
-                        //calcula o total do componente
-                        dao_custos.calculaTotalCompProjeto(jTBComponentesMecanicos);
-                        
-                        //seta no campo total mecanicos o valor total de mecanicos
-                        jTFTotalMecanicos.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalComponentes(jTBComponentesMecanicos)).toString());
-                        
-                        dao_custos.consultaTodasCertifVersao(versao_projeto);
-                       
-                        //Preenche todos as certificações 
-                        Jtable.PreencherJtableGenerico(jTBCertificações, new String[]{"id_certificacao","descricao","versao","nome","titulo",
-                        "resultado","valor","data_ensaio"}, versao_projeto.getRetorno());
-                        Jtable.ajustarColunasDaTabela(jTBCertificações);
-                        
-                        //seta no campo total certificação o valor total de certificações
-                        jTFTotalCertificações.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalCertificacao(jTBCertificações)).toString());
-                        break;
-                    }   
-                }else{
+
+                    switch (jCBVersao.getSelectedIndex()) {
+                        case 0:
+                            JOptionPane.showMessageDialog(null, "Selecione uma versão!");
+                            break;
+
+                        default:
+                            id_versao = versao_projeto.getArray_versoes(jCBVersao.getSelectedIndex() - 1);
+
+                            versao_projeto.setId_projeto(id_projeto);
+                            versao_projeto.setCod_vers_projeto(id_versao);
+
+                            dao_custos.consultaTodosCompFornecVersao(versao_projeto, "E");
+
+                            //Preenche todos os componentes eletronicos fornecidos para a versão
+                            Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"id_fornecimento", "id_comp_versao", "id_componente", "componente.descricao", "versao", "qntd_para_projeto",
+                                "componentes_fornecimento.id_moeda", "moeda.unidade", "componentes_fornecimento.valor_unit", "imposto_unit", "data_cadastro", "total", "id_moeda_frete",
+                                "vl_frete", "id_moeda_imp", "vl_impostos"}, versao_projeto.getRetorno());
+                            Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
+
+                            //remove os componentes eletronicos compostos
+                            dao_custos.removeComponentesCompostos(jTBComponentesEletronicos);
+
+                            //calcula o imposto unitário dos componentes eletronicos
+                            dao_custos.calculaImpostoUnitarioComp(jTBComponentesEletronicos);
+
+                            //calcula o total do componente
+                            dao_custos.calculaTotalCompProjeto(jTBComponentesEletronicos);
+
+                            //seta no campo total eletronicos o valor total de eletronicos
+                            jTFTotalEletronicos.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalComponentes(jTBComponentesEletronicos)).toString());
+
+                            dao_custos.consultaTodosCompFornecVersao(versao_projeto, "M");
+
+                            //Preenche todos os componentes eletronicos fornecidos para a versão 
+                            Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"id_fornecimento", "id_comp_versao", "id_componente", "componente.descricao", "versao", "qntd_para_projeto",
+                                "componentes_fornecimento.id_moeda", "moeda.unidade", "componentes_fornecimento.valor_unit", "imposto_unit", "data_cadastro", "total", "id_moeda_frete",
+                                "vl_frete", "id_moeda_imp", "vl_impostos"}, versao_projeto.getRetorno());
+                            Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
+
+                            //remove os componentes mecanicos compostos
+                            dao_custos.removeComponentesCompostos(jTBComponentesMecanicos);
+
+                            //calcula o imposto unitário dos componentes mecânicos
+                            dao_custos.calculaImpostoUnitarioComp(jTBComponentesMecanicos);
+
+                            //calcula o total do componente
+                            dao_custos.calculaTotalCompProjeto(jTBComponentesMecanicos);
+
+                            //seta no campo total mecanicos o valor total de mecanicos
+                            jTFTotalMecanicos.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalComponentes(jTBComponentesMecanicos)).toString());
+
+                            dao_custos.consultaTodasCertifVersao(versao_projeto);
+
+                            //Preenche todos as certificações 
+                            Jtable.PreencherJtableGenerico(jTBCertificações, new String[]{"id_certificacao", "descricao", "versao", "nome", "titulo",
+                                "resultado", "valor", "data_ensaio"}, versao_projeto.getRetorno());
+                            Jtable.ajustarColunasDaTabela(jTBCertificações);
+
+                            //seta no campo total certificação o valor total de certificações
+                            jTFTotalCertificações.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalCertificacao(jTBCertificações)).toString());
+                            break;
+                    }
+                } else {
                     JOptionPane.showMessageDialog(null, "Selecione um projeto!");
                 }
                 break;
             //caso selecionou custo de protótipo da versão    
             case 3:
-                
+
                 //verifica se selecionou algum projeto
-                if(jCBProjeto.getSelectedIndex() > 0){
-                    
+                if (jCBProjeto.getSelectedIndex() > 0) {
+
                     id_projeto = projeto.getArray_projetos(jCBProjeto.getSelectedIndex() - 1);
-                    
-                    switch(jCBVersao.getSelectedIndex()){
-                    case 0:
-                        JOptionPane.showMessageDialog(null, "Selecione uma versão!");
-                        break;
-                        
-                    default:
-                        id_versao = versao_projeto.getArray_versoes(jCBVersao.getSelectedIndex() - 1);
-                        
-                        versao_projeto.setId_projeto(id_projeto);
-                        versao_projeto.setCod_vers_projeto(id_versao);
-  
-                        dao_custos.consultaTodosCompNaVersao(versao_projeto, "E");
-                        
-                        //Preenche todos os componentes eletronicos fornecidos para a versão
-                        Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"id_fornecimento","id_comp_versao","id_componente","componente.descricao","versao","qntd_no_projeto",
-                        "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
-                        "vl_frete","id_moeda_imp","vl_impostos"}, versao_projeto.getRetorno());
-                        Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
-                      /*  
-                        //calcula o imposto unitário dos componentes eletronicos
-                        dao_custos.calculaImpostoUnitarioComp(jTBComponentesEletronicos);
-                      */  
-                        //calcula o total do componente
-                        dao_custos.calculaTotalCompProjeto(jTBComponentesEletronicos);
-                        
-                        //seta no campo total eletronicos o valor total de eletronicos
-                        jTFTotalEletronicos.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalComponentes(jTBComponentesEletronicos)).toString());
-                        
-                        dao_custos.consultaTodosCompNaVersao(versao_projeto, "M");
-                        
-                        //Preenche todos os componentes eletronicos fornecidos para a versão 
-                        Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"id_fornecimento","id_comp_versao","id_componente","componente.descricao","versao","qntd_no_projeto",
-                        "componentes_fornecimento.id_moeda","moeda.unidade","componentes_fornecimento.valor_unit","imposto_unit","data_cadastro","total","id_moeda_frete",
-                        "vl_frete","id_moeda_imp","vl_impostos"}, versao_projeto.getRetorno());
-                        Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
-                       /* 
-                        //calcula o imposto unitário dos componentes mecânicos
-                        dao_custos.calculaImpostoUnitarioComp(jTBComponentesMecanicos);
-                        */
-                        //calcula o total do componente
-                        dao_custos.calculaTotalCompProjeto(jTBComponentesMecanicos);
-                        
-                        //seta no campo total mecanicos o valor total de mecanicos
-                        jTFTotalMecanicos.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalComponentes(jTBComponentesMecanicos)).toString());
-                        break;
+
+                    switch (jCBVersao.getSelectedIndex()) {
+                        case 0:
+                            JOptionPane.showMessageDialog(null, "Selecione uma versão!");
+                            break;
+
+                        default:
+                            id_versao = versao_projeto.getArray_versoes(jCBVersao.getSelectedIndex() - 1);
+
+                            versao_projeto.setId_projeto(id_projeto);
+                            versao_projeto.setCod_vers_projeto(id_versao);
+
+                            dao_custos.consultaTodosCompNaVersao(versao_projeto, "E");
+
+                            //Preenche todos os componentes eletronicos fornecidos para a versão
+                            Jtable.PreencherJtableGenerico(jTBComponentesEletronicos, new String[]{"id_fornecimento", "id_comp_versao", "id_componente", "componente.descricao", "versao", "qntd_no_projeto",
+                                "componentes_fornecimento.id_moeda", "moeda.unidade", "componentes_fornecimento.valor_unit", "imposto_unit", "data_cadastro", "total", "id_moeda_frete",
+                                "vl_frete", "id_moeda_imp", "vl_impostos"}, versao_projeto.getRetorno());
+                            Jtable.ajustarColunasDaTabela(jTBComponentesEletronicos);
+                            /*  
+                             //calcula o imposto unitário dos componentes eletronicos
+                             dao_custos.calculaImpostoUnitarioComp(jTBComponentesEletronicos);
+                             */
+                            //calcula o total do componente
+                            dao_custos.calculaTotalCompProjeto(jTBComponentesEletronicos);
+
+                            //seta no campo total eletronicos o valor total de eletronicos
+                            jTFTotalEletronicos.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalComponentes(jTBComponentesEletronicos)).toString());
+
+                            dao_custos.consultaTodosCompNaVersao(versao_projeto, "M");
+
+                            //Preenche todos os componentes eletronicos fornecidos para a versão 
+                            Jtable.PreencherJtableGenerico(jTBComponentesMecanicos, new String[]{"id_fornecimento", "id_comp_versao", "id_componente", "componente.descricao", "versao", "qntd_no_projeto",
+                                "componentes_fornecimento.id_moeda", "moeda.unidade", "componentes_fornecimento.valor_unit", "imposto_unit", "data_cadastro", "total", "id_moeda_frete",
+                                "vl_frete", "id_moeda_imp", "vl_impostos"}, versao_projeto.getRetorno());
+                            Jtable.ajustarColunasDaTabela(jTBComponentesMecanicos);
+                            /* 
+                             //calcula o imposto unitário dos componentes mecânicos
+                             dao_custos.calculaImpostoUnitarioComp(jTBComponentesMecanicos);
+                             */
+                            //calcula o total do componente
+                            dao_custos.calculaTotalCompProjeto(jTBComponentesMecanicos);
+
+                            //seta no campo total mecanicos o valor total de mecanicos
+                            jTFTotalMecanicos.setText(converte.doubleParaObjectDecimalFormat(dao_custos.calculaTotalComponentes(jTBComponentesMecanicos)).toString());
+                            break;
                     }
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Selecione um projeto!");
                 }
                 break;
-            }
+        }
         //seta no campo total do projeto, a soma dos componentes e das certificações
         total_eletronicos = Double.parseDouble(jTFTotalEletronicos.getText().replace(".", "").replace(",", "."));
         total_mecanicos = Double.parseDouble(jTFTotalMecanicos.getText().replace(".", "").replace(",", "."));
         total_certificacao = Double.parseDouble(jTFTotalCertificações.getText().replace(".", "").replace(",", "."));
         total = total_eletronicos + total_mecanicos + total_certificacao;
-        
+
         jTFTotalGeral.setText(converte.doubleParaObjectDecimalFormat(total).toString());
     }//GEN-LAST:event_jBTListarActionPerformed
 
     private void jCBTipoCustoPopupMenuWillBecomeInvisible(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_jCBTipoCustoPopupMenuWillBecomeInvisible
-        switch(jCBTipoCusto.getSelectedIndex()){
+        switch (jCBTipoCusto.getSelectedIndex()) {
             case 1:
                 try {
                     jCBVersao.setSelectedIndex(0);
@@ -701,11 +709,11 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                     jCBVersao.setEnabled(false);
                 }
                 break;
-                
+
             case 2:
                 jCBVersao.setEnabled(true);
                 break;
-                
+
             case 3:
                 jCBVersao.setEnabled(true);
                 break;
@@ -716,7 +724,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         valida_campos.LimparJtable(jTBComponentesEletronicos);
         valida_campos.LimparJtable(jTBComponentesMecanicos);
         valida_campos.LimparJtable(jTBCertificações);
-       
+
         //limpa campo de totais
         jTFTotalEletronicos.setText("0,00");
         jTFTotalMecanicos.setText("0,00");
@@ -728,13 +736,36 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         valida_campos.LimparJtable(jTBComponentesEletronicos);
         valida_campos.LimparJtable(jTBComponentesMecanicos);
         valida_campos.LimparJtable(jTBCertificações);
-       
+
         //zera campo de totais
         jTFTotalEletronicos.setText("0,00");
         jTFTotalMecanicos.setText("0,00");
         jTFTotalCertificações.setText("0,00");
         jTFTotalGeral.setText("0,00");
     }//GEN-LAST:event_jCBVersaoPopupMenuWillBecomeVisible
+
+    private void jBTRelatórioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRelatórioActionPerformed
+
+        if (jCBVersao.getSelectedIndex() > 0) {
+
+            if (jCBTipoCusto.getSelectedIndex() == 2) {
+                
+                Integer id_versao = versao_projeto.getArray_versoes(jCBVersao.getSelectedIndex() - 1);
+
+                try {
+                    new Relatorio(ConexaoBanco.ConexaoBanco).relatorioCustoVersao(id_versao);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Falha ao gerar relatório");
+                }
+            }
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione uma versão para imprimir o relatório!");
+        }
+
+
+    }//GEN-LAST:event_jBTRelatórioActionPerformed
 
     /**
      * @param args the command line arguments

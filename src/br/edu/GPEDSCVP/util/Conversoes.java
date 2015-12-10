@@ -5,6 +5,7 @@
  */
 package br.edu.GPEDSCVP.util;
 
+import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 

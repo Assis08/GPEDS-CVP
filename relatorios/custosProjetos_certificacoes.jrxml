@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="custosProjetos_certificacoes" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="97dd3553-11c4-42e9-834b-dc78e1fa8e66">
+	<property name="ireport.zoom" value="2.143588810000008"/>
+	<property name="ireport.x" value="501"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_VERSAO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[$P{ID_VERSAO}]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT id_certificacao,certificacao.descricao,pessoa.id_pessoa, pessoa.nome,versao_projeto.versao, norma.id_norma, norma.titulo,resultado,
+valor,data_ensaio from certificacao
+inner join certificadora on (certificadora.id_pessoa = certificacao.id_pessoa)
+inner join pessoa_juridica on (pessoa_juridica.id_pessoa = certificadora.id_pessoa)
+inner join pessoa on (pessoa.id_pessoa = pessoa_juridica.id_pessoa)
+inner join norma on (norma.id_norma = certificacao.id_norma)
+inner join versao_projeto on (versao_projeto.cod_vers_projeto = certificacao.cod_vers_projeto)
+where certificacao.cod_vers_projeto = $P{ID_VERSAO} and certificacao.in_ativo = 'A';]]>
+	</queryString>
+	<field name="id_certificacao" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descricao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_pessoa" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nome" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="versao" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_norma" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="titulo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="resultado" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="valor" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="data_ensaio" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="total_certificacoes" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<group name="id_certificacao">
+		<groupExpression><![CDATA[$F{id_certificacao}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="35" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="15" width="51" height="20" uuid="332d11fc-0231-4fed-984f-7be03e610748"/>
+				<text><![CDATA[ID Certif.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="51" y="15" width="232" height="20" uuid="d1832582-306a-46a6-afe2-fa3e44027fff"/>
+				<text><![CDATA[Descrição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="283" y="15" width="100" height="20" uuid="7f99b975-5e80-4eb7-9e82-0bb6eba8369a"/>
+				<text><![CDATA[Certificadora]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="383" y="15" width="47" height="20" uuid="f7e848b6-c5ff-417f-817c-eb25dd889cc8"/>
+				<text><![CDATA[Norma]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="496" y="14" width="59" height="20" uuid="eaabb293-8983-424d-9436-275bd9169bbf"/>
+				<text><![CDATA[Data ensaio]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="443" y="15" width="53" height="20" uuid="69b19912-950b-40fe-9fa8-463fb6903653"/>
+				<text><![CDATA[Valor R$]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="34" width="555" height="1" uuid="46fded9c-e922-430c-a023-8d263d144f1b"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="383" y="0" width="47" height="20" uuid="4bbaad76-33fe-414c-8d57-0bda062f2569"/>
+				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="496" y="0" width="59" height="20" uuid="3ac0638c-cd8e-42a5-82bd-df998c5425a5"/>
+				<textFieldExpression><![CDATA[$F{data_ensaio}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="51" height="20" uuid="1ac5f795-8709-46eb-8ebb-d4baddb903bc"/>
+				<textFieldExpression><![CDATA[$F{id_certificacao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="51" y="0" width="232" height="20" uuid="62fd44bf-9aaf-40db-b7e2-eab9f7f12b81"/>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="283" y="0" width="100" height="20" uuid="270a7a16-e49c-421d-8825-921fef176ed0"/>
+				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;#,##0.00-">
+				<reportElement x="443" y="0" width="53" height="20" uuid="aa3173cd-368c-43bc-87ae-caa3107773f3"/>
+				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="23" splitType="Stretch">
+			<staticText>
+				<reportElement x="383" y="3" width="49" height="20" uuid="663229a9-3d70-4c91-8b9c-cddaab9cdc60"/>
+				<text><![CDATA[Total R$:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="443" y="3" width="100" height="20" uuid="21f60f9c-4adb-42d4-9cbb-3e621cac9033"/>
+				<textFieldExpression><![CDATA[$V{total_certificacoes}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="custosProjetos" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f42fbfe2-4b6c-45ed-8d12-2f783187db4e">
+	<property name="ireport.zoom" value="1.7715610000000108"/>
+	<property name="ireport.x" value="341"/>
+	<property name="ireport.y" value="500"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_VERSAO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select * from versao_projeto
+inner join projeto on (projeto.id_projeto = versao_projeto.id_projeto)
+where cod_vers_projeto = $P{ID_VERSAO}]]>
+	</queryString>
+	<field name="cod_vers_projeto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_projeto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="versao" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="in_ativo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="comercializado" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="lote" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="certificacao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="data_cadastro" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="data_alter" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descricao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<variable name="vl_total_eletronicos" class="java.lang.Double">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0d]]></initialValueExpression>
+	</variable>
+	<variable name="vl_total_mecanicos" class="java.lang.Double">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0d]]></initialValueExpression>
+	</variable>
+	<variable name="vl_total_certificacoes" class="java.lang.Double">
+		<variableExpression><![CDATA[]]></variableExpression>
+		<initialValueExpression><![CDATA[0d]]></initialValueExpression>
+	</variable>
+	<variable name="vl_total_versao" class="java.lang.Double">
+		<variableExpression><![CDATA[$V{vl_total_eletronicos}  +
+$V{vl_total_mecanicos}  +
+$V{vl_total_certificacoes}]]></variableExpression>
+		<initialValueExpression><![CDATA[0d]]></initialValueExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="89" splitType="Stretch">
+			<staticText>
+				<reportElement x="154" y="0" width="223" height="20" uuid="75ed5455-d582-40d2-90a0-97c73a277202"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Relatório de custos (Versão Projeto)]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="390" y="0" width="29" height="20" uuid="6cf1b8ac-ee52-4e6f-95e3-2887db005297"/>
+				<text><![CDATA[Data:]]></text>
+			</staticText>
+			<textField pattern="dd/MM/yyyy">
+				<reportElement x="419" y="0" width="61" height="20" uuid="010df21f-1ea5-47c8-95b3-ee54366ab053"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<textField pattern="HH.mm.ss">
+				<reportElement x="506" y="0" width="49" height="20" uuid="d2d27092-0798-4cd0-98ba-337f66cf59c7"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="480" y="0" width="26" height="20" uuid="2eb35933-6a86-4d8c-9e9f-0cec1cfec6ce"/>
+				<text><![CDATA[Hora:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="100" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="35" width="52" height="20" uuid="65ae519e-cb53-4f16-b724-71f651e74d2f"/>
+				<text><![CDATA[ID Projeto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="70" width="43" height="20" uuid="87d769eb-c5dd-4f82-b1a2-5f534fd41c49"/>
+				<text><![CDATA[Projeto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="127" y="70" width="40" height="20" uuid="854fc3ed-52df-4404-b11d-55d170e028e7"/>
+				<text><![CDATA[Versão:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="52" y="35" width="52" height="20" uuid="a2c4898c-1bc9-49f7-9fda-eacdbbbdffb7"/>
+				<textFieldExpression><![CDATA[$F{id_projeto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="43" y="70" width="75" height="20" uuid="09a53b78-207a-4f6f-a1df-f7f7c6d54131"/>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="167" y="70" width="40" height="20" uuid="8a02a8a9-bb46-4ae3-8f57-a92f7ca63320"/>
+				<textFieldExpression><![CDATA[$F{versao}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="118" height="20" uuid="7a5e75d7-60c6-4e10-a7a3-e2b480ec70a6"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dados do projeto:]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="132">
+			<subreport>
+				<reportElement positionType="Float" x="0" y="50" width="555" height="30" uuid="1d2f5474-ac8c-4553-9e48-b63872160ecc"/>
+				<subreportParameter name="ID_VERSAO">
+					<subreportParameterExpression><![CDATA[$P{ID_VERSAO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TIPO_COMP">
+					<subreportParameterExpression><![CDATA["M"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="vl_total_componentes" toVariable="vl_total_mecanicos"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "custosProjetos_eletronicos.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement x="0" y="20" width="555" height="30" uuid="ae223a6f-776a-4d9b-8312-318d2e7264d3"/>
+				<subreportParameter name="ID_VERSAO">
+					<subreportParameterExpression><![CDATA[$P{ID_VERSAO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="TIPO_COMP">
+					<subreportParameterExpression><![CDATA["E"]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="vl_total_componentes" toVariable="vl_total_eletronicos"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "custosProjetos_eletronicos.jasper"]]></subreportExpression>
+			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="106" width="555" height="26" uuid="04467884-b669-455b-b3e0-6bc9fe0a3c82"/>
+				<subreportParameter name="ID_VERSAO">
+					<subreportParameterExpression><![CDATA[$F{cod_vers_projeto}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="total_certificacoes" toVariable="vl_total_certificacoes"/>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "custosProjetos_certificacoes.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="0" y="0" width="167" height="20" uuid="0222b445-8e00-492f-aafb-19048cbb1252"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Componentes:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="86" width="167" height="20" uuid="bdc410eb-edf4-4b24-a675-871ab6b6f8e3"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificações:]]></text>
+			</staticText>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement x="377" y="8" width="83" height="20" uuid="2f836afd-ceb9-43ee-a5a8-d518a0f522f2"/>
+				<text><![CDATA[Total versão R$:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="470" y="8" width="85" height="20" uuid="aa4fb63b-17da-47c8-8edd-02aca9546a95"/>
+				<textFieldExpression><![CDATA[($V{vl_total_eletronicos} != null ? $V{vl_total_eletronicos} : 0)  +
+($V{vl_total_mecanicos} != null ? $V{vl_total_mecanicos} : 0)  +
+($V{vl_total_certificacoes} != null ? $V{vl_total_certificacoes} : 0)]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="37" splitType="Stretch">
+			<textField>
+				<reportElement x="526" y="17" width="29" height="20" uuid="6026a024-0ce3-4021-9d4c-b458d7f170f3"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
