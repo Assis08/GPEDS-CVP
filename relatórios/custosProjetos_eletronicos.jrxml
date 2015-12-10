@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="custosProjetos_eletronicos" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a6981fae-d700-4a62-8bd0-80ded62c7cc7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_VERSAO" class="java.lang.Integer"/>
+	<parameter name="TIPO_COMP" class="java.lang.String">
+		<defaultValueExpression><![CDATA['E']]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select fornecimento.id_fornecimento, componentes_versao_projeto.id_comp_versao, componentes_versao_projeto.id_componente, componente.descricao,projeto.descricao,
+versao_projeto.versao,versao_projeto.cod_vers_projeto,componentes_versao_projeto.qntd_para_projeto,componentes_fornecimento.id_moeda, moeda.unidade,
+componentes_fornecimento.valor_unit, 0 as imposto_unit, fornecimento.data_cadastro, qntd_para_projeto* valor_unit as total,fornecimento.id_moeda_frete,projeto.id_projeto,projeto.descricao ds_projeto,
+fornecimento.vl_frete, fornecimento.id_moeda_imp, fornecimento.vl_impostos from fornecimento
+inner join componentes_fornecimento on (componentes_fornecimento.id_fornecimento = fornecimento.id_fornecimento)
+inner join moeda on (moeda.id_moeda = componentes_fornecimento.id_moeda)
+inner join componente on (componente.id_componente = componentes_fornecimento.id_componente)
+inner join componentes_versao_projeto on (componentes_versao_projeto.id_comp_fornec = componentes_fornecimento.id_comp_fornec)
+inner join versao_projeto on (versao_projeto.cod_vers_projeto = componentes_versao_projeto.cod_vers_projeto)
+inner join projeto on (projeto.id_projeto = versao_projeto.id_projeto)
+where versao_projeto.cod_vers_projeto = $P{ID_VERSAO} and componente.tipo = $P{TIPO_COMP} and componentes_versao_projeto.in_ativo = 'A']]>
+	</queryString>
+	<field name="id_fornecimento" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_comp_versao" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_componente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descricao" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="versao" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cod_vers_projeto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="qntd_para_projeto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_moeda" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="unidade" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="valor_unit" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="imposto_unit" class="java.lang.Long"/>
+	<field name="data_cadastro" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total" class="java.lang.Double"/>
+	<field name="id_moeda_frete" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_projeto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ds_projeto" class="java.lang.String"/>
+	<field name="vl_frete" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_moeda_imp" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="vl_impostos" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="43" splitType="Stretch">
+			<staticText>
+				<reportElement x="1" y="22" width="20" height="20" uuid="49b66a70-a97c-408d-9b74-b848d9766e33"/>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="433" y="23" width="58" height="20" uuid="753eddaf-73c3-4f5e-bb46-8198329aa188"/>
+				<text><![CDATA[Total R$]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="232" y="23" width="63" height="20" uuid="6ddc3f75-ba93-4c59-8c8e-8554475b2d73"/>
+				<text><![CDATA[Quantidade]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="306" y="23" width="67" height="20" uuid="17623180-b87b-4e82-b9ca-c8d12c2c3285"/>
+				<text><![CDATA[Valor Unitário]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="384" y="23" width="37" height="20" uuid="bbe5b280-f30f-403c-acef-f61e74fc873f"/>
+				<text><![CDATA[Moeda]]></text>
+			</staticText>
+			<line>
+				<reportElement x="1" y="42" width="555" height="1" uuid="f1a81a63-8805-4e4e-a9b8-a4db4c979339"/>
+			</line>
+			<staticText>
+				<reportElement x="39" y="23" width="66" height="20" uuid="fc9fe935-e880-461e-b06b-ee99c8b1f703"/>
+				<text><![CDATA[Componente]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="1" y="3" width="554" height="20" uuid="99d42e2e-1a5f-4889-bfd1-5934b4f25643"/>
+				<textFieldExpression><![CDATA[$P{TIPO_COMP} == 'M' ? "Mecânicos" : "Eletrônicos"]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="433" y="0" width="58" height="20" uuid="fb93bfa9-a338-4f11-87da-6cba06493490"/>
+				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="250" y="0" width="19" height="20" uuid="0e819f3a-5d8c-4aa2-8131-30051bab33e2"/>
+				<textFieldExpression><![CDATA[$F{qntd_para_projeto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="306" y="0" width="67" height="20" uuid="e63ca9ee-ec0a-4c86-a0ad-890ac3748067"/>
+				<textFieldExpression><![CDATA[$F{valor_unit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="384" y="0" width="37" height="20" uuid="f2647133-ba36-4cb9-be50-c82faac0ac31"/>
+				<textFieldExpression><![CDATA[$F{unidade}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="16" height="20" uuid="24009db9-5562-4822-86d4-8e0916150291"/>
+				<textFieldExpression><![CDATA[$F{id_componente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="39" y="0" width="193" height="20" uuid="d71f3624-633b-482a-88b7-97a86ba7075b"/>
+				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="29" splitType="Stretch"/>
+	</columnFooter>
+</jasperReport>
