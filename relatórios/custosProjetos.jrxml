@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="custosProjetos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f42fbfe2-4b6c-45ed-8d12-2f783187db4e">
 	<property name="ireport.zoom" value="1.7715610000000108"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="432"/>
+	<property name="ireport.x" value="22"/>
+	<property name="ireport.y" value="503"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["C:\\Users\\rafa\\"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_VERSAO" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
@@ -78,7 +78,7 @@ where cod_vers_projeto = $P{ID_VERSAO}]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="166" splitType="Stretch">
+		<band height="100" splitType="Stretch">
 			<staticText>
 				<reportElement x="0" y="35" width="52" height="20" uuid="65ae519e-cb53-4f16-b724-71f651e74d2f"/>
 				<text><![CDATA[ID Projeto]]></text>
@@ -110,19 +110,12 @@ where cod_vers_projeto = $P{ID_VERSAO}]]>
 				</textElement>
 				<text><![CDATA[Dados do projeto:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="0" y="115" width="167" height="20" uuid="56d5aacf-ee86-4afd-ad48-df05783d6d8c"/>
-				<textElement>
-					<font size="12" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Componentes eletrônicos:]]></text>
-			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="86" splitType="Stretch">
+		<band height="148" splitType="Stretch">
 			<subreport>
-				<reportElement positionType="Float" x="0" y="43" width="555" height="43" uuid="1d2f5474-ac8c-4553-9e48-b63872160ecc"/>
+				<reportElement positionType="Float" x="0" y="50" width="555" height="30" uuid="1d2f5474-ac8c-4553-9e48-b63872160ecc"/>
 				<subreportParameter name="ID_VERSAO">
 					<subreportParameterExpression><![CDATA[$P{ID_VERSAO}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -133,7 +126,7 @@ where cod_vers_projeto = $P{ID_VERSAO}]]>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "custosProjetos_eletronicos.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
-				<reportElement x="0" y="0" width="555" height="43" uuid="ae223a6f-776a-4d9b-8312-318d2e7264d3"/>
+				<reportElement x="0" y="20" width="555" height="30" uuid="ae223a6f-776a-4d9b-8312-318d2e7264d3"/>
 				<subreportParameter name="ID_VERSAO">
 					<subreportParameterExpression><![CDATA[$P{ID_VERSAO}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -143,6 +136,28 @@ where cod_vers_projeto = $P{ID_VERSAO}]]>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "custosProjetos_eletronicos.jasper"]]></subreportExpression>
 			</subreport>
+			<subreport>
+				<reportElement positionType="Float" x="0" y="106" width="555" height="26" uuid="04467884-b669-455b-b3e0-6bc9fe0a3c82"/>
+				<subreportParameter name="ID_VERSAO">
+					<subreportParameterExpression><![CDATA[$F{cod_vers_projeto}]]></subreportParameterExpression>
+				</subreportParameter>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "custosProjetos_certificacoes.jasper"]]></subreportExpression>
+			</subreport>
+			<staticText>
+				<reportElement x="0" y="0" width="167" height="20" uuid="0222b445-8e00-492f-aafb-19048cbb1252"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Componentes:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="0" y="86" width="167" height="20" uuid="bdc410eb-edf4-4b24-a675-871ab6b6f8e3"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Certificações:]]></text>
+			</staticText>
 		</band>
 	</detail>
 	<columnFooter>

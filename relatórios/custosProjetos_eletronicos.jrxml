@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="custosProjetos_eletronicos" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a6981fae-d700-4a62-8bd0-80ded62c7cc7">
-	<property name="ireport.zoom" value="1.0"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.zoom" value="2.3579476910000023"/>
+	<property name="ireport.x" value="616"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_VERSAO" class="java.lang.Integer"/>
 	<parameter name="TIPO_COMP" class="java.lang.String">
@@ -77,15 +77,15 @@ where versao_projeto.cod_vers_projeto = $P{ID_VERSAO} and componente.tipo = $P{T
 	<columnHeader>
 		<band height="43" splitType="Stretch">
 			<staticText>
-				<reportElement x="1" y="22" width="20" height="20" uuid="49b66a70-a97c-408d-9b74-b848d9766e33"/>
-				<text><![CDATA[ID]]></text>
+				<reportElement x="52" y="22" width="56" height="20" uuid="49b66a70-a97c-408d-9b74-b848d9766e33"/>
+				<text><![CDATA[ID Comp.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="433" y="23" width="58" height="20" uuid="753eddaf-73c3-4f5e-bb46-8198329aa188"/>
+				<reportElement x="476" y="23" width="58" height="20" uuid="753eddaf-73c3-4f5e-bb46-8198329aa188"/>
 				<text><![CDATA[Total R$]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="232" y="23" width="63" height="20" uuid="6ddc3f75-ba93-4c59-8c8e-8554475b2d73"/>
+				<reportElement x="243" y="23" width="63" height="20" uuid="6ddc3f75-ba93-4c59-8c8e-8554475b2d73"/>
 				<text><![CDATA[Quantidade]]></text>
 			</staticText>
 			<staticText>
@@ -93,51 +93,67 @@ where versao_projeto.cod_vers_projeto = $P{ID_VERSAO} and componente.tipo = $P{T
 				<text><![CDATA[Valor Unitário]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="384" y="23" width="37" height="20" uuid="bbe5b280-f30f-403c-acef-f61e74fc873f"/>
+				<reportElement x="373" y="23" width="37" height="20" uuid="bbe5b280-f30f-403c-acef-f61e74fc873f"/>
 				<text><![CDATA[Moeda]]></text>
 			</staticText>
 			<line>
 				<reportElement x="1" y="42" width="555" height="1" uuid="f1a81a63-8805-4e4e-a9b8-a4db4c979339"/>
 			</line>
 			<staticText>
-				<reportElement x="39" y="23" width="66" height="20" uuid="fc9fe935-e880-461e-b06b-ee99c8b1f703"/>
+				<reportElement x="108" y="23" width="66" height="20" uuid="fc9fe935-e880-461e-b06b-ee99c8b1f703"/>
 				<text><![CDATA[Componente]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="1" y="3" width="554" height="20" uuid="99d42e2e-1a5f-4889-bfd1-5934b4f25643"/>
 				<textFieldExpression><![CDATA[$P{TIPO_COMP} == 'M' ? "Mecânicos" : "Eletrônicos"]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="1" y="23" width="51" height="20" uuid="325646c1-754c-4711-89a3-fde2dda9484a"/>
+				<text><![CDATA[ID Fornec.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="410" y="23" width="66" height="20" uuid="e13ed05e-b609-423e-8718-3567dd94f4ca"/>
+				<text><![CDATA[Imp. unit (R$)]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="433" y="0" width="58" height="20" uuid="fb93bfa9-a338-4f11-87da-6cba06493490"/>
+				<reportElement x="476" y="0" width="58" height="20" uuid="fb93bfa9-a338-4f11-87da-6cba06493490"/>
 				<textFieldExpression><![CDATA[$F{total}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="250" y="0" width="19" height="20" uuid="0e819f3a-5d8c-4aa2-8131-30051bab33e2"/>
+				<reportElement x="261" y="0" width="19" height="20" uuid="0e819f3a-5d8c-4aa2-8131-30051bab33e2"/>
 				<textFieldExpression><![CDATA[$F{qntd_para_projeto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="306" y="0" width="67" height="20" uuid="e63ca9ee-ec0a-4c86-a0ad-890ac3748067"/>
+				<reportElement x="319" y="0" width="44" height="20" uuid="e63ca9ee-ec0a-4c86-a0ad-890ac3748067"/>
 				<textFieldExpression><![CDATA[$F{valor_unit}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="384" y="0" width="37" height="20" uuid="f2647133-ba36-4cb9-be50-c82faac0ac31"/>
+				<reportElement x="373" y="0" width="37" height="20" uuid="f2647133-ba36-4cb9-be50-c82faac0ac31"/>
 				<textFieldExpression><![CDATA[$F{unidade}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="16" height="20" uuid="24009db9-5562-4822-86d4-8e0916150291"/>
+				<reportElement x="52" y="0" width="56" height="20" uuid="24009db9-5562-4822-86d4-8e0916150291"/>
 				<textFieldExpression><![CDATA[$F{id_componente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="39" y="0" width="193" height="20" uuid="d71f3624-633b-482a-88b7-97a86ba7075b"/>
+				<reportElement x="108" y="0" width="142" height="20" uuid="d71f3624-633b-482a-88b7-97a86ba7075b"/>
 				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="0" width="51" height="20" uuid="6e5fe4ed-a384-469b-97b1-09d91a1f8a9f"/>
+				<textFieldExpression><![CDATA[$F{id_fornecimento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="410" y="0" width="66" height="20" uuid="d7a33b98-370d-4ab2-9a77-5f88334835aa"/>
+				<textFieldExpression><![CDATA[$F{imposto_unit}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="29" splitType="Stretch"/>
+		<band height="20"/>
 	</columnFooter>
 </jasperReport>

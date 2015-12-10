@@ -122,6 +122,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
         jTBComponentesMecanicos = new javax.swing.JTable();
         jTFTotalGeral = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
+        jBTRelatório = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Custos do projeto");
@@ -287,6 +288,8 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
 
         jLabel12.setText("Total geral R$:");
 
+        jBTRelatório.setText("Relatório");
+
         javax.swing.GroupLayout jPCustosProjetoLayout = new javax.swing.GroupLayout(jPCustosProjeto);
         jPCustosProjeto.setLayout(jPCustosProjetoLayout);
         jPCustosProjetoLayout.setHorizontalGroup(
@@ -312,7 +315,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                                         .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)))
                                 .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPCustosProjetoLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 339, Short.MAX_VALUE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCustosProjetoLayout.createSequentialGroup()
                                                 .addComponent(jLabel8)
@@ -335,12 +338,16 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                                     .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
+                                    .addGroup(jPCustosProjetoLayout.createSequentialGroup()
+                                        .addComponent(jLabel3)
+                                        .addGap(0, 0, Short.MAX_VALUE))
                                     .addGroup(jPCustosProjetoLayout.createSequentialGroup()
                                         .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addGap(18, 18, 18)
-                                        .addComponent(jBTListar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))
+                                        .addComponent(jBTListar, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                .addGap(311, 311, 311)
+                                .addComponent(jBTRelatório))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPCustosProjetoLayout.createSequentialGroup()
                                 .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(jPCustosProjetoLayout.createSequentialGroup()
@@ -370,7 +377,8 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                     .addComponent(jCBTipoCusto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCBProjeto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jCBVersao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBTListar))
+                    .addComponent(jBTListar)
+                    .addComponent(jBTRelatório))
                 .addGap(14, 14, 14)
                 .addGroup(jPCustosProjetoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -765,6 +773,7 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBTListar;
+    private javax.swing.JButton jBTRelatório;
     private javax.swing.JComboBox jCBProjeto;
     private javax.swing.JComboBox jCBTipoCusto;
     private javax.swing.JComboBox jCBVersao;
