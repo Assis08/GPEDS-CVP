@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="custosProjetos_certificacoes" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="97dd3553-11c4-42e9-834b-dc78e1fa8e66">
 	<property name="ireport.zoom" value="2.143588810000008"/>
-	<property name="ireport.x" value="493"/>
+	<property name="ireport.x" value="467"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_VERSAO" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[$P{ID_VERSAO}]]></defaultValueExpression>
@@ -46,6 +46,10 @@ where certificacao.cod_vers_projeto = $P{ID_VERSAO} and certificacao.in_ativo = 
 	<field name="data_ensaio" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<variable name="total_certificacoes" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$F{valor}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
 	<group name="id_certificacao">
 		<groupExpression><![CDATA[$F{id_certificacao}]]></groupExpression>
 	</group>
@@ -112,11 +116,15 @@ where certificacao.cod_vers_projeto = $P{ID_VERSAO} and certificacao.in_ativo = 
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="57" splitType="Stretch">
+		<band height="23" splitType="Stretch">
 			<staticText>
-				<reportElement x="394" y="37" width="49" height="20" uuid="663229a9-3d70-4c91-8b9c-cddaab9cdc60"/>
+				<reportElement x="383" y="3" width="49" height="20" uuid="663229a9-3d70-4c91-8b9c-cddaab9cdc60"/>
 				<text><![CDATA[Total R$:]]></text>
 			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="443" y="3" width="100" height="20" uuid="21f60f9c-4adb-42d4-9cbb-3e621cac9033"/>
+				<textFieldExpression><![CDATA[$V{total_certificacoes}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnFooter>
 </jasperReport>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="custosProjetos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f42fbfe2-4b6c-45ed-8d12-2f783187db4e">
 	<property name="ireport.zoom" value="1.7715610000000108"/>
-	<property name="ireport.x" value="367"/>
-	<property name="ireport.y" value="144"/>
+	<property name="ireport.x" value="43"/>
+	<property name="ireport.y" value="333"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["./"]]></defaultValueExpression>
 	</parameter>
@@ -44,6 +44,15 @@ where cod_vers_projeto = $P{ID_VERSAO}]]>
 	<field name="descricao" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<variable name="vl_total_eletronicos" class="java.lang.Double">
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="vl_total_mecanicos" class="java.lang.Double">
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="vl_total_certificacoes" class="java.lang.Double">
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -110,14 +119,10 @@ where cod_vers_projeto = $P{ID_VERSAO}]]>
 				</textElement>
 				<text><![CDATA[Dados do projeto:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="377" y="70" width="70" height="20" uuid="2f836afd-ceb9-43ee-a5a8-d518a0f522f2"/>
-				<text><![CDATA[Custo total R$:]]></text>
-			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="132" splitType="Stretch">
+		<band height="132">
 			<subreport>
 				<reportElement positionType="Float" x="0" y="50" width="555" height="30" uuid="1d2f5474-ac8c-4553-9e48-b63872160ecc"/>
 				<subreportParameter name="ID_VERSAO">
@@ -127,6 +132,7 @@ where cod_vers_projeto = $P{ID_VERSAO}]]>
 					<subreportParameterExpression><![CDATA['M']]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="vl_total_componentes" toVariable="vl_total_mecanicos"/>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "custosProjetos_eletronicos.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
@@ -138,6 +144,7 @@ where cod_vers_projeto = $P{ID_VERSAO}]]>
 					<subreportParameterExpression><![CDATA['E']]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="vl_total_componentes" toVariable="vl_total_eletronicos"/>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "custosProjetos_eletronicos.jasper"]]></subreportExpression>
 			</subreport>
 			<subreport>
@@ -146,6 +153,7 @@ where cod_vers_projeto = $P{ID_VERSAO}]]>
 					<subreportParameterExpression><![CDATA[$F{cod_vers_projeto}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<returnValue subreportVariable="total_certificacoes" toVariable="vl_total_certificacoes"/>
 				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "custosProjetos_certificacoes.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
@@ -165,7 +173,17 @@ where cod_vers_projeto = $P{ID_VERSAO}]]>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="49" splitType="Stretch"/>
+		<band height="28" splitType="Stretch">
+			<staticText>
+				<reportElement x="377" y="8" width="83" height="20" uuid="2f836afd-ceb9-43ee-a5a8-d518a0f522f2"/>
+				<text><![CDATA[Total versão R$:]]></text>
+			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="476" y="8" width="79" height="20" uuid="b1c43e55-5fd8-4ff8-a52c-2cbfdf74cdce"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$V{vl_total_eletronicos} + $V{vl_total_mecanicos} + $V{vl_total_certificacoes}]]></textFieldExpression>
+			</textField>
+		</band>
 	</columnFooter>
 	<pageFooter>
 		<band height="56" splitType="Stretch">

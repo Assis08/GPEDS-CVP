@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="custosProjetos_eletronicos" language="groovy" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="a6981fae-d700-4a62-8bd0-80ded62c7cc7">
 	<property name="ireport.zoom" value="2.3579476910000023"/>
-	<property name="ireport.x" value="616"/>
+	<property name="ireport.x" value="624"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_VERSAO" class="java.lang.Integer"/>
 	<parameter name="TIPO_COMP" class="java.lang.String">
@@ -85,10 +85,16 @@ where versao_projeto.cod_vers_projeto = $P{ID_VERSAO} and componente.tipo = $P{T
 	<field name="qntd_comp" class="java.lang.Long"/>
 	<variable name="vl_imposto_frete_unit_convet" class="java.lang.Double">
 		<variableExpression><![CDATA[($F{vl_impostos_convert} + $F{vl_frete_convert}) / $F{qntd_comp}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<variable name="vl_total_comp_convert" class="java.lang.Double">
 		<variableExpression><![CDATA[$F{valor_unit_convert} * $F{qntd_para_projeto} +
 $V{vl_imposto_frete_unit_convet}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="vl_total_componentes" class="java.lang.Double" resetType="Column" calculation="Sum">
+		<variableExpression><![CDATA[$V{vl_total_comp_convert}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
 	</variable>
 	<background>
 		<band splitType="Stretch"/>
@@ -100,7 +106,8 @@ $V{vl_imposto_frete_unit_convet}]]></variableExpression>
 				<text><![CDATA[ID Comp.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="476" y="23" width="58" height="20" uuid="753eddaf-73c3-4f5e-bb46-8198329aa188"/>
+				<reportElement x="476" y="23" width="79" height="20" uuid="753eddaf-73c3-4f5e-bb46-8198329aa188"/>
+				<textElement textAlignment="Right"/>
 				<text><![CDATA[Total R$]]></text>
 			</staticText>
 			<staticText>
@@ -109,6 +116,7 @@ $V{vl_imposto_frete_unit_convet}]]></variableExpression>
 			</staticText>
 			<staticText>
 				<reportElement x="306" y="23" width="88" height="20" uuid="17623180-b87b-4e82-b9ca-c8d12c2c3285"/>
+				<textElement textAlignment="Right"/>
 				<text><![CDATA[Valor Unitário (R$)]]></text>
 			</staticText>
 			<line>
@@ -127,7 +135,8 @@ $V{vl_imposto_frete_unit_convet}]]></variableExpression>
 				<text><![CDATA[ID Fornec.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="394" y="23" width="66" height="20" uuid="e13ed05e-b609-423e-8718-3567dd94f4ca"/>
+				<reportElement x="402" y="23" width="66" height="20" uuid="e13ed05e-b609-423e-8718-3567dd94f4ca"/>
+				<textElement textAlignment="Right"/>
 				<text><![CDATA[Imp. unit (R$)]]></text>
 			</staticText>
 		</band>
@@ -135,7 +144,8 @@ $V{vl_imposto_frete_unit_convet}]]></variableExpression>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="476" y="0" width="58" height="20" uuid="fb93bfa9-a338-4f11-87da-6cba06493490"/>
+				<reportElement x="476" y="0" width="79" height="20" uuid="fb93bfa9-a338-4f11-87da-6cba06493490"/>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{vl_total_comp_convert}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -143,7 +153,8 @@ $V{vl_imposto_frete_unit_convet}]]></variableExpression>
 				<textFieldExpression><![CDATA[$F{qntd_para_projeto}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="325" y="0" width="44" height="20" uuid="e63ca9ee-ec0a-4c86-a0ad-890ac3748067"/>
+				<reportElement x="306" y="0" width="88" height="20" uuid="e63ca9ee-ec0a-4c86-a0ad-890ac3748067"/>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{valor_unit_convert}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -159,17 +170,25 @@ $V{vl_imposto_frete_unit_convet}]]></variableExpression>
 				<textFieldExpression><![CDATA[$F{id_fornecimento}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="394" y="0" width="66" height="20" uuid="d7a33b98-370d-4ab2-9a77-5f88334835aa"/>
+				<reportElement x="402" y="0" width="66" height="20" uuid="d7a33b98-370d-4ab2-9a77-5f88334835aa"/>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$V{vl_imposto_frete_unit_convet}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="57">
+		<band height="23">
 			<staticText>
-				<reportElement x="394" y="37" width="66" height="20" uuid="de74419c-6891-46f8-86e3-9f769eec6afe"/>
+				<reportElement x="476" y="3" width="49" height="20" uuid="de74419c-6891-46f8-86e3-9f769eec6afe"/>
 				<text><![CDATA[Total R$:]]></text>
 			</staticText>
+			<textField pattern="#,##0.00;-#,##0.00">
+				<reportElement x="525" y="3" width="31" height="20" uuid="8d92782c-30c9-4cc2-9d88-4b6dac8073fc"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{vl_total_componentes}]]></textFieldExpression>
+			</textField>
 		</band>
 	</columnFooter>
 </jasperReport>
