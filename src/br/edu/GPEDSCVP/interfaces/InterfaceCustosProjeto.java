@@ -746,10 +746,10 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
 
     private void jBTRelatórioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBTRelatórioActionPerformed
 
-        if (jCBVersao.getSelectedIndex() > 0) {
+        if (jCBTipoCusto.getSelectedIndex() == 2) {
+        
+            if (jCBVersao.getSelectedIndex() > 0) {
 
-            if (jCBTipoCusto.getSelectedIndex() == 2) {
-                
                 Integer id_versao = versao_projeto.getArray_versoes(jCBVersao.getSelectedIndex() - 1);
 
                 try {
@@ -758,13 +758,11 @@ public class InterfaceCustosProjeto extends javax.swing.JFrame {
                     ex.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Falha ao gerar relatório");
                 }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Selecione uma versão para imprimir o relatório!");
             }
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Selecione uma versão para imprimir o relatório!");
         }
-
-
     }//GEN-LAST:event_jBTRelatórioActionPerformed
 
     /**

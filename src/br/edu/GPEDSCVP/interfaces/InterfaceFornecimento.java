@@ -836,6 +836,8 @@ public class InterfaceFornecimento extends javax.swing.JFrame {
 
         jLabel11.setText("Total R$ :");
 
+        jTFTotalFornecimento.setEditable(false);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(

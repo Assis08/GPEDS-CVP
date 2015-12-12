@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="custosProjetos_certificacoes" pageWidth="555" pageHeight="802" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="97dd3553-11c4-42e9-834b-dc78e1fa8e66">
 	<property name="ireport.zoom" value="2.143588810000008"/>
-	<property name="ireport.x" value="501"/>
+	<property name="ireport.x" value="467"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_VERSAO" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[$P{ID_VERSAO}]]></defaultValueExpression>
@@ -63,38 +63,46 @@ where certificacao.cod_vers_projeto = $P{ID_VERSAO} and certificacao.in_ativo = 
 				<text><![CDATA[ID Certif.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="51" y="15" width="232" height="20" uuid="d1832582-306a-46a6-afe2-fa3e44027fff"/>
+				<reportElement x="51" y="15" width="165" height="20" uuid="d1832582-306a-46a6-afe2-fa3e44027fff"/>
 				<text><![CDATA[Descrição]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="283" y="15" width="100" height="20" uuid="7f99b975-5e80-4eb7-9e82-0bb6eba8369a"/>
+				<reportElement x="216" y="15" width="100" height="20" uuid="7f99b975-5e80-4eb7-9e82-0bb6eba8369a"/>
 				<text><![CDATA[Certificadora]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="383" y="15" width="47" height="20" uuid="f7e848b6-c5ff-417f-817c-eb25dd889cc8"/>
+				<reportElement x="316" y="15" width="47" height="20" uuid="f7e848b6-c5ff-417f-817c-eb25dd889cc8"/>
 				<text><![CDATA[Norma]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="496" y="14" width="59" height="20" uuid="eaabb293-8983-424d-9436-275bd9169bbf"/>
+				<reportElement x="363" y="14" width="59" height="20" uuid="eaabb293-8983-424d-9436-275bd9169bbf"/>
+				<textElement textAlignment="Justified"/>
 				<text><![CDATA[Data ensaio]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="443" y="15" width="53" height="20" uuid="69b19912-950b-40fe-9fa8-463fb6903653"/>
+				<reportElement x="476" y="15" width="79" height="20" uuid="69b19912-950b-40fe-9fa8-463fb6903653"/>
+				<textElement textAlignment="Right"/>
 				<text><![CDATA[Valor R$]]></text>
 			</staticText>
 			<line>
 				<reportElement x="0" y="34" width="555" height="1" uuid="46fded9c-e922-430c-a023-8d263d144f1b"/>
 			</line>
+			<staticText>
+				<reportElement x="422" y="15" width="54" height="20" uuid="13826c8d-03af-4c2c-8c0c-2e9762c42919"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Resultado]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
 			<textField>
-				<reportElement x="383" y="0" width="47" height="20" uuid="4bbaad76-33fe-414c-8d57-0bda062f2569"/>
+				<reportElement x="316" y="0" width="47" height="20" uuid="4bbaad76-33fe-414c-8d57-0bda062f2569"/>
 				<textFieldExpression><![CDATA[$F{titulo}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd/MM/yyyy">
-				<reportElement x="496" y="0" width="59" height="20" uuid="3ac0638c-cd8e-42a5-82bd-df998c5425a5"/>
+				<reportElement x="363" y="0" width="59" height="20" uuid="3ac0638c-cd8e-42a5-82bd-df998c5425a5"/>
+				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{data_ensaio}]]></textFieldExpression>
 			</textField>
 			<textField>
@@ -102,27 +110,37 @@ where certificacao.cod_vers_projeto = $P{ID_VERSAO} and certificacao.in_ativo = 
 				<textFieldExpression><![CDATA[$F{id_certificacao}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="51" y="0" width="232" height="20" uuid="62fd44bf-9aaf-40db-b7e2-eab9f7f12b81"/>
+				<reportElement x="51" y="0" width="165" height="20" uuid="62fd44bf-9aaf-40db-b7e2-eab9f7f12b81"/>
 				<textFieldExpression><![CDATA[$F{descricao}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="283" y="0" width="100" height="20" uuid="270a7a16-e49c-421d-8825-921fef176ed0"/>
+				<reportElement x="216" y="0" width="100" height="20" uuid="270a7a16-e49c-421d-8825-921fef176ed0"/>
 				<textFieldExpression><![CDATA[$F{nome}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00;#,##0.00-">
-				<reportElement x="443" y="0" width="53" height="20" uuid="aa3173cd-368c-43bc-87ae-caa3107773f3"/>
+				<reportElement x="476" y="0" width="79" height="20" uuid="aa3173cd-368c-43bc-87ae-caa3107773f3"/>
+				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{valor}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="422" y="1" width="54" height="19" uuid="55dd3d86-319a-4677-b15b-8c4acfb13421"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{resultado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
 	<columnFooter>
 		<band height="23" splitType="Stretch">
 			<staticText>
-				<reportElement x="383" y="3" width="49" height="20" uuid="663229a9-3d70-4c91-8b9c-cddaab9cdc60"/>
+				<reportElement x="466" y="3" width="49" height="20" uuid="663229a9-3d70-4c91-8b9c-cddaab9cdc60"/>
+				<textElement textAlignment="Right"/>
 				<text><![CDATA[Total R$:]]></text>
 			</staticText>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="443" y="3" width="100" height="20" uuid="21f60f9c-4adb-42d4-9cbb-3e621cac9033"/>
+				<reportElement x="515" y="3" width="40" height="20" uuid="21f60f9c-4adb-42d4-9cbb-3e621cac9033"/>
+				<textElement textAlignment="Right">
+					<font isBold="true" isStrikeThrough="false"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$V{total_certificacoes}]]></textFieldExpression>
 			</textField>
 		</band>

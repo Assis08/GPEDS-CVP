@@ -184,11 +184,15 @@ $V{vl_total_certificacoes}]]></variableExpression>
 	<columnFooter>
 		<band height="28" splitType="Stretch">
 			<staticText>
-				<reportElement x="377" y="8" width="83" height="20" uuid="2f836afd-ceb9-43ee-a5a8-d518a0f522f2"/>
+				<reportElement x="419" y="8" width="83" height="20" uuid="2f836afd-ceb9-43ee-a5a8-d518a0f522f2"/>
+				<textElement textAlignment="Right"/>
 				<text><![CDATA[Total versão R$:]]></text>
 			</staticText>
 			<textField pattern="#,##0.00;-#,##0.00">
-				<reportElement x="470" y="8" width="85" height="20" uuid="aa4fb63b-17da-47c8-8edd-02aca9546a95"/>
+				<reportElement x="506" y="8" width="49" height="20" uuid="aa4fb63b-17da-47c8-8edd-02aca9546a95"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
 				<textFieldExpression><![CDATA[($V{vl_total_eletronicos} != null ? $V{vl_total_eletronicos} : 0)  +
 ($V{vl_total_mecanicos} != null ? $V{vl_total_mecanicos} : 0)  +
 ($V{vl_total_certificacoes} != null ? $V{vl_total_certificacoes} : 0)]]></textFieldExpression>
